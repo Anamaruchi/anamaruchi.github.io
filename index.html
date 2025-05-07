@@ -1,102 +1,422 @@
 <!DOCTYPE html>
-<html lang="en">  
-   <head>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Anamaruchi</title>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content=""width=device-width, initial-scale=1" />
-  </head>
-  <body style="background-color:#b5e7ff;">
-<text><span style="color: black;">(c) <a style="color:black"; href="https://www.facebook.com/anang.zikri.f">Anamaruchi</a> - Made With Love for Someo<u><b>n</b></u>e</span></b>
-<br> 
-<br> 
-  <div class="container">
-	<fieldset id="container">
-		<form name="calculator">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
 
-			<input id="display" type="text" name="display"	readonly>
-			<input style="background-color: red; class="button mathButtons" type="button" value="Calculate" onclick="calculator.display.value = eval(calculator.display.value)">
-			<input style="background-color: white; id="clearButton" class="button" type="button" value="Clear" onclick="calculator.display.value = ''">
-			<br>
-			<br>
-			<details>
-			<summary><b>1.</b> Select Paper
-			</summary>
-			<ul>
-			<input class="button digits" type="button" value="Art Paper 120gsm" onclick="calculator.display.value += '0.0131*'">
-			<br>
-			<input class="button digits" type="button" value="Art Paper 150gsm" onclick="calculator.display.value += '0.0142*'">
-			<br>
-			<input class="button digits" type="button" value="Matte Paper 120gsm" onclick="calculator.display.value += '0.0131*'">
-			<br>
-			<input class="button digits" type="button" value="Matte Paper 150gsm" onclick="calculator.display.value += '0.0142*'">
-			<br>
-			<input class="button digits" type="button" value="Art Carton 400gsm" onclick="calculator.display.value += '0.05*'">
-			<br>
-			<input class="button digits" type="button" value="Art Carton 310gsm" onclick="calculator.display.value += '0.036*'">
-			<br>
-			<input class="button digits" type="button" value="Art Carton 260gsm" onclick="calculator.display.value += '0.03125*'">
-			<br>
-			<input class="button digits" type="button" value="Art Carton 230gsm" onclick="calculator.display.value += '0.025*'">
-			<br>
-			<input class="button digits" type="button" value="Art Carton 210gsm" onclick="calculator.display.value += '0.023*'">
-			<br>
-			<input class="button digits" type="button" value="HVS 75gsm" onclick="calculator.display.value += '0.0093*'">
-			<br>
-			<input class="button digits" type="button" value="HVS 80gsm" onclick="calculator.display.value += '0.01041*'">
-			<br>
-			<input class="button digits" type="button" value="HVS 100gsm" onclick="calculator.display.value += '0.01234*'">
-			<br>
-			<input class="button digits" type="button" value="Bookpaper" onclick="calculator.display.value += '0.0120*'">
-			</ul>
-			</details>
-			<br>
-			<span style="color: black;"><b>2.</b> Number of Paper</span>
-                        <br>
-			<input class="button digits" type="button" value="8" onclick="calculator.display.value += '8'">
-			<input class="button digits" type="button" value="9" onclick="calculator.display.value += '9'">
-			<input class="button digits" type="button" value="0" onclick="calculator.display.value += '0'">
-			<input style="background-color: black; class="button digits" type="button" value="0" onclick="calculator.display.value += ''">
-			<br>
-			<input class="button digits" type="button" value="4" onclick="calculator.display.value += '4'">
-			<input class="button digits" type="button" value="5" onclick="calculator.display.value += '5'">
-			<input class="button digits" type="button" value="6" onclick="calculator.display.value += '6'">
-			<input class="button digits" type="button" value="7" onclick="calculator.display.value += '7'">
-			<br>
-			<input class="button digits" type="button" value="1" onclick="calculator.display.value += '1'">
-			<input class="button digits" type="button" value="2" onclick="calculator.display.value += '2'">
-			<input class="button digits" type="button" value="3" onclick="calculator.display.value += '3'">	
-			<input style="background-color: black; class="button digits" type="button" value="0" onclick="calculator.display.value += ''">
-			<br>
-		</form>
-	</fieldset>
-<br>
-  <div class="container">
-	<fieldset id="container">
-		<form name="Spiral">
-<span style="color: black;"><b>Spiral Number by Centimeter </b><b>( Max<span style="color: Red;"> 3cm</b> <b> )</b></span>
-<br>
-<br>
-<span style="color: Red;">> </span><b>0,5cm</b> Number</span><b><span style="color: Red;"> 5</b></span>
-<br>
-<span style="color: Red;">> </span><b>0,7cm</b> Number</span><b><span style="color: Red;"> 6</b></span>
-<br>
-<span style="color: Red;">> </span><b>0,8cm</b> Number</span><b><span style="color: Red;"> 7</b></span>
-<br>
-<span style="color: Red;">> </span><b>0,9cm</b> Number</span><b><span style="color: Red;"> 8</b></span>
-<br>
-<span style="color: Red;">> </span><b>1,1cm</b> Number</span><b><span style="color: Red;"> 9</b></span>
-<br>
-<span style="color: Red;">> </span><b>1,3cm</b> Number</span><b><span style="color: Red;"> 10</b></span>
-<br>
-<span style="color: Red;">> </span><b>1,6cm</b> Number</span><b><span style="color: Red;"> 12</b></span>
-<br>
-<span style="color: Red;">> </span><b>1,8cm</b> Number</span><b><span style="color: Red;"> 14</b></span>
-<br>
-<span style="color: Red;">> </span><b>2,1cm</b> Number</span><b><span style="color: Red;"> 16</b></span>
-<br>
-<span style="color: Red;">> </span><b>2,6cm</b> Number</span><b><span style="color: Red;"> 20</b></span>
-<br>
-</form>
-	</fieldset>
-  </body>
+        .calculator-container {
+            background-color: #333;
+            border-radius: 12px;
+            padding: 10px;
+            width: 385px;
+            border: 2px solid #1976d2;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding-left: 30px;
+            padding-right: 30px;
+            padding-bottom: 20px;
+        }
+
+        .calculator-header {
+            width: 100%;
+            text-align: center;
+            color: #fff;
+            margin-bottom: 15px;
+            padding-top: 10px;
+            border-bottom: 2px solid #1976d2;
+            padding-bottom: 10px;
+        }
+
+        .calculator-header h1 {
+            margin: 0;
+            font-size: 22px;
+            font-weight: 600;
+            color: #64b5f6;
+        }
+
+        .form-width {
+            width: 100%;
+            max-width: 352px;
+        }
+
+        .paper-select {
+            position: relative;
+            margin-bottom: 8px;
+            box-sizing: border-box;
+        }
+
+        .select-dropdown {
+            width: 100%;
+            background-color: #e0e0e0;
+            border: none;
+            padding: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            text-align: center;	
+            position: relative;
+            border-radius: 4px;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #e0e0e0;
+            width: 100%;
+            max-height: 250px;
+            overflow-y: auto;
+            z-index: 1;
+            left: 0;
+            right: 0;
+            top: 100%; /* Changed from bottom: 100% to top: 100% */
+            margin: 0 auto;
+            margin-top: 5px; /* Changed from margin-bottom to margin-top */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Changed shadow direction */
+            border-radius: 4px;
+        }
+
+        .dropdown-content div {
+            padding: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .dropdown-content div:hover {
+            background-color: #ccc;
+        }
+	
+        .triangle {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%); /* Removed rotation to point downward */
+            width: 0;
+            height: 0;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-top: 6px solid #000; /* Changed from border-bottom to border-top */
+        }
+        .input-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 1px;
+            justify-content: space-between;
+            box-sizing: border-box;
+        }
+
+        input, button {
+            padding: 10px 0;
+            border: none;
+            font-size: 14px;
+            text-align: center;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        #valueAnswer {
+            width: calc(50% - 4px);
+            text-align: center;
+            white-space: normal;
+            height: auto;
+            min-height: 36px;
+        }
+
+        #inputValue {
+            width: calc(50% - 4px);
+        }
+
+        button {
+            background-color: #1976d2;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #1565c0;
+        }
+
+        /* Result details section */
+        .result-details {
+            width: 100%;
+            max-width: 352px;
+            margin-top: 15px;
+            background-color: #444;
+            border-radius: 8px;
+            padding: 10px;
+            color: #fff;
+            font-size: 14px;
+            display: none;
+        }
+
+        .result-details p {
+            margin: 5px 0;
+        }
+
+        .result-details .highlight {
+            color: #64b5f6;
+            font-weight: bold;
+        }
+
+        /* Spiral number highlight */
+        .spiral-highlight {
+            color: #4caf50;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        /* Warning highlight for "No More Use Spiral" */
+        .warning-highlight {
+            color: #ff5252;
+	    font-weight: bold;
+            font-size: 14px;
+        }
+
+	/* Footer style */
+        .footer {
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 15px;
+            color: #fff;
+            padding: 5px;
+        }
+
+        .footer a {
+            color: #64b5f6;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer a:hover {
+            color: #90caf9;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator-container">
+        <div class="calculator-header">
+            <h1>Paper Thickness Calculator</h1>
+        </div>
+        
+        <div class="paper-select form-width">
+            <div class="dropdown-content" id="paperOptions">
+                <!-- Paper thickness values are in cm -->
+                <div data-value="art120" data-thickness="0.0131" data-name="Art Paper 120gsm">Art Paper 120gsm</div>
+                <div data-value="art150" data-thickness="0.0142" data-name="Art Paper 150gsm">Art Paper 150gsm</div>
+                <div data-value="matte120" data-thickness="0.0131" data-name="Matte Paper 120gsm">Matte Paper 120gsm</div>
+                <div data-value="matte150" data-thickness="0.0142" data-name="Matte Paper 150gsm">Matte Paper 150gsm</div>
+                <div data-value="carton400" data-thickness="0.05" data-name="Art Carton 400gsm">Art Carton 400gsm</div>
+                <div data-value="carton310" data-thickness="0.036" data-name="Art Carton 310gsm">Art Carton 310gsm</div>
+                <div data-value="carton260" data-thickness="0.03125" data-name="Art Carton 260gsm">Art Carton 260gsm</div>
+                <div data-value="carton230" data-thickness="0.025" data-name="Art Carton 230gsm">Art Carton 230gsm</div>
+                <div data-value="carton210" data-thickness="0.023" data-name="Art Carton 210gsm">Art Carton 210gsm</div>
+                <div data-value="hvs75" data-thickness="0.0093" data-name="HVS 75gsm">HVS 75gsm</div>
+                <div data-value="hvs80" data-thickness="0.01041" data-name="HVS 80gsm">HVS 80gsm</div>
+                <div data-value="hvs100" data-thickness="0.01234" data-name="HVS 100gsm">HVS 100gsm</div>
+                <div data-value="bookpaper" data-thickness="0.0120" data-name="Bookpaper">Bookpaper</div>
+            </div>
+            <div class="select-dropdown" id="selectedPaper">
+                ~Select Paper~
+                <span class="triangle"></span>
+            </div>
+        </div>
+        
+        <div class="input-group form-width">
+            <input type="number" id="inputValue" placeholder="Number of Paper">
+            <input type="text" id="valueAnswer" placeholder="" readonly>
+        </div>
+        <div class="form-width" style="margin-top: 8px;">
+            <button id="calculateBtn" style="width: 100%;">Calculate</button>
+        </div>
+
+        <!-- New detailed results section -->
+        <div class="result-details" id="resultDetails">
+            <p>Paper Type: <span id="paperTypeDetail" class="highlight"></span></p>
+            <p>Paper Weight: <span id="paperWeightDetail" class="highlight"></span></p> 	
+            <p>Thickness Total: <span id="stackHeightDetail" class="highlight"></span></p>
+            <p>Spiral Binding: <span id="spiralNumberDetail" class="spiral-highlight"></span></p>
+        </div>
+    </div>
+
+    <!-- Footer with attribution -->
+ <div class="footer">
+        Created By Anamaruchi (<a href="https://www.facebook.com/anang.zikri.f" target="_blank">Anang Zikri Febriyansyah</a>)
+    </div>	
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Paper weights and rates (values are in cm)
+            const paperRates = {
+                'art120': 0.0131,
+                'art150': 0.0142,
+                'matte120': 0.0131,
+                'matte150': 0.0142,
+                'carton400': 0.05,
+                'carton310': 0.036,
+                'carton260': 0.03125,
+                'carton230': 0.025,
+                'carton210': 0.023,
+                'hvs75': 0.0093,
+                'hvs80': 0.01041,
+                'hvs100': 0.01234,
+                'bookpaper': 0.0120
+            };
+
+            // Paper details storage
+            const paperDetails = {};
+
+            const selectedPaper = document.getElementById('selectedPaper');
+            const paperOptions = document.getElementById('paperOptions');
+            const inputValue = document.getElementById('inputValue');
+            const valueAnswer = document.getElementById('valueAnswer');
+            const calculateBtn = document.getElementById('calculateBtn');
+            const resultDetails = document.getElementById('resultDetails');
+            
+            // Detail elements
+            const paperTypeDetail = document.getElementById('paperTypeDetail');
+            const paperWeightDetail = document.getElementById('paperWeightDetail');
+            const stackHeightDetail = document.getElementById('stackHeightDetail');
+            const spiralNumberDetail = document.getElementById('spiralNumberDetail');
+            
+            let currentSelection = '';
+            let currentPaperName = '';
+            let currentThickness = 0;
+
+            // Function to determine spiral number based on thickness in cm
+            function getSpiralNumber(thicknessInCm) {
+                const thickness = parseFloat(thicknessInCm);
+                
+                // Check if thickness is more than 3cm
+                if (thickness > 3) {
+                    spiralNumberDetail.className = 'warning-highlight'; // Change to warning color
+                    return "No More Use Spiral";
+                }
+                
+                // Reset to normal spiral highlight color
+                spiralNumberDetail.className = 'spiral-highlight';
+                
+                // Spiral size recommendations based on thickness in cm
+                if (thickness <= 0.5) return "Number 5 (Max 0,5cm)";
+                if (thickness <= 0.7) return "Number 6 (Max 0,7cm)";
+                if (thickness <= 0.8) return "Number 7 (Max 0,8cm)";
+                if (thickness <= 0.9) return "Number 8 (Max 0,9cm)";
+                if (thickness <= 1.1) return "Number 9 (Max 1,1cm)";
+                if (thickness <= 1.3) return "Number 10 (Max 1,3cm)";
+                if (thickness <= 1.6) return "Number 12 (Max 1,6cm)";
+                if (thickness <= 1.8) return "Number 14 (Max 1,8cm)";
+                if (thickness <= 2.1) return "Number 16 (Max 2,1cm)";
+                if (thickness <= 2.6) return "Number 20 (Max 2,6cm)";
+                if (thickness <= 3.0) return "Number 24 (Max 3cm)";
+                return "No More Use Spiral";
+            }
+
+            // Store paper details from data attributes
+            paperOptions.querySelectorAll('div').forEach(option => {
+                const value = option.getAttribute('data-value');
+                const thickness = parseFloat(option.getAttribute('data-thickness'));
+                const name = option.getAttribute('data-name');
+                
+                paperDetails[value] = {
+                    thickness: thickness,
+                    name: name
+                };
+            });
+
+            // Toggle dropdown
+            selectedPaper.addEventListener('click', function() {
+                const isVisible = paperOptions.style.display === 'block';
+                paperOptions.style.display = isVisible ? 'none' : 'block';
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!event.target.closest('.paper-select')) {
+                    paperOptions.style.display = 'none';
+                }
+            });
+
+            // Handle paper selection
+            paperOptions.querySelectorAll('div').forEach(option => {
+                option.addEventListener('click', function() {
+                    const value = this.getAttribute('data-value');
+                    const text = this.textContent;
+                    const thickness = parseFloat(this.getAttribute('data-thickness'));
+                    const name = this.getAttribute('data-name');
+                    
+                    selectedPaper.textContent = text;
+                    selectedPaper.appendChild(document.createElement('span')).className = 'triangle';
+                    currentSelection = value;
+                    currentPaperName = name;
+                    currentThickness = thickness;
+                    
+                    paperOptions.style.display = 'none';
+                });
+            });
+
+            // Calculate button functionality
+            calculateBtn.addEventListener('click', function() {
+                if (!currentSelection) {
+                    alert('Please select a paper type first');
+                    return;
+                }
+
+                const input = parseFloat(inputValue.value);
+                if (isNaN(input)) {
+                    alert('Please enter a valid number');
+                    return;
+                }
+
+                // Calculate total thickness directly in cm
+                // The thickness values in data-thickness are already in cm
+                const exactThickness = currentThickness * input;
+                
+                // Show the exact calculation result with 4 decimal places
+                const thicknessInCm = exactThickness.toFixed(4);
+                
+                // For spiral binding determination, we still use the exact value
+                const spiralNumber = getSpiralNumber(exactThickness);
+                
+                // Extract GSM from paper name
+                const gsmMatch = currentPaperName.match(/(\d+)gsm/i);
+                const gsm = gsmMatch ? gsmMatch[1] : 'N/A';
+                
+                // Set value answer to show cm with 4 decimal places
+                valueAnswer.value = `${thicknessInCm} cm`;
+                
+                // Update detailed results
+                paperTypeDetail.textContent = currentPaperName;
+                paperWeightDetail.textContent = `${gsm} gsm`;
+                stackHeightDetail.textContent = `${thicknessInCm} cm`;
+                spiralNumberDetail.textContent = spiralNumber;
+                
+                // Show detailed results
+                resultDetails.style.display = 'block';
+            });
+            
+            // Add keyboard support - calculate on Enter key
+            inputValue.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    calculateBtn.click();
+                }
+            });
+        });
+    </script>
+</body>
 </html>
