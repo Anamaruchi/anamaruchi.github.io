@@ -248,10 +248,10 @@
 
         <!-- New detailed results section -->
         <div class="result-details" id="resultDetails">
-            <p>Paper Type: <span id="paperTypeDetail" class="highlight"></span></p>
-            <p>Paper Weight: <span id="paperWeightDetail" class="highlight"></span></p> 	
-            <p>Thickness Total: <span id="stackHeightDetail" class="highlight"></span></p>
-            <p>Spiral Binding: <span id="spiralNumberDetail" class="spiral-highlight"></span></p>
+            <p>Paper Type : <span id="paperTypeDetail" class="highlight"></span></p>
+            <p>Paper Weight : <span id="paperWeightDetail" class="highlight"></span></p> 	
+            <p>Thickness Total : <span id="stackHeightDetail" class="highlight"></span></p>
+            <p>Spiral Binding : <span id="spiralNumberDetail" class="spiral-highlight"></span></p>
         </div>
     </div>
 
@@ -313,17 +313,17 @@
                 spiralNumberDetail.className = 'spiral-highlight';
                 
                 // Spiral size recommendations based on thickness in cm
-                if (thickness <= 0.5) return "Number 5 (Max 0,5cm)";
-                if (thickness <= 0.7) return "Number 6 (Max 0,7cm)";
-                if (thickness <= 0.8) return "Number 7 (Max 0,8cm)";
-                if (thickness <= 0.9) return "Number 8 (Max 0,9cm)";
-                if (thickness <= 1.1) return "Number 9 (Max 1,1cm)";
-                if (thickness <= 1.3) return "Number 10 (Max 1,3cm)";
-                if (thickness <= 1.6) return "Number 12 (Max 1,6cm)";
-                if (thickness <= 1.8) return "Number 14 (Max 1,8cm)";
-                if (thickness <= 2.1) return "Number 16 (Max 2,1cm)";
-                if (thickness <= 2.6) return "Number 20 (Max 2,6cm)";
-                if (thickness <= 3.0) return "Number 24 (Max 3cm)";
+                if (thickness <= 0.5) return "Number 5 (Max 0,5 cm)";
+                if (thickness <= 0.7) return "Number 6 (Max 0,7 cm)";
+                if (thickness <= 0.8) return "Number 7 (Max 0,8 cm)";
+                if (thickness <= 0.9) return "Number 8 (Max 0,9 cm)";
+                if (thickness <= 1.1) return "Number 9 (Max 1,1 cm)";
+                if (thickness <= 1.3) return "Number 10 (Max 1,3 cm)";
+                if (thickness <= 1.6) return "Number 12 (Max 1,6 cm)";
+                if (thickness <= 1.8) return "Number 14 (Max 1,8 cm)";
+                if (thickness <= 2.1) return "Number 16 (Max 2,1 cm)";
+                if (thickness <= 2.6) return "Number 20 (Max 2,6 cm)";
+                if (thickness <= 3.0) return "Number 20 (Max 3 cm)";
                 return "No More Use Spiral";
             }
 
