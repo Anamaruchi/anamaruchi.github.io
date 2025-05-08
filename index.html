@@ -16,22 +16,34 @@
             padding: 0;
         }
 
-        .calculator-container {
-            background-color: #333;
-            border-radius: 12px;
-            padding: 10px;
-            width: 385px;
-            border: 2px solid #1976d2;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        .main-container {
             display: flex;
-            flex-direction: column;
+            gap: 20px;
+            justify-content: center;
             align-items: flex-start;
-            padding-left: 30px;
-            padding-right: 30px;
-            padding-bottom: 20px;
         }
 
-        .calculator-header {
+        .calculator-container, .spiral-reference {
+            background-color: #333;
+            border-radius: 12px;
+            padding: 20px;
+            border: 2px solid #1976d2;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .calculator-container {
+            width: 385px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .spiral-reference {
+            width: 180px;
+            color: #fff;
+        }
+
+        .calculator-header, .spiral-header {
             width: 100%;
             text-align: center;
             color: #fff;
@@ -41,7 +53,7 @@
             padding-bottom: 10px;
         }
 
-        .calculator-header h1 {
+        .calculator-header h1, .spiral-header h1 {
             margin: 0;
             font-size: 22px;
             font-weight: 600;
@@ -81,10 +93,10 @@
             z-index: 1;
             left: 0;
             right: 0;
-            top: 100%; /* Changed from bottom: 100% to top: 100% */
+            top: 100%;
             margin: 0 auto;
-            margin-top: 5px; /* Changed from margin-bottom to margin-top */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Changed shadow direction */
+            margin-top: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             border-radius: 4px;
         }
 
@@ -102,13 +114,14 @@
             position: absolute;
             right: 10px;
             top: 50%;
-            transform: translateY(-50%); /* Removed rotation to point downward */
+            transform: translateY(-50%);
             width: 0;
             height: 0;
             border-left: 6px solid transparent;
             border-right: 6px solid transparent;
-            border-top: 6px solid #000; /* Changed from border-bottom to border-top */
+            border-top: 6px solid #000;
         }
+        
         .input-group {
             display: flex;
             flex-wrap: wrap;
@@ -181,11 +194,23 @@
         /* Warning highlight for "No More Use Spiral" */
         .warning-highlight {
             color: #ff5252;
-	    font-weight: bold;
+            font-weight: bold;
             font-size: 14px;
         }
 
-	/* Footer style */
+        /* Spiral reference list */
+        .spiral-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .spiral-list li {
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        /* Footer style */
         .footer {
             position: absolute;
             bottom: 10px;
@@ -210,53 +235,73 @@
     </style>
 </head>
 <body>
-    <div class="calculator-container">
-        <div class="calculator-header">
-            <h1>Paper Thickness Calculator</h1>
-        </div>
-        
-        <div class="paper-select form-width">
-            <div class="dropdown-content" id="paperOptions">
-                <!-- Paper thickness values are in cm -->
-                <div data-value="art120" data-thickness="0.0131" data-name="Art Paper 120gsm">Art Paper 120gsm</div>
-                <div data-value="art150" data-thickness="0.0142" data-name="Art Paper 150gsm">Art Paper 150gsm</div>
-                <div data-value="matte120" data-thickness="0.0131" data-name="Matte Paper 120gsm">Matte Paper 120gsm</div>
-                <div data-value="matte150" data-thickness="0.0142" data-name="Matte Paper 150gsm">Matte Paper 150gsm</div>
-                <div data-value="carton400" data-thickness="0.05" data-name="Art Carton 400gsm">Art Carton 400gsm</div>
-                <div data-value="carton310" data-thickness="0.036" data-name="Art Carton 310gsm">Art Carton 310gsm</div>
-                <div data-value="carton260" data-thickness="0.03125" data-name="Art Carton 260gsm">Art Carton 260gsm</div>
-                <div data-value="carton230" data-thickness="0.025" data-name="Art Carton 230gsm">Art Carton 230gsm</div>
-                <div data-value="carton210" data-thickness="0.023" data-name="Art Carton 210gsm">Art Carton 210gsm</div>
-                <div data-value="hvs75" data-thickness="0.0093" data-name="HVS 75gsm">HVS 75gsm</div>
-                <div data-value="hvs80" data-thickness="0.01041" data-name="HVS 80gsm">HVS 80gsm</div>
-                <div data-value="hvs100" data-thickness="0.01234" data-name="HVS 100gsm">HVS 100gsm</div>
-                <div data-value="bookpaper" data-thickness="0.0120" data-name="Bookpaper">Bookpaper</div>
+    <div class="main-container">
+        <div class="calculator-container">
+            <div class="calculator-header">
+                <h1>Paper Thickness Calculator</h1>
             </div>
-            <div class="select-dropdown" id="selectedPaper">
-                ~Select Paper~
-                <span class="triangle"></span>
+            
+            <div class="paper-select form-width">
+                <div class="dropdown-content" id="paperOptions">
+                    <!-- Paper thickness values are in cm -->
+                    <div data-value="art120" data-thickness="0.0131" data-name="Art Paper 120gsm">Art Paper 120gsm</div>
+                    <div data-value="art150" data-thickness="0.0142" data-name="Art Paper 150gsm">Art Paper 150gsm</div>
+                    <div data-value="matte120" data-thickness="0.0131" data-name="Matte Paper 120gsm">Matte Paper 120gsm</div>
+                    <div data-value="matte150" data-thickness="0.0142" data-name="Matte Paper 150gsm">Matte Paper 150gsm</div>
+                    <div data-value="carton400" data-thickness="0.05" data-name="Art Carton 400gsm">Art Carton 400gsm</div>
+                    <div data-value="carton310" data-thickness="0.036" data-name="Art Carton 310gsm">Art Carton 310gsm</div>
+                    <div data-value="carton260" data-thickness="0.03125" data-name="Art Carton 260gsm">Art Carton 260gsm</div>
+                    <div data-value="carton230" data-thickness="0.025" data-name="Art Carton 230gsm">Art Carton 230gsm</div>
+                    <div data-value="carton210" data-thickness="0.023" data-name="Art Carton 210gsm">Art Carton 210gsm</div>
+                    <div data-value="hvs75" data-thickness="0.0093" data-name="HVS 75gsm">HVS 75gsm</div>
+                    <div data-value="hvs80" data-thickness="0.01041" data-name="HVS 80gsm">HVS 80gsm</div>
+                    <div data-value="hvs100" data-thickness="0.01234" data-name="HVS 100gsm">HVS 100gsm</div>
+                    <div data-value="bookpaper" data-thickness="0.0120" data-name="Bookpaper">Bookpaper</div>
+                </div>
+                <div class="select-dropdown" id="selectedPaper">
+                    ~Select Paper~
+                    <span class="triangle"></span>
+                </div>
             </div>
-        </div>
-        
-        <div class="input-group form-width">
-            <input type="number" id="inputValue" placeholder="Number of Paper">
-            <input type="text" id="valueAnswer" placeholder="Result" readonly>
-        </div>
-        <div class="form-width" style="margin-top: 8px;">
-            <button id="calculateBtn" style="width: 100%;">Calculate</button>
+            
+            <div class="input-group form-width">
+                <input type="number" id="inputValue" placeholder="Number of Paper">
+                <input type="text" id="valueAnswer" placeholder="Result" readonly>
+            </div>
+            <div class="form-width" style="margin-top: 8px;">
+                <button id="calculateBtn" style="width: 100%;">Calculate</button>
+            </div>
+
+            <!-- New detailed results section -->
+            <div class="result-details" id="resultDetails">
+                <p>Paper Type : <span id="paperTypeDetail" class="highlight"></span></p>
+                <p>Paper Weight : <span id="paperWeightDetail" class="highlight"></span></p> 	
+                <p>Thickness Total : <span id="stackHeightDetail" class="highlight"></span></p>
+                <p>Spiral Binding : <span id="spiralNumberDetail" class="spiral-highlight"></span></p>
+            </div>
         </div>
 
-        <!-- New detailed results section -->
-        <div class="result-details" id="resultDetails">
-            <p>Paper Type : <span id="paperTypeDetail" class="highlight"></span></p>
-            <p>Paper Weight : <span id="paperWeightDetail" class="highlight"></span></p> 	
-            <p>Thickness Total : <span id="stackHeightDetail" class="highlight"></span></p>
-            <p>Spiral Binding : <span id="spiralNumberDetail" class="spiral-highlight"></span></p>
+        <div class="spiral-reference">
+            <div class="spiral-header">
+                <h1>Spiral Binding</h1>
+            </div>
+            <ul class="spiral-list">
+                <li>Number 5 (Max 0,5 cm)</li>
+                <li>Number 6 (Max 0,7 cm)</li>
+                <li>Number 7 (Max 0,8 cm)</li>
+                <li>Number 8 (Max 0,9 cm)</li>
+                <li>Number 9 (Max 1,1 cm)</li>
+                <li>Number 10 (Max 1,3 cm)</li>
+                <li>Number 12 (Max 1,6 cm)</li>
+                <li>Number 14 (Max 1,8 cm)</li>
+                <li>Number 16 (Max 2,1 cm)</li>
+                <li>Number 20 (Max 3 cm)</li>
+            </ul>
         </div>
     </div>
 
     <!-- Footer with attribution -->
- <div class="footer">
+    <div class="footer">
         Created By Anamaruchi (<a href="https://www.facebook.com/anang.zikri.f" target="_blank">Anang Zikri Febriyansyah</a>)
     </div>	
 
