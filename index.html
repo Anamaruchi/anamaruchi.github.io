@@ -15,6 +15,7 @@
             --text-light: #fff;
             --success-color: #4caf50;
             --warning-color: #ff5252;
+            --error-color: #f44336;
             --border-radius: 12px;
             --border-radius-sm: 4px;
             --spacing-xs: 5px;
@@ -179,6 +180,28 @@
             width: 100%;
         }
 
+        .input-wrapper {
+            position: relative;
+            width: calc(50% - 4px);
+        }
+
+        .error-message {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: -18px;
+            font-size: 11px;
+            color: var(--error-color);
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            pointer-events: none;
+        }
+
+        .error-message.visible {
+            opacity: 1;
+        }
+
         input, button {
             padding: clamp(8px, 2vw, 10px) 0;
             border: none;
@@ -188,15 +211,19 @@
             min-height: 36px;
         }
 
+        input {
+            width: 100%;
+        }
+
+        input.error {
+            border: 1px solid var(--error-color);
+            background-color: rgba(244, 67, 54, 0.1);
+        }
+
         #valueAnswer {
-            width: calc(50% - 4px);
             text-align: center;
             white-space: normal;
             height: auto;
-        }
-
-        #inputValue {
-            width: calc(50% - 4px);
         }
 
         button {
@@ -205,6 +232,7 @@
             cursor: pointer;
             transition: background-color 0.2s ease;
             -webkit-tap-highlight-color: transparent;
+            width: 100%;
         }
 
         button:hover, button:active {
@@ -315,8 +343,13 @@
                 flex-direction: column;
             }
 
-            #valueAnswer, #inputValue {
+            .input-wrapper {
                 width: 100%;
+                margin-bottom: 20px; /* Space for error message */
+            }
+            
+            .input-wrapper:last-child {
+                margin-bottom: 0;
             }
             
             .select-dropdown {
@@ -363,7 +396,7 @@
     <div class="main-container">
         <div class="calculator-container">
             <div class="calculator-header">
-                <h1>Paper Thickness Calculation</h1>
+                <h1>Paper Thickness Calculator</h1>
             </div>
             
             <div class="paper-select form-width">
@@ -390,11 +423,16 @@
             </div>
             
             <div class="input-group form-width">
-                <input type="number" id="inputValue" placeholder="Number of Paper" inputmode="numeric">
-                <input type="text" id="valueAnswer" placeholder="Result" readonly>
+                <div class="input-wrapper">
+                    <input type="number" id="inputValue" placeholder="Number of Paper" inputmode="numeric" min="1" step="1">
+                    <div id="inputError" class="error-message">Minimum value is 1</div>
+                </div>
+                <div class="input-wrapper">
+                    <input type="text" id="valueAnswer" placeholder="Result" readonly>
+                </div>
             </div>
             <div class="form-width" style="margin-top: var(--spacing-sm);">
-                <button id="calculateBtn" style="width: 100%;">Calculate</button>
+                <button id="calculateBtn">Calculate</button>
             </div>
             
             <!-- Creator attribution -->
@@ -455,6 +493,7 @@
             const selectedPaper = document.getElementById('selectedPaper');
             const paperOptions = document.getElementById('paperOptions');
             const inputValue = document.getElementById('inputValue');
+            const inputError = document.getElementById('inputError');
             const valueAnswer = document.getElementById('valueAnswer');
             const calculateBtn = document.getElementById('calculateBtn');
             const resultDetails = document.getElementById('resultDetails');
@@ -554,6 +593,34 @@
                 });
             });
 
+            // Validate input value
+            function validateInput() {
+                const value = parseInt(inputValue.value);
+                
+                // Check if value is less than 1 or not a number
+                if (isNaN(value) || value < 1) {
+                    inputValue.classList.add('error');
+                    inputError.classList.add('visible');
+                    return false;
+                } else {
+                    inputValue.classList.remove('error');
+                    inputError.classList.remove('visible');
+                    return true;
+                }
+            }
+
+            // Add input validation on change and input events
+            inputValue.addEventListener('input', validateInput);
+            inputValue.addEventListener('change', validateInput);
+            
+            // Force minimum value on blur
+            inputValue.addEventListener('blur', function() {
+                if (this.value === '' || parseInt(this.value) < 1) {
+                    this.value = 1;
+                    validateInput();
+                }
+            });
+
             // Calculate button functionality
             calculateBtn.addEventListener('click', function() {
                 if (!currentSelection) {
@@ -561,12 +628,14 @@
                     return;
                 }
 
-                const input = parseFloat(inputValue.value);
-                if (isNaN(input)) {
-                    alert('Please Enter a Valid Number Paper!');
+                // Validate input before calculating
+                if (!validateInput()) {
+                    inputValue.focus();
                     return;
                 }
 
+                const input = parseInt(inputValue.value);
+                
                 // Calculate total thickness directly in cm
                 // The thickness values in data-thickness are already in cm
                 const exactThickness = currentThickness * input;
