@@ -149,15 +149,20 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
 
+        .social-icon.youtube {
+            width: 70px;
+            height: 50px;
+        }
+
         .social-icon:hover {
             transform: translateY(-5px) scale(1.1);
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
         }
+
         @media (max-width: 768px) {
             .hello-text {
                 font-size: 2.5rem;
             }
-
 
             .description {
                 font-size: 1rem;
@@ -182,13 +187,17 @@
                 width: 45px;
                 height: 45px;
             }
+
+            .social-icon.youtube {
+                width: 63px;
+                height: 45px;
+            }
         }
 
         @media (max-width: 480px) {
             .hello-text {
                 font-size: 2rem;
             }
-
 
             .description {
                 font-size: 0.9rem;
@@ -203,7 +212,13 @@
                 width: 40px;
                 height: 40px;
             }
+
+            .social-icon.youtube {
+                width: 56px;
+                height: 40px;
+            }
         }
+
         .container {
             animation: fadeInUp 1s ease-out;
         }
@@ -235,7 +250,7 @@
             <p>Currently I'm Using Windows 11 & Linux on My Personal Computer.</p>
         </div>
 
-    <div class="buttons-section">
+        <div class="buttons-section">
             <!--<a href="#portfolio" class="btn" id="portfolioBtn">My Portofolio</a>-->
             <a href="Paper-Thickness-Calcualtion.html" class="btn" id="calculatorBtn">Paper Thickness Calcualtion</a>
         </div>
@@ -243,21 +258,28 @@
         <div class="social-media">
             <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Facebook%20Logo-MJ3d0Y6cgvgacL0zQNVVyaBwSgL8k8.png" alt="Facebook" class="social-icon" id="facebookIcon">
             <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Instagram%20Logo.PNG-wl2Mb5zNebhaaRjd2pjyTUDsKZWNDs.png" alt="Instagram" class="social-icon" id="instagramIcon">
+            <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Logo%20Youtube-9mYmQqdYxM7Sg1VVbtbAWAxHsabfjf.png" alt="YouTube" class="social-icon youtube" id="youtubeIcon">
         </div>
     </div>
 
     <script>
         document.getElementById('facebookIcon').addEventListener('click', function() {
-            window.open('https://www.facebook.com/anang.zikri.f', '_blank');
+            window.open('https://www.facebook.com/anamaruchi', '_blank');
         });
 
         document.getElementById('instagramIcon').addEventListener('click', function() {
-            window.open('https://www.instagram.com/04.nang_', '_blank');
+            window.open('https://www.instagram.com/anamaruchi', '_blank');
         });
+
+        document.getElementById('youtubeIcon').addEventListener('click', function() {
+            window.open('https://www.youtube.com/LtcoAnangZikri', '_blank');
+        });
+
         document.getElementById('portfolioBtn').addEventListener('click', function(e) {
             e.preventDefault();
             window.open('https://anamaruchi.portfolio.com', '_blank');
         });
+
         document.querySelectorAll('.btn').forEach(button => {
             button.addEventListener('mouseenter', function() {
                 this.style.transform = 'translateY(-3px) scale(1.05)';
@@ -318,6 +340,7 @@
                 }
             });
         });
+
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Enter' || e.key === ' ') {
                 if (document.activeElement.classList.contains('btn') || 
