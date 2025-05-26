@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Anamaruchi</title>
+    <style>
+        :root {
+            --primary-color: #1976d2;
+            --primary-light: #64b5f6;
+            --primary-dark: #1565c0;
+            --bg-dark: #121212;
+            --bg-container: #333;
+            --bg-input: #1976d2;
+            --text-light: #fff;
+            --success-color: #4caf50;
+            --warning-color: #ff5252;
+            --error-color: #f44336;
+            --border-radius: 12px;
+            --border-radius-sm: 4px;
+            --spacing-xs: 5px;
+            --spacing-sm: 8px;
+            --spacing-md: 15px;
+            --spacing-lg: 20px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background-color: var(--bg-dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: clamp(10px, 5vw, 30px);
+            color: var(--text-light);
+        }
+
+        .main-container {
+            display: flex;
+            flex-direction: row;
+            gap: clamp(10px, 3vw, 20px);
+            justify-content: center;
+            align-items: flex-start;
+            width: 100%;
+            max-width: 800px;
+            flex-wrap: wrap;
+        }
+
+        .calculator-container, .spiral-reference {
+            background-color: var(--bg-container);
+            border-radius: var(--border-radius);
+            padding: clamp(15px, 4vw, 20px);
+            border: 2px solid var(--primary-color);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .calculator-container {
+            width: 100%;
+            max-width: 385px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            min-width: min(280px, 100%);
+        }
+
+        .spiral-reference {
+            width: 100%;
+            max-width: 180px;
+            flex: 0 1 auto;
+            min-width: min(280px, 100%);
+        }
+
+        .calculator-header, .spiral-header {
+            width: 100%;
+            text-align: center;
+            margin-bottom: var(--spacing-md);
+            padding-top: 10px;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+        }
+
+        .calculator-header h1, .spiral-header h1 {
+            margin: 0;
+            font-size: clamp(16px, 5vw, 22px);
+            font-weight: 600;
+            color: var(--primary-light);
+        }
+
+        .form-width {
+            width: 100%;
+            max-width: 352px;
+        }
+
+        .paper-select {
+            position: relative;
+            margin-bottom: var(--spacing-sm);
+            width: 100%;
+        }
+
+        .select-dropdown {
+            width: 100%;
+            background-color: var(--bg-input);
+            border: none;
+            padding: clamp(8px, 2vw, 12px);
+            font-size: clamp(13px, 3.5vw, 14px);
+            cursor: pointer;
+            text-align: center;	
+            position: relative;
+            border-radius: var(--border-radius-sm);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            min-height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: var(--bg-input);
+            width: 100%;
+            max-height: min(250px, 60vh);
+            overflow-y: auto;
+            z-index: 10;
+            left: 0;
+            right: 0;
+            top: 100%;
+            margin: 0 auto;
+            margin-top: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: var(--border-radius-sm);
+        }
+
+        .dropdown-content div {
+            padding: clamp(5px, 1.5vw, 8px);
+            cursor: pointer;
+            font-size: clamp(13px, 3.5vw, 14px);
+            white-space: normal;
+            word-wrap: break-word;
+        }
+
+        .dropdown-content div:hover, .dropdown-content div:active {
+            background-color: #ccc;
+        }
+	
+        .triangle {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-top: 6px solid #000;
+            pointer-events: none;
+        }
+        
+        .input-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--spacing-sm);
+            margin-top: 1px;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .input-wrapper {
+            position: relative;
+            width: calc(50% - 4px);
+        }
+
+        .error-message {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: -18px;
+            font-size: 11px;
+            color: var(--error-color);
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            pointer-events: none;
+        }
+
+        .error-message.visible {
+            opacity: 1;
+        }
+
+        input, button {
+            padding: clamp(8px, 2vw, 10px) 0;
+            border: none;
+            font-size: clamp(13px, 3.5vw, 14px);
+            text-align: center;
+            border-radius: var(--border-radius-sm);
+            min-height: 36px;
+        }
+
+        input {
+            width: 100%;
+        }
+
+        input.error {
+            border: 1px solid var(--error-color);
+            background-color: rgba(244, 67, 54, 0.1);
+        }
+
+        #valueAnswer {
+            text-align: center;
+            white-space: normal;
+            height: auto;
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            -webkit-tap-highlight-color: transparent;
+            width: 100%;
+        }
+
+        button:hover, button:active {
+            background-color: var(--primary-dark);
+        }
+
+        /* Result details section */
+        .result-details {
+            width: 100%;
+            max-width: 352px;
+            margin-top: var(--spacing-md);
+            background-color: #444;
+            border-radius: var(--border-radius-sm);
+            padding: clamp(8px, 2vw, 10px);
+            font-size: clamp(12px, 3.5vw, 14px);
+            display: none;
+        }
+
+        .result-details p {
+            margin: 5px 0;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        .result-details .highlight {
+            color: var(--primary-light);
+            font-weight: bold;
+        }
+
+        /* Spiral number highlight */
+        .spiral-highlight {
+            color: var(--success-color);
+            font-weight: bold;
+            font-size: clamp(12px, 3.5vw, 14px);
+        }
+
+        /* Warning highlight for "No More Use Spiral" */
+        .warning-highlight {
+            color: var(--warning-color);
+            font-weight: bold;
+            font-size: clamp(12px, 3.5vw, 14px);
+        }
+
+        /* Spiral reference list */
+        .spiral-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .spiral-list li {
+            margin-bottom: var(--spacing-sm);
+            font-size: clamp(14px, 4vw, 16px);
+            padding: 2px 0;
+        }
+
+        /* Creator attribution style */
+        .creator-info {
+            width: 100%;
+            text-align: center;
+            font-size: clamp(12px, 3.5vw, 15px);
+            padding: var(--spacing-md) 0 var(--spacing-xs) 0;
+            margin-top: var(--spacing-md);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .creator-info a {
+            color: var(--primary-light);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .creator-info a:hover, .creator-info a:active {
+            color: #90caf9;
+            text-decoration: underline;
+        }
+
+        /* Touch-friendly adjustments */
+        @media (hover: none) {
+            .select-dropdown, button, .dropdown-content div, .creator-info a {
+                cursor: default;
+            }
+            
+            input, button, .select-dropdown {
+                font-size: 16px; /* Prevent iOS zoom on focus */
+            }
+        }
+
+        /* Media queries for responsive design */
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .calculator-container, .spiral-reference {
+                max-width: 100%;
+                width: 100%;
+            }
+            
+            .spiral-reference {
+                margin-top: var(--spacing-md);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .input-group {
+                flex-direction: column;
+            }
+
+            .input-wrapper {
+                width: 100%;
+                margin-bottom: 20px; /* Space for error message */
+            }
+            
+            .input-wrapper:last-child {
+                margin-bottom: 0;
+            }
+            
+            .select-dropdown {
+                padding-right: 25px; /* Add right padding for triangle */
+            }
+            
+            .spiral-list {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+                gap: 5px;
+            }
+            
+            .spiral-list li {
+                margin-bottom: 5px;
+                font-size: clamp(12px, 3.5vw, 14px);
+            }
+        }
+
+        @media (max-width: 320px) {
+            body {
+                padding: 5px;
+            }
+            
+            .calculator-container, .spiral-reference {
+                padding: 10px;
+                border-width: 1px;
+            }
+            
+            .calculator-header, .spiral-header {
+                padding: 5px 0;
+                margin-bottom: 10px;
+            }
+        }
+
+        /* Fix for iOS Safari 100vh issue */
+        @supports (-webkit-touch-callout: none) {
+            body {
+                min-height: -webkit-fill-available;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="calculator-container">
+            <div class="calculator-header">
+                <h1>Paper Thickness Calculation</h1>
+            </div>
+            
+            <div class="paper-select form-width">
+                <div class="dropdown-content" id="paperOptions">
+                    <!-- Paper thickness values are in cm -->
+                    <div data-value="art120" data-thickness="0.01074" data-name="Art Paper 120gsm">Art Paper 120gsm</div>
+                    <div data-value="art150" data-thickness="0.0142" data-name="Art Paper 150gsm">Art Paper 150gsm</div>
+                    <div data-value="matte120" data-thickness="0.01074" data-name="Matte Paper 120gsm">Matte Paper 120gsm</div>
+                    <div data-value="matte150" data-thickness="0.0142" data-name="Matte Paper 150gsm">Matte Paper 150gsm</div>
+                    <div data-value="carton400" data-thickness="0.05" data-name="Art Carton 400gsm">Art Carton 400gsm</div>
+                    <div data-value="carton310" data-thickness="0.036" data-name="Art Carton 310gsm">Art Carton 310gsm</div>
+                    <div data-value="carton260" data-thickness="0.03125" data-name="Art Carton 260gsm">Art Carton 260gsm</div>
+                    <div data-value="carton230" data-thickness="0.025" data-name="Art Carton 230gsm">Art Carton 230gsm</div>
+                    <div data-value="carton210" data-thickness="0.023" data-name="Art Carton 210gsm">Art Carton 210gsm</div>
+                    <div data-value="hvs75" data-thickness="0.0093" data-name="HVS 75gsm">HVS 75gsm</div>
+                    <div data-value="hvs80" data-thickness="0.01041" data-name="HVS 80gsm">HVS 80gsm</div>
+                    <div data-value="hvs100" data-thickness="0.01234" data-name="HVS 100gsm">HVS 100gsm</div>
+                    <div data-value="bookpaper" data-thickness="0.0120" data-name="Bookpaper">Bookpaper</div>
+                </div>
+                <div class="select-dropdown" id="selectedPaper">
+                    ~Select Paper~
+                    <span class="triangle"></span>
+                </div>
+            </div>
+            
+            <div class="input-group form-width">
+                <div class="input-wrapper">
+                    <input type="number" id="inputValue" placeholder="Number of Paper" inputmode="numeric" min="1" step="1">
+                    <div id="inputError" class="error-message">Minimum value is 1</div>
+                </div>
+                <div class="input-wrapper">
+                    <input type="text" id="valueAnswer" placeholder="Result" readonly>
+                </div>
+            </div>
+            <div class="form-width" style="margin-top: var(--spacing-sm);">
+                <button id="calculateBtn">Calculate</button>
+            </div>
+            
+            <!-- Creator attribution -->
+            <div class="creator-info form-width">
+                Created By Anamaruchi (<a href="https://www.facebook.com/anang.zikri.f" target="_blank">Anang Zikri Febriyansyah</a>)
+            </div>
+
+            <!-- New detailed results section -->
+            <div class="result-details" id="resultDetails">
+                <p>Paper Type : <span id="paperTypeDetail" class="highlight"></span></p>
+                <p>Paper Weight : <span id="paperWeightDetail" class="highlight"></span></p> 	
+                <p>Thickness Total : <span id="stackHeightDetail" class="highlight"></span></p>
+                <p>Spiral Binding : <span id="spiralNumberDetail" class="spiral-highlight"></span></p>
+            </div>
+        </div>
+
+        <div class="spiral-reference">
+            <div class="spiral-header">
+                <h1>Spiral Binding</h1>
+            </div>
+            <ul class="spiral-list">
+                <li>Number 5 (Max 0,5 cm)</li>
+                <li>Number 6 (Max 0,7 cm)</li>
+                <li>Number 7 (Max 0,8 cm)</li>
+                <li>Number 8 (Max 0,9 cm)</li>
+                <li>Number 9 (Max 1,1 cm)</li>
+                <li>Number 10 (Max 1,3 cm)</li>
+                <li>Number 12 (Max 1,6 cm)</li>
+                <li>Number 14 (Max 1,8 cm)</li>
+                <li>Number 16 (Max 2,1 cm)</li>
+                <li>Number 20 (Max 3 cm)</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Paper weights and rates (values are in cm)
+            const paperRates = {
+                'art120': 0.01074,
+                'art150': 0.0142,
+                'matte120': 0.01074,
+                'matte150': 0.0142,
+                'carton400': 0.05,
+                'carton310': 0.036,
+                'carton260': 0.03125,
+                'carton230': 0.025,
+                'carton210': 0.023,
+                'hvs75': 0.0093,
+                'hvs80': 0.01041,
+                'hvs100': 0.01234,
+                'bookpaper': 0.0120
+            };
+
+            // Paper details storage
+            const paperDetails = {};
+
+            const selectedPaper = document.getElementById('selectedPaper');
+            const paperOptions = document.getElementById('paperOptions');
+            const inputValue = document.getElementById('inputValue');
+            const inputError = document.getElementById('inputError');
+            const valueAnswer = document.getElementById('valueAnswer');
+            const calculateBtn = document.getElementById('calculateBtn');
+            const resultDetails = document.getElementById('resultDetails');
+            
+            // Detail elements
+            const paperTypeDetail = document.getElementById('paperTypeDetail');
+            const paperWeightDetail = document.getElementById('paperWeightDetail');
+            const stackHeightDetail = document.getElementById('stackHeightDetail');
+            const spiralNumberDetail = document.getElementById('spiralNumberDetail');
+            
+            let currentSelection = '';
+            let currentPaperName = '';
+            let currentThickness = 0;
+
+            // Function to determine spiral number based on thickness in cm
+            function getSpiralNumber(thicknessInCm) {
+                const thickness = parseFloat(thicknessInCm);
+                
+                // Check if thickness is more than 3cm
+                if (thickness > 3) {
+                    spiralNumberDetail.className = 'warning-highlight'; // Change to warning color
+                    return "No More Use Spiral";
+                }
+                
+                // Reset to normal spiral highlight color
+                spiralNumberDetail.className = 'spiral-highlight';
+                
+                // Spiral size recommendations based on thickness in cm
+                if (thickness <= 0.5) return "Number 5 (Max 0,5 cm)";
+                if (thickness <= 0.7) return "Number 6 (Max 0,7 cm)";
+                if (thickness <= 0.8) return "Number 7 (Max 0,8 cm)";
+                if (thickness <= 0.9) return "Number 8 (Max 0,9 cm)";
+                if (thickness <= 1.1) return "Number 9 (Max 1,1 cm)";
+                if (thickness <= 1.3) return "Number 10 (Max 1,3 cm)";
+                if (thickness <= 1.6) return "Number 12 (Max 1,6 cm)";
+                if (thickness <= 1.8) return "Number 14 (Max 1,8 cm)";
+                if (thickness <= 2.1) return "Number 16 (Max 2,1 cm)";
+                if (thickness <= 2.6) return "Number 20 (Max 2,6 cm)";
+                if (thickness <= 3.0) return "Number 20 (Max 3 cm)";
+                return "No More Use Spiral";
+            }
+
+            // Store paper details from data attributes
+            paperOptions.querySelectorAll('div').forEach(option => {
+                const value = option.getAttribute('data-value');
+                const thickness = parseFloat(option.getAttribute('data-thickness'));
+                const name = option.getAttribute('data-name');
+                
+                paperDetails[value] = {
+                    thickness: thickness,
+                    name: name
+                };
+            });
+
+            // Toggle dropdown
+            selectedPaper.addEventListener('click', function(e) {
+                e.preventDefault(); // Prevent double-tap zoom on mobile
+                const isVisible = paperOptions.style.display === 'block';
+                paperOptions.style.display = isVisible ? 'none' : 'block';
+                
+                // Position the dropdown properly
+                positionDropdown();
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!event.target.closest('.paper-select')) {
+                    paperOptions.style.display = 'none';
+                }
+            });
+
+            // Handle paper selection
+            paperOptions.querySelectorAll('div').forEach(option => {
+                option.addEventListener('click', function() {
+                    const value = this.getAttribute('data-value');
+                    const text = this.textContent;
+                    const thickness = parseFloat(this.getAttribute('data-thickness'));
+                    const name = this.getAttribute('data-name');
+                    
+                    // Clear the content first
+                    selectedPaper.textContent = '';
+                    
+                    // Create a text node for the paper name
+                    const textNode = document.createTextNode(text);
+                    selectedPaper.appendChild(textNode);
+                    
+                    // Add the triangle
+                    const triangle = document.createElement('span');
+                    triangle.className = 'triangle';
+                    selectedPaper.appendChild(triangle);
+                    
+                    currentSelection = value;
+                    currentPaperName = name;
+                    currentThickness = thickness;
+                    
+                    paperOptions.style.display = 'none';
+                });
+            });
+
+            // Validate input value
+            function validateInput() {
+                const value = parseInt(inputValue.value);
+                
+                // Check if value is less than 1 or not a number
+                if (isNaN(value) || value < 1) {
+                    inputValue.classList.add('error');
+                    inputError.classList.add('visible');
+                    return false;
+                } else {
+                    inputValue.classList.remove('error');
+                    inputError.classList.remove('visible');
+                    return true;
+                }
+            }
+
+            // Add input validation on change and input events
+            inputValue.addEventListener('input', validateInput);
+            inputValue.addEventListener('change', validateInput);
+            
+            // Force minimum value on blur
+            inputValue.addEventListener('blur', function() {
+                if (this.value === '' || parseInt(this.value) < 1) {
+                    this.value = 1;
+                    validateInput();
+                }
+            });
+
+            // Calculate button functionality
+            calculateBtn.addEventListener('click', function() {
+                if (!currentSelection) {
+                    alert('Please Select a Paper Type First!');
+                    return;
+                }
+
+                // Validate input before calculating
+                if (!validateInput()) {
+                    inputValue.focus();
+                    return;
+                }
+
+                const input = parseInt(inputValue.value);
+                
+                // Calculate total thickness directly in cm
+                // The thickness values in data-thickness are already in cm
+                const exactThickness = currentThickness * input;
+                
+                // Show the exact calculation result with 4 decimal places
+                const thicknessInCm = exactThickness.toFixed(4);
+                
+                // For spiral binding determination, we still use the exact value
+                const spiralNumber = getSpiralNumber(exactThickness);
+                
+                // Extract GSM from paper name
+                const gsmMatch = currentPaperName.match(/(\d+)gsm/i);
+                const gsm = gsmMatch ? gsmMatch[1] : 'N/A';
+                
+                // Set value answer to show cm with 4 decimal places
+                valueAnswer.value = `${thicknessInCm} cm`;
+                
+                // Update detailed results
+                paperTypeDetail.textContent = currentPaperName;
+                paperWeightDetail.textContent = `${gsm} gsm`;
+                stackHeightDetail.textContent = `${thicknessInCm} cm`;
+                spiralNumberDetail.textContent = spiralNumber;
+                
+                // Show detailed results
+                resultDetails.style.display = 'block';
+                
+                // Blur active element to hide keyboard on mobile
+                document.activeElement.blur();
+            });
+            
+            // Add keyboard support - calculate on Enter key
+            inputValue.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    calculateBtn.click();
+                }
+            });
+
+            // Function to position the dropdown properly
+            function positionDropdown() {
+                // Get the parent container width
+                const parentWidth = selectedPaper.offsetWidth;
+                
+                // Set the dropdown width to match the parent
+                paperOptions.style.width = parentWidth + 'px';
+                
+                // Check if dropdown would go off-screen
+                const paperSelectRect = document.querySelector('.paper-select').getBoundingClientRect();
+                const viewportWidth = window.innerWidth;
+                
+                // If dropdown would extend beyond right edge of viewport
+                if (paperSelectRect.left + parentWidth > viewportWidth) {
+                    // Adjust position to keep it within viewport
+                    const adjustment = (paperSelectRect.left + parentWidth) - viewportWidth + 10; // 10px buffer
+                    paperOptions.style.left = `-${adjustment}px`;
+                } else {
+                    paperOptions.style.left = '0';
+                }
+                
+                // Check if dropdown would go off bottom of screen
+                const dropdownHeight = paperOptions.scrollHeight;
+                const spaceBelow = window.innerHeight - paperSelectRect.bottom;
+                
+                if (dropdownHeight > spaceBelow && paperSelectRect.top > dropdownHeight) {
+                    // Position above if there's more space
+                    paperOptions.style.top = 'auto';
+                    paperOptions.style.bottom = '100%';
+                    paperOptions.style.marginTop = '0';
+                    paperOptions.style.marginBottom = '5px';
+                } else {
+                    // Position below
+                    paperOptions.style.top = '100%';
+                    paperOptions.style.bottom = 'auto';
+                    paperOptions.style.marginTop = '5px';
+                    paperOptions.style.marginBottom = '0';
+                }
+            }
+
+            // Responsive layout adjustments
+            function handleResponsiveLayout() {
+                const windowWidth = window.innerWidth;
+                const calculatorWidth = document.querySelector('.calculator-container').offsetWidth;
+                
+                // Ensure dropdown doesn't exceed container width
+                paperOptions.style.maxWidth = (calculatorWidth - 40) + 'px'; // 40px for padding
+                
+                // Adjust text display in dropdown based on available width
+                if (windowWidth <= 480) {
+                    // For very small screens, ensure triangle doesn't overlap text
+                    selectedPaper.style.paddingRight = '25px';
+                } else {
+                    selectedPaper.style.paddingRight = '';
+                }
+                
+                // Reposition dropdown if it's currently visible
+                if (paperOptions.style.display === 'block') {
+                    positionDropdown();
+                }
+                
+                // Adjust spiral list layout based on container width
+                const spiralReference = document.querySelector('.spiral-reference');
+                const spiralList = document.querySelector('.spiral-list');
+                
+                if (spiralReference && spiralList) {
+                    const containerWidth = spiralReference.offsetWidth;
+                    
+                    if (containerWidth > 300 && windowWidth > 480) {
+                        // For wider containers on larger screens, use grid layout
+                        spiralList.style.display = 'grid';
+                        spiralList.style.gridTemplateColumns = 'repeat(auto-fill, minmax(120px, 1fr))';
+                    } else if (windowWidth <= 480) {
+                        // Keep grid layout on small screens
+                        spiralList.style.display = 'grid';
+                        spiralList.style.gridTemplateColumns = 'repeat(auto-fill, minmax(120px, 1fr))';
+                    } else {
+                        // Default to list layout
+                        spiralList.style.display = 'block';
+                    }
+                }
+            }
+
+            // Fix for iOS Safari 100vh issue
+            function setViewportHeight() {
+                document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
+            }
+
+            // Initial calls
+            handleResponsiveLayout();
+            setViewportHeight();
+            
+            // Event listeners for resize and orientation change
+            window.addEventListener('resize', function() {
+                handleResponsiveLayout();
+                setViewportHeight();
+            });
+            
+            window.addEventListener('orientationchange', function() {
+                // Small delay to ensure orientation change is complete
+                setTimeout(function() {
+                    handleResponsiveLayout();
+                    setViewportHeight();
+                }, 200);
+            });
+            
+            // Prevent zoom on double tap for iOS
+            let lastTouchEnd = 0;
+            document.addEventListener('touchend', function(event) {
+                const now = (new Date()).getTime();
+                if (now - lastTouchEnd <= 300) {
+                    event.preventDefault();
+                }
+                lastTouchEnd = now;
+            }, false);
+        });
+    </script>
+</body>
+</html>
