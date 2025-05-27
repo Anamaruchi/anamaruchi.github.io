@@ -31,16 +31,16 @@
         }
 
         .home-button {
-            position: fixed;
-            top: clamp(10px, 2vw, 20px);
-            left: clamp(10px, 2vw, 20px);
+            position: fixed !important;
+            top: clamp(10px, 2vw, 20px) !important;
+            left: clamp(10px, 2vw, 20px) !important;
             background: linear-gradient(135deg, #0060df, #003eaa);
             color: white;
             border: none;
             padding: clamp(8px, 2vw, 12px);
             border-radius: 10px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
             box-shadow: 0 5px 15px rgba(0, 96, 223, 0.3);
             z-index: 100;
             text-decoration: none;
@@ -49,39 +49,47 @@
             justify-content: center;
             width: clamp(40px, 8vw, 50px);
             height: clamp(40px, 8vw, 50px);
+            /* Prevent any movement */
+            transform: none !important;
         }
 
         .home-button:hover {
             background: linear-gradient(135deg, #003eaa, #0060df);
             box-shadow: 0 8px 25px rgba(0, 96, 223, 0.4);
+            transform: none !important;
         }
 
         .home-button:active {
             background: linear-gradient(135deg, #002080, #0060df);
             box-shadow: 0 4px 15px rgba(0, 96, 223, 0.5);
+            transform: none !important;
+        }
+
+        .home-button:focus {
+            outline: 2px solid rgba(255, 255, 255, 0.5);
+            outline-offset: 2px;
+            /* Ensure no transform on focus */
+            transform: none !important;
         }
 
         .home-icon {
             width: clamp(18px, 4vw, 24px);
             height: clamp(18px, 4vw, 24px);
             filter: brightness(0) invert(1);
-            transition: all 0.3s ease;
-        }
-
-        .home-button:hover .home-icon {
-            transform: scale(1.1);
+            /* Remove transform from icon too */
+            transition: none;
         }
 
         .scroll-to-top {
-            position: fixed;
-            bottom: clamp(15px, 3vw, 30px);
-            right: clamp(15px, 3vw, 30px);
+            position: fixed !important;
+            bottom: clamp(15px, 3vw, 30px) !important;
+            right: clamp(15px, 3vw, 30px) !important;
             background: linear-gradient(135deg, #0060df, #003eaa);
             border: none;
             padding: clamp(10px, 2.5vw, 15px);
             border-radius: 50%;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease, visibility 0.3s ease;
             box-shadow: 0 5px 15px rgba(0, 96, 223, 0.3);
             z-index: 100;
             width: clamp(45px, 10vw, 60px);
@@ -91,21 +99,17 @@
             justify-content: center;
             opacity: 0;
             visibility: hidden;
-            transform: translateY(100px);
+            /* Prevent any movement */
+            transform: translateY(100px) !important;
         }
 
         .scroll-to-top.show {
             opacity: 1;
             visibility: visible;
-            transform: translateY(0);
+            transform: translateY(0) !important;
         }
 
         .scroll-to-top:hover {
-            background: linear-gradient(135deg, #003eaa, #0060df);
-            box-shadow: 0 10px 25px rgba(0, 96, 223, 0.5);
-        }
-
-        .scroll-to-top.show:hover {
             background: linear-gradient(135deg, #003eaa, #0060df);
             box-shadow: 0 10px 25px rgba(0, 96, 223, 0.5);
         }
@@ -115,19 +119,18 @@
             box-shadow: 0 6px 20px rgba(0, 96, 223, 0.6);
         }
 
+        .scroll-to-top.show:hover {
+            transform: translateY(0) !important;
+        }
+
         .scroll-to-top.show:active {
-            background: linear-gradient(135deg, #002080, #0060df);
-            box-shadow: 0 6px 20px rgba(0, 96, 223, 0.6);
+            transform: translateY(0) !important;
         }
 
         .go-up-icon {
             width: clamp(20px, 5vw, 28px);
             height: clamp(20px, 5vw, 28px);
-            transition: all 0.3s ease;
-        }
-
-        .scroll-to-top:hover .go-up-icon {
-            transform: scale(1.2) translateY(-2px);
+            transition: none;
         }
 
         .main-container {
@@ -322,6 +325,10 @@
         }
 
         .dropdown-content div:active {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .dropdown-content div.touched {
             background: rgba(255, 255, 255, 0.3);
         }
 	
@@ -575,7 +582,6 @@
 
             .dropdown-content {
                 backdrop-filter: none;
-                /* Enhanced mobile dropdown */
                 max-height: min(250px, 50vh);
                 border: 2px solid rgba(59, 130, 246, 0.5);
             }
@@ -657,7 +663,6 @@
                 text-align: center;
             }
 
-            /* Enhanced mobile dropdown for small screens */
             .dropdown-content {
                 max-height: min(300px, 60vh);
                 border-radius: 12px;
@@ -855,10 +860,38 @@
             let currentThickness = 0;
             let isDropdownOpen = false;
             let dropdownTimeout = null;
+            let touchStartTime = 0;
+            let isTouch = false;
 
             function setupHomeButton() {
                 homeButton.addEventListener('click', function(e) {
-                    addRippleEffect(this, e);
+                    // Simple ripple effect without transforms
+                    const ripple = document.createElement('span');
+                    const rect = this.getBoundingClientRect();
+                    const size = Math.max(rect.width, rect.height);
+                    const x = e.clientX - rect.left - size / 2;
+                    const y = e.clientY - rect.top - size / 2;
+                    
+                    ripple.style.cssText = `
+                        position: absolute;
+                        width: ${size}px;
+                        height: ${size}px;
+                        left: ${x}px;
+                        top: ${y}px;
+                        background: rgba(255, 255, 255, 0.3);
+                        border-radius: 50%;
+                        opacity: 0.7;
+                        pointer-events: none;
+                        z-index: 10;
+                    `;
+                    
+                    this.style.position = 'relative';
+                    this.style.overflow = 'hidden';
+                    this.appendChild(ripple);
+                    
+                    setTimeout(() => {
+                        ripple.remove();
+                    }, 300);
                 });
 
                 homeButton.setAttribute('tabindex', '0');
@@ -890,7 +923,6 @@
 
                 scrollToTopBtn.addEventListener('click', function(e) {
                     e.preventDefault();
-                    addRippleEffect(this, e);
                     
                     window.scrollTo({
                         top: 0,
@@ -907,36 +939,6 @@
                 scrollToTopBtn.setAttribute('aria-label', 'Scroll to top');
 
                 checkScrollPosition();
-            }
-
-            function addRippleEffect(element, event) {
-                const ripple = document.createElement('span');
-                const rect = element.getBoundingClientRect();
-                const size = Math.max(rect.width, rect.height);
-                const x = event.clientX - rect.left - size / 2;
-                const y = event.clientY - rect.top - size / 2;
-                
-                ripple.style.cssText = `
-                    position: absolute;
-                    width: ${size}px;
-                    height: ${size}px;
-                    left: ${x}px;
-                    top: ${y}px;
-                    background: rgba(255, 255, 255, 0.3);
-                    border-radius: 50%;
-                    transform: scale(0);
-                    animation: ripple 0.6s ease-out;
-                    pointer-events: none;
-                    z-index: 10;
-                `;
-                
-                element.style.position = 'relative';
-                element.style.overflow = 'hidden';
-                element.appendChild(ripple);
-                
-                setTimeout(() => {
-                    ripple.remove();
-                }, 600);
             }
 
             function getSpiralNumber(thicknessInCm) {
@@ -1014,38 +1016,94 @@
                 }
             }
 
-            // Enhanced mobile touch handling
-            selectedPaper.addEventListener('click', toggleDropdown);
-            
-            // Improved touch handling for mobile
-            selectedPaper.addEventListener('touchstart', function(e) {
-                // Don't prevent default to allow proper touch handling
-                toggleDropdown(e);
-            }, { passive: true });
 
-            // Close dropdown when clicking outside
-            document.addEventListener('click', function(event) {
-                if (!event.target.closest('.paper-select')) {
-                    closeDropdown();
+            function isTouchDevice() {
+                return (('ontouchstart' in window) ||
+                       (navigator.maxTouchPoints > 0) ||
+                       (navigator.msMaxTouchPoints > 0));
+            }
+
+            selectedPaper.addEventListener('click', function(e) {
+                if (!isTouch) {
+                    toggleDropdown(e);
                 }
             });
 
-            document.addEventListener('touchstart', function(event) {
-                if (!event.target.closest('.paper-select')) {
-                    closeDropdown();
-                }
+            selectedPaper.addEventListener('touchstart', function(e) {
+                isTouch = true;
+                touchStartTime = Date.now();
             }, { passive: true });
 
-            // Enhanced option selection with better mobile support
+            selectedPaper.addEventListener('touchend', function(e) {
+                e.preventDefault();
+                const touchDuration = Date.now() - touchStartTime;
+                
+  
+                if (touchDuration < 300) {
+                    setTimeout(() => {
+                        toggleDropdown(e);
+                    }, 50);
+                }
+                
+                setTimeout(() => {
+                    isTouch = false;
+                }, 300);
+            });
+
+            function handleOutsideClick(event) {
+                if (!event.target.closest('.paper-select')) {
+                    if (isTouchDevice()) {
+                        setTimeout(() => {
+                            closeDropdown();
+                        }, 100);
+                    } else {
+                        closeDropdown();
+                    }
+                }
+            }
+
+            document.addEventListener('click', handleOutsideClick);
+            document.addEventListener('touchstart', handleOutsideClick, { passive: true });
+
             paperOptions.querySelectorAll('div').forEach(option => {
+                let optionTouchStartTime = 0;
+
                 option.addEventListener('click', function(e) {
+                    if (!isTouch) {
+                        selectOption(this, e);
+                    }
+                });
+
+                option.addEventListener('touchstart', function(e) {
+                    optionTouchStartTime = Date.now();
+                    this.classList.add('touched');
+                }, { passive: true });
+
+                option.addEventListener('touchend', function(e) {
                     e.preventDefault();
                     e.stopPropagation();
                     
-                    const value = this.getAttribute('data-value');
-                    const text = this.textContent;
-                    const thickness = parseFloat(this.getAttribute('data-thickness'));
-                    const name = this.getAttribute('data-name');
+                    const touchDuration = Date.now() - optionTouchStartTime;
+                    
+                    // Only select if it's a quick tap
+                    if (touchDuration < 300) {
+                        setTimeout(() => {
+                            selectOption(this, e);
+                        }, 50);
+                    }
+                    
+                    this.classList.remove('touched');
+                });
+
+                option.addEventListener('touchcancel', function(e) {
+                    this.classList.remove('touched');
+                });
+
+                function selectOption(element, e) {
+                    const value = element.getAttribute('data-value');
+                    const text = element.textContent;
+                    const thickness = parseFloat(element.getAttribute('data-thickness'));
+                    const name = element.getAttribute('data-name');
                     
                     selectedPaper.innerHTML = '';
                     
@@ -1061,27 +1119,7 @@
                     currentThickness = thickness;
                     
                     closeDropdown();
-                });
-
-                // Enhanced touch handling for options
-                option.addEventListener('touchstart', function(e) {
-                    // Add visual feedback for touch
-                    this.style.background = 'rgba(255, 255, 255, 0.3)';
-                }, { passive: true });
-
-                option.addEventListener('touchend', function(e) {
-                    // Remove visual feedback
-                    this.style.background = '';
-                    // Trigger click after a small delay to ensure proper handling
-                    setTimeout(() => {
-                        this.click();
-                    }, 50);
-                }, { passive: true });
-
-                option.addEventListener('touchcancel', function(e) {
-                    // Remove visual feedback if touch is cancelled
-                    this.style.background = '';
-                }, { passive: true });
+                }
             });
 
             function validateInput() {
@@ -1109,8 +1147,6 @@
             });
 
             calculateBtn.addEventListener('click', function(e) {
-                addRippleEffect(this, e);
-                
                 if (!currentSelection) {
                     alert('Please Select a Paper Type First!');
                     return;
@@ -1150,15 +1186,6 @@
                 }
             });
 
-            document.querySelectorAll('button').forEach(element => {
-                element.addEventListener('click', function(e) {
-                    if (!this.classList.contains('scroll-to-top') && 
-                        !this.classList.contains('home-button')) {
-                        addRippleEffect(this, e);
-                    }
-                });
-            });
-
             function positionDropdown() {
                 paperOptions.style.display = 'block';
                 
@@ -1177,21 +1204,18 @@
                     paperOptions.style.left = '0';
                 }
                 
-                // Enhanced mobile positioning
                 const isMobile = window.innerWidth <= 768;
                 const maxDropdownHeight = isMobile ? Math.min(300, viewportHeight * 0.6) : 180;
                 const spaceBelow = viewportHeight - paperSelectRect.bottom - 20;
                 const spaceAbove = paperSelectRect.top - 20;
 
                 if (maxDropdownHeight > spaceBelow && spaceAbove > spaceBelow && spaceAbove > 150) {
-                    // Position above if there's more space
                     paperOptions.style.top = 'auto';
                     paperOptions.style.bottom = '100%';
                     paperOptions.style.marginTop = '0';
                     paperOptions.style.marginBottom = '5px';
                     paperOptions.style.maxHeight = Math.min(maxDropdownHeight, spaceAbove) + 'px';
                 } else {
-                    // Position below
                     paperOptions.style.top = '100%';
                     paperOptions.style.bottom = 'auto';
                     paperOptions.style.marginTop = '5px';
@@ -1257,12 +1281,11 @@
                 }
             });
             
-            // Prevent zoom on double tap for iOS but allow scrolling
+
             let lastTouchEnd = 0;
             document.addEventListener('touchend', function(event) {
                 const now = (new Date()).getTime();
                 if (now - lastTouchEnd <= 300) {
-                    // Only prevent default if not in dropdown area
                     if (!event.target.closest('.dropdown-content')) {
                         event.preventDefault();
                     }
