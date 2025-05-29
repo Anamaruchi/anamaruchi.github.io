@@ -23,11 +23,19 @@
             color: white;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
             min-height: 100vh;
             padding: clamp(5px, 2vw, 30px);
             position: relative;
             box-sizing: border-box;
+            padding-top: clamp(60px, 15vw, 80px);
+        }
+
+        @media (min-width: 769px) {
+            body {
+                align-items: center;
+                padding-top: clamp(5px, 2vw, 30px);
+            }
         }
 
         .home-button {
@@ -49,7 +57,6 @@
             justify-content: center;
             width: clamp(40px, 8vw, 50px);
             height: clamp(40px, 8vw, 50px);
-            /* Prevent any movement */
             transform: none !important;
         }
 
@@ -68,7 +75,6 @@
         .home-button:focus {
             outline: 2px solid rgba(255, 255, 255, 0.5);
             outline-offset: 2px;
-            /* Ensure no transform on focus */
             transform: none !important;
         }
 
@@ -76,7 +82,6 @@
             width: clamp(18px, 4vw, 24px);
             height: clamp(18px, 4vw, 24px);
             filter: brightness(0) invert(1);
-            /* Remove transform from icon too */
             transition: none;
         }
 
@@ -99,7 +104,6 @@
             justify-content: center;
             opacity: 0;
             visibility: hidden;
-            /* Prevent any movement */
             transform: translateY(100px) !important;
         }
 
@@ -146,6 +150,8 @@
             z-index: 1;
             animation: fadeInUp 1s ease-out;
             box-sizing: border-box;
+            min-height: auto;
+            margin-bottom: clamp(20px, 5vw, 40px);
         }
 
         @keyframes fadeInUp {
@@ -285,7 +291,6 @@
             pointer-events: none;
             box-sizing: border-box;
             border: 1px solid rgba(59, 130, 246, 0.5);
-            /* Enhanced mobile scrolling */
             -webkit-overflow-scrolling: touch;
             overscroll-behavior: contain;
         }
@@ -308,7 +313,6 @@
             transition: background-color 0.15s ease;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             position: relative;
-            /* Enhanced touch targets for mobile */
             min-height: clamp(40px, 10vw, 48px);
             display: flex;
             align-items: center;
@@ -575,6 +579,12 @@
         }
 
         @media (max-width: 768px) {
+            body {
+                align-items: flex-start;
+                padding-top: clamp(60px, 15vw, 80px);
+                padding-bottom: clamp(20px, 5vw, 40px);
+            }
+
             .calculator-container, .spiral-reference {
                 backdrop-filter: none;
                 background: rgba(26, 26, 26, 0.95);
@@ -593,6 +603,7 @@
             .main-container {
                 flex-direction: column;
                 align-items: center;
+                margin-bottom: clamp(40px, 10vw, 60px);
             }
 
             .calculator-container, .spiral-reference {
@@ -604,7 +615,6 @@
                 margin-top: clamp(15px, 4vw, 20px);
             }
 
-            /* Disable hover effects on mobile */
             .calculator-container:hover, .spiral-reference:hover {
                 transform: none;
                 box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
@@ -678,6 +688,7 @@
         @media (max-width: 320px) {
             body {
                 padding: clamp(3px, 1vw, 5px);
+                padding-top: clamp(50px, 12vw, 60px);
             }
             
             .calculator-container, .spiral-reference {
@@ -865,7 +876,6 @@
 
             function setupHomeButton() {
                 homeButton.addEventListener('click', function(e) {
-                    // Simple ripple effect without transforms
                     const ripple = document.createElement('span');
                     const rect = this.getBoundingClientRect();
                     const size = Math.max(rect.width, rect.height);
@@ -1016,7 +1026,6 @@
                 }
             }
 
-
             function isTouchDevice() {
                 return (('ontouchstart' in window) ||
                        (navigator.maxTouchPoints > 0) ||
@@ -1038,7 +1047,6 @@
                 e.preventDefault();
                 const touchDuration = Date.now() - touchStartTime;
                 
-  
                 if (touchDuration < 300) {
                     setTimeout(() => {
                         toggleDropdown(e);
@@ -1085,7 +1093,6 @@
                     
                     const touchDuration = Date.now() - optionTouchStartTime;
                     
-                    // Only select if it's a quick tap
                     if (touchDuration < 300) {
                         setTimeout(() => {
                             selectOption(this, e);
@@ -1281,7 +1288,6 @@
                 }
             });
             
-
             let lastTouchEnd = 0;
             document.addEventListener('touchend', function(event) {
                 const now = (new Date()).getTime();
