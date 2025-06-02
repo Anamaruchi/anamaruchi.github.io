@@ -39,52 +39,46 @@
         }
 
         .home-button {
-            position: fixed !important;
-            top: clamp(10px, 2vw, 20px) !important;
-            left: clamp(10px, 2vw, 20px) !important;
+            position: fixed;
+            top: 20px;
+            left: 20px;
             background: linear-gradient(135deg, #0060df, #003eaa);
             color: white;
             border: none;
-            padding: clamp(8px, 2vw, 12px);
+            padding: 12px;
             border-radius: 10px;
             cursor: pointer;
-            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            transition: all 0.3s ease;
             box-shadow: 0 5px 15px rgba(0, 96, 223, 0.3);
             z-index: 100;
             text-decoration: none;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: clamp(40px, 8vw, 50px);
-            height: clamp(40px, 8vw, 50px);
-            transform: none !important;
+            width: 50px;
+            height: 50px;
         }
 
         .home-button:hover {
             background: linear-gradient(135deg, #003eaa, #0060df);
+            transform: translateY(-3px) scale(1.05);
             box-shadow: 0 8px 25px rgba(0, 96, 223, 0.4);
-            transform: none !important;
         }
 
         .home-button:active {
-            background: linear-gradient(135deg, #002080, #0060df);
-            box-shadow: 0 4px 15px rgba(0, 96, 223, 0.5);
-            transform: none !important;
-        }
-
-        .home-button:focus {
-            outline: 2px solid rgba(255, 255, 255, 0.5);
-            outline-offset: 2px;
-            transform: none !important;
+            transform: translateY(-1px) scale(1.02);
         }
 
         .home-icon {
-            width: clamp(18px, 4vw, 24px);
-            height: clamp(18px, 4vw, 24px);
+            width: 24px;
+            height: 24px;
             filter: brightness(0) invert(1);
-            transition: none;
+            transition: all 0.3s ease;
         }
 
+        .home-button:hover .home-icon {
+            transform: scale(1.1);
+        }
         .scroll-to-top {
             position: fixed !important;
             bottom: clamp(15px, 3vw, 30px) !important;
