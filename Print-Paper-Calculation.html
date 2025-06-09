@@ -1,0 +1,1901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Anamaruchi - Print Paper Calculation</title>
+<link rel="icon" type="image/x-icon" href="/Image/Anamaruchi.ico">
+<style>
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: clamp(5px, 2vw, 15px);
+    position: relative;
+    box-sizing: border-box;
+}
+
+.home-button {
+	position: fixed !important;
+	top: clamp(10px, 2vw, 20px) !important;
+	left: clamp(10px, 2vw, 20px) !important;
+	background: linear-gradient(135deg, #0060df, #003eaa);
+	color: white;
+	border: none;
+	padding: clamp(8px, 2vw, 12px);
+	border-radius: 10px;
+	cursor: pointer;
+	transition: background-color 0.3s ease, box-shadow 0.3s ease;
+	box-shadow: 0 5px 15px rgba(0, 96, 223, 0.3);
+	z-index: 100;
+	text-decoration: none;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: clamp(40px, 8vw, 50px);
+	height: clamp(40px, 8vw, 50px);
+	transform: none !important;
+}
+
+.home-button:hover {
+    background: linear-gradient(135deg, #003eaa, #0060df);
+    box-shadow: 0 8px 25px rgba(0, 96, 223, 0.4);
+    transform: none !important;
+}
+
+.home-button:active {
+	background: linear-gradient(135deg, #002080, #0060df);
+	box-shadow: 0 4px 15px rgba(0, 96, 223, 0.5);
+	transform: none !important;
+}
+
+.home-button:focus {
+	outline: 2px solid rgba(255, 255, 255, 0.5);
+	outline-offset: 2px;
+	transform: none !important;
+}
+
+.home-icon {
+    width: clamp(18px, 4vw, 24px);
+    height: clamp(18px, 4vw, 24px);
+    filter: brightness(0) invert(1);
+    transition: none;
+}
+
+.scroll-to-top {
+    position: fixed !important;
+    bottom: clamp(15px, 3vw, 30px) !important;
+    right: clamp(15px, 3vw, 30px) !important;
+    background: linear-gradient(135deg, #0060df, #003eaa);
+    border: none;
+    padding: clamp(10px, 2.5vw, 15px);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease, visibility 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 96, 223, 0.3);
+    z-index: 100;
+    width: clamp(45px, 10vw, 60px);
+    height: clamp(45px, 10vw, 60px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(100px) !important;
+}
+
+.scroll-to-top.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) !important;
+}
+
+.scroll-to-top:hover {
+    background: linear-gradient(135deg, #003eaa, #0060df);
+    box-shadow: 0 10px 25px rgba(0, 96, 223, 0.5);
+}
+
+.main-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding-top: clamp(20px, 5vh, 60px);
+}
+
+.calculator-container {
+    width: 100%;
+    max-width: 600px;
+    padding: 20px;
+    background: linear-gradient(135deg, rgba(26, 26, 26, 0.9), rgba(45, 45, 45, 0.9));
+    backdrop-filter: blur(10px);
+    border-radius: 30px;
+    border: 3px solid rgba(59, 130, 246, 0.3);
+    box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
+    transition: all 0.3s ease;
+    animation: fadeInUp 1s ease-out;
+    margin-bottom: clamp(20px, 5vh, 60px);
+}
+
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.calculator-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(59, 130, 246, 0.4);
+}
+
+h1 {
+    text-align: center;
+    color: #3b82f6;
+    margin-top: 0;
+    margin-bottom: 30px;
+    border-bottom: 3px solid rgba(59, 130, 246, 0.5);
+    padding-bottom: 15px;
+    font-size: 2rem;
+    text-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+    font-weight: 600;
+}
+
+.input-row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    gap: 10px;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+    text-align: center;
+}
+
+input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+    text-align: center;
+}
+
+input::-moz-placeholder {
+    text-align: center;
+    opacity: 1;
+}
+
+input:-ms-input-placeholder {
+    text-align: center;
+}
+
+input::-ms-input-placeholder {
+    text-align: center;
+}
+
+input:focus {
+    outline: none;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+}
+
+.input-container {
+    flex: 1 1 45%;
+    min-width: 250px;
+}
+
+.dropdown-container {
+    position: relative;
+    flex: 1 1 45%;
+    min-width: 250px;
+}
+
+.dropdown-btn {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+    font-weight: 500;
+}
+
+.dropdown-btn:hover {
+    background: linear-gradient(135deg, #1d4ed8, #3b82f6);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+}
+
+.dropdown-btn.active {
+    background: linear-gradient(135deg, #1d4ed8, #3b82f6);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    width: 100%;
+    box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
+    z-index: 1000;
+    max-height: 200px;
+    overflow-y: auto;
+    border-radius: 8px;
+    margin-top: 4px;
+    backdrop-filter: blur(10px);
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    pointer-events: none;
+    border: 1px solid rgba(59, 130, 246, 0.5);
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+}
+
+.dropdown-content.show {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+    z-index: 1000;
+}
+
+.dropdown-content div {
+    color: white;
+    padding: 12px;
+    text-decoration: none;
+    display: block;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dropdown-content div:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.dropdown-content div:active {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.dropdown-content div:first-child {
+    border-radius: 8px 8px 0 0;
+}
+
+.dropdown-content div:last-child {
+    border-radius: 0 0 8px 8px;
+    border-bottom: none;
+}
+
+.dropdown-arrow {
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid white;
+    display: inline-block;
+    margin-left: 8px;
+    transition: all 0.3s ease;
+}
+
+.dropdown-btn:hover .dropdown-arrow,
+.dropdown-btn.active .dropdown-arrow {
+    transform: scale(1.1);
+}
+
+.dropdown-btn.active .dropdown-arrow {
+    transform: rotate(180deg);
+}
+
+.calculate-btn {
+    width: 100%;
+    padding: 10px;
+    background: linear-gradient(135deg, #003eaa, #002080);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 20px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 96, 223, 0.3);
+    font-weight: 600;
+}
+
+.calculate-btn:hover {
+    background: linear-gradient(135deg, #002080, #003eaa);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 96, 223, 0.5);
+}
+
+.result-container {
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(29, 78, 216, 0.1));
+    color: white;
+    font-size: 18px;
+    display: none;
+    line-height: 1.8;
+    text-align: left;
+    overflow-x: auto;
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+    animation: slideUp 0.5s ease forwards;
+}
+
+@keyframes slideUp {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.result-container .result-row {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.result-container .result-label {
+    font-weight: bold;
+    width: 150px;
+    min-width: 120px;
+    padding-right: 10px;
+    color: #60a5fa;
+}
+
+.result-container .result-value {
+    flex: 1;
+    min-width: 150px;
+}
+
+.calculation-details {
+    margin-top: 15px;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.8);
+    border-top: 1px dashed rgba(59, 130, 246, 0.3);
+    padding-top: 5px;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    hyphens: auto;
+}
+
+.special-note {
+    font-weight: bold;
+    color: #4caf50;
+    margin-top: 10px;
+}
+
+.credit-line {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #fff;
+    border-top: 1px solid rgba(59, 130, 246, 0.3);
+    padding-top: 15px;
+}
+
+.credit-line a {
+    color: #60a5fa;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.credit-line a:hover {
+    color: #90caf9;
+    text-decoration: underline;
+    text-shadow: 0 0 10px rgba(144, 202, 249, 0.5);
+}
+
+.paper-info-container {
+    margin-top: 30px;
+    padding: 15px;
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(29, 78, 216, 0.1));
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+}
+
+.paper-info-container h2 {
+    text-align: center;
+    color: #3b82f6;
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+    font-weight: 600;
+}
+
+.paper-preview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.paper-container {
+    position: relative;
+    width: 280px;
+    height: 200px;
+    margin: 10px 0;
+}
+
+.paper-size {
+    width: 100%;
+    height: 100%;
+    background: #cc0000;
+    border-radius: 8px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #840000;
+    padding: 2px;
+}
+
+.print-area {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border-radius: 4px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+}
+
+.finish-media-grid {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    gap: 3px;
+    padding: 0;
+    background: #cc0000;
+}
+
+.finish-media-piece {
+    background: #ffdd44;
+    border-radius: 4px;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: bold;
+    color: #333;
+}
+
+.legend {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 15px;
+    flex-wrap: wrap;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+}
+
+.legend-color {
+    width: 16px;
+    height: 16px;
+    border-radius: 3px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+@media (hover: none) {
+    .dropdown-btn, .calculate-btn, .dropdown-content div, .credit-line a {
+        cursor: default;
+    }
+    
+    input, .calculate-btn, .dropdown-btn {
+        font-size: 16px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+
+    .main-wrapper {
+        padding-top: clamp(15px, 3vh, 30px);
+    }
+
+    .calculator-container {
+        backdrop-filter: none;
+        background: rgba(26, 26, 26, 0.95);
+        border-radius: 15px;
+        padding: 15px;
+        margin-bottom: clamp(15px, 3vh, 30px);
+        max-width: 100%;
+    }
+
+    .dropdown-content {
+        backdrop-filter: none;
+        max-height: min(250px, 50vh);
+        border: 2px solid rgba(59, 130, 246, 0.5);
+    }
+
+    .result-container {
+        backdrop-filter: none;
+        font-size: 16px;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+    }
+
+    .result-container .result-row {
+        margin-bottom: 8px;
+    }
+
+    .result-container .result-label,
+    .result-container .result-value {
+        width: 100%;
+        min-width: 100%;
+    }
+
+    .credit-line {
+        font-size: 1rem;
+    }
+
+    .calculator-container:hover {
+        transform: none;
+        box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
+    }
+
+    .dropdown-btn:hover {
+        background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+        transform: none;
+        box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+    }
+
+    .dropdown-content div:hover {
+        background: transparent;
+    }
+
+    input:focus {
+        transform: none;
+        box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+    }
+
+    .calculate-btn:hover {
+        transform: none;
+        box-shadow: 0 5px 15px rgba(0, 96, 223, 0.3);
+    }
+    
+    .paper-container {
+        width: 240px;
+        height: 170px;
+    }
+
+    .legend {
+        gap: 15px;
+    }
+
+    .legend-item {
+        font-size: 12px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .calculator-container {
+        padding: 10px;
+        border-radius: 10px;
+    }
+
+    h1 {
+        font-size: 1.2rem;
+    }
+
+    input, .dropdown-btn {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .calculate-btn {
+        font-size: 16px;
+    }
+
+    .result-container {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .calculation-details {
+        font-size: 12px;
+    }
+
+    .dropdown-content {
+        max-height: min(300px, 60vh);
+        border-radius: 12px;
+    }
+
+    .dropdown-content div {
+        padding: clamp(15px, 4vw, 18px);
+        min-height: clamp(44px, 11vw, 52px);
+        font-size: clamp(14px, 4vw, 16px);
+    }
+    
+    .paper-container {
+        width: 200px;
+        height: 140px;
+    }
+
+    .legend {
+        gap: 10px;
+    }
+
+    .legend-item {
+        font-size: 11px;
+    }
+
+    .legend-color {
+        width: 12px;
+        height: 12px;
+    }
+}
+
+@supports (-webkit-touch-callout: none) {
+    body {
+        min-height: -webkit-fill-available;
+    }
+}
+
+* {
+    max-width: 100%;
+}
+
+h1, p, span, div, li, input, button {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+}
+</style>
+</head>
+<body>
+<a href="https://anamaruchi.github.io/" class="home-button" id="homeButton">
+<img src="Image/Home Icon.png" alt="Home" />
+</a>
+
+<button class="scroll-to-top" id="scrollToTop">
+↑
+</button>
+
+<div class="main-wrapper">
+<div class="calculator-container">
+    <h1>Print Paper Calculation</h1>
+    
+    <div class="input-row">
+        <div class="input-container">
+            <input type="number" id="totalPages" placeholder="Total Of Page" min="1">
+        </div>
+        
+        <div class="input-container">
+            <input type="number" id="qtyTotal" placeholder="Qty Total" min="1">
+        </div>
+        
+        <div class="dropdown-container">
+            <button class="dropdown-btn" id="finishMediaBtn">
+                Finish Media <span class="dropdown-arrow"></span>
+            </button>
+            <div id="finishMediaDropdown" class="dropdown-content">
+                <div data-value="A4/B5">A4 [21x29,7cm] / B5 [17,6x25cm]</div>
+                <div data-value="A5/B6">A5 [14,8x21cm] / B6 [12,5x17,6cm]</div>
+                <div data-value="A6">A6</div>
+            </div>
+        </div>
+        
+        <div class="dropdown-container">
+            <button class="dropdown-btn" id="printSideBtn">
+                Print Side <span class="dropdown-arrow"></span>
+            </button>
+            <div id="printSideDropdown" class="dropdown-content">
+                <div data-value="1 Side">1 Side</div>
+                <div data-value="2 Side">2 Side</div>
+            </div>
+        </div>
+        
+        <div class="dropdown-container">
+            <button class="dropdown-btn" id="paperSizeBtn">
+                Select Paper Size <span class="dropdown-arrow"></span>
+            </button>
+            <div id="paperSizeDropdown" class="dropdown-content">
+                <div data-value="A3+ [31,5x47,5cm]">A3+ [31,5x47,5cm]</div>
+                <div data-value="A3 [42x29,7cm]">A3 [42x29,7cm]</div>
+                <div data-value="A4 [29,7x21cm]">A4 [29,7x21cm]</div>
+            </div>
+        </div>
+    </div>
+    
+    <button class="calculate-btn" id="calculateBtn">Calculate</button>
+    
+    <div id="resultContainer" class="result-container">
+        <div id="resultText"></div>
+    </div>
+    
+    <div class="paper-info-container">
+        <h2>Print Paper Size Information</h2>
+        <div class="paper-preview">
+            <div class="paper-container">
+                <div class="paper-size">
+                    <div class="print-area">
+                        <div class="finish-media-grid" id="finishMediaGrid">
+                            <div style="color: rgba(255,255,255,0.5); text-align: center; font-size: 12px;">Click Calculate to see preview</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="legend" id="previewLegend">
+                <div class="legend-item" id="paperSizeLegend">
+                    <div class="legend-color" style="background: #cc0000;"></div>
+                    <span>Paper Size</span>
+                </div>
+                <div class="legend-item" id="printAreaLegend" style="display: none;">
+                    <div class="legend-color" style="background: #4488ff;"></div>
+                    <span>Print Area</span>
+                </div>
+                <div class="legend-item" id="finishMediaLegend">
+                    <div class="legend-color" style="background: #ffdd44;"></div>
+                    <span>Finish Media</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="credit-line">
+        Created By Anamaruchi (<a href="https://www.facebook.com/anang.zikri.f" target="_blank">Anang Zikri Febriyansyah</a>)
+    </div>
+</div>
+</div>
+
+<script>
+let selectedFinishMedia = '';
+let selectedPrintSide = '';
+let selectedPaperSize = '';
+
+let isDropdownOpen = false;
+
+function setupScrollToTop() {
+    let isScrolling = false;
+
+    function checkScrollPosition() {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        
+        if (scrollTop > 300) {
+            document.getElementById('scrollToTop').classList.add('show');
+        } else {
+            document.getElementById('scrollToTop').classList.remove('show');
+        }
+    }
+
+    window.addEventListener('scroll', function() {
+        if (!isScrolling) {
+            requestAnimationFrame(function() {
+                checkScrollPosition();
+                isScrolling = false;
+            });
+            isScrolling = true;
+        }
+    });
+
+    document.getElementById('scrollToTop').addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+
+        setTimeout(function() {
+            checkScrollPosition();
+        }, 100);
+    });
+
+    checkScrollPosition();
+}
+
+function isMobileDevice() {
+    return (window.innerWidth <= 768);
+}
+
+function adjustForMobile() {
+    if (isMobileDevice()) {
+        window.addEventListener('scroll', function() {
+            closeAllDropdowns();
+        });
+        
+        const dropdowns = document.getElementsByClassName("dropdown-content");
+        for (let i = 0; i < dropdowns.length; i++) {
+            dropdowns[i].style.maxHeight = (window.innerHeight * 0.4) + "px";
+        }
+    }
+}
+
+function closeAllDropdowns() {
+    const dropdowns = document.getElementsByClassName("dropdown-content");
+    for (let i = 0; i < dropdowns.length; i++) {
+        const openDropdown = dropdowns[i];
+        if (openDropdown.classList.contains('show')) {
+            openDropdown.classList.remove('show');
+        }
+    }
+    
+    const dropdownBtns = document.getElementsByClassName("dropdown-btn");
+    for (let i = 0; i < dropdownBtns.length; i++) {
+        dropdownBtns[i].classList.remove('active');
+    }
+    
+    isDropdownOpen = false;
+}
+
+function toggleDropdown(dropdownId) {
+    try {
+        const dropdown = document.getElementById(dropdownId);
+        if (!dropdown) {
+            console.error('Dropdown not found:', dropdownId);
+            return;
+        }
+        
+        const btn = dropdown.previousElementSibling;
+        if (!btn) {
+            console.error('Button not found for dropdown:', dropdownId);
+            return;
+        }
+        
+        if (dropdown.classList.contains('show')) {
+            dropdown.classList.remove('show');
+            btn.classList.remove('active');
+            isDropdownOpen = false;
+        } else {
+            closeAllDropdowns();
+            
+            dropdown.classList.add('show');
+            btn.classList.add('active');
+            isDropdownOpen = true;
+        }
+    } catch (error) {
+        console.error('Error in toggleDropdown:', error);
+    }
+}
+
+function selectOption(type, value) {
+    try {
+        if (type === 'finishMedia') {
+            selectedFinishMedia = value;
+            const btn = document.getElementById('finishMediaBtn');
+            if (btn) {
+                btn.innerHTML = value + ' <span class="dropdown-arrow"></span>';
+            }
+        } else if (type === 'printSide') {
+            selectedPrintSide = value;
+            const btn = document.getElementById('printSideBtn');
+            if (btn) {
+                btn.innerHTML = value + ' <span class="dropdown-arrow"></span>';
+            }
+        } else if (type === 'paperSize') {
+            selectedPaperSize = value;
+            const btn = document.getElementById('paperSizeBtn');
+            if (btn) {
+                btn.innerHTML = value + ' <span class="dropdown-arrow"></span>';
+            }
+        }
+        
+        closeAllDropdowns();
+    } catch (error) {
+        console.error('Error in selectOption:', error);
+    }
+}
+
+function updatePaperPreview() {
+    try {
+        const grid = document.getElementById('finishMediaGrid');
+        if (!grid) {
+            console.error('Finish media grid not found');
+            return;
+        }
+        
+        const printArea = document.querySelector('.print-area');
+        if (!printArea) {
+            console.error('Print area not found');
+            return;
+        }
+        
+        const paperSizeLegend = document.getElementById('paperSizeLegend');
+        const printAreaLegend = document.getElementById('printAreaLegend');
+        const finishMediaLegend = document.getElementById('finishMediaLegend');
+        
+        if (!selectedFinishMedia || !selectedPaperSize) {
+            grid.innerHTML = '<div style="color: rgba(255,255,255,0.5); text-align: center; font-size: 12px;">Click Calculate to see preview</div>';
+            if (paperSizeLegend) paperSizeLegend.style.display = 'flex';
+            if (printAreaLegend) printAreaLegend.style.display = 'none';
+            if (finishMediaLegend) finishMediaLegend.querySelector('span').textContent = 'Finish Media';
+            return;
+        }
+        
+        let pieces = 1;
+        let gridCols = 1;
+        let gridRows = 1;
+        
+        const validFinishMedia = selectedFinishMedia === 'A4/B5' || selectedFinishMedia === 'A5/B6' || selectedFinishMedia === 'A6';
+        const validPaperSizes = selectedPaperSize.includes('A3 [42x29,7cm]') || selectedPaperSize.includes('A4 [29,7x21cm]');
+        const useNewDesign = validFinishMedia && validPaperSizes;
+        const isA3Plus = selectedPaperSize.includes('A3+ [31,5x47,5cm]');
+        
+        if (validPaperSizes) {
+            if (paperSizeLegend) paperSizeLegend.style.display = 'flex';
+            if (printAreaLegend) printAreaLegend.style.display = 'none';
+            if (finishMediaLegend) finishMediaLegend.querySelector('span').textContent = 'Available Print Area';
+        } else if (isA3Plus) {
+            if (paperSizeLegend) paperSizeLegend.style.display = 'flex';
+            if (printAreaLegend) printAreaLegend.style.display = 'flex';
+            if (finishMediaLegend) finishMediaLegend.querySelector('span').textContent = 'Finish Media';
+        } else {
+            if (paperSizeLegend) paperSizeLegend.style.display = 'flex';
+            if (printAreaLegend) printAreaLegend.style.display = 'none';
+            if (finishMediaLegend) finishMediaLegend.querySelector('span').textContent = 'Finish Media';
+        }
+        
+        if (selectedFinishMedia === 'A4/B5') {
+            if (selectedPaperSize.includes('A4')) {
+                pieces = 1;
+                gridCols = 1;
+                gridRows = 1;
+            } else if (selectedPaperSize.includes('A3')) {
+                pieces = 2;
+                gridCols = 2;
+                gridRows = 1;
+            }
+        } else if (selectedFinishMedia === 'A5/B6') {
+            if (selectedPaperSize.includes('A4')) {
+                pieces = 2;
+                gridCols = 2;
+                gridRows = 1;
+            } else if (selectedPaperSize.includes('A3')) {
+                pieces = 4;
+                gridCols = 2;
+                gridRows = 2;
+            }
+        } else if (selectedFinishMedia === 'A6') {
+            if (selectedPaperSize.includes('A4')) {
+                pieces = 4;
+                gridCols = 2;
+                gridRows = 2;
+            } else if (selectedPaperSize.includes('A3')) {
+                pieces = 8;
+                gridCols = 4;
+                gridRows = 2;
+            }
+        }
+        
+        if (useNewDesign) {
+            printArea.style.width = '100%';
+            printArea.style.height = '100%';
+            printArea.style.background = 'transparent';
+            printArea.style.border = 'none';
+            printArea.style.padding = '2px';
+            
+            grid.style.width = '100%';
+            grid.style.height = '100%';
+            grid.style.gap = '2px';
+            grid.style.padding = '0';
+            grid.style.background = '#cc0000';
+        } else {
+            printArea.style.width = '95%';
+            printArea.style.height = '95%';
+            printArea.style.background = '#4488ff';
+            printArea.style.border = '2px solid #2266cc';
+            printArea.style.padding = '8px';
+            
+            grid.style.width = '95%';
+            grid.style.height = '95%';
+            grid.style.gap = '2px';
+            grid.style.padding = '4px';
+            grid.style.background = 'transparent';
+        }
+        
+        grid.style.gridTemplateColumns = `repeat(${gridCols}, 1fr)`;
+        grid.style.gridTemplateRows = `repeat(${gridRows}, 1fr)`;
+        
+        grid.innerHTML = '';
+        for (let i = 0; i < pieces; i++) {
+            const piece = document.createElement('div');
+            piece.className = 'finish-media-piece';
+            
+            if (useNewDesign) {
+                piece.style.background = '#ffdd44';
+                piece.style.border = 'none';
+                piece.style.borderRadius = '4px';
+                piece.textContent = i + 1;
+                piece.style.fontSize = '12px';
+                piece.style.fontWeight = 'bold';
+                piece.style.color = '#333';
+            } else {
+                piece.style.background = '#ffdd44';
+                piece.style.border = '1px solid #ccaa00';
+                piece.style.borderRadius = '2px';
+                piece.textContent = i + 1;
+            }
+            
+            grid.appendChild(piece);
+        }
+    } catch (error) {
+        console.error('Error in updatePaperPreview:', error);
+    }
+}
+
+function formatRoundingText(rawValue, roundedValue) {
+    if (Math.ceil(rawValue) === rawValue) {
+        return `= ${roundedValue}`;
+    } else {
+        return `= ${rawValue} > rounded to ${roundedValue}`;
+    }
+}
+
+function calculate() {
+    try {
+        const totalPages = parseInt(document.getElementById('totalPages').value) || 0;
+        let qtyTotal = parseInt(document.getElementById('qtyTotal').value) || 0;
+        
+        if (totalPages <= 0 || qtyTotal <= 0) {
+            alert('Please enter valid values for Total Of Page and Qty Total');
+            return;
+        }
+        
+        if (!selectedFinishMedia || !selectedPrintSide || !selectedPaperSize) {
+            alert('Please Select All options');
+            return;
+        }
+        
+        updatePaperPreview();
+        
+        let result = 0;
+        let calculationDetails = '';
+        let specialNote = '';
+        let a3Warning = '';
+        let hasRepeatCalculation = false;
+        
+        if (selectedFinishMedia === 'A4/B5') {
+            if (selectedPrintSide === '1 Side') {
+                if (selectedPaperSize.includes('A4')) {
+                    result = qtyTotal * totalPages;
+                    calculationDetails = `Calculation for ${qtyTotal} copies: ${qtyTotal} * ${totalPages} = ${result} sheets`;
+                } else if (selectedPaperSize.includes('A3')) {
+                    const repeats = Math.floor(qtyTotal / 2);
+                    const remainder = qtyTotal % 2;
+                    hasRepeatCalculation = true;
+                    
+                    const repeatPaper = repeats * totalPages;
+                    let collecutPaper = 0;
+                    
+                    if (remainder > 0) {
+                        const rawHalfPages = totalPages / 2;
+                        const halfPages = Math.ceil(rawHalfPages);
+                        collecutPaper = remainder * halfPages;
+                        
+                        const halfPagesText = formatRoundingText(rawHalfPages, halfPages);
+                        
+                        result = repeatPaper + collecutPaper;
+                        
+                        if (repeats > 0) {
+                            calculationDetails = `Calculation for ${qtyTotal} copies:<br>
+1. 1 sheet produces 2 pieces (1 repeat)<br>
+2. ${qtyTotal} / 2 = ${repeats} repeats with remainder ${remainder}<br>
+3. Half pages (for collecut): ${totalPages} / 2 ${halfPagesText} sheets<br>
+4. Paper for repeats: ${repeats} * ${totalPages} = ${repeatPaper} sheets<br>
+5. Paper for collecut: ${remainder} * ${halfPages} = ${collecutPaper} sheets<br>
+6. Total required paper: ${repeatPaper} + ${collecutPaper} = ${result} sheets`;
+                            
+                            specialNote = `${repeats} Repeat + ${remainder} Collecut`;
+                        } else {
+                            calculationDetails = `Calculation for ${qtyTotal} copies:<br>
+1. 1 sheet produces 2 pieces (1 repeat)<br>
+2. ${qtyTotal} / 2 = ${repeats} repeats with remainder ${remainder}<br>
+3. Half pages (for collecut): ${totalPages} / 2 ${halfPagesText} sheets<br>
+4. Paper for collecut: ${remainder} * ${halfPages} = ${collecutPaper} sheets<br>
+5. Total required paper: ${collecutPaper} = ${result} sheets`;
+                            
+                            specialNote = `${remainder} Collecut`;
+                        }
+                    } else {
+                        result = repeatPaper;
+                        
+                        if (repeats > 0) {
+                            calculationDetails = `Calculation for ${qtyTotal} copies:<br>
+1. 1 sheet produces 2 pieces (1 repeat)<br>
+2. ${qtyTotal} / 2 = ${repeats} repeats<br>
+3. Paper for repeats: ${repeats} * ${totalPages} = ${repeatPaper} sheets`;
+                            
+                            specialNote = `${repeats} Repeat`;
+                        } else {
+                            calculationDetails = `Calculation for ${qtyTotal} copies:<br>
+1. 1 sheet produces 2 pieces (1 repeat)<br>
+2. ${qtyTotal} / 2 = ${repeats} repeats<br>
+3. No paper needed as quantity is 0`;
+                        }
+                    }
+                }
+            } else if (selectedPrintSide === '2 Side') {
+                if (selectedPaperSize.includes('A4')) {
+                    const rawHalfPages = totalPages / 2;
+                    const halfPages = Math.ceil(rawHalfPages);
+                    result = qtyTotal * halfPages;
+                    
+                    const halfPagesText = formatRoundingText(rawHalfPages, halfPages);
+                    
+                    calculationDetails = `Calculation for ${qtyTotal} copies (2-sided):<br>
+1. Half pages: ${totalPages} / 2 ${halfPagesText} sheets<br>
+2. Paper needed: ${qtyTotal} * ${halfPages} = ${result} sheets`;
+                } else if (selectedPaperSize.includes('A3')) {
+                    const repeats = Math.floor(qtyTotal / 2);
+                    const remainder = qtyTotal % 2;
+                    hasRepeatCalculation = true;
+                    
+                    const rawHalfPages = totalPages / 2;
+                    const halfPages = Math.ceil(rawHalfPages);
+                    const halfPagesText = formatRoundingText(rawHalfPages, halfPages);
+                    
+                    const repeatPaper = repeats * halfPages;
+                    let collecutPaper = 0;
+                    
+                    if (remainder > 0) {
+                        const rawQuarterPages = totalPages / 4;
+                        const quarterPages = Math.ceil(rawQuarterPages);
+                        collecutPaper = remainder * quarterPages;
+                        
+                        const quarterPagesText = formatRoundingText(rawQuarterPages, quarterPages);
+                        
+                        result = repeatPaper + collecutPaper;
+                        
+                        if (repeats > 0) {
+                            calculationDetails = `Calculation for ${qtyTotal} copies (2-sided):<br>
+1. 1 sheet produces 2 pieces (1 repeat)<br>
+2. ${qtyTotal} / 2 = ${repeats} repeats with remainder ${remainder}<br>
+3. Half pages (for repeat): ${totalPages} / 2 ${halfPagesText} sheets<br>
+4. Quarter pages (for collecut): ${totalPages} / 4 ${quarterPagesText} sheets<br>
+5. Paper for repeats: ${repeats} * ${halfPages} = ${repeatPaper} sheets<br>
+6. Paper for collecut: ${remainder} * ${quarterPages} = ${collecutPaper} sheets<br>
+7. Total required paper: ${repeatPaper} + ${collecutPaper} = ${result} sheets`;
+                            
+                            specialNote = `${repeats} Repeat + ${remainder} Collecut`;
+                        } else {
+                            calculationDetails = `Calculation for ${qtyTotal} copies (2-sided):<br>
+1. 1 sheet produces 2 pieces (1 repeat)<br>
+2. ${qtyTotal} / 2 = ${repeats} repeats with remainder ${remainder}<br>
+3. Quarter pages (for collecut): ${totalPages} / 4 ${quarterPagesText} sheets<br>
+4. Paper for collecut: ${remainder} * ${quarterPages} = ${collecutPaper} sheets<br>
+5. Total required paper: ${collecutPaper} = ${result} sheets`;
+                            
+                            specialNote = `${remainder} Collecut`;
+                        }
+                    } else {
+                        result = repeatPaper;
+                        
+                        if (repeats > 0) {
+                            calculationDetails = `Calculation for ${qtyTotal} copies (2-sided):<br>
+1. 1 sheet produces 2 pieces (1 repeat)<br>
+2. ${qtyTotal} / 2 = ${repeats} repeats<br>
+3. Half pages (for repeat): ${totalPages} / 2 ${halfPagesText} sheets<br>
+4. Paper for repeats: ${repeats} * ${halfPages} = ${repeatPaper} sheets`;
+                            
+                            specialNote = `${repeats} Repeat`;
+                        } else {
+                            calculationDetails = `Calculation for ${qtyTotal} copies (2-sided):<br>
+1. 1 sheet produces 2 pieces (1 repeat)<br>
+2. ${qtyTotal} / 2 = ${repeats} repeats<br>
+3. No paper needed as quantity is 0`;
+                        }
+                    }
+                }
+            }
+        }
+        else if (selectedFinishMedia === 'A5/B6') {
+            if (selectedPrintSide === '1 Side') {
+                if (selectedPaperSize.includes('A4')) {
+                    const repeats = Math.floor(qtyTotal / 2);
+                    const remainder = qtyTotal % 2;
+                    hasRepeatCalculation = true;
+                    
+                    const repeatPaper = repeats * totalPages;
+                    let collecutPaper = 0;
+                    
+                    if (remainder > 0) {
+                        const rawHalfPages = totalPages / 2;
+                        const halfPages = Math.ceil(rawHalfPages);
+                        collecutPaper = remainder * halfPages;
+                        
+                        const halfPagesText = formatRoundingText(rawHalfPages, halfPages);
+                        
+                        result = repeatPaper + collecutPaper;
+                        
+                        if (repeats > 0) {
+                            calculationDetails = `Calculation for ${qtyTotal} copies:<br>
+1. 1 sheet produces 2 pieces (1 repeat)<br>
+2. ${qtyTotal} / 2 = ${repeats} repeats with remainder ${remainder}<br>
+3. Half pages (for collecut): ${totalPages} / 2 ${halfPagesText} sheets<br>
+4. Paper for repeats: ${repeats} * ${totalPages} = ${repeatPaper} sheets<br>
+5. Paper for collecut: ${remainder} * ${halfPages} = ${collecutPaper} sheets<br>
+6. Total required paper: ${repeatPaper} + ${collecutPaper} = ${result} sheets`;
+                            
+                            specialNote = `${repeats} Repeat + ${remainder} Collecut`;
+                        } else {
+                            calculationDetails = `Calculation for ${qtyTotal} copies:<br>
+1. 1 sheet produces 2 pieces (1 repeat)<br>
+2. ${qtyTotal} / 2 = ${repeats} repeats with remainder ${remainder}<br>
+3. Half pages (for collecut): ${totalPages} / 2 ${halfPagesText} sheets<br>
+4. Paper for collecut: ${remainder} * ${halfPages} = ${collecutPaper} sheets<br>
+5. Total required paper: ${collecutPaper} = ${result} sheets`;
+                            
+                            specialNote = `${remainder} Collecut`;
+                        }
+                    } else {
+                        result = repeatPaper;
+                        
+                        if (repeats > 0) {
+                            calculationDetails = `Calculation for ${qtyTotal} copies:<br>
+1. 1 sheet produces 2 pieces (1 repeat)<br>
+2. ${qtyTotal} / 2 = ${repeats} repeats<br>
+3. Paper for repeats: ${repeats} * ${totalPages} = ${repeatPaper} sheets`;
+                            
+                            specialNote = `${repeats} Repeat`;
+                        } else {
+                            calculationDetails = `Calculation for ${qtyTotal} copies:<br>
+1. 1 sheet produces 2 pieces (1 repeat)<br>
+2. ${qtyTotal} / 2 = ${repeats} repeats<br>
+3. No paper needed as quantity is 0`;
+                        }
+                    }
+                } else if (selectedPaperSize.includes('A3')) {
+                    const repeats = Math.floor(qtyTotal / 4);
+                    const remainder = qtyTotal % 4;
+                    hasRepeatCalculation = true;
+                    
+                    const repeatPaper = repeats * totalPages;
+                    let collecutPaper = 0;
+                    
+                    if (remainder > 0) {
+                        const rawQuarterPages = totalPages / 4;
+                        const quarterPages = Math.ceil(rawQuarterPages);
+                        collecutPaper = remainder * quarterPages;
+                        
+                        const quarterPagesText = formatRoundingText(rawQuarterPages, quarterPages);
+                        
+                        result = repeatPaper + collecutPaper;
+                        
+                        if (repeats > 0) {
+                            calculationDetails = `Calculation for ${qtyTotal} copies:<br>
+1. 1 sheet produces 4 pieces (1 repeat)<br>
+2. ${qtyTotal} / 4 = ${repeats} repeats with remainder ${remainder}<br>
+3. Quarter pages (for collecut): ${totalPages} / 4 ${quarterPagesText} sheets<br>
+4. Paper for repeats: ${repeats} * ${totalPages} = ${repeatPaper} sheets<br>
+5. Paper for collecut: ${remainder} * ${quarterPages} = ${collecutPaper} sheets<br>
+6. Total required paper: ${repeatPaper} + ${collecutPaper} = ${result} sheets`;
+                            
+                            specialNote = `${repeats} Repeat + ${remainder} Collecut`;
+                        } else {
+                            calculationDetails = `Calculation for ${qtyTotal} copies:<br>
+1. 1 sheet produces 4 pieces (1 repeat)<br>
+2. ${qtyTotal} / 4 = ${repeats} repeats with remainder ${remainder}<br>
+3. Quarter pages (for collecut): ${totalPages} / 4 ${quarterPagesText} sheets<br>
+4. Paper for collecut: ${remainder} * ${quarterPages} = ${collecutPaper} sheets<br>
+5. Total required paper: ${collecutPaper} = ${result} sheets`;
+                            
+                            specialNote = `${remainder} Collecut`;
+                        }
+                    } else {
+                        result = repeatPaper;
+                        
+                        if (repeats > 0) {
+                            calculationDetails = `Calculation for ${qtyTotal} copies:<br>
+1. 1 sheet produces 4 pieces (1 repeat)<br>
+2. ${qtyTotal} / 4 = ${repeats} repeats<br>
+3. Paper for repeats: ${repeats} * ${totalPages} = ${repeatPaper} sheets`;
+                            
+                            specialNote = `${repeats} Repeat`;
+                        } else {
+                            calculationDetails = `Calculation for ${qtyTotal} copies:<br>
+1. 1 sheet produces 4 pieces (1 repeat)<br>
+2. ${qtyTotal} / 4 = ${repeats} repeats<br>
+3. No paper needed as quantity is 0`;
+                        }
+                    }
+                }
+            } else if (selectedPrintSide === '2 Side') {
+                if (selectedPaperSize.includes('A4')) {
+                    const repeats = Math.floor(qtyTotal / 2);
+                    const remainder = qtyTotal % 2;
+                    hasRepeatCalculation = true;
+                    
+                    const rawHalfPages = totalPages / 2;
+                    const halfPages = Math.ceil(rawHalfPages);
+                    const halfPagesText = formatRoundingText(rawHalfPages, halfPages);
+                    
+                    const repeatPaper = repeats * halfPages;
+                    let collecutPaper = 0;
+                    
+                    if (remainder > 0) {
+                        const rawQuarterPages = totalPages / 4;
+                        const quarterPages = Math.ceil(rawQuarterPages);
+                        collecutPaper = remainder * quarterPages;
+                        
+                        const quarterPagesText = formatRoundingText(rawQuarterPages, quarterPages);
+                        
+                        result = repeatPaper + collecutPaper;
+                        
+                        if (repeats > 0) {
+                            calculationDetails = `Calculation for ${qtyTotal} copies (2-sided):<br>
+1. 1 sheet produces 2 pieces (1 repeat)<br>
+2. ${qtyTotal} / 2 = ${repeats} repeats with remainder ${remainder}<br>
+3. Half pages (for repeat): ${totalPages} / 2 ${halfPagesText} sheets<br>
+4. Quarter pages (for collecut): ${totalPages} / 4 ${quarterPagesText} sheets<br>
+5. Paper for repeats: ${repeats} * ${halfPages} = ${repeatPaper} sheets<br>
+6. Paper for collecut: ${remainder} * ${quarterPages} = ${collecutPaper} sheets<br>
+7. Total required paper: ${repeatPaper} + ${collecutPaper} = ${result} sheets`;
+                            
+                            specialNote = `${repeats} Repeat + ${remainder} Collecut`;
+                        } else {
+                            calculationDetails = `Calculation for ${qtyTotal} copies (2-sided):<br>
+1. 1 sheet produces 2 pieces (1 repeat)<br>
+2. ${qtyTotal} / 2 = ${repeats} repeats with remainder ${remainder}<br>
+3. Quarter pages (for collecut): ${totalPages} / 4 ${quarterPagesText} sheets<br>
+4. Paper for collecut: ${remainder} * ${quarterPages} = ${collecutPaper} sheets<br>
+5. Total required paper: ${collecutPaper} = ${result} sheets`;
+                            
+                            specialNote = `${remainder} Collecut`;
+                        }
+                    } else {
+                        result = repeatPaper;
+                        
+                        if (repeats > 0) {
+                            calculationDetails = `Calculation for ${qtyTotal} copies (2-sided):<br>
+1. 1 sheet produces 2 pieces (1 repeat)<br>
+2. ${qtyTotal} / 2 = ${repeats} repeats<br>
+3. Half pages (for repeat): ${totalPages} / 2 ${halfPagesText} sheets<br>
+4. Paper for repeats: ${repeats} * ${halfPages} = ${repeatPaper} sheets`;
+                            
+                            specialNote = `${repeats} Repeat`;
+                        } else {
+                            calculationDetails = `Calculation for ${qtyTotal} copies (2-sided):<br>
+1. 1 sheet produces 2 pieces (1 repeat)<br>
+2. ${qtyTotal} / 2 = ${repeats} repeats<br>
+3. No paper needed as quantity is 0`;
+                        }
+                    }
+                } else if (selectedPaperSize.includes('A3')) {
+                    const repeats = Math.floor(qtyTotal / 4);
+                    const remainder = qtyTotal % 4;
+                    hasRepeatCalculation = true;
+                    
+                    const rawHalfPages = totalPages / 2;
+                    const halfPages = Math.ceil(rawHalfPages);
+                    const halfPagesText = formatRoundingText(rawHalfPages, halfPages);
+                    
+                    const repeatPaper = repeats * halfPages;
+                    let collecutPaper = 0;
+                    
+                    if (remainder > 0) {
+                        const rawEighthPages = totalPages / 8;
+                        const eighthPages = Math.ceil(rawEighthPages);
+                        collecutPaper = remainder * eighthPages;
+                        
+                        const eighthPagesText = formatRoundingText(rawEighthPages, eighthPages);
+                        
+                        result = repeatPaper + collecutPaper;
+                        
+                        if (repeats > 0) {
+                            calculationDetails = `Calculation for ${qtyTotal} copies (2-sided):<br>
+1. 1 sheet produces 4 pieces (1 repeat)<br>
+2. ${qtyTotal} / 4 = ${repeats} repeats with remainder ${remainder}<br>
+3. Half pages (for repeat): ${totalPages} / 2 ${halfPagesText} sheets<br>
+4. Eighth pages (for collecut): ${totalPages} / 8 ${eighthPagesText} sheets<br>
+5. Paper for repeats: ${repeats} * ${halfPages} = ${repeatPaper} sheets<br>
+6. Paper for collecut: ${remainder} * ${eighthPages} = ${collecutPaper} sheets<br>
+7. Total required paper: ${repeatPaper} + ${collecutPaper} = ${result} sheets`;
+                            
+                            specialNote = `${repeats} Repeat + ${remainder} Collecut`;
+                        } else {
+                            calculationDetails = `Calculation for ${qtyTotal} copies (2-sided):<br>
+1. 1 sheet produces 4 pieces (1 repeat)<br>
+2. ${qtyTotal} / 4 = ${repeats} repeats with remainder ${remainder}<br>
+3. Eighth pages (for collecut): ${totalPages} / 8 ${eighthPagesText} sheets<br>
+4. Paper for collecut: ${remainder} * ${eighthPages} = ${collecutPaper} sheets<br>
+5. Total required paper: ${collecutPaper} = ${result} sheets`;
+                            
+                            specialNote = `${remainder} Collecut`;
+                        }
+                    } else {
+                        result = repeatPaper;
+                        
+                        if (repeats > 0) {
+                            calculationDetails = `Calculation for ${qtyTotal} copies (2-sided):<br>
+1. 1 sheet produces 4 pieces (1 repeat)<br>
+2. ${qtyTotal} / 4 = ${repeats} repeats<br>
+3. Half pages (for repeat): ${totalPages} / 2 ${halfPagesText} sheets<br>
+4. Paper for repeats: ${repeats} * ${halfPages} = ${repeatPaper} sheets`;
+                            
+                            specialNote = `${repeats} Repeat`;
+                        } else {
+                            calculationDetails = `Calculation for ${qtyTotal} copies (2-sided):<br>
+1. 1 sheet produces 4 pieces (1 repeat)<br>
+2. ${qtyTotal} / 4 = ${repeats} repeats<br>
+3. No paper needed as quantity is 0`;
+                        }
+                    }
+                }
+            }
+        }
+        else if (selectedFinishMedia === 'A6') {
+            if (selectedPrintSide === '1 Side') {
+                if (selectedPaperSize.includes('A4')) {
+                    const repeats = Math.floor(qtyTotal / 4);
+                    const remainder = qtyTotal % 4;
+                    hasRepeatCalculation = true;
+                    
+                    const repeatPaper = repeats * totalPages;
+                    let collecutPaper = 0;
+                    
+                    if (remainder > 0) {
+                        const rawQuarterPages = totalPages / 4;
+                        const quarterPages = Math.ceil(rawQuarterPages);
+                        collecutPaper = remainder * quarterPages;
+                        
+                        const quarterPagesText = formatRoundingText(rawQuarterPages, quarterPages);
+                        
+                        result = repeatPaper + collecutPaper;
+                        
+                        if (repeats > 0) {
+                            calculationDetails = `Calculation for ${qtyTotal} copies:<br>
+1. 1 sheet produces 4 pieces (1 repeat)<br>
+2. ${qtyTotal} / 4 = ${repeats} repeats with remainder ${remainder}<br>
+3. Quarter pages (for collecut): ${totalPages} / 4 ${quarterPagesText} sheets<br>
+4. Paper for repeats: ${repeats} * ${totalPages} = ${repeatPaper} sheets<br>
+5. Paper for collecut: ${remainder} * ${quarterPages} = ${collecutPaper} sheets<br>
+6. Total required paper: ${repeatPaper} + ${collecutPaper} = ${result} sheets`;
+                            
+                            specialNote = `${repeats} Repeat + ${remainder} Collecut`;
+                        } else {
+                            calculationDetails = `Calculation for ${qtyTotal} copies:<br>
+1. 1 sheet produces 4 pieces (1 repeat)<br>
+2. ${qtyTotal} / 4 = ${repeats} repeats with remainder ${remainder}<br>
+3. Quarter pages (for collecut): ${totalPages} / 4 ${quarterPagesText} sheets<br>
+4. Paper for collecut: ${remainder} * ${quarterPages} = ${collecutPaper} sheets<br>
+5. Total required paper: ${collecutPaper} = ${result} sheets`;
+                            
+                            specialNote = `${remainder} Collecut`;
+                        }
+                    } else {
+                        result = repeatPaper;
+                        
+                        if (repeats > 0) {
+                            calculationDetails = `Calculation for ${qtyTotal} copies:<br>
+1. 1 sheet produces 4 pieces (1 repeat)<br>
+2. ${qtyTotal} / 4 = ${repeats} repeats<br>
+3. Paper for repeats: ${repeats} * ${totalPages} = ${repeatPaper} sheets`;
+                            
+                            specialNote = `${repeats} Repeat`;
+                        } else {
+                            calculationDetails = `Calculation for ${qtyTotal} copies:<br>
+1. 1 sheet produces 4 pieces (1 repeat)<br>
+2. ${qtyTotal} / 4 = ${repeats} repeats<br>
+3. No paper needed as quantity is 0`;
+                        }
+                    }
+                } else if (selectedPaperSize.includes('A3')) {
+                    const repeats = Math.floor(qtyTotal / 8);
+                    const remainder = qtyTotal % 8;
+                    hasRepeatCalculation = true;
+                    
+                    const repeatPaper = repeats * totalPages;
+                    let collecutPaper = 0;
+                    
+                    if (remainder > 0) {
+                        const rawEighthPages = totalPages / 8;
+                        const eighthPages = Math.ceil(rawEighthPages);
+                        collecutPaper = remainder * eighthPages;
+                        
+                        const eighthPagesText = formatRoundingText(rawEighthPages, eighthPages);
+                        
+                        result = repeatPaper + collecutPaper;
+                        
+                        if (repeats > 0) {
+                            calculationDetails = `Calculation for ${qtyTotal} copies:<br>
+1. 1 sheet produces 8 pieces (1 repeat)<br>
+2. ${qtyTotal} / 8 = ${repeats} repeats with remainder ${remainder}<br>
+3. Eighth pages (for collecut): ${totalPages} / 8 ${eighthPagesText} sheets<br>
+4. Paper for repeats: ${repeats} * ${totalPages} = ${repeatPaper} sheets<br>
+5. Paper for collecut: ${remainder} * ${eighthPages} = ${collecutPaper} sheets<br>
+6. Total required paper: ${repeatPaper} + ${collecutPaper} = ${result} sheets`;
+                            
+                            specialNote = `${repeats} Repeat + ${remainder} Collecut`;
+                        } else {
+                            calculationDetails = `Calculation for ${qtyTotal} copies:<br>
+1. 1 sheet produces 8 pieces (1 repeat)<br>
+2. ${qtyTotal} / 8 = ${repeats} repeats with remainder ${remainder}<br>
+3. Eighth pages (for collecut): ${totalPages} / 8 ${eighthPagesText} sheets<br>
+4. Paper for collecut: ${remainder} * ${eighthPages} = ${collecutPaper} sheets<br>
+5. Total required paper: ${collecutPaper} = ${result} sheets`;
+                            
+                            specialNote = `${remainder} Collecut`;
+                        }
+                    } else {
+                        result = repeatPaper;
+                        
+                        if (repeats > 0) {
+                            calculationDetails = `Calculation for ${qtyTotal} copies:<br>
+1. 1 sheet produces 8 pieces (1 repeat)<br>
+2. ${qtyTotal} / 8 = ${repeats} repeats<br>
+3. Paper for repeats: ${repeats} * ${totalPages} = ${repeatPaper} sheets`;
+                            
+                            specialNote = `${repeats} Repeat`;
+                        } else {
+                            calculationDetails = `Calculation for ${qtyTotal} copies:<br>
+1. 1 sheet produces 8 pieces (1 repeat)<br>
+2. ${qtyTotal} / 8 = ${repeats} repeats<br>
+3. No paper needed as quantity is 0`;
+                        }
+                    }
+                }
+            } else if (selectedPrintSide === '2 Side') {
+                if (selectedPaperSize.includes('A4')) {
+                    const repeats = Math.floor(qtyTotal / 4);
+                    const remainder = qtyTotal % 4;
+                    hasRepeatCalculation = true;
+                    
+                    const rawHalfPages = totalPages / 2;
+                    const halfPages = Math.ceil(rawHalfPages);
+                    const halfPagesText = formatRoundingText(rawHalfPages, halfPages);
+                    
+                    const repeatPaper = repeats * halfPages;
+                    let collecutPaper = 0;
+                    
+                    if (remainder > 0) {
+                        const rawEighthPages = totalPages / 8;
+                        const eighthPages = Math.ceil(rawEighthPages);
+                        collecutPaper = remainder * eighthPages;
+                        
+                        const eighthPagesText = formatRoundingText(rawEighthPages, eighthPages);
+                        
+                        result = repeatPaper + collecutPaper;
+                        
+                        if (repeats > 0) {
+                            calculationDetails = `Calculation for ${qtyTotal} copies (2-sided):<br>
+1. 1 sheet produces 4 pieces (1 repeat)<br>
+2. ${qtyTotal} / 4 = ${repeats} repeats with remainder ${remainder}<br>
+3. Half pages (for repeat): ${totalPages} / 2 ${halfPagesText} sheets<br>
+4. Eighth pages (for collecut): ${totalPages} / 8 ${eighthPagesText} sheets<br>
+5. Paper for repeats: ${repeats} * ${halfPages} = ${repeatPaper} sheets<br>
+6. Paper for collecut: ${remainder} * ${eighthPages} = ${collecutPaper} sheets<br>
+7. Total required paper: ${repeatPaper} + ${collecutPaper} = ${result} sheets`;
+                            
+                            specialNote = `${repeats} Repeat + ${remainder} Collecut`;
+                        } else {
+                            calculationDetails = `Calculation for ${qtyTotal} copies (2-sided):<br>
+1. 1 sheet produces 4 pieces (1 repeat)<br>
+2. ${qtyTotal} / 4 = ${repeats} repeats with remainder ${remainder}<br>
+3. Eighth pages (for collecut): ${totalPages} / 8 ${eighthPagesText} sheets<br>
+4. Paper for collecut: ${remainder} * ${eighthPages} = ${collecutPaper} sheets<br>
+5. Total required paper: ${collecutPaper} = ${result} sheets`;
+                            
+                            specialNote = `${remainder} Collecut`;
+                        }
+                    } else {
+                        result = repeatPaper;
+                        
+                        if (repeats > 0) {
+                            calculationDetails = `Calculation for ${qtyTotal} copies (2-sided):<br>
+1. 1 sheet produces 4 pieces (1 repeat)<br>
+2. ${qtyTotal} / 4 = ${repeats} repeats<br>
+3. Half pages (for repeat): ${totalPages} / 2 ${halfPagesText} sheets<br>
+4. Paper for repeats: ${repeats} * ${halfPages} = ${repeatPaper} sheets`;
+                            
+                            specialNote = `${repeats} Repeat`;
+                        } else {
+                            calculationDetails = `Calculation for ${qtyTotal} copies (2-sided):<br>
+1. 1 sheet produces 4 pieces (1 repeat)<br>
+2. ${qtyTotal} / 4 = ${repeats} repeats<br>
+3. No paper needed as quantity is 0`;
+                        }
+                    }
+                } else if (selectedPaperSize.includes('A3')) {
+                    const repeats = Math.floor(qtyTotal / 8);
+                    const remainder = qtyTotal % 8;
+                    hasRepeatCalculation = true;
+                    
+                    const rawHalfPages = totalPages / 2;
+                    const halfPages = Math.ceil(rawHalfPages);
+                    const halfPagesText = formatRoundingText(rawHalfPages, halfPages);
+                    
+                    const repeatPaper = repeats * halfPages;
+                    let collecutPaper = 0;
+                    
+                    if (remainder > 0) {
+                        const rawSixteenthPages = totalPages / 16;
+                        const sixteenthPages = Math.ceil(rawSixteenthPages);
+                        collecutPaper = remainder * sixteenthPages;
+                        
+                        const sixteenthPagesText = formatRoundingText(rawSixteenthPages, sixteenthPages);
+                        
+                        result = repeatPaper + collecutPaper;
+                        
+                        if (repeats > 0) {
+                            calculationDetails = `Calculation for ${qtyTotal} copies (2-sided):<br>
+1. 1 sheet produces 8 pieces (1 repeat)<br>
+2. ${qtyTotal} / 8 = ${repeats} repeats with remainder ${remainder}<br>
+3. Half pages (for repeat): ${totalPages} / 2 ${halfPagesText} sheets<br>
+4. Sixteenth pages (for collecut): ${totalPages} / 16 ${sixteenthPagesText} sheets<br>
+5. Paper for repeats: ${repeats} * ${halfPages} = ${repeatPaper} sheets<br>
+6. Paper for collecut: ${remainder} * ${sixteenthPages} = ${collecutPaper} sheets<br>
+7. Total required paper: ${repeatPaper} + ${collecutPaper} = ${result} sheets`;
+                            
+                            specialNote = `${repeats} Repeat + ${remainder} Collecut`;
+                        } else {
+                            calculationDetails = `Calculation for ${qtyTotal} copies (2-sided):<br>
+1. 1 sheet produces 8 pieces (1 repeat)<br>
+2. ${qtyTotal} / 8 = ${repeats} repeats with remainder ${remainder}<br>
+3. Sixteenth pages (for collecut): ${totalPages} / 16 ${sixteenthPagesText} sheets<br>
+4. Paper for collecut: ${remainder} * ${sixteenthPages} = ${collecutPaper} sheets<br>
+5. Total required paper: ${collecutPaper} = ${result} sheets`;
+                            
+                            specialNote = `${remainder} Collecut`;
+                        }
+                    } else {
+                        result = repeatPaper;
+                        
+                        if (repeats > 0) {
+                            calculationDetails = `Calculation for ${qtyTotal} copies (2-sided):<br>
+1. 1 sheet produces 8 pieces (1 repeat)<br>
+2. ${qtyTotal} / 8 = ${repeats} repeats<br>
+3. Half pages (for repeat): ${totalPages} / 2 ${halfPagesText} sheets<br>
+4. Paper for repeats: ${repeats} * ${halfPages} = ${repeatPaper} sheets`;
+                            
+                            specialNote = `${repeats} Repeat`;
+                        } else {
+                            calculationDetails = `Calculation for ${qtyTotal} copies (2-sided):<br>
+1. 1 sheet produces 8 pieces (1 repeat)<br>
+2. ${qtyTotal} / 8 = ${repeats} repeats<br>
+3. No paper needed as quantity is 0`;
+                        }
+                    }
+                }
+            }
+        }
+        
+        if (selectedPaperSize.includes('A3 [42x29,7cm]') || selectedPaperSize.includes('A4 [29,7x21cm]')) {
+            a3Warning = "Use A3+ Paper Size if the Media Finishing Image is Full Print.";
+        }
+        
+        const resultContainer = document.getElementById('resultContainer');
+        const resultText = document.getElementById('resultText');
+        
+        if (!resultContainer || !resultText) {
+            console.error('Result container elements not found');
+            alert('Error: Result container not found. Please refresh the page.');
+            return;
+        }
+        
+        let formattedResult = '';
+        
+        if (isMobileDevice()) {
+            formattedResult = `
+                <div class="result-row">
+                    <div class="result-label">Total Qty:</div>
+                    <div class="result-value">${qtyTotal}pcs</div>
+                </div>
+                <div class="result-row">
+                    <div class="result-label">Total Of Page:</div>
+                    <div class="result-value">${totalPages}</div>
+                </div>
+                <div class="result-row">
+                    <div class="result-label">Finish Media:</div>
+                    <div class="result-value">${selectedFinishMedia}</div>
+                </div>
+                <div class="result-row">
+                    <div class="result-label">Print Side:</div>
+                    <div class="result-value">${selectedPrintSide}</div>
+                </div>
+                <div class="result-row">
+                    <div class="result-label">Total Paper:</div>
+                    <div class="result-value">${result}</div>
+                </div>
+            `;
+        } else {
+            formattedResult = `
+                <div class="result-row">
+                    <div class="result-label">Total Qty :</div>
+                    <div class="result-value"> ${qtyTotal}pcs</div>
+                </div>
+                <div class="result-row">
+                    <div class="result-label">Total Of Page :</div>
+                    <div class="result-value"> ${totalPages}</div>
+                </div>
+                <div class="result-row">
+                    <div class="result-label">Finish Media :</div>
+                    <div class="result-value"> ${selectedFinishMedia}</div>
+                </div>
+                <div class="result-row">
+                    <div class="result-label">Print Side :</div>
+                    <div class="result-value"> ${selectedPrintSide}</div>
+                </div>
+                <div class="result-row">
+                    <div class="result-label">Total Paper :</div>
+                    <div class="result-value"> ${result}</div>
+                </div>
+            `;
+        }
+        
+        if (specialNote && hasRepeatCalculation) {
+            formattedResult += `
+                <div class="special-note">
+                    ${specialNote}
+                </div>
+            `;
+        }
+
+        if (a3Warning) {
+            formattedResult += `
+                <div class="special-note" style="color: #ff5252; margin-top: 10px;">
+                    ${a3Warning}
+                </div>
+            `;
+        }
+        
+        formattedResult += `
+            <div class="calculation-details">
+                ${calculationDetails}
+            </div>
+        `;
+        
+        resultText.innerHTML = formattedResult;
+        resultContainer.style.display = 'block';
+        
+        if (isMobileDevice()) {
+            setTimeout(() => {
+                resultContainer.scrollIntoView({ behavior: 'smooth' });
+            }, 100);
+        }
+        
+        console.log('Calculation completed successfully');
+    } catch (error) {
+        console.error('Error in calculate function:', error);
+        alert('An error occurred during calculation.');
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    try {
+        console.log('DOM fully loaded');
+        
+        document.getElementById('finishMediaBtn').addEventListener('click', function() {
+            toggleDropdown('finishMediaDropdown');
+        });
+        
+        document.getElementById('printSideBtn').addEventListener('click', function() {
+            toggleDropdown('printSideDropdown');
+        });
+        
+        document.getElementById('paperSizeBtn').addEventListener('click', function() {
+            toggleDropdown('paperSizeDropdown');
+        });
+        
+        const finishMediaOptions = document.querySelectorAll('#finishMediaDropdown div');
+        finishMediaOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                selectOption('finishMedia', this.getAttribute('data-value'));
+            });
+        });
+        
+        const printSideOptions = document.querySelectorAll('#printSideDropdown div');
+        printSideOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                selectOption('printSide', this.getAttribute('data-value'));
+            });
+        });
+        
+        const paperSizeOptions = document.querySelectorAll('#paperSizeDropdown div');
+        paperSizeOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                selectOption('paperSize', this.getAttribute('data-value'));
+            });
+        });
+        
+        document.getElementById('calculateBtn').addEventListener('click', calculate);
+        
+        document.addEventListener('click', function(event) {
+            if (!event.target.matches('.dropdown-btn') && 
+                !event.target.matches('.dropdown-arrow') && 
+                !event.target.closest('.dropdown-content')) {
+                closeAllDropdowns();
+            }
+        });
+
+        document.addEventListener('touchstart', function(event) {
+            if (!event.target.closest('.dropdown-container')) {
+                closeAllDropdowns();
+            }
+        });
+        
+        setupScrollToTop();
+        adjustForMobile();
+        
+        window.addEventListener('resize', adjustForMobile);
+        window.addEventListener('orientationchange', function() {
+            setTimeout(adjustForMobile, 200);
+        });
+        
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && isDropdownOpen) {
+                closeAllDropdowns();
+            }
+        });
+        
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function(event) {
+            const now = (new Date()).getTime();
+            if (now - lastTouchEnd <= 300) {
+                if (!event.target.closest('.dropdown-content')) {
+                    event.preventDefault();
+                }
+            }
+            lastTouchEnd = now;
+        }, false);
+        
+        console.log('Initialization complete');
+    } catch (error) {
+        console.error('Error during initialization:', error);
+    }
+});
+</script>
+</body>
+</html>
