@@ -731,7 +731,7 @@ h1, p, span, div, li, input, button {
                 Finish Media <span class="dropdown-arrow"></span>
             </button>
             <div id="finishMediaDropdown" class="dropdown-content">
-                <div data-value="A4/B5/Quarto/Quarto">A4/B5/Quarto/Quarto</div>
+                <div data-value="A4/B5">A4/B5</div>
                 <div data-value="A5/B6">A5/B6</div>
                 <div data-value="A6">A6</div>
             </div>
@@ -969,7 +969,7 @@ function updatePaperPreview() {
         let gridCols = 1;
         let gridRows = 1;
         
-        const validFinishMedia = selectedFinishMedia === 'A4/B5/Quarto/Quarto' || selectedFinishMedia === 'A5/B6' || selectedFinishMedia === 'A6';
+        const validFinishMedia = selectedFinishMedia === 'A4/B5' || selectedFinishMedia === 'A5/B6' || selectedFinishMedia === 'A6';
         const validPaperSizes = selectedPaperSize.includes('A3 [42x29,7cm]') || selectedPaperSize.includes('A4 [29,7x21cm]');
         const useNewDesign = validFinishMedia && validPaperSizes;
         const isA3Plus = selectedPaperSize.includes('A3+ [31,5x47,5cm]');
@@ -988,7 +988,7 @@ function updatePaperPreview() {
             if (finishMediaLegend) finishMediaLegend.querySelector('span').textContent = 'Finish Media';
         }
         
-        if (selectedFinishMedia === 'A4/B5/Quarto/Quarto') {
+        if (selectedFinishMedia === 'A4/B5') {
             if (selectedPaperSize.includes('A4')) {
                 pieces = 1;
                 gridCols = 1;
