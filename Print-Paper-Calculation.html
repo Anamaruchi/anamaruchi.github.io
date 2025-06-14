@@ -969,7 +969,7 @@ function updatePaperPreview() {
         let gridCols = 1;
         let gridRows = 1;
         
-        const validFinishMedia = selectedFinishMedia === 'A4/B5' || selectedFinishMedia === 'A5/B6' || selectedFinishMedia === 'A6';
+        const validFinishMedia = selectedFinishMedia === 'A4/B5/Quarto' || selectedFinishMedia === 'A5/B6' || selectedFinishMedia === 'A6';
         const validPaperSizes = selectedPaperSize.includes('A3 [42x29,7cm]') || selectedPaperSize.includes('A4 [29,7x21cm]');
         const useNewDesign = validFinishMedia && validPaperSizes;
         const isA3Plus = selectedPaperSize.includes('A3+ [31,5x47,5cm]');
