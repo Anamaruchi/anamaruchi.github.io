@@ -731,8 +731,8 @@ h1, p, span, div, li, input, button {
                 Finish Media <span class="dropdown-arrow"></span>
             </button>
             <div id="finishMediaDropdown" class="dropdown-content">
-                <div data-value="A4/B5">A4 [21x29,7cm] / B5 [17,6x25cm]</div>
-                <div data-value="A5/B6">A5 [14,8x21cm] / B6 [12,5x17,6cm]</div>
+                <div data-value="A4/B5/Quarto">A4/B5/Quarto</div>
+                <div data-value="A5/B6">A5/B6</div>
                 <div data-value="A6">A6</div>
             </div>
         </div>
@@ -969,7 +969,7 @@ function updatePaperPreview() {
         let gridCols = 1;
         let gridRows = 1;
         
-        const validFinishMedia = selectedFinishMedia === 'A4/B5' || selectedFinishMedia === 'A5/B6' || selectedFinishMedia === 'A6';
+        const validFinishMedia = selectedFinishMedia === 'A4/B5/Quarto' || selectedFinishMedia === 'A5/B6' || selectedFinishMedia === 'A6';
         const validPaperSizes = selectedPaperSize.includes('A3 [42x29,7cm]') || selectedPaperSize.includes('A4 [29,7x21cm]');
         const useNewDesign = validFinishMedia && validPaperSizes;
         const isA3Plus = selectedPaperSize.includes('A3+ [31,5x47,5cm]');
@@ -988,7 +988,7 @@ function updatePaperPreview() {
             if (finishMediaLegend) finishMediaLegend.querySelector('span').textContent = 'Finish Media';
         }
         
-        if (selectedFinishMedia === 'A4/B5') {
+        if (selectedFinishMedia === 'A4/B5/Quarto') {
             if (selectedPaperSize.includes('A4')) {
                 pieces = 1;
                 gridCols = 1;
@@ -1107,7 +1107,7 @@ function calculate() {
         let a3Warning = '';
         let hasRepeatCalculation = false;
         
-        if (selectedFinishMedia === 'A4/B5') {
+        if (selectedFinishMedia === 'A4/B5/Quarto') {
             if (selectedPrintSide === '1 Side') {
                 if (selectedPaperSize.includes('A4')) {
                     result = qtyTotal * totalPages;
