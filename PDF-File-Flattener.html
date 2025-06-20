@@ -2,11 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale: 1.0, user-scalable=no">
     <title>Anamaruchi - PDF File Flattener</title>
-	<link rel="icon" type="image/x-icon" href="/Image/Anamaruchi.ico">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script> <!-- Awusome Lib UWU -->	
+    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script> <!-- Awusome Lib UWU -->
     <style>
         *, *::before, *::after {
             box-sizing: border-box;
@@ -564,6 +563,7 @@
             font-size: 0.7rem;
             color: rgba(255, 255, 255, 0.8);
             font-weight: 500;
+            text-transform: uppercase;
             letter-spacing: 0.5px;
             margin: 0;
         }
@@ -607,10 +607,13 @@
             background: linear-gradient(135deg, #3b82f6, #1d4ed8);
             font-size: 0.9rem;
             padding: 14px 28px;
+            transition: all 0.3s ease;
         }
 
         .btn-primary:hover {
+            background: linear-gradient(135deg, #1d4ed8, #3b82f6);
             box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+            transform: translateY(-2px);
         }
 
         .btn-secondary {
@@ -834,6 +837,7 @@
             backdrop-filter: blur(10px);
         }
 
+        /* Footer Styles */
         .footer-credit {
             text-align: center;
             margin-top: 10px;
@@ -860,10 +864,15 @@
             text-decoration: underline;
         }
 
+        /* Mobile Responsiveness */
         @media (hover: none) {
             .container:hover, .btn:hover, .dpi-option:hover, .compression-option:hover, .upload-area:hover {
                 transform: none;
                 box-shadow: initial;
+            }
+            
+            .btn-primary:hover {
+                background: linear-gradient(135deg, #1d4ed8, #0f172a);
             }
         }
 
@@ -885,6 +894,7 @@
                 max-width: 100%;
             }
 
+            /* Remove backdrop-filter from all elements on mobile */
             .warning-section,
             .settings-section,
             .setting-group,
@@ -900,6 +910,7 @@
                 backdrop-filter: none !important;
             }
 
+            /* Ensure solid backgrounds for readability */
             .warning-section {
                 background: rgba(59, 130, 246, 0.15) !important;
             }
@@ -986,6 +997,7 @@
                 align-items: center;
             }
 
+            /* Enhanced Mobile Size Comparison */
             .size-comparison {
                 padding: 12px 15px 20px 15px;
             }
@@ -1059,6 +1071,7 @@
             }
         }
 
+        /* Force remove all backdrop filters on mobile */
         @media screen and (max-width: 768px) {
             * {
                 backdrop-filter: none !important;
@@ -1101,6 +1114,7 @@
                 gap: 10px;
             }
 
+            /* Extra Small Mobile Size Comparison */
             .size-comparison {
                 padding: 10px 12px 18px 12px;
             }
@@ -1157,6 +1171,7 @@
             }
         }
 
+        /* Extra responsive adjustments for very small screens */
         @media screen and (max-width: 360px) {
             .size-bars {
                 gap: 8px;
@@ -1225,7 +1240,7 @@
             <div class="warning-section">
                 <div class="warning-title">⚠️ Important Note</div>
                 <div class="warning-text">
-                    PDF File Flattening converts text and vectors to images, which often <strong>increases file size</strong>. 
+                    PDF flattening converts text and vectors to images, which often <strong>increases file size</strong>. 
                     Text-heavy PDFs may become 2-5x larger. Image-heavy PDFs may become smaller with compression.
                 </div>
             </div>
@@ -1234,12 +1249,11 @@
                 <div class="settings-grid">
                     <div class="setting-group">
                         <h3 class="setting-title">Quality Resolution (DPI)</h3>
-						<p></p>
                         <div class="dpi-options">
                             <label class="dpi-option">
                                 <input type="radio" name="dpi" value="custom">
                                 <div class="dpi-value">Custom</div>
-                                <div class="dpi-label">Custom</div>
+                                <div class="dpi-label">Set your own DPI</div>
                             </label>
                             <label class="dpi-option selected">
                                 <input type="radio" name="dpi" value="150" checked>
@@ -1273,7 +1287,6 @@
 
                     <div class="setting-group">
                         <h3 class="setting-title">Compression File</h3>
-						<p></p>	
                         <div class="compression-options">
                             <label class="compression-option selected">
                                 <input type="radio" name="compression" value="aggressive" checked>
@@ -1426,6 +1439,7 @@
                 </div>
             </div>
 
+            <!-- Footer Credit -->
             <div class="footer-credit">
                 <p class="footer-text">
                     Created By Anamaruchi (<a href="https://www.facebook.com/anang.zikri.f" target="_blank" class="footer-link">Anang Zikri Febriyansyah</a>)
@@ -1435,6 +1449,7 @@
     </div>
 
     <script>
+        // Set up PDF.js worker
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
         let optimizedPdfBytes = null;
@@ -1453,6 +1468,7 @@
             processingTime: 0
         };
 
+        // More realistic compression settings
         const compressionSettings = {
             'aggressive': { quality: 40, format: 'jpeg' },
             'balanced': { quality: 60, format: 'jpeg' },
@@ -1460,6 +1476,7 @@
             'custom': { quality: 40, format: 'jpeg' }
         };
 
+        // Initialize when DOM is loaded
         document.addEventListener('DOMContentLoaded', function() {
             initializeControls();
             initializeUpload();
@@ -1506,6 +1523,7 @@
         }
 
         function initializeControls() {
+            // DPI options
             document.querySelectorAll('input[name="dpi"]').forEach(option => {
                 option.addEventListener('change', function() {
                     document.querySelectorAll('.dpi-option').forEach(opt => opt.classList.remove('selected'));
@@ -1521,10 +1539,12 @@
                 });
             });
 
+            // Custom DPI input
             document.getElementById('customDpiInput').addEventListener('input', function() {
                 updateSizeEstimate();
             });
 
+            // Compression options
             document.querySelectorAll('input[name="compression"]').forEach(option => {
                 option.addEventListener('change', function() {
                     document.querySelectorAll('.compression-option').forEach(opt => opt.classList.remove('selected'));
@@ -1540,6 +1560,7 @@
                 });
             });
 
+            // Quality slider
             const qualitySlider = document.getElementById('qualitySlider');
             const qualityValue = document.getElementById('qualityValue');
             
@@ -1602,14 +1623,17 @@
             }
             
             try {
+                // Store file info
                 currentFile = file;
                 originalFileName = file.name.replace('.pdf', '');
                 originalFileSize = file.size;
                 
+                // Analyze PDF
                 const arrayBuffer = await file.arrayBuffer();
                 const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
                 pdfPageCount = pdf.numPages;
                 
+                // Update UI
                 showFileInfo(file.name, file.size, pdfPageCount);
                 updateSizeEstimate();
                 
@@ -1624,6 +1648,7 @@
             const fileInfo = document.getElementById('fileInfo');
             const uploadIcon = uploadArea.querySelector('svg');
             
+            // Update upload area
             uploadArea.classList.add('file-loaded');
             if (uploadIcon) {
                 uploadIcon.style.filter = 'drop-shadow(0 0 20px rgba(59, 130, 246, 0.5))';
@@ -1631,6 +1656,7 @@
             uploadArea.querySelector('.upload-text').textContent = 'File loaded successfully!';
             uploadArea.querySelector('.upload-subtext').textContent = 'Configure settings and click "Start Processing"';
             
+            // Show file info
             document.getElementById('fileName').textContent = fileName;
             document.getElementById('fileSize').textContent = formatFileSize(fileSize);
             document.getElementById('pageCount').textContent = pageCount;
@@ -1654,7 +1680,7 @@
             const isIncrease = change > 0;
             
             sizeEstimate.innerHTML = `
-                <h4>File Size Estimate</h4>
+                <h4>Realistic Size Estimate</h4>
                 <p>Original: ${formatFileSize(originalFileSize)} → Estimated: ${formatFileSize(estimatedSize)}</p>
                 <p style="color: ${isIncrease ? '#3b82f6' : '#3b82f6'}; font-weight: 600; margin-top: 6px;">
                     ${isIncrease ? 'Likely to increase' : 'May decrease'} by ~${Math.abs(change)}%
@@ -1666,28 +1692,34 @@
         }
 
         function calculateRealisticSize(originalSize, pageCount, settings) {
-
+            // More realistic calculation based on actual PDF flattening behavior
+            
+            // Base size per page when converted to image (varies by DPI)
             const baseSizePerPage = {
-                72: 30 * 1024,    
-                120: 50 * 1024,   
-                150: 80 * 1024,   
-                200: 140 * 1024,  
-                300: 300 * 1024,  
-                600: 1200 * 1024  
+                72: 30 * 1024,    // ~30KB per page at 72 DPI
+                120: 50 * 1024,   // ~50KB per page at 120 DPI
+                150: 80 * 1024,   // ~80KB per page at 150 DPI  
+                200: 140 * 1024,  // ~140KB per page at 200 DPI
+                300: 300 * 1024,  // ~300KB per page at 300 DPI
+                600: 1200 * 1024  // ~1.2MB per page at 600 DPI
             };
             
             const baseSize = baseSizePerPage[settings.dpi] || baseSizePerPage[150];
             
+            // Calculate base image size
             let estimatedSize = baseSize * pageCount;
             
+            // Apply compression
             const compressionFactor = settings.quality / 100;
             estimatedSize *= compressionFactor;
             
-            const pdfOverhead = Math.max(50 * 1024, originalSize * 0.1);
+            // Add PDF overhead (structure, metadata, etc.)
+            const pdfOverhead = Math.max(50 * 1024, originalSize * 0.1); // At least 50KB overhead
             estimatedSize += pdfOverhead;
             
-            if (originalSize < 1024 * 1024) { 
-                estimatedSize = Math.max(estimatedSize, originalSize * 1.5); 
+            // For very small original files (text-heavy), the increase is usually significant
+            if (originalSize < 1024 * 1024) { // Less than 1MB
+                estimatedSize = Math.max(estimatedSize, originalSize * 1.5); // At least 50% increase
             }
             
             return Math.round(estimatedSize);
@@ -1764,6 +1796,7 @@
                 
                 if (processingCancelled) return;
                 
+                // Create new PDF document
                 const pdfDoc = await PDFLib.PDFDocument.create();
                 
                 for (let pageNum = 1; pageNum <= numPages; pageNum++) {
@@ -1783,12 +1816,14 @@
                 
                 updateProgress(85, 'Finalizing flattened PDF...', 'Applying final compression and optimization');
                 
+                // Generate final PDF with aggressive optimization
                 optimizedPdfBytes = await pdfDoc.save({
-                    useObjectStreams: true, 
+                    useObjectStreams: true, // Enable compression
                     addDefaultPage: false,
                     objectsPerTick: 50
                 });
                 
+                // Calculate final stats
                 const endTime = Date.now();
                 const compressionRatio = Math.round((optimizedPdfBytes.length / originalFileSize - 1) * 100);
                 
@@ -1818,29 +1853,34 @@
         async function optimizePage(pdfDoc, page, settings) {
             const viewport = page.getViewport({ scale: settings.scale });
             
+            // Create canvas with exact dimensions
             const canvas = document.createElement('canvas');
             const context = canvas.getContext('2d');
             
             canvas.width = viewport.width;
             canvas.height = viewport.height;
             
+            // Render with optimization settings
             const renderContext = {
                 canvasContext: context,
                 viewport: viewport,
                 enableWebGL: false,
                 renderInteractiveForms: false,
-                textLayerMode: 0, 
-                annotationMode: 0
+                textLayerMode: 0, // Disable text layer completely
+                annotationMode: 0 // Disable annotations
             };
             
             await page.render(renderContext).promise;
             
+            // Convert to highly compressed JPEG
             const imageData = canvas.toDataURL('image/jpeg', settings.quality / 100);
             const jpegImage = await pdfDoc.embedJpg(imageData);
             
+            // Create new page with original dimensions
             const originalViewport = page.getViewport({ scale: 1.0 });
             const newPage = pdfDoc.addPage([originalViewport.width, originalViewport.height]);
             
+            // Draw the compressed image
             newPage.drawImage(jpegImage, {
                 x: 0,
                 y: 0,
@@ -1856,6 +1896,7 @@
             pdfPageCount = 0;
             document.getElementById('fileInput').value = '';
             
+            // Reset upload area
             const uploadArea = document.getElementById('uploadArea');
             const uploadIcon = uploadArea.querySelector('svg');
             uploadArea.classList.remove('file-loaded');
@@ -1865,8 +1906,10 @@
             uploadArea.querySelector('.upload-text').textContent = 'Drop your PDF file here';
             uploadArea.querySelector('.upload-subtext').textContent = 'or click to browse files (Max 100MB)';
             
-            document.getElementById('fileInfo').classList.remove('show');	
+            // Hide file info
+            document.getElementById('fileInfo').classList.remove('show');
             
+            // Reset size estimate
             document.getElementById('sizeEstimate').innerHTML = `
                 <h4>File Size Estimate</h4>
                 <p>Upload a file to see accurate size prediction</p>
@@ -1897,11 +1940,13 @@
             document.getElementById('processingSection').style.display = 'none';
             document.getElementById('resultSection').style.display = 'block';
             
+            // Update stats
             document.getElementById('resultPageCount').textContent = processingStats.pages;
             document.getElementById('outputDpi').textContent = processingStats.dpi;
             document.getElementById('compressionLevel').textContent = processingStats.quality + '%';
             document.getElementById('processingTime').textContent = processingStats.processingTime + 's';
             
+            // Update size comparison
             const originalSizeKB = Math.round(originalFileSize / 1024);
             const optimizedSizeKB = processingStats.fileSize;
             const change = processingStats.compressionRatio;
@@ -1909,6 +1954,7 @@
             document.getElementById('originalSizeDisplay').textContent = formatFileSize(originalFileSize);
             document.getElementById('optimizedSizeDisplay').textContent = formatFileSize(optimizedPdfBytes.length);
             
+            // Update size bars
             const maxSize = Math.max(originalSizeKB, optimizedSizeKB);
             const originalHeight = (originalSizeKB / maxSize) * 80;
             const optimizedHeight = (optimizedSizeKB / maxSize) * 80;
@@ -1916,6 +1962,7 @@
             document.getElementById('originalBar').style.height = originalHeight + 'px';
             document.getElementById('optimizedBar').style.height = optimizedHeight + 'px';
             
+            // Update comparison section styling and text
             const sizeComparison = document.getElementById('sizeComparison');
             const savingsElement = document.getElementById('sizeSavings');
             
