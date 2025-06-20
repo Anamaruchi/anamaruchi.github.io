@@ -1240,7 +1240,7 @@
             <div class="warning-section">
                 <div class="warning-title">⚠️ Important Note</div>
                 <div class="warning-text">
-                    PDF flattening converts text and vectors to images, which often <strong>increases file size</strong>. 
+                    PDF File Flattening converts text and vectors to images, which often <strong>increases file size</strong>. 
                     Text-heavy PDFs may become 2-5x larger. Image-heavy PDFs may become smaller with compression.
                 </div>
             </div>
@@ -1682,7 +1682,7 @@
             const isIncrease = change > 0;
             
             sizeEstimate.innerHTML = `
-                <h4>Realistic Size Estimate</h4>
+                <h4>File Size Estimate</h4>
                 <p>Original: ${formatFileSize(originalFileSize)} → Estimated: ${formatFileSize(estimatedSize)}</p>
                 <p style="color: ${isIncrease ? '#3b82f6' : '#3b82f6'}; font-weight: 600; margin-top: 6px;">
                     ${isIncrease ? 'Likely to increase' : 'May decrease'} by ~${Math.abs(change)}%
