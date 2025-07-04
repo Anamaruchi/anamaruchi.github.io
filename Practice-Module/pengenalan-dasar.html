@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pengenalan Dasar - Anamaruchi</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="sidebar">
+            <div class="logo">
+                <h1 style="text-align: center;">Anamaruchi</h1>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-item dropdown">
+                    <div class="nav-header" onclick="toggleDropdown('home-dropdown')">
+                        <span>Awal</span>
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div class="dropdown-content active" id="home-dropdown">
+                        <a href="pengenalan-dasar.html" class="active-link">Pengenalan Dasar</a>
+                        <a href="kartu-flazz-emoney-brizzi.html">Ukuran Kertas</a>
+                    </div>
+                </div>
+            </div>
+
+              <div class="nav-section">
+                <div class="nav-item dropdown">
+                    <div class="nav-header" onclick="toggleDropdown('tutorial-dropdown')">
+                        <span>Tutorial</span>
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div class="dropdown-content active" id="tutorial-dropdown">
+                        <a href="kartu-nama.html" >Kartu Nama</a>
+                        <a href="id-card-laser.html">ID Card Laser</a>
+                        <a href="id-card-uv.html">ID Card UV</a>
+						<a href="id-card-uv.html">Kartu Flazz - EMoney - Brizzi</a>
+						<a href="kiss-cutting.html">Kiss Cutting</a>
+						<a href="die-cutting.html">Die Cutting</a>
+						<a href="soft-cover.html">Soft Cover</a>
+						<a href="hard-cover.html">Hard Cover</a>
+						<a href="special-color-a3+.html">Special Color A3+</a>
+						<a href="outdoor.html">Outdoor</a>
+						<a href="indoor.html">Indoor</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <main class="content">
+            <div class="content-area">
+                <h1>Pengenalan Dasar</h1>
+                <div class="tutorial-content">
+				<b>Di Website ini kamu akan belajar berbagai setting sebagai Job Deskprint<br /><br />Deskprint
+  membutuhkan Ketelitian dan Kerapihan dalam Menangani Berbagai Macam File Sebelum
+  Masuk ke Prosess Print atau Produksi. Untuk Itu, Selama di Website
+  ini Kamu Belajar Setting File agar tidak salah saat</b>
+  <b>Prosess Print atau Produksi<br /><br /><span
+    style="color: #0b5394; font-size: large;">Hal Paling Dasar Yang di Perlukan :</span>
+	<br />1. Mengerti Menggunakan Komputer<br />2. Bisa Menggunakan Software
+  Design Seperti Adobe Photoshop, Adobe Illustrator, Coreldraw, dll<br />3.
+  Mengerti Tugas yang diberikan<br/></b>
+                    <div class="note">
+                        <strong>Tips:</strong> Mulailah dengan tutorial yang paling sederhana dan tingkatkan secara bertahap.
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+	<script src="script.js"></script>
+    <style>
+        .tutorial-content {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+        
+        .tutorial-content h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        
+        .tutorial-content h3 {
+            color: #34495e;
+            margin: 20px 0 10px 0;
+        }
+        
+        .tutorial-content ul {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .tutorial-content li {
+            margin-bottom: 5px;
+            line-height: 1.6;
+        }
+        
+        .note {
+            background: #e8f4fd;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        
+        .active-link {
+            background-color: #3498db !important;
+            border-left-color: #2980b9 !important;
+        }
+
+        .simple-download-btn {
+            display: inline-block;
+            background-color: #5DADE2;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .simple-download-btn:hover {
+            background-color: #3498db;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            color: white;
+            text-decoration: none;
+        }
+
+        .simple-download-btn:visited {
+            color: white;
+            text-decoration: none;
+        }
+
+        .simple-download-btn:active {
+            transform: translateY(0);
+        }
+
+        @media (max-width: 768px) {
+            .simple-download-btn {
+                padding: 12px 25px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</body>
+</html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ukuran Kertas - Anamaruchi</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="sidebar">
+            <div class="logo">
+                <h1 style="text-align: center;">Anamaruchi</h1>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-item dropdown">
+                    <div class="nav-header" onclick="toggleDropdown('home-dropdown')">
+                        <span>Awal</span>
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div class="dropdown-content active" id="home-dropdown">
+                        <a href="pengenalan-dasar.html">Pengenalan Dasar</a>
+                        <a href="ukuran-kertas.html" class="active-link">Ukuran Kertas</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-item dropdown">
+                    <div class="nav-header" onclick="toggleDropdown('tutorial-dropdown')">
+                        <span>Tutorial</span>
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div class="dropdown-content active" id="tutorial-dropdown">
+                        <a href="kartu-nama.html" >Kartu Nama</a>
+                        <a href="id-card-laser.html">ID Card Laser</a>
+                        <a href="id-card-uv.html">ID Card UV</a>
+						<a href="kartu-flazz-emoney-brizzi.html">Kartu Flazz - EMoney - Brizzi</a>
+						<a href="kiss-cutting.html">Kiss Cutting</a>
+						<a href="die-cutting.html">Die Cutting</a>
+						<a href="soft-cover.html">Soft Cover</a>
+						<a href="hard-cover.html">Hard Cover</a>
+						<a href="special-color-a3+.html">Special Color A3+</a>
+						<a href="outdoor.html">Outdoor</a>
+						<a href="indoor.html">Indoor</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <main class="content">
+            <div class="content-area">
+                <h1>Ukuran Kertas</h1>
+                <div class="tutorial-content">
+                    <h2>Panduan Ukuran Kertas Standar</h2>
+                    <p>Memahami ukuran kertas standar sangat penting untuk desain dan percetakan yang akurat.</p>
+                    
+                    <h3>1. Seri A (ISO 216)</h3>
+                    <ul>
+                        <li><strong>A0:</strong> 84,1 x 118,9cm</li>
+                        <li><strong>A1:</strong> 59,4 x 84,1cm</li>
+                        <li><strong>A2:</strong> 42 x 59,4cm</li>
+                        <li><strong>A3:</strong> 29,7 x 42cm</li>
+						<li><strong>A3+:</strong> 31,5 x 47,5cm</li>
+                        <li><strong>A4:</strong> 21 x 29,7cm</li>
+                        <li><strong>A5:</strong> 14,8 x 21cm</li>
+                        <li><strong>A6:</strong> 10,5 x 14,8cm</li>
+                    </ul>
+                    
+                    <h3>2. Seri B (ISO 216)</h3>
+                    <ul>
+                        <li><strong>B0:</strong> 100 x 141,4cm</li>
+                        <li><strong>B1:</strong> 70,7 x 100cm</li>
+                        <li><strong>B2:</strong> 50 x 70,7cm</li>
+                        <li><strong>B3:</strong> 35,3 x 50cm</li>
+                        <li><strong>B4:</strong> 25 x 35,3cm</li>
+                        <li><strong>B5:</strong> 17,6 x 25cm</li>
+                    </ul>
+                    
+                    <h3>3. Ukuran Khusus Indonesia</h3>
+                    <ul>
+                        <li><strong>F4/Folio:</strong> 21,6 x 33cm</li>
+                        <li><strong>Legal:</strong> 21,6 x 35,6cm</li>
+                        <li><strong>Letter:</strong> 21,6 x 27,9cm</li>
+                        <li><strong>Quarto:</strong> 21,6 x 27,5cm</li>
+                    </ul>
+                    
+                    <h3>4. Ukuran Kartu</h3>
+                    <ul>
+                        <li><strong>Kartu Nama:</strong> 9 x 5,5cm</li>
+                        <li><strong>ID Card:</strong> 5,4 x 8,6cm</li>
+                    </ul>    
+                    
+                    <h3>5. Catatan Penting</h3>
+                    <ul>
+                        <li>Selalu tambahkan (Minimal) bleed 2mm keliling untuk hasil print yang akan dipotong</li>
+                        <li>Gunakan safe area (Minimal) 3mm dari tepi untuk teks/gambar penting</li>
+                        <li>Perhatikan orientasi: Portrait (Tinggi) vs Landscape (Lebar)</li>
+                    </ul>
+                    
+                    <div class="note">
+                        <strong>Catatan:</strong> Berlatih Untuk Menghafal Seluruh Ukuran Kertas secara bertahap, agar kamu bisa lebih menguasai hal selanjutnya.
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+	<script src="script.js"></script>
+    <style>
+        .tutorial-content {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+        
+        .tutorial-content h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        
+        .tutorial-content h3 {
+            color: #34495e;
+            margin: 20px 0 10px 0;
+        }
+        
+        .tutorial-content ul {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .tutorial-content li {
+            margin-bottom: 5px;
+            line-height: 1.6;
+        }
+        
+        .note {
+            background: #e8f4fd;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        
+        .active-link {
+            background-color: #3498db !important;
+            border-left-color: #2980b9 !important;
+        }
+
+        .simple-download-btn {
+            display: inline-block;
+            background-color: #5DADE2;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .simple-download-btn:hover {
+            background-color: #3498db;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            color: white;
+            text-decoration: none;
+        }
+
+        .simple-download-btn:visited {
+            color: white;
+            text-decoration: none;
+        }
+
+        .simple-download-btn:active {
+            transform: translateY(0);
+        }
+
+        @media (max-width: 768px) {
+            .simple-download-btn {
+                padding: 12px 25px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</body>
+</html>
