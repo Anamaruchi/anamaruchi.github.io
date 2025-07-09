@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutorial Booklet - Anamaruchi</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/x-icon" href="/Image/Anamaruchi.ico">
+</head>
+<body>
+    <div class="container">
+        <nav class="sidebar">
+            <div class="logo">
+                <h1 style="text-align: center;">Anamaruchi</h1>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-item dropdown">
+                    <div class="nav-header" onclick="toggleDropdown('home-dropdown')">
+                        <span>Awal</span>
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div class="dropdown-content" id="home-dropdown">
+                        <a href="./pengenalan">Pengenalan Dasar</a>
+                        <a href="./ukuran-kertas">Ukuran Kertas</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-item dropdown">
+                    <div class="nav-header" onclick="toggleDropdown('tutorial-dropdown')">
+                        <span>Tutorial | Tahap 1</span>
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div class="dropdown-content" id="tutorial-dropdown">
+                        <a href="./kartu-nama">Kartu Nama</a>
+                        <a href="./id-card-laser">ID Card Laser</a>
+                        <a href="./id-card-uv">ID Card UV</a>
+                        <a href="./kartu-flazz-emoney-brizzi">Kartu Flazz - EMoney - Brizzi</a>
+                        <a href="./kiss-cutting">Kiss Cutting</a>
+                        <a href="./die-cutting">Die Cutting</a>
+                        <a href="./soft-cover">Soft Cover</a>
+                        <a href="./hard-cover">Hard Cover</a>
+                        <a href="./special-color-a3+">Special Color A3+</a>
+                        <a href="./outdoor">Outdoor</a>
+                        <a href="./indoor">Indoor</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-item dropdown">
+                    <div class="nav-header" onclick="toggleDropdown('tutorial-tahap2-dropdown')">
+                        <span>Tutorial | Tahap 2</span>
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div class="dropdown-content active" id="tutorial-tahap2-dropdown">
+                        <a href="./booklet" class="active-link">Booklet</a>
+						<a href="./cutting-stiker-meter">Cutting Stiker Meter</a>
+						<a href="./stampel">Stampel</a>
+						<a href="./map-a4">Custom Map A4</a>
+						<a href="./map-f4">Custom Map F4</a>
+						<a href="./dtf">Print DTF</a>
+						<a href="./mug">Print Mug</a>
+						<a href="./custom-amplop">Custom Amplop</a>
+						<a href="./ganci-pin-bulat">Gantungan Kunci & Pin Bulat</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <main class="content">
+            <div class="content-area">
+                <h1>Tutorial Booklet</h1>
+                <div class="tutorial-content">
+				<div style="text-align: center; margin: 30px 0;">
+    <a href="https://drive.google.com/file/d/1js-HlO7etLBeQI545OxDd4x9pcEzW87Q/view?usp=sharing" target="_blank" class="simple-download-btn">
+        Download | File Module Tutorial Booklet
+    </a>
+</div>
+<div style="text-align: center;">
+  <b
+    style='background-color: white; box-sizing: border-box; color: #2c3e50; font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; font-size: 16px; margin: 0px; padding: 0px; text-align: center;'
+    >Booklet</b
+  ><span
+    face='"Segoe UI", Tahoma, Geneva, Verdana, sans-serif'
+    style="background-color: white; color: #2c3e50; font-size: 16px; text-align: center;"
+    >&nbsp;adalah salah satu&nbsp;</span
+  ><b
+    style='background-color: white; box-sizing: border-box; color: #2c3e50; font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; font-size: 16px; margin: 0px; padding: 0px; text-align: center;'
+    >Jenis Jilid/Binding pada Buku</b
+  ><span
+    face='"Segoe UI", Tahoma, Geneva, Verdana, sans-serif'
+    style="background-color: white; color: #2c3e50; text-align: center;"
+    >, Booklet adalah
+    <b style="font-size: 16px;"
+      >Binding yang menggunakan steples pada bagian tengah buku</b
+    >, seperti contoh Buku Belajar LKS.<br /><br />
+    <div style="text-align: left;">
+      <b
+        >Booklet memiliki hitungan jumlah pasti sebelum melakukan Settingan
+        Booklet</b
+      >, Booklet dalam 1 Lembar <b>harus terdiri dari 4 Halaman</b>, Karena jika
+      Halamannya Kurang akan terdapat <b>Halaman yang di isi lembar kosong.</b
+      ><br /><br /><b>Contoh Hitung Halaman Booklet :</b><br /><b
+        >Customer Ingin Cetak Buku UK A5 Tertutup dengan Jilid Booklet</b
+      >
+      dengan <b>Covernya Di Print 1 Sisi, dan Isinya di Print 2 Sisi.</b> File
+      dari Customer Berjumlah 30 Halaman termasuk Cover Depan &amp; Cover
+      Belakang, tapi jika langsung di Setting Booklet Halaman tidak akan bertemu
+      dan akan ngacak,
+      <b
+        >Untuk Itu Kamu harus membuat menjadi 32 Halaman dahulu agar halamannya
+        cocok dan sesuai.</b
+      ><br /><br />30/4 = 7,5<b>
+        ❌ [Hasilnya terdapat Desimal dengan Begitu Halaman belum
+        Cocok/Cukup]</b
+      ><br />32/4 = 8&nbsp;✔️
+      <b
+        >[Hasilnya sudah tidak terdapat Desimal dengan Begitu Halaman sudah
+        Sesuai]<br /></b
+      ><br /><b>Cara Setting Booklet :</b><br /><b>1.</b> Buka PDF File Booklet
+      yang ingin disetting, Lalu Cek Halaman &amp; Ukuran apakah sudah sesuai
+      atau belum, Perhatikan Panah pada Gambar Bawah<br />
+    </div>
+    <div class="separator" style="clear: both; text-align: left;">
+      <a
+        href="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiAXp8bi0a-ST8pME_W1LYAiV8Cva0YMcglZ-eXP6LfYpqjWwrHF6YeootIi7msUnx9xSG6f1Lft0VtGX87Gkxz_VULdnJL-iNIeCUxAkR7TnP8He0wZRH9txd1fn7wFynwZAYj5Hh-ppfds1jmmrPLHI9Z4ZTRMZT45hmCeqSlPyM3kOZaZiCRQjPaZy5H/s1097/Step%20Booklet%201.png"
+        style="margin-left: 1em; margin-right: 1em;"
+        ><img
+          border="0"
+          data-original-height="726"
+          data-original-width="1097"
+          height="265"
+          src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiAXp8bi0a-ST8pME_W1LYAiV8Cva0YMcglZ-eXP6LfYpqjWwrHF6YeootIi7msUnx9xSG6f1Lft0VtGX87Gkxz_VULdnJL-iNIeCUxAkR7TnP8He0wZRH9txd1fn7wFynwZAYj5Hh-ppfds1jmmrPLHI9Z4ZTRMZT45hmCeqSlPyM3kOZaZiCRQjPaZy5H/w400-h265/Step%20Booklet%201.png"
+          width="400" /></a
+      ><br /><b>2.</b> Jika Halaman Belum Sesuai Kamu
+      <b>Konfirmasi dahulu kepada Customer</b>, tapi Karena Customer ingin
+      Covernya 1 Sisi Berdasarkan [Pernyataan Permintaan di atas], Kamu Berikan
+      Kosongan Setelah Halaman 1 [Cover Depan] &amp; Sebelum Halaman 30 [Cover
+      Belakang] dengan Cara Click Kanan pada Halaman dan Pilih Insert Pages
+      -&gt; A Blank Page, Perhatikan Panah pada Gambar Bawah<br />
+    </div>
+    <div class="separator" style="clear: both; text-align: left;">
+      <a
+        href="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhPGEykj8l2juPY6jpGEeoQzmQiDZZUOrVVK7H4VWSb-1O6pO1S28SM38ckZ62zIt3b0DWhQ9K5xndENXHLve4Nubg2nUaHN9xX4qIQr82Jf_lJ2cWoyRfAgC3I5J8QLIghruRZj1RvCN1r7_dy2pLkj7G-nL_YpGThmaRmHu380VVGpZszTkVx4_QoHyDE/s1097/Step%20Booklet%202.png"
+        style="margin-left: 1em; margin-right: 1em;"
+        ><img
+          border="0"
+          data-original-height="727"
+          data-original-width="1097"
+          height="265"
+          src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhPGEykj8l2juPY6jpGEeoQzmQiDZZUOrVVK7H4VWSb-1O6pO1S28SM38ckZ62zIt3b0DWhQ9K5xndENXHLve4Nubg2nUaHN9xX4qIQr82Jf_lJ2cWoyRfAgC3I5J8QLIghruRZj1RvCN1r7_dy2pLkj7G-nL_YpGThmaRmHu380VVGpZszTkVx4_QoHyDE/w400-h265/Step%20Booklet%202.png"
+          width="400" /></a
+      ><br /><b>3.</b> Setelah Sudah Menjadi Halaman yang Sesuai, Kamu Pergi ke
+      bagian menu atas, Plug-ins -&gt; Create booklet, Perhatikan Panah pada
+      Gambar Bawah<br />
+    </div>
+    <div class="separator" style="clear: both; text-align: left;">
+      <a
+        href="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhpbWK08yjmyZbqgRJjZISRSSfpihkegu1QmFz_7WBFiHjOjMzalQEx0n0WQ5NNaIEDfXgcLHoBA0yw7_ImnDxGvm2sNF1WHQuuOIUED-ID5VkYsAK3SgMas2AUgNrhfktoem2AnNGRs9_NiRBNoh_tnSqvU967iw0HZq8FMiHeOj1ckkKBDpdYUWW_FyR2/s1097/Step%20Booklet%203.png"
+        style="margin-left: 1em; margin-right: 1em;"
+        ><img
+          border="0"
+          data-original-height="727"
+          data-original-width="1097"
+          height="265"
+          src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhpbWK08yjmyZbqgRJjZISRSSfpihkegu1QmFz_7WBFiHjOjMzalQEx0n0WQ5NNaIEDfXgcLHoBA0yw7_ImnDxGvm2sNF1WHQuuOIUED-ID5VkYsAK3SgMas2AUgNrhfktoem2AnNGRs9_NiRBNoh_tnSqvU967iw0HZq8FMiHeOj1ckkKBDpdYUWW_FyR2/w400-h265/Step%20Booklet%203.png"
+          width="400" /></a
+      ><br /><b>4.</b> Pilih Option Berdasarkan, Perhatikan Gambar bawah<br />
+    </div>
+    <div class="separator" style="clear: both; text-align: left;">
+      <a
+        href="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEii9M7JrHFFsVHR1l6MZ2I48qR3CfFvc9rp1OlKUje1JNyIiS3A1uimii6FE8aJBtNE7HeaSK37iAhw326BnCbxePoJEqEE7XprbrLJIqkUT2rwStYI3pGZpFZLlmnqSIm4haMT_DMXa8RLtJpgr8KCM0HXSBd-BOl56sM_Rq3mbUMbeZTRcgMr1Rq-Epf2/s1970/Step%20Booklet%204.PNG"
+        style="margin-left: 1em; margin-right: 1em;"
+        ><img
+          border="0"
+          data-original-height="374"
+          data-original-width="1970"
+          height="122"
+          src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEii9M7JrHFFsVHR1l6MZ2I48qR3CfFvc9rp1OlKUje1JNyIiS3A1uimii6FE8aJBtNE7HeaSK37iAhw326BnCbxePoJEqEE7XprbrLJIqkUT2rwStYI3pGZpFZLlmnqSIm4haMT_DMXa8RLtJpgr8KCM0HXSBd-BOl56sM_Rq3mbUMbeZTRcgMr1Rq-Epf2/w640-h122/Step%20Booklet%204.PNG"
+          width="640" /></a
+      ><br /><b>5. </b>Selah Melakukan Step 4, akan Muncul New Tab Selesai
+      Setting Booklet, File yang awalnya
+      <b>A5 setelah booklet akan digabung menjadi A4 pada PDF</b>, Perhatikan
+      Panah pada Gambar Bawah<br />
+    </div>
+    <div class="separator" style="clear: both; text-align: left;">
+      <a
+        href="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhF_nb8cO0RfJtjS5M91Iq9g4sOiD3C6phTSkIzhz1LdOI7HfheZmuzXtAEq4DhrrZNzYmBNIt0rlZ5jn0pBGLSBz3uarg8Jxb_o3-z8Yi5MZvmrHU6ZHfmohYYb5CaPJ6mIHzhzsHSp4pyfSeXgsRW_-WtVP4siGzWmNtuUnb-qtjIjr_pVoTG_eZzDZEe/s1101/Step%20Booklet%205.png"
+        style="margin-left: 1em; margin-right: 1em;"
+        ><img
+          border="0"
+          data-original-height="727"
+          data-original-width="1101"
+          height="264"
+          src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhF_nb8cO0RfJtjS5M91Iq9g4sOiD3C6phTSkIzhz1LdOI7HfheZmuzXtAEq4DhrrZNzYmBNIt0rlZ5jn0pBGLSBz3uarg8Jxb_o3-z8Yi5MZvmrHU6ZHfmohYYb5CaPJ6mIHzhzsHSp4pyfSeXgsRW_-WtVP4siGzWmNtuUnb-qtjIjr_pVoTG_eZzDZEe/w400-h264/Step%20Booklet%205.png"
+          width="400" /></a
+      ><br /><b>6. </b>Extract Page Halaman 1 Pada Selesai Setting Booklet,
+      Untuk Memisahkan File Print Cover, dan Save PDF Filenya, Perhatikan Panah
+      pada Gambar Bawah<br />
+    </div>
+    <div class="separator" style="clear: both; text-align: left;">
+      <a
+        href="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhEUyJ1MwqFiP5iodat9IKXvQghyphenhyphenKfwAauqGLlza1R5ONifaknQqLf3uFLRGUKK_FVzBxD3wmhyWz8K0EHVffEjBYMWYqsbQOsoh-frh1OL-G_ZRlsjADi0nLSyirx9EoMRNFE8gGs37VB0AJCKH8gzcBg6YNBxLEGzKtZX3LRjkq-P2744JZO1O39qqS6f/s1102/Step%20Booklet%206.png"
+        style="margin-left: 1em; margin-right: 1em;"
+        ><img
+          border="0"
+          data-original-height="728"
+          data-original-width="1102"
+          height="264"
+          src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhEUyJ1MwqFiP5iodat9IKXvQghyphenhyphenKfwAauqGLlza1R5ONifaknQqLf3uFLRGUKK_FVzBxD3wmhyWz8K0EHVffEjBYMWYqsbQOsoh-frh1OL-G_ZRlsjADi0nLSyirx9EoMRNFE8gGs37VB0AJCKH8gzcBg6YNBxLEGzKtZX3LRjkq-P2744JZO1O39qqS6f/w400-h264/Step%20Booklet%206.png"
+          width="400" /></a
+      ><br /><b>7.</b> Lalu Hapus Halaman 1 &amp; 2 pada PDF Booklet untuk
+      Menyisakan Halaman Booklet Isi, dan Save PDF Filenya<br />
+    </div>
+    <div class="separator" style="clear: both; text-align: left;">
+      <a
+        href="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEivl4uZ6P8x04J_92udCYyMdMt3jXrr1ntLr3WFIt42cbA88vJBgIzcNlbl8IM5S0Kls3eRg085HuyR7UvP5az9RvqfoUmwsBYQ2LhNmxK1lCYfJJorI41Q0q4gjJzj9ewjzNzl_6_hpXhi3OwcOITWhHdaqjf3pauZL41l6lNYNkJsZ-TTGdmexGr7Y_Vu/s1100/Step%20Booklet%207.png"
+        style="margin-left: 1em; margin-right: 1em;"
+        ><img
+          border="0"
+          data-original-height="730"
+          data-original-width="1100"
+          height="265"
+          src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEivl4uZ6P8x04J_92udCYyMdMt3jXrr1ntLr3WFIt42cbA88vJBgIzcNlbl8IM5S0Kls3eRg085HuyR7UvP5az9RvqfoUmwsBYQ2LhNmxK1lCYfJJorI41Q0q4gjJzj9ewjzNzl_6_hpXhi3OwcOITWhHdaqjf3pauZL41l6lNYNkJsZ-TTGdmexGr7Y_Vu/w400-h265/Step%20Booklet%207.png"
+          width="400" /></a
+      ><br /><br /><b
+        style='box-sizing: border-box; font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; margin: 0px; padding: 0px;'
+        >Untuk Rename File Booklet bisa seperti dibawah<br
+      /></b>
+      <div class="separator" style="clear: both; text-align: left;">
+        <a
+          href="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiWy6BhkN6cDq4i1F238sXbqAyigXuX81h4v_RUiqRJN_9pA1E6zjDeNwk1JvXMLgcpHngkHa-2v62XeCja3h82u_v9Z0OgNAEFiH9RadVOC47LBqIFzck8YbhDTcU4o1UCu3G6kXp2sd8A2up0rtTA143ehJuxaYFWIGc9qp-uRxNYAN_8Bqtxozi6kAxo/s1475/Rename%20File%20Booklet.png"
+          style="margin-left: 1em; margin-right: 1em;"
+          ><img
+            border="0"
+            data-original-height="135"
+            data-original-width="1475"
+            height="36"
+            src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiWy6BhkN6cDq4i1F238sXbqAyigXuX81h4v_RUiqRJN_9pA1E6zjDeNwk1JvXMLgcpHngkHa-2v62XeCja3h82u_v9Z0OgNAEFiH9RadVOC47LBqIFzck8YbhDTcU4o1UCu3G6kXp2sd8A2up0rtTA143ehJuxaYFWIGc9qp-uRxNYAN_8Bqtxozi6kAxo/w400-h36/Rename%20File%20Booklet.png"
+            width="400" /></a
+        ><br /><span
+          face='"Segoe UI", Tahoma, Geneva, Verdana, sans-serif'
+          style="box-sizing: border-box; hyphens: auto; margin: 0px; overflow-wrap: break-word; padding: 0px;"
+          >Hijau = Nama Customer</span
+        ><br
+          style='box-sizing: border-box; font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; margin: 0px; padding: 0px;'
+        /><span
+          face='"Segoe UI", Tahoma, Geneva, Verdana, sans-serif'
+          style="box-sizing: border-box; hyphens: auto; margin: 0px; overflow-wrap: break-word; padding: 0px;"
+          >Kuning = Nama File yang berada didalam</span
+        ><br
+          style='box-sizing: border-box; font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; margin: 0px; padding: 0px;'
+        /><span
+          face='"Segoe UI", Tahoma, Geneva, Verdana, sans-serif'
+          style="box-sizing: border-box; hyphens: auto; margin: 0px; overflow-wrap: break-word; padding: 0px;"
+          >Merah = Ukuran Jadi File</span
+        ><br
+          style='box-sizing: border-box; font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; margin: 0px; padding: 0px;'
+        /><span
+          face='"Segoe UI", Tahoma, Geneva, Verdana, sans-serif'
+          style="box-sizing: border-box; hyphens: auto; margin: 0px; overflow-wrap: break-word; padding: 0px;"
+          >Biru = Bahan Print<br />Ungu = Isi Booklet
+          <b>Sudah pasti BB [Bolak Balik]</b>, Terkecuali
+          <b>Cover Bisa 2 Sisi maupun 1 Sisi</b></span></br>
+        <span>Oren = Butuh Berapa Kali Printnya</span
+        ><br
+          style='box-sizing: border-box; font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; margin: 0px; padding: 0px;'
+        /><span
+          face='"Segoe UI", Tahoma, Geneva, Verdana, sans-serif'
+          style="box-sizing: border-box; hyphens: auto; margin: 0px; overflow-wrap: break-word; padding: 0px;"
+          >Abu² = Jika hasil butuh laminating, Jika tidak laminating tidak perlu
+          direname
+          <b
+            >[Disarankan Laminating agar saat cover dilipat tidak
+            retak/pecah]</b
+          ></span
+        >
+      </div>
+    </div></span
+  >
+</div>
+
+
+		</div>
+		</main>
+				</div>
+   <footer class="site-footer">
+        <div class="footer-credit">
+            <p>Created By Anang Zikri Febriyansyah (Anamaruchi)</p>
+        </div>
+    </footer>
+
+	<script src="script.js"></script>
+    <style>
+        .tutorial-content {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+        
+        .tutorial-content h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        
+        .tutorial-content h3 {
+            color: #34495e;
+            margin: 20px 0 10px 0;
+        }
+        
+        .tutorial-content ul {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .tutorial-content li {
+            margin-bottom: 5px;
+            line-height: 1.6;
+        }
+        
+        .note {
+            background: #e8f4fd;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        
+        .active-link {
+            background-color: #3498db !important;
+            border-left-color: #2980b9 !important;
+        }
+
+        .simple-download-btn {
+            display: inline-block;
+            background-color: #5DADE2;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .simple-download-btn:hover {
+            background-color: #3498db;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            color: white;
+            text-decoration: none;
+        }
+
+        .simple-download-btn:visited {
+            color: white;
+            text-decoration: none;
+        }
+
+        .simple-download-btn:active {
+            transform: translateY(0);
+        }
+
+        .site-footer {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            margin-top: 50px;
+            padding: 20px 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .footer-credit {
+            text-align: center;
+        }
+
+        .footer-credit p {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 500;
+            color: #5DADE2;
+        }
+
+        @media (max-width: 768px) {
+            .simple-download-btn {
+                padding: 12px 25px;
+                font-size: 14px;
+            }
+
+            .footer-credit p {
+                font-size: 14px;
+            }
+        }
+    </style>
+</body>
+</html>

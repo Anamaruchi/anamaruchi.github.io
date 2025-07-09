@@ -179,7 +179,7 @@ body {
 }
 
 .tutorial-content {
-  background: white; 
+  background: white;
   backdrop-filter: none;
   padding: clamp(20px, 4vw, 30px);
   border-radius: 15px;
