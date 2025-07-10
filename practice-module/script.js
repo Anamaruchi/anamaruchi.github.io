@@ -35,7 +35,7 @@
 		const tahap2Pages = [
 		  "booklet",
 		  "cutting-stiker-meter",
-		  "stampel",
+		  "stempel",
 		  "map-a4",
 		  "map-f4",
 		  "dtf",
