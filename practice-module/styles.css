@@ -741,3 +741,71 @@ button {
     background: rgba(26, 26, 26, 0.95);
   }
 }
+
+.home-button {
+  position: fixed !important;
+  top: clamp(15px, 3vw, 30px) !important;
+  left: auto !important;
+  right: clamp(20px, 4vw, 40px) !important;
+  background: linear-gradient(135deg, #0060df, #003eaa);
+  color: white;
+  border: none;
+  padding: clamp(8px, 2vw, 12px);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 5px 15px rgba(0, 96, 223, 0.3);
+  z-index: 100;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(35px, 8vw, 45px);
+  height: clamp(35px, 8vw, 45px);
+  transform: none !important;
+}
+
+.home-button:hover {
+  background: linear-gradient(135deg, #003eaa, #0060df);
+  box-shadow: 0 8px 25px rgba(0, 96, 223, 0.4);
+  transform: none !important;
+}
+
+.home-button:active {
+  background: linear-gradient(135deg, #002080, #0060df);
+  box-shadow: 0 4px 15px rgba(0, 96, 223, 0.5);
+  transform: none !important;
+}
+
+.home-button:focus {
+  outline: 2px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 2px;
+  transform: none !important;
+}
+
+.home-icon {
+  width: clamp(18px, 4vw, 24px);
+  height: clamp(18px, 4vw, 24px);
+  filter: brightness(0) invert(1);
+  transition: none;
+}
+
+@keyframes ripple {
+  to {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+@media (hover: none) {
+  .home-button {
+    cursor: default;
+  }
+}
+
+@media (max-width: 768px) {
+  .home-button:hover {
+    transform: none;
+    box-shadow: 0 5px 15px rgba(0, 96, 223, 0.3);
+  }
+}
