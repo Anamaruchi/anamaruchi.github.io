@@ -24,6 +24,7 @@
             flex-direction: column;
             position: relative;
             overflow-x: hidden;
+            min-height: 100vh; 
         }
 
         body::before {
@@ -52,7 +53,8 @@
         .main-content {
             flex: 1;
             display: flex;
-            align-items: center;
+            flex-direction: column;
+            align-items: center; 
             justify-content: center;
             padding: 20px;
             position: relative;
@@ -147,46 +149,6 @@
             transform: translateY(-1px);
         }
 
-        @media (max-width: 768px) {
-            .hello-text {
-                font-size: 2.5rem;
-            }
-
-            .description {
-                font-size: 1rem;
-                padding: 0 10px;
-            }
-
-            .buttons-section {
-                flex-direction: column;
-                align-items: center;
-                gap: 12px;
-            }
-
-            .btn {
-                width: 100%;
-                max-width: 280px;
-                padding: 10px 20px;
-                font-size: 0.9rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .hello-text {
-                font-size: 2rem;
-            }
-
-            .description {
-                font-size: 0.9rem;
-            }
-
-            .btn {
-                padding: 10px 18px;
-                font-size: 0.85rem;
-                max-width: 260px;
-            }
-        }
-
         .container {
             animation: fadeInUp 1s ease-out;
         }
@@ -217,6 +179,7 @@
             margin-top: auto;
             position: relative;
             z-index: 1;
+            flex-shrink: 0;
         }
 
         .footer-content {
@@ -276,41 +239,310 @@
         }
 
         @media (max-width: 768px) {
-            .social-icon {
-                width: 50px;
-                height: 50px;
+            .main-content {
+                flex: 1;
+                justify-content: flex-start;
+                padding: 15px 15px 0;
+                padding-top: 20px;
             }
 
-            .social-media {
-                gap: 15px;
+            .hello-text {
+                font-size: 2.5rem;
+            }
+
+            .description {
+                font-size: 1rem;
+                padding: 0 10px;
+                margin-bottom: 25px;
+            }
+
+            .buttons-section {
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+                margin-bottom: 10px;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 280px;
+                padding: 12px 20px;
+                font-size: 0.9rem;
             }
 
             .footer {
-                padding: 15px 0;
+                padding: 12px 0;
+                margin-top: 0;
             }
 
             .footer-content {
-                padding: 0 15px;
+                padding: 0 10px;
+            }
+
+            .social-media {
+                gap: 12px;
+                margin-bottom: 8px;
+            }
+
+            .social-icon {
+                width: 36px;
+                height: 36px;
+                border-radius: 8px;
             }
 
             .social-icon.youtube {
-                width: 70px;
-                height: 50px;
+                width: 48px;
+                height: 36px;
+            }
+
+            .footer-copyright {
+                font-size: 9px;
+                padding-top: 6px;
+                margin-top: 0;
+                line-height: 1.1;
             }
         }
 
         @media (max-width: 480px) {
+            .main-content {
+                padding: 10px 10px 0;
+                padding-top: 15px;
+            }
+
+            .hello-text {
+                font-size: 2rem;
+            }
+
+            .description {
+                font-size: 0.9rem;
+                margin-bottom: 20px;
+                line-height: 1.4;
+            }
+
+            .buttons-section {
+                margin-bottom: 8px;
+                gap: 8px;
+            }
+
+            .btn {
+                padding: 10px 18px;
+                font-size: 0.85rem;
+                max-width: 260px;
+            }
+
+            .footer {
+                padding: 10px 0;
+            }
+
+            .social-media {
+                gap: 10px;
+                margin-bottom: 6px;
+            }
+
             .social-icon {
-                width: 45px;
-                height: 45px;
+                width: 32px;
+                height: 32px;
+                border-radius: 6px;
             }
 
             .social-icon.youtube {
-                width: 63px;
-                height: 45px;
+                width: 42px;
+                height: 32px;
+            }
+
+            .footer-copyright {
+                font-size: 8px;
+                padding-top: 4px;
             }
         }
-</style>
+
+        @media (max-width: 360px) {
+            .main-content {
+                padding: 8px 8px 0;
+                padding-top: 12px;
+            }
+
+            .profile-image {
+                width: 140px;
+                height: 140px;
+                margin-bottom: 20px;
+            }
+
+            .hello-text {
+                font-size: 1.8rem;
+                margin-bottom: 15px;
+            }
+
+            .description {
+                font-size: 0.85rem;
+                margin-bottom: 15px;
+                line-height: 1.3;
+                padding: 0 5px;
+            }
+
+            .description p {
+                margin-bottom: 8px;
+            }
+
+            .buttons-section {
+                margin-bottom: 5px;
+                gap: 6px;
+            }
+
+            .btn {
+                padding: 9px 15px;
+                font-size: 0.8rem;
+                max-width: 240px;
+            }
+
+            .footer {
+                padding: 8px 0;
+            }
+
+            .social-media {
+                gap: 8px;
+                margin-bottom: 4px;
+            }
+
+            .social-icon {
+                width: 28px;
+                height: 28px;
+                border-radius: 5px;
+            }
+
+            .social-icon.youtube {
+                width: 37px;
+                height: 28px;
+            }
+
+            .footer-copyright {
+                font-size: 7px;
+                padding-top: 3px;
+            }
+        }
+
+        @media (max-width: 320px) {
+            .main-content {
+                padding: 5px 5px 0;
+                padding-top: 10px;
+            }
+
+            .profile-image {
+                width: 120px;
+                height: 120px;
+                margin-bottom: 15px;
+            }
+
+            .hello-text {
+                font-size: 1.6rem;
+                margin-bottom: 12px;
+            }
+
+            .description {
+                font-size: 0.8rem;
+                margin-bottom: 12px;
+                line-height: 1.2;
+            }
+
+            .buttons-section {
+                margin-bottom: 3px;
+                gap: 5px;
+            }
+
+            .btn {
+                padding: 8px 12px;
+                font-size: 0.75rem;
+                max-width: 220px;
+            }
+
+            .footer {
+                padding: 6px 0;
+            }
+
+            .social-media {
+                gap: 6px;
+                margin-bottom: 3px;
+            }
+
+            .social-icon {
+                width: 24px;
+                height: 24px;
+                border-radius: 4px;
+            }
+
+            .social-icon.youtube {
+                width: 32px;
+                height: 24px;
+            }
+
+            .footer-copyright {
+                font-size: 6px;
+                padding-top: 2px; 
+            }
+        }
+
+        @media (max-height: 600px) and (max-width: 480px) {
+            .main-content {
+                flex: 1; 
+                min-height: auto; 
+                padding-top: 8px;
+            }
+
+            .profile-section {
+                margin-bottom: 20px;
+            }
+
+            .profile-image {
+                width: 100px;
+                height: 100px;
+                margin-bottom: 15px;
+            }
+
+            .hello-text {
+                font-size: 1.5rem;
+                margin-bottom: 10px;
+            }
+
+            .description {
+                font-size: 0.8rem;
+                margin-bottom: 15px;
+                line-height: 1.2;
+            }
+
+            .description p {
+                margin-bottom: 5px;
+            }
+
+            .buttons-section {
+                margin-bottom: 3px; 
+                gap: 4px;
+            }
+
+            .btn {
+                padding: 6px 10px;
+                font-size: 0.7rem;
+            }
+
+            .footer {
+                padding: 4px 0;
+            }
+
+            .social-icon {
+                width: 20px;
+                height: 20px;
+            }
+
+            .social-icon.youtube {
+                width: 28px;
+                height: 20px;
+            }
+
+            .footer-copyright {
+                font-size: 5px;
+                padding-top: 2px; 
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="main-content">
