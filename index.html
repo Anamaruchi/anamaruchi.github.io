@@ -134,6 +134,48 @@
             100% { opacity: 0.3; }
         }
 
+        .home-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: linear-gradient(135deg, #0060df, #003eaa);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 96, 223, 0.3);
+            z-index: 100;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+        }
+
+        .home-button:hover {
+            background: linear-gradient(135deg, #003eaa, #0060df);
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(0, 96, 223, 0.4);
+        }
+
+        .home-button:active {
+            transform: translateY(-1px) scale(1.02);
+        }
+
+        .home-icon {
+            width: 24px;
+            height: 24px;
+            filter: brightness(0) invert(1);
+            transition: all 0.3s ease;
+        }
+
+        .home-button:hover .home-icon {
+            transform: scale(1.1);
+        }
+
         .main-content {
             flex: 1;
             display: flex;
@@ -425,6 +467,19 @@
                 margin-top: 0;
                 line-height: 1.1;
             }
+
+            .home-button {
+                top: 15px;
+                left: 15px;
+                width: 45px;
+                height: 45px;
+                padding: 10px;
+            }
+
+            .home-icon {
+                width: 20px;
+                height: 20px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -482,6 +537,19 @@
             .footer-copyright {
                 font-size: 8px;
                 padding-top: 4px;
+            }
+
+            .home-button {
+                top: 10px;
+                left: 10px;
+                width: 40px;
+                height: 40px;
+                padding: 8px;
+            }
+
+            .home-icon {
+                width: 18px;
+                height: 18px;
             }
         }
 
@@ -684,6 +752,10 @@
     </style>
 </head>
 <body>
+    <a href="https://anamaruchi.github.io/" class="home-button" id="homeButton">
+        <img src="Image/Practice Module.png" alt="Home" class="home-icon">
+    </a>
+
     <div class="main-content">
         <div class="container">
             <div class="profile-section">
@@ -811,6 +883,45 @@
             icon.setAttribute('tabindex', '0');
             icon.setAttribute('role', 'button');
         });
+
+        function setupHomeButton() {
+            const homeButton = document.getElementById('homeButton');
+            
+            homeButton.addEventListener('click', function(e) {
+                const ripple = document.createElement('span');
+                const rect = this.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+                
+                ripple.style.cssText = `
+                    position: absolute;
+                    width: ${size}px;
+                    height: ${size}px;
+                    left: ${x}px;
+                    top: ${y}px;
+                    background: rgba(255, 255, 255, 0.3);
+                    border-radius: 50%;
+                    transform: scale(0);
+                    animation: ripple 0.6s ease-out;
+                    pointer-events: none;
+                    z-index: 10;
+                `;
+                
+                this.style.position = 'relative';
+                this.style.overflow = 'hidden';
+                this.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            });
+
+            homeButton.setAttribute('tabindex', '0');
+            homeButton.setAttribute('role', 'button');
+        }
+
+        setupHomeButton();
     </script>
 </body>
 </html>
