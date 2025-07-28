@@ -29,16 +29,10 @@
         html {
           -webkit-text-size-adjust: 100%;
           -ms-text-size-adjust: 100%;
-          touch-action: manipulation;
         }
 
         * {
           -webkit-tap-highlight-color: transparent;
-          -webkit-touch-callout: none;
-          -webkit-user-select: none;
-          -moz-user-select: none;
-          -ms-user-select: none;
-          user-select: none;
         }
 
         /* Allow text selection for content */
@@ -68,7 +62,6 @@
             position: relative;
             overflow-x: hidden;
             min-height: 100vh;
-            touch-action: manipulation;
             -webkit-overflow-scrolling: touch;
             -webkit-transform: translate3d(0, 0, 0);
             transform: translate3d(0, 0, 0);
@@ -116,7 +109,6 @@
             width: 100%;
             position: relative;
             z-index: 1;
-            touch-action: manipulation;
             -webkit-transform: translateZ(0);
             transform: translateZ(0);
         }
@@ -134,10 +126,9 @@
             display: block;
             object-fit: cover;
             box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
-            transition: none;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
             flex-shrink: 0;
             max-width: 170px;
-            touch-action: manipulation;
             -webkit-transform: translate3d(0, 0, 0);
             transform: translate3d(0, 0, 0);
             -webkit-backface-visibility: hidden;
@@ -182,7 +173,6 @@
             flex-wrap: nowrap;
             padding: 0 10px;
             max-width: 100%;
-            touch-action: manipulation;
             -webkit-transform: translate3d(0, 0, 0);
             transform: translate3d(0, 0, 0);
             -webkit-backface-visibility: hidden;
@@ -200,7 +190,7 @@
             font-weight: 600;
             text-decoration: none;
             display: inline-block;
-            transition: none;
+            transition: all 0.3s ease;
             box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
             cursor: pointer;
             white-space: nowrap;
@@ -282,6 +272,7 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
             position: relative;
             overflow: hidden;
+            touch-action: manipulation;
         }
 
         .social-icon:hover {
@@ -762,24 +753,6 @@
             icon.setAttribute('tabindex', '0');
             icon.setAttribute('role', 'button');
         });
-
-        // Prevent mobile elastic scrolling issues
-        document.addEventListener('touchstart', function(e) {
-          if (e.touches.length > 1) {
-            e.preventDefault();
-          }
-        }, { passive: false });
-
-        document.addEventListener('touchmove', function(e) {
-          if (e.scale !== 1) {
-            e.preventDefault();
-          }
-        }, { passive: false });
-
-        // Disable hover effects on touch devices
-        if ('ontouchstart' in window) {
-          document.body.classList.add('touch-device');
-        }
     </script>
 </body>
 </html>
