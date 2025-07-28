@@ -1,0 +1,1371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Anamaruchi - Auto Layout Recap Invoice</title>
+	<link rel="icon" type="image/x-icon" href="/Image/Anamaruchi.ico">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: clamp(5px, 2vw, 15px);
+            position: relative;
+            box-sizing: border-box;
+        }
+
+        .home-button {
+            position: fixed !important;
+            top: clamp(10px, 2vw, 20px) !important;
+            left: clamp(10px, 2vw, 20px) !important;
+            background: linear-gradient(135deg, #0060df, #003eaa);
+            color: white;
+            border: none;
+            padding: clamp(8px, 2vw, 12px);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 96, 223, 0.3);
+            z-index: 100;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: clamp(40px, 8vw, 50px);
+            height: clamp(40px, 8vw, 50px);
+            transform: none !important;
+        }
+
+        .home-button:hover {
+            background: linear-gradient(135deg, #003eaa, #0060df);
+            box-shadow: 0 8px 25px rgba(0, 96, 223, 0.4);
+            transform: none !important;
+        }
+
+        .home-button:active {
+            background: linear-gradient(135deg, #002080, #0060df);
+            box-shadow: 0 4px 15px rgba(0, 96, 223, 0.5);
+            transform: none !important;
+        }
+
+        .home-button:focus {
+            outline: 2px solid rgba(255, 255, 255, 0.5);
+            outline-offset: 2px;
+            transform: none !important;
+        }
+
+        .home-icon {
+            width: clamp(18px, 4vw, 24px);
+            height: clamp(18px, 4vw, 24px);
+            filter: brightness(0) invert(1);
+            transition: none;
+        }
+
+        .main-wrapper {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding-top: clamp(15px, 3vh, 40px);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(26, 26, 26, 0.9), rgba(45, 45, 45, 0.9));
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 2px solid rgba(59, 130, 246, 0.3);
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+            transition: all 0.3s ease;
+            animation: fadeInUp 1s ease-out;
+            margin-bottom: clamp(15px, 3vh, 40px);
+            box-sizing: border-box;
+        }
+
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(59, 130, 246, 0.4);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            color: #3b82f6;
+            margin: 0 0 8px 0;
+            border-bottom: 2px solid rgba(59, 130, 246, 0.5);
+            padding-bottom: 10px;
+            font-size: 1.6rem;
+            text-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+            font-weight: 600;
+        }
+
+        .header p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1rem;
+            margin: 0;
+        }
+
+        .title-editor {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .title-input {
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 12px;
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            display: block;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .title-input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .title-input:focus {
+            outline: none;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+        }
+
+        .instructions {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(29, 78, 216, 0.1));
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 12px;
+            padding: 10px 12px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .instructions h4 {
+            margin-bottom: 6px;
+            margin-top: 0;
+            color: #3b82f6;
+            font-size: 1.1rem;
+            text-shadow: 0 0 8px rgba(59, 130, 246, 0.5);
+            font-weight: 600;
+        }
+
+        .instructions ul {
+            margin-left: 16px;
+            margin-top: 0;
+            margin-bottom: 0;
+            line-height: 1.4;
+        }
+
+        .instructions li {
+            margin-bottom: 4px;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 14px;
+        }
+
+        .instructions li:last-child {
+            margin-bottom: 0;
+        }
+
+        .instructions strong {
+            color: #60a5fa;
+        }
+
+        .upload-section {
+            margin-bottom: 20px;
+            padding: 18px;
+            border: 2px dashed rgba(59, 130, 246, 0.4);
+            border-radius: 15px;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), rgba(29, 78, 216, 0.05));
+            backdrop-filter: blur(5px);
+        }
+
+        .upload-btn {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            margin: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .upload-btn:hover {
+            background: linear-gradient(135deg, #1d4ed8, #3b82f6);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+        }
+
+        .clear-btn {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            margin-left: 12px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+        }
+
+        .clear-btn:hover {
+            background: linear-gradient(135deg, #c82333, #dc3545);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(220, 53, 69, 0.4);
+        }
+
+        .upload-section p {
+            margin-top: 12px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 13px;
+        }
+
+        .controls {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .print-btn {
+            background: linear-gradient(135deg, #0060df, #003eaa);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            margin: 0 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 96, 223, 0.3);
+        }
+
+        .print-btn:hover {
+            background: linear-gradient(135deg, #003eaa, #0060df);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 96, 223, 0.4);
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            row-gap: 12px;
+            margin: 15px 0;
+            padding: 15px;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), rgba(29, 78, 216, 0.05));
+            border-radius: 15px;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            width: 100%;
+            box-sizing: border-box;
+            justify-items: center;
+        }
+
+        .invoice-box {
+            width: 100%;
+            max-width: 110px;
+            aspect-ratio: 3.2/3.9;
+            border: 2px solid rgba(59, 130, 246, 0.3);
+            display: flex;
+            flex-direction: column;
+            background: linear-gradient(135deg, rgba(26, 26, 26, 0.8), rgba(45, 45, 45, 0.8));
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            box-sizing: border-box;
+        }
+
+        .invoice-box:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+            border-color: #3b82f6;
+        }
+
+        .invoice-box.has-image {
+            cursor: default;
+            border-color: rgba(96, 165, 250, 0.6);
+        }
+
+        .invoice-box.upload-hover {
+            border-color: #28a745;
+            border-width: 3px;
+            background: linear-gradient(135deg, rgba(40, 167, 69, 0.1), rgba(40, 167, 69, 0.05));
+            box-shadow: 0 8px 25px rgba(40, 167, 69, 0.3);
+        }
+
+        .invoice-name {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(29, 78, 216, 0.2));
+            padding: 4px 6px;
+            font-size: 9px;
+            font-weight: bold;
+            text-align: center;
+            border-bottom: 1px solid rgba(59, 130, 246, 0.3);
+            min-height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            word-break: break-all;
+            position: relative;
+            color: #60a5fa;
+            line-height: 1.1;
+        }
+
+        .invoice-image {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(26, 26, 26, 0.3);
+            position: relative;
+        }
+
+        .invoice-image img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .placeholder-text {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 7px;
+            text-align: center;
+            pointer-events: none;
+            line-height: 1.1;
+            padding: 2px;
+        }
+
+        .remove-btn {
+            position: absolute;
+            top: 3px;
+            right: 3px;
+            background: linear-gradient(135deg, #dc3545, #c82333);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            font-size: 10px;
+            cursor: pointer;
+            display: none;
+            z-index: 10;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 6px rgba(220, 53, 69, 0.4);
+        }
+
+        .hidden-input {
+            display: none;
+        }
+
+        .bulk-upload-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .bulk-upload-content {
+            background: linear-gradient(135deg, rgba(26, 26, 26, 0.95), rgba(45, 45, 45, 0.95));
+            backdrop-filter: blur(20px);
+            padding: 30px;
+            border-radius: 20px;
+            border: 2px solid rgba(59, 130, 246, 0.3);
+            box-shadow: 0 20px 40px rgba(59, 130, 246, 0.3);
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .bulk-upload-content h3 {
+            margin-bottom: 15px;
+            margin-top: 5px;
+            text-align: left;
+            padding-left: 10px;
+            color: #3b82f6;
+            font-size: 1.3rem;
+            text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+        }
+
+        .bulk-upload-content h3 + p {
+            text-align: left;
+            padding-left: 10px;
+            margin-bottom: 20px;
+            color: rgba(255,255,255,0.8);
+        }
+
+        .bulk-upload-list {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 12px;
+            padding: 10px;
+            margin: 15px 0;
+            background: rgba(26, 26, 26, 0.3);
+        }
+
+        .bulk-upload-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 8px;
+            margin-bottom: 5px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .bulk-upload-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .bulk-upload-item:hover {
+            background: rgba(59, 130, 246, 0.1);
+            transform: translateX(5px);
+        }
+
+        .bulk-upload-item img {
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
+            border-radius: 6px;
+            margin-right: 15px;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .bulk-upload-info {
+            flex: 1;
+            font-size: 14px;
+        }
+
+        .bulk-upload-info strong {
+            color: #60a5fa;
+        }
+
+        .bulk-upload-actions {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .bulk-upload-actions button {
+            margin: 0 10px;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #1d4ed8, #3b82f6);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #6c757d, #545b62);
+            color: white;
+            box-shadow: 0 5px 15px rgba(108, 117, 125, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #545b62, #6c757d);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(108, 117, 125, 0.4);
+        }
+
+        .crop-overlay {
+            position: absolute;
+            border: 2px dashed #3b82f6;
+            background: rgba(59, 130, 246, 0.1);
+            pointer-events: none;
+            display: none;
+        }
+
+        .pdf-container {
+            width: 210mm;
+            min-height: auto;
+            margin: 0 auto;
+            background: white;
+            padding: 6mm;
+            box-sizing: border-box;
+        }
+
+        .pdf-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 1.5mm;
+            row-gap: 2mm;
+            width: 100%;
+        }
+
+        .pdf-mode .invoice-box {
+            width: 33mm;
+            height: 55mm;
+            border: 1px solid #000;
+            page-break-inside: avoid;
+            cursor: default;
+            background: white;
+            backdrop-filter: none;
+            border-radius: 0 !important;
+            padding: 0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .pdf-mode .invoice-name {
+            font-size: 8px;
+            min-height: 6mm;
+            padding: 1mm;
+            cursor: default;
+            background: #f8f9fa;
+            color: #333;
+        }
+
+        .pdf-mode .invoice-image {
+            background: white;
+            overflow: hidden;
+            padding: 0;
+            margin: 0;
+        }
+
+        .pdf-mode .placeholder-text {
+            font-size: 6px;
+            color: #666;
+        }
+
+        .pdf-loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .pdf-loading-content {
+            background: linear-gradient(135deg, rgba(26, 26, 26, 0.95), rgba(45, 45, 45, 0.95));
+            backdrop-filter: blur(20px);
+            padding: 30px;
+            border-radius: 20px;
+            border: 2px solid rgba(59, 130, 246, 0.3);
+            box-shadow: 0 20px 40px rgba(59, 130, 246, 0.3);
+            text-align: center;
+            color: white;
+        }
+
+        .pdf-loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(59, 130, 246, 0.3);
+            border-top: 4px solid #3b82f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .credit-line {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #fff;
+            border-top: 1px solid rgba(59, 130, 246, 0.3);
+            padding-top: 15px;
+        }
+
+        .credit-line a {
+            color: #60a5fa;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .credit-line a:hover {
+            color: #90caf9;
+            text-decoration: underline;
+            text-shadow: 0 0 10px rgba(144, 202, 249, 0.5);
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            
+            .upload-section,
+            .controls,
+            .instructions,
+            .home-button,
+            .credit-line {
+                display: none;
+            }
+            
+            .container {
+                box-shadow: none;
+                padding: 10px;
+                background: white;
+                backdrop-filter: none;
+            }
+            
+            .remove-btn {
+                display: none !important;
+            }
+
+            .pdf-mode .invoice-box {
+                border-radius: 0 !important;
+            }
+        }
+
+        @media screen and (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .main-wrapper {
+                padding-top: clamp(15px, 3vh, 30px);
+            }
+
+            .container {
+                backdrop-filter: none;
+                background: rgba(26, 26, 26, 0.95);
+                border-radius: 15px;
+                padding: 15px;
+                margin-bottom: clamp(10px, 2vh, 20px);
+                max-width: 100%;
+            }
+
+            .container:hover {
+                transform: none;
+                box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
+            }
+
+            .header h1 {
+                font-size: 1.3rem;
+                margin-bottom: 10px;
+                padding-bottom: 8px;
+            }
+
+            .grid-container {
+                grid-template-columns: repeat(3, 1fr);
+                padding: 12px;
+                gap: 6px;
+            }
+            
+            .invoice-box {
+                max-width: none;
+                width: 100%;
+                aspect-ratio: 3.2/3.9;
+            }
+
+            .bulk-upload-content {
+                backdrop-filter: none;
+                background: rgba(26, 26, 26, 0.98);
+                border-radius: 15px;
+                padding: 20px;
+            }
+
+            .credit-line {
+                font-size: 1rem;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .container {
+                padding: 12px;
+                border-radius: 10px;
+            }
+
+            .header h1 {
+                font-size: 1.2rem;
+            }
+
+            .title-input {
+                font-size: 15px;
+                padding: 10px;
+            }
+
+            .upload-btn, .print-btn {
+                padding: 10px 18px;
+                font-size: 13px;
+            }
+
+            .grid-container {
+                grid-template-columns: repeat(2, 1fr);
+                padding: 8px;
+                gap: 4px;
+            }
+
+            .bulk-upload-content {
+                padding: 15px;
+                border-radius: 12px;
+            }
+
+            .credit-line {
+                font-size: 0.9rem;
+            }
+        }
+
+        @supports (-webkit-touch-callout: none) {
+            body {
+                min-height: -webkit-fill-available;
+            }
+        }
+
+        * {
+            max-width: 100%;
+        }
+
+        h1, p, span, div, li, input, button {
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            hyphens: auto;
+        }
+
+        .invoice-box:hover .remove-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <a href="https://anamaruchi.github.io/" class="home-button" id="homeButton">
+        <img src="Image/Home Icon.png" alt="Home" class="home-icon" />
+    </a>
+
+    <div class="main-wrapper">
+        <div class="container">
+            <div class="header">
+                <h1>Auto Layout Recap Invoice</h1>
+                <p>Upload Image to Create Auto Layout Invoice [Max 25 Images]</p>
+            </div>
+
+            <div class="title-editor">
+                <input type="text" class="title-input" id="layoutTitle" value="Change Tittle Name Here" placeholder="Enter layout title...">
+            </div>
+
+            <div class="instructions">
+                <h4>How to use:</h4>
+                <ul>
+                    <li><strong>Edit Title:</strong> Click on the title above to change it</li>
+                    <li><strong>Upload Multiple Images:</strong> Use "Upload All Images" to select multiple files and place them manually</li>
+                    <li><strong>Upload to Specific Box:</strong> Click on any empty box to upload an image to that position</li>
+                    <li><strong>Remove Images:</strong> Hover over image and click × button</li>
+                    <li><strong>Clear All:</strong> Remove all images at once</li>
+                </ul>
+            </div>
+
+            <div class="upload-section">
+                <input type="file" id="bulkFileInput" multiple accept="image/*" style="display: none;">
+                <button class="upload-btn" onclick="document.getElementById('bulkFileInput').click()">
+                    Upload All Images
+                </button>
+                <button class="clear-btn" onclick="clearAll()">
+                    Clear All Images
+                </button>
+                <p>Use "Upload All Images" for multiple files, or click individual boxes below for specific positions.</p>
+            </div>
+
+            <div class="controls">
+                <button class="print-btn" onclick="downloadLayout()">
+                    Save as PDF (A4)
+                </button>
+            </div>
+
+            <div class="grid-container" id="gridContainer">
+            </div>
+
+            <div id="fileInputs"></div>
+
+            <div class="credit-line">
+                Created By Anamaruchi (<a href="https://www.facebook.com/anang.zikri.f" target="_blank">Anang Zikri Febriyansyah</a>)
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let gridImages = new Array(25).fill(null);
+        let bulkUploadImages = [];
+        const maxBoxes = 25;
+        let selectedBulkImageIndex = null;
+
+        function initializeGrid() {
+            const container = document.getElementById('gridContainer');
+            const fileInputsContainer = document.getElementById('fileInputs');
+            container.innerHTML = '';
+            fileInputsContainer.innerHTML = '';
+            
+            for (let i = 0; i < maxBoxes; i++) {
+                const box = createBox(i);
+                container.appendChild(box);
+                
+                const fileInput = document.createElement('input');
+                fileInput.type = 'file';
+                fileInput.accept = 'image/*';
+                fileInput.className = 'hidden-input';
+                fileInput.id = `fileInput-${i}`;
+                fileInput.addEventListener('change', (e) => handleFileUpload(e, i));
+                fileInputsContainer.appendChild(fileInput);
+            }
+        }
+
+        function fitImageToBox(imageSrc, callback) {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+            
+            img.onload = function() {
+                const outputWidth = 320;
+                const outputHeight = 390;
+                canvas.width = outputWidth;
+                canvas.height = outputHeight;
+                
+                const imageAspectRatio = img.width / img.height;
+                const boxAspectRatio = outputWidth / outputHeight;
+                
+                let drawWidth, drawHeight, drawX, drawY;
+                
+                if (imageAspectRatio > boxAspectRatio) {
+                    drawHeight = outputHeight;
+                    drawWidth = outputHeight * imageAspectRatio;
+                    drawX = (outputWidth - drawWidth) / 2;
+                    drawY = 0;
+                } else {
+                    drawWidth = outputWidth;
+                    drawHeight = outputWidth / imageAspectRatio;
+                    drawX = 0;
+                    drawY = (outputHeight - drawHeight) / 2;
+                }
+                
+                ctx.fillStyle = 'white';
+                ctx.fillRect(0, 0, outputWidth, outputHeight);
+                
+                ctx.drawImage(img, drawX, drawY, drawWidth, drawHeight);
+                
+                const fittedImageUrl = canvas.toDataURL('image/png', 0.9);
+                callback(fittedImageUrl);
+            };
+            
+            img.src = imageSrc;
+        }
+
+        function createBox(index) {
+            const box = document.createElement('div');
+            box.className = 'invoice-box';
+            box.setAttribute('data-index', index);
+            
+            const imageData = gridImages[index];
+            
+            if (imageData) {
+                const fileName = imageData.name.replace(/\.[^/.]+$/, "");
+                box.classList.add('has-image');
+                box.innerHTML = `
+                    <div class="invoice-name">${fileName}</div>
+                    <div class="invoice-image">
+                        <img src="${imageData.url}" alt="${fileName}">
+                        <button class="remove-btn" onclick="removeImage(${index})" title="Remove">×</button>
+                    </div>
+                `;
+            } else {
+                box.innerHTML = `
+                    <div class="invoice-name"></div>
+                    <div class="invoice-image">
+                        <div class="placeholder-text">Click to Upload or Drag Drop Image</div>
+                    </div>
+                `;
+        
+                box.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    
+                    if (selectedBulkImageIndex !== null && gridImages[index] === null) {
+                        gridImages[index] = {
+                            name: bulkUploadImages[selectedBulkImageIndex].name,
+                            url: bulkUploadImages[selectedBulkImageIndex].url
+                        };
+                        
+                        bulkUploadImages.splice(selectedBulkImageIndex, 1);
+                        selectedBulkImageIndex = null;
+                        
+                        updateGrid();
+                        
+                        if (bulkUploadImages.length > 0) {
+                            showBulkUploadModal();
+                        } else {
+                            closeBulkUploadModal();
+                        }
+                    } else if (gridImages[index] === null) {
+                        document.getElementById(`fileInput-${index}`).click();
+                    }
+                });
+                
+                setupDropZone(box, index);
+            }
+            
+            return box;
+        }
+
+        function handleFileUpload(event, boxIndex) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    fitImageToBox(e.target.result, function(fittedImageUrl) {
+                        gridImages[boxIndex] = {
+                            name: file.name,
+                            url: fittedImageUrl
+                        };
+                        updateGrid();
+                    });
+                };
+                reader.readAsDataURL(file);
+            }
+            event.target.value = '';
+        }
+
+        document.getElementById('bulkFileInput').addEventListener('change', function(e) {
+            const files = Array.from(e.target.files);
+            if (files.length === 0) return;
+            
+            bulkUploadImages = [];
+            let loadedCount = 0;
+            
+            files.forEach((file, index) => {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    bulkUploadImages.push({
+                        name: file.name,
+                        url: event.target.result,
+                        index: index
+                    });
+                    loadedCount++;
+                    
+                    if (loadedCount === files.length) {
+                        showBulkUploadModal();
+                    }
+                };
+                reader.readAsDataURL(file);
+            });
+            
+            e.target.value = '';
+        });
+
+        function showBulkUploadModal() {
+            const modal = document.createElement('div');
+            modal.className = 'bulk-upload-modal';
+            
+            const content = document.createElement('div');
+            content.className = 'bulk-upload-content';
+            
+            content.innerHTML = `
+                <h3>Preview Invoice Upload</h3>
+                <p style="color: rgba(255,255,255,0.8); text-align: left; padding-left: 10px; margin-bottom: 20px;">Make sure the invoice image uploaded is the correct data.</p>
+                <div class="bulk-upload-list" id="bulkUploadList">
+                    ${bulkUploadImages.map((img, index) => `
+                        <div class="bulk-upload-item" data-index="${index}" onclick="selectBulkImage(${index})">
+                            <img src="${img.url}" alt="${img.name}">
+                            <div class="bulk-upload-info">
+                                <strong>${img.name.replace(/\.[^/.]+$/, "")}</strong>
+                                <div style="font-size: 12px; color: rgba(255,255,255,0.6);">Click to select</div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+                <div class="bulk-upload-actions">
+                    <button class="btn-primary" onclick="autoPlaceBulkImages()">Confirm Place</button>
+                    <button class="btn-secondary" onclick="closeBulkUploadModal()">Cancel</button>
+                </div>
+            `;
+            
+            modal.appendChild(content);
+            document.body.appendChild(modal);
+            
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeBulkUploadModal();
+                }
+            });
+        }
+
+        function selectBulkImage(index) {
+            const items = document.querySelectorAll('.bulk-upload-item');
+            items.forEach(item => item.style.background = '');
+            
+            const selectedItem = document.querySelector(`[data-index="${index}"]`);
+            selectedItem.style.background = 'rgba(59, 130, 246, 0.3)';
+            selectedBulkImageIndex = index;
+            
+            const modal = document.querySelector('.bulk-upload-modal');
+            const instruction = modal.querySelector('p');
+            instruction.textContent = `Selected: ${bulkUploadImages[index].name.replace(/\.[^/.]+$/, "")}. Now click on an empty grid box to place it.`;
+            instruction.style.color = '#60a5fa';
+            instruction.style.fontWeight = 'bold';
+        }
+
+        function autoPlaceBulkImages() {
+            let placedCount = 0;
+            let processedCount = 0;
+            
+            const processImage = (imageData, targetIndex) => {
+                fitImageToBox(imageData.url, function(fittedImageUrl) {
+                    gridImages[targetIndex] = {
+                        name: imageData.name,
+                        url: fittedImageUrl
+                    };
+                    processedCount++;
+                    
+                    if (processedCount === placedCount) {
+                        updateGrid();
+                        closeBulkUploadModal();
+                        
+                        if (placedCount < bulkUploadImages.length) {
+                            alert(`Placed ${placedCount} images. ${bulkUploadImages.length - placedCount} images couldn't be placed due to lack of empty spaces.`);
+                        }
+                    }
+                });
+            };
+            
+            for (let i = 0; i < maxBoxes && placedCount < bulkUploadImages.length; i++) {
+                if (gridImages[i] === null) {
+                    processImage(bulkUploadImages[placedCount], i);
+                    placedCount++;
+                }
+            }
+            
+            if (placedCount === 0) {
+                closeBulkUploadModal();
+            }
+        }
+
+        function closeBulkUploadModal() {
+            const modal = document.querySelector('.bulk-upload-modal');
+            if (modal) {
+                document.body.removeChild(modal);
+            }
+            bulkUploadImages = [];
+            selectedBulkImageIndex = null;
+        }
+
+        function setupDropZone(box, index) {
+            box.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                box.classList.add('upload-hover');
+                e.dataTransfer.dropEffect = 'copy';
+            });
+
+            box.addEventListener('dragleave', (e) => {
+                e.preventDefault();
+                box.classList.remove('upload-hover');
+            });
+
+            box.addEventListener('drop', (e) => {
+                e.preventDefault();
+                box.classList.remove('upload-hover');
+                
+                const files = Array.from(e.dataTransfer.files).filter(file => file.type.startsWith('image/'));
+                
+                if (files.length > 0) {
+                    const file = files[0];
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        fitImageToBox(event.target.result, function(fittedImageUrl) {
+                            gridImages[index] = {
+                                name: file.name,
+                                url: fittedImageUrl
+                            };
+                            updateGrid();
+                        });
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        function updateGrid() {
+            const container = document.getElementById('gridContainer');
+            container.innerHTML = '';
+            
+            for (let i = 0; i < maxBoxes; i++) {
+                const box = createBox(i);
+                container.appendChild(box);
+            }
+        }
+
+        function removeImage(index) {
+            gridImages[index] = null;
+            updateGrid();
+        }
+
+        function clearAll() {
+            if (confirm('Are you sure you want to clear all images?')) {
+                gridImages = new Array(25).fill(null);
+                updateGrid();
+            }
+        }
+
+        function showLoadingModal() {
+            const modal = document.createElement('div');
+            modal.className = 'pdf-loading';
+            modal.id = 'pdfLoadingModal';
+            
+            modal.innerHTML = `
+                <div class="pdf-loading-content">
+                    <div class="pdf-loading-spinner"></div>
+                    <h3 style="color: #3b82f6; margin-bottom: 10px;">Generating High-Quality PDF</h3>
+                    <p style="color: rgba(255,255,255,0.8); margin: 0;">Please wait...</p>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+        }
+
+        function hideLoadingModal() {
+            const modal = document.getElementById('pdfLoadingModal');
+            if (modal) {
+                document.body.removeChild(modal);
+            }
+        }
+
+async function downloadLayout() {
+    try {
+        showLoadingModal();
+        const pdfContainer = document.createElement('div');
+        pdfContainer.style.position = 'absolute';
+        pdfContainer.style.left = '-9999px';
+        pdfContainer.style.top = '0';
+        pdfContainer.style.width = '210mm';
+        pdfContainer.style.height = '297mm';
+        pdfContainer.style.padding = '3mm'; 
+        pdfContainer.style.boxSizing = 'border-box';
+        pdfContainer.style.backgroundColor = 'white';
+        pdfContainer.style.fontFamily = 'Arial, sans-serif';
+
+        const title = document.createElement('h2');
+        title.textContent = document.getElementById('layoutTitle').value || 'Change Tittle Name Here';
+        title.style.textAlign = 'center';
+        title.style.marginBottom = '2mm'; 
+        title.style.marginTop = '0';
+        title.style.fontSize = '16px';
+        title.style.color = '#333';
+        title.style.fontWeight = 'bold';
+        pdfContainer.appendChild(title);
+
+        const pdfGrid = document.createElement('div');
+        pdfGrid.style.display = 'grid';
+        pdfGrid.style.gridTemplateColumns = 'repeat(5, 40mm)'; 
+        pdfGrid.style.gridTemplateRows = 'repeat(5, 55mm)';
+        pdfGrid.style.gap = '1.5mm'; 
+        pdfGrid.style.justifyContent = 'center';
+        pdfGrid.style.width = '100%';
+        pdfGrid.style.maxWidth = '204mm'; 
+        pdfGrid.style.margin = '0 auto';
+        
+        for (let i = 0; i < maxBoxes; i++) {
+            const box = document.createElement('div');
+            box.style.width = '40mm';  
+            box.style.height = '55mm'; 
+            box.style.border = '1px solid #000';
+            box.style.display = 'flex';
+            box.style.flexDirection = 'column';
+            box.style.background = 'white';
+            box.style.overflow = 'hidden';
+            box.style.boxSizing = 'border-box';
+            
+            const imageData = gridImages[i];
+            if (imageData) {
+                const fileName = imageData.name.replace(/\.[^/.]+$/, "");
+                
+                const nameDiv = document.createElement('div');
+                nameDiv.style.background = '#f8f9fa';
+                nameDiv.style.padding = '1mm';
+                nameDiv.style.fontSize = '8px';
+                nameDiv.style.fontWeight = 'bold';
+                nameDiv.style.textAlign = 'center';
+                nameDiv.style.borderBottom = '1px solid #ddd';
+                nameDiv.style.height = '8mm';
+                nameDiv.style.display = 'flex';
+                nameDiv.style.alignItems = 'center';
+                nameDiv.style.justifyContent = 'center';
+                nameDiv.style.color = '#333';
+                nameDiv.style.wordBreak = 'break-all';
+                nameDiv.style.lineHeight = '1.1';
+                nameDiv.style.boxSizing = 'border-box';
+                nameDiv.textContent = fileName;
+                
+                const imageDiv = document.createElement('div');
+                imageDiv.style.height = '47mm'; 
+                imageDiv.style.display = 'flex';
+                imageDiv.style.alignItems = 'center';
+                imageDiv.style.justifyContent = 'center';
+                imageDiv.style.background = 'white';
+                imageDiv.style.overflow = 'hidden';
+                imageDiv.style.boxSizing = 'border-box';
+                
+                const img = document.createElement('img');
+                img.src = imageData.url;
+                img.alt = fileName;
+                img.style.width = '100%';
+                img.style.height = '100%';
+                img.style.objectFit = 'cover';
+                img.style.display = 'block';
+                
+                imageDiv.appendChild(img);
+                box.appendChild(nameDiv);
+                box.appendChild(imageDiv);
+            } else {
+                const nameDiv = document.createElement('div');
+                nameDiv.style.background = '#f8f9fa';
+                nameDiv.style.padding = '1mm';
+                nameDiv.style.fontSize = '8px';
+                nameDiv.style.height = '8mm';
+                nameDiv.style.borderBottom = '1px solid #ddd';
+                nameDiv.style.boxSizing = 'border-box';
+                
+                const imageDiv = document.createElement('div');
+                imageDiv.style.height = '47mm';
+                imageDiv.style.display = 'flex';
+                imageDiv.style.alignItems = 'center';
+                imageDiv.style.justifyContent = 'center';
+                imageDiv.style.background = 'white';
+                imageDiv.style.fontSize = '8px';
+                imageDiv.style.color = '#666';
+                imageDiv.style.boxSizing = 'border-box';
+                imageDiv.textContent = 'Empty';
+                
+                box.appendChild(nameDiv);
+                box.appendChild(imageDiv);
+            }
+            
+            pdfGrid.appendChild(box);
+        }
+        
+        pdfContainer.appendChild(pdfGrid);
+        document.body.appendChild(pdfContainer);
+        
+        const images = pdfContainer.querySelectorAll('img');
+        await Promise.all(Array.from(images).map(img => {
+            return new Promise((resolve) => {
+                if (img.complete) {
+                    resolve();
+                } else {
+                    img.onload = resolve;
+                    img.onerror = resolve;
+                }
+            });
+        }));
+
+        const canvas = await html2canvas(pdfContainer, {
+            backgroundColor: '#ffffff',
+            scale: 2.95, 
+            useCORS: true,
+            allowTaint: true,
+            logging: false,
+            imageTimeout: 15000,
+            removeContainer: false,
+            scrollX: 0,
+            scrollY: 0
+        });
+
+        document.body.removeChild(pdfContainer);
+
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF('p', 'mm', 'a4');
+
+        const imgData = canvas.toDataURL('image/png', 0.95);
+
+        pdf.addImage(imgData, 'PNG', 0, 0, 210, 297, '', 'FAST');
+        
+        const currentDate = new Date().toISOString().split('T')[0];
+        const titleText = document.getElementById('layoutTitle').value.replace(/[^a-zA-Z0-9]/g, '-') || 'invoice-layout';
+        
+        hideLoadingModal();
+        
+        pdf.save(`${titleText}-${currentDate}-250dpi.pdf`);
+        
+    } catch (error) {
+        console.error('Error generating PDF:', error);
+        hideLoadingModal();
+        alert('Error generating PDF. Please try again.');
+    }
+}
+
+        initializeGrid();
+    </script>
+</body>
+</html>
