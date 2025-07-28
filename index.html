@@ -2,10 +2,62 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Anamaruchi</title>
     <link rel="icon" type="image/x-icon" href="/Image/Anamaruchi.ico">
     <style>
+        /* Prevent stretching during scroll on mobile */
+        @media screen and (max-width: 768px) {
+          * {
+            -webkit-transform: translateZ(0);
+            transform: translateZ(0);
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            -webkit-perspective: 1000;
+            perspective: 1000;
+          }
+          
+          .container, .buttons-section, .profile-image, .btn {
+            position: relative;
+            -webkit-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0);
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            will-change: auto;
+          }
+          
+          .btn {
+            min-width: fit-content;
+            max-width: none;
+            width: auto;
+            flex: 0 0 auto;
+          }
+          
+          .profile-image {
+            min-width: 170px;
+            min-height: 170px;
+          }
+          
+          .buttons-section {
+            min-height: fit-content;
+          }
+        }
+
+        /* Additional mobile fixes */
+        @media screen and (max-width: 480px) {
+          .profile-image {
+            min-width: 140px;
+            min-height: 140px;
+          }
+        }
+
+        @media screen and (max-width: 360px) {
+          .profile-image {
+            min-width: 120px;
+            min-height: 120px;
+          }
+        }
+
         /* Mobile-specific fixes to prevent jelly effect */
         @media (hover: none) and (pointer: coarse) {
           .btn:hover {
@@ -54,19 +106,14 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-            color: white;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            overflow-x: hidden;
-            min-height: 100vh;
-            -webkit-overflow-scrolling: touch;
-            -webkit-transform: translate3d(0, 0, 0);
-            transform: translate3d(0, 0, 0);
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
+          -webkit-transform: translateZ(0);
+          transform: translateZ(0);
+          -webkit-backface-visibility: hidden;
+          backface-visibility: hidden;
+          position: relative;
+          width: 100vw;
+          min-width: 100vw;
+          max-width: 100vw;
         }
 
         body::before {
