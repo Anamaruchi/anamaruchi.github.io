@@ -34,17 +34,17 @@
           }
 
           .module-button {
-            top: 15px;
-            left: 15px;
-            width: 80px;
-            height: 50px;
-            padding: 8px;
-          }
+    top: clamp(10px, 2vw, 15px) !important;
+    left: clamp(10px, 2vw, 15px) !important;
+    width: clamp(70px, 13vw, 80px);
+    height: clamp(32px, 7vw, 38px);
+    padding: clamp(6px, 1.5vw, 10px);
+}
 
-          .module-icon {
-            width: 60px;
-            height: 35px;
-          }
+.module-icon {
+    width: clamp(50px, 10vw, 60px);
+    height: clamp(24px, 5vw, 28px);
+}
         }
 
         @media screen and (max-width: 480px) {
@@ -58,17 +58,17 @@
           }
 
           .module-button {
-            top: 10px;
-            left: 10px;
-            width: 75px;
-            height: 45px;
-            padding: 7px;
-          }
+    top: clamp(8px, 1.5vw, 12px) !important;
+    left: clamp(8px, 1.5vw, 12px) !important;
+    width: clamp(65px, 12vw, 75px);
+    height: clamp(30px, 6vw, 35px);
+    padding: clamp(5px, 1vw, 8px);
+}
 
-          .module-icon {
-            width: 55px;
-            height: 30px;
-          }
+.module-icon {
+    width: clamp(45px, 9vw, 55px);
+    height: clamp(22px, 4.5vw, 26px);
+}
         }
 
         @media screen and (max-width: 360px) {
@@ -82,15 +82,15 @@
           }
 
           .module-button {
-            width: 70px;
-            height: 40px;
-            padding: 6px;
-          }
+    width: clamp(60px, 11vw, 70px);
+    height: clamp(28px, 5.5vw, 32px);
+    padding: clamp(4px, 0.8vw, 6px);
+}
 
-          .module-icon {
-            width: 50px;
-            height: 28px;
-          }
+.module-icon {
+    width: clamp(40px, 8vw, 50px);
+    height: clamp(20px, 4vw, 24px);
+}
         }
 
         @media (hover: none) and (pointer: coarse) {
@@ -172,47 +172,62 @@
         }
 
         .module-button {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            background: linear-gradient(135deg, #0060df, #003eaa);
-            color: white;
-            border: none;
-            padding: 10px;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0, 96, 223, 0.3);
-            z-index: 100;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 90px;
-            height: 40px;
-        }
+    position: fixed !important;
+    top: clamp(10px, 2vw, 20px) !important;
+    left: clamp(10px, 2vw, 20px) !important;
+    background: linear-gradient(135deg, #0060df, #003eaa);
+    color: white;
+    border: none;
+    padding: clamp(8px, 2vw, 12px);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 96, 223, 0.3);
+    z-index: 100;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: clamp(80px, 15vw, 90px);
+    height: clamp(35px, 8vw, 40px);
+    transform: none !important;
+}
 
-        .module-button:hover {
-            background: linear-gradient(135deg, #003eaa, #0060df);
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 8px 25px rgba(0, 96, 223, 0.4);
-        }
+.module-button:visited {
+    background: linear-gradient(135deg, #0060df, #003eaa) !important;
+    color: white !important;
+}
 
-        .module-button:active {
-            transform: translateY(-1px) scale(1.02);
-        }
+.module-button:visited:hover {
+    background: linear-gradient(135deg, #003eaa, #0060df) !important;
+    box-shadow: 0 8px 25px rgba(0, 96, 223, 0.4) !important;
+    transform: none !important;
+}
 
-        .module-icon {
-            width: 70px;
-            height: 40px;
-            filter: brightness(0) invert(1);
-            transition: all 0.3s ease;
-            object-fit: contain;
-        }
+.module-button:hover {
+    background: linear-gradient(135deg, #003eaa, #0060df);
+    box-shadow: 0 8px 25px rgba(0, 96, 223, 0.4);
+    transform: none !important;
+}
 
-        .module-button:hover .module-icon {
-            transform: scale(1.1);
-        }
+.module-button:active {
+    background: linear-gradient(135deg, #002080, #0060df);
+    box-shadow: 0 4px 15px rgba(0, 96, 223, 0.5);
+    transform: none !important;
+}
+
+.module-button:focus {
+    outline: 2px solid rgba(255, 255, 255, 0.5);
+    outline-offset: 2px;
+    transform: none !important;
+}
+
+.module-icon {
+    width: clamp(60px, 12vw, 70px);
+    height: clamp(28px, 6vw, 32px);
+    filter: brightness(0) invert(1);
+    transition: none;
+}
 
         .main-content {
             flex: 1;
