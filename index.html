@@ -373,21 +373,22 @@
             }
 
             .buttons-section {
-                gap: 6px;
-                flex-wrap: nowrap;
-                overflow-x: auto;
-                justify-content: flex-start;
-                padding: 0 15px;
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+                margin-bottom: 10px;
+                flex-wrap: wrap;
+                overflow-x: visible;
             }
 
             .btn {
                 -webkit-transform: translateZ(0);
                 transform: translateZ(0);
                 backface-visibility: hidden;
-                flex-shrink: 0;
-                padding: 10px 16px;
-                font-size: 0.85rem;
-                min-width: fit-content;
+                width: 100%;
+                max-width: 280px;
+                padding: 12px 20px;
+                font-size: 0.9rem;
             }
 
             .footer {
