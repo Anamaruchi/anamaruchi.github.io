@@ -117,16 +117,18 @@
 
         .buttons-section {
             display: flex;
-            gap: 15px;
+            gap: 8px;
             justify-content: center;
             margin-bottom: 40px;
-            flex-wrap: wrap;
+            flex-wrap: nowrap;
+            padding: 0 10px;
+            max-width: 100%;
         }
 
         .btn {
             background: linear-gradient(135deg, #3b82f6, #1d4ed8);
             color: white;
-            padding: 8px 16px;
+            padding: 12px 20px;
             border: none;
             border-radius: 8px;
             font-size: 0.95rem;
@@ -137,6 +139,8 @@
             box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
             cursor: pointer;
             white-space: nowrap;
+            flex-shrink: 0;
+            min-width: 0;
         }
 
         .btn:hover {
@@ -261,6 +265,8 @@
                 align-items: center;
                 gap: 10px;
                 margin-bottom: 10px;
+                flex-wrap: wrap;
+                overflow-x: visible;
             }
 
             .btn {
