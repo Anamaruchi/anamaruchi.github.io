@@ -6,6 +6,49 @@
     <title>Anamaruchi</title>
     <link rel="icon" type="image/x-icon" href="/Image/Anamaruchi.ico">
     <style>
+        /* Mobile-specific fixes to prevent jelly effect */
+        @media (hover: none) and (pointer: coarse) {
+          .btn:hover {
+            transform: none !important;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3) !important;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8) !important;
+          }
+          
+          .profile-image:hover {
+            transform: none !important;
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3) !important;
+          }
+          
+          .social-icon:hover {
+            transform: none !important;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3) !important;
+          }
+        }
+
+        /* Prevent elastic scrolling and zoom */
+        html {
+          -webkit-text-size-adjust: 100%;
+          -ms-text-size-adjust: 100%;
+          touch-action: manipulation;
+        }
+
+        * {
+          -webkit-tap-highlight-color: transparent;
+          -webkit-touch-callout: none;
+          -webkit-user-select: none;
+          -moz-user-select: none;
+          -ms-user-select: none;
+          user-select: none;
+        }
+
+        /* Allow text selection for content */
+        .description, .footer-copyright {
+          -webkit-user-select: text;
+          -moz-user-select: text;
+          -ms-user-select: text;
+          user-select: text;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -27,6 +70,10 @@
             min-height: 100vh;
             touch-action: manipulation;
             -webkit-overflow-scrolling: touch;
+            -webkit-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0);
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
         }
 
         body::before {
@@ -87,10 +134,14 @@
             display: block;
             object-fit: cover;
             box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: none;
             flex-shrink: 0;
             max-width: 170px;
             touch-action: manipulation;
+            -webkit-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0);
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
         }
 
         .profile-image:hover {
@@ -132,8 +183,11 @@
             padding: 0 10px;
             max-width: 100%;
             touch-action: manipulation;
-            -webkit-transform: translateZ(0);
-            transform: translateZ(0);
+            -webkit-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0);
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            position: relative;
         }
 
         .btn {
@@ -146,16 +200,19 @@
             font-weight: 600;
             text-decoration: none;
             display: inline-block;
-            transition: all 0.3s ease;
+            transition: none;
             box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
             cursor: pointer;
             white-space: nowrap;
             flex-shrink: 0;
             min-width: 0;
             touch-action: manipulation;
-            -webkit-transform: translateZ(0);
-            transform: translateZ(0);
-            will-change: transform;
+            -webkit-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0);
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            position: relative;
+            overflow: hidden;
         }
 
         .btn:hover {
@@ -705,6 +762,24 @@
             icon.setAttribute('tabindex', '0');
             icon.setAttribute('role', 'button');
         });
+
+        // Prevent mobile elastic scrolling issues
+        document.addEventListener('touchstart', function(e) {
+          if (e.touches.length > 1) {
+            e.preventDefault();
+          }
+        }, { passive: false });
+
+        document.addEventListener('touchmove', function(e) {
+          if (e.scale !== 1) {
+            e.preventDefault();
+          }
+        }, { passive: false });
+
+        // Disable hover effects on touch devices
+        if ('ontouchstart' in window) {
+          document.body.classList.add('touch-device');
+        }
     </script>
 </body>
 </html>
