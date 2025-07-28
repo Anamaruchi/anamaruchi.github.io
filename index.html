@@ -6,10 +6,6 @@
     <title>Anamaruchi</title>
     <link rel="icon" type="image/x-icon" href="/Image/Anamaruchi.ico">
     <style>
-        /* Prevent elastic scrolling on iOS */
-        /* Remove these lines that are causing issues */
-
-        /* Lock profile image dimensions during scroll */
         @media screen and (max-width: 768px) {
           .profile-image {
             width: 170px !important;
@@ -60,7 +56,6 @@
           }
         }
 
-        /* Mobile-specific fixes to prevent jelly effect */
         @media (hover: none) and (pointer: coarse) {
           .btn:hover {
             transform: none !important;
@@ -79,7 +74,6 @@
           }
         }
 
-        /* Prevent elastic scrolling and zoom */
         html {
           -webkit-text-size-adjust: 100%;
           -ms-text-size-adjust: 100%;
@@ -89,7 +83,6 @@
           -webkit-tap-highlight-color: transparent;
         }
 
-        /* Allow text selection for content */
         .description, .footer-copyright {
           -webkit-user-select: text;
           -moz-user-select: text;
