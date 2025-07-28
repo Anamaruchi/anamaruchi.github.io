@@ -32,6 +32,19 @@
             flex-shrink: 0 !important;
             flex-grow: 0 !important;
           }
+
+          .module-button {
+            top: 15px;
+            left: 15px;
+            width: 80px;
+            height: 50px;
+            padding: 8px;
+          }
+
+          .module-icon {
+            width: 60px;
+            height: 35px;
+          }
         }
 
         @media screen and (max-width: 480px) {
@@ -43,6 +56,19 @@
             max-width: 140px !important;
             max-height: 140px !important;
           }
+
+          .module-button {
+            top: 10px;
+            left: 10px;
+            width: 75px;
+            height: 45px;
+            padding: 7px;
+          }
+
+          .module-icon {
+            width: 55px;
+            height: 30px;
+          }
         }
 
         @media screen and (max-width: 360px) {
@@ -53,6 +79,17 @@
             min-height: 120px !important;
             max-width: 120px !important;
             max-height: 120px !important;
+          }
+
+          .module-button {
+            width: 70px;
+            height: 40px;
+            padding: 6px;
+          }
+
+          .module-icon {
+            width: 50px;
+            height: 28px;
           }
         }
 
@@ -134,14 +171,14 @@
             100% { opacity: 0.3; }
         }
 
-        .home-button {
+        .module-button {
             position: fixed;
             top: 20px;
             left: 20px;
             background: linear-gradient(135deg, #0060df, #003eaa);
             color: white;
             border: none;
-            padding: 12px;
+            padding: 10px;
             border-radius: 10px;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -151,28 +188,29 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 50px;
-            height: 50px;
+            width: 90px;
+            height: 40px;
         }
 
-        .home-button:hover {
+        .module-button:hover {
             background: linear-gradient(135deg, #003eaa, #0060df);
             transform: translateY(-3px) scale(1.05);
             box-shadow: 0 8px 25px rgba(0, 96, 223, 0.4);
         }
 
-        .home-button:active {
+        .module-button:active {
             transform: translateY(-1px) scale(1.02);
         }
 
-        .home-icon {
-            width: 24px;
-            height: 24px;
+        .module-icon {
+            width: 70px;
+            height: 40px;
             filter: brightness(0) invert(1);
             transition: all 0.3s ease;
+            object-fit: contain;
         }
 
-        .home-button:hover .home-icon {
+        .module-button:hover .module-icon {
             transform: scale(1.1);
         }
 
@@ -467,19 +505,6 @@
                 margin-top: 0;
                 line-height: 1.1;
             }
-
-            .home-button {
-                top: 15px;
-                left: 15px;
-                width: 45px;
-                height: 45px;
-                padding: 10px;
-            }
-
-            .home-icon {
-                width: 20px;
-                height: 20px;
-            }
         }
 
         @media (max-width: 480px) {
@@ -537,19 +562,6 @@
             .footer-copyright {
                 font-size: 8px;
                 padding-top: 4px;
-            }
-
-            .home-button {
-                top: 10px;
-                left: 10px;
-                width: 40px;
-                height: 40px;
-                padding: 8px;
-            }
-
-            .home-icon {
-                width: 18px;
-                height: 18px;
             }
         }
 
@@ -752,8 +764,8 @@
     </style>
 </head>
 <body>
-    <a href="https://anamaruchi.github.io/" class="home-button" id="homeButton">
-        <img src="Image/Practice Module.png" alt="Home" class="home-icon">
+    <a href="./practice-module/pengenalan" class="module-button" id="moduleButton">
+        <img src="Image/Practice Module.png" alt="Module" class="module-icon">
     </a>
 
     <div class="main-content">
@@ -884,10 +896,10 @@
             icon.setAttribute('role', 'button');
         });
 
-        function setupHomeButton() {
-            const homeButton = document.getElementById('homeButton');
+        function setupModuleButton() {
+            const moduleButton = document.getElementById('moduleButton');
             
-            homeButton.addEventListener('click', function(e) {
+            moduleButton.addEventListener('click', function(e) {
                 const ripple = document.createElement('span');
                 const rect = this.getBoundingClientRect();
                 const size = Math.max(rect.width, rect.height);
@@ -917,11 +929,11 @@
                 }, 600);
             });
 
-            homeButton.setAttribute('tabindex', '0');
-            homeButton.setAttribute('role', 'button');
+            moduleButton.setAttribute('tabindex', '0');
+            moduleButton.setAttribute('role', 'button');
         }
 
-        setupHomeButton();
+        setupModuleButton();
     </script>
 </body>
 </html>
