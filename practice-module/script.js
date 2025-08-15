@@ -45,7 +45,7 @@ class NavigationManager {
       "ganci-pin-bulat",
     ]
 
-    const awalPages = ["pengenalan", "ukuran-kertas"]
+    const awalPages = ["pengenalan", "ukuran-kertas", "super-detail-spk-invoice"]
 
     this.removeAllActiveStates()
 
