@@ -240,6 +240,73 @@
     object-fit: contain;
 }
 
+        .portfolio-group {
+            position: fixed !important;
+            top: clamp(10px, 2vw, 20px) !important;
+            left: clamp(10px, 2vw, 20px) !important;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 100;
+        }
+
+        .portfolio-button {
+            position: relative !important;
+            background: linear-gradient(135deg, #0060df, #003eaa);
+            color: white;
+            border: none;
+            padding: clamp(8px, 2vw, 12px);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 96, 223, 0.3);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: clamp(100px, 15vw, 90px);
+            height: clamp(35px, 8vw, 40px);
+            transform: none !important;
+        }
+
+.portfolio-button:visited {
+    background: linear-gradient(135deg, #0060df, #003eaa) !important;
+    color: white !important;
+}
+
+.portfolio-button:visited:hover {
+    background: linear-gradient(135deg, #003eaa, #0060df) !important;
+    box-shadow: 0 8px 25px rgba(0, 96, 223, 0.4) !important;
+    transform: none !important;
+}
+
+.portfolio-button:hover {
+    background: linear-gradient(135deg, #003eaa, #0060df);
+    box-shadow: 0 8px 25px rgba(0, 96, 223, 0.4);
+    transform: none !important;
+}
+
+.portfolio-button:active {
+    background: linear-gradient(135deg, #002080, #0060df);
+    box-shadow: 0 4px 15px rgba(0, 96, 223, 0.5);
+    transform: none !important;
+}
+
+.portfolio-button:focus {
+    outline: 2px solid rgba(255, 255, 255, 0.5);
+    outline-offset: 2px;
+    transform: none !important;
+}
+
+.portfolio-icon {
+    width: clamp(60px, 12vw, 70px);
+    height: clamp(28px, 6vw, 32px);
+    filter: brightness(0) invert(1);
+    transition: none;
+    object-fit: contain;
+}
+
+
         .main-content {
             flex: 1;
             display: flex;
@@ -791,7 +858,7 @@
 </head>
 <body>
     <div class="module-group">
-        <a href="./my-portfolio" class="module-button" id="moduleButton2">
+        <a href="./my-portfolio" class="portfolio-button" id="portfolioButton">
             <img src="Image/My Portfolio.PNG" alt="Module" class="module-icon">
         </a>
         <a href="./practice-module/pengenalan" class="module-button" id="moduleButton">
@@ -965,7 +1032,7 @@
         }
 
         setupModuleButton('moduleButton');
-        setupModuleButton('moduleButton2');
+        setupModuleButton('portfolioButton');
     </script>
 </body>
 </html>
