@@ -174,27 +174,34 @@
             100% { opacity: 0.3; }
         }
 
+        .module-group {
+            position: fixed !important;
+            top: clamp(10px, 2vw, 20px) !important;
+            left: clamp(10px, 2vw, 20px) !important;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 100;
+        }
+
         .module-button {
-    position: fixed !important;
-    top: clamp(10px, 2vw, 20px) !important;
-    left: clamp(10px, 2vw, 20px) !important;
-    background: linear-gradient(135deg, #0060df, #003eaa);
-    color: white;
-    border: none;
-    padding: clamp(8px, 2vw, 12px);
-    border-radius: 10px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 5px 15px rgba(0, 96, 223, 0.3);
-    z-index: 100;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: clamp(80px, 15vw, 90px);
-    height: clamp(35px, 8vw, 40px);
-    transform: none !important;
-}
+            position: relative !important;
+            background: linear-gradient(135deg, #0060df, #003eaa);
+            color: white;
+            border: none;
+            padding: clamp(8px, 2vw, 12px);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 96, 223, 0.3);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: clamp(80px, 15vw, 90px);
+            height: clamp(35px, 8vw, 40px);
+            transform: none !important;
+        }
 
 .module-button:visited {
     background: linear-gradient(135deg, #0060df, #003eaa) !important;
@@ -783,9 +790,14 @@
     </style>
 </head>
 <body>
-    <a href="./practice-module/pengenalan" class="module-button" id="moduleButton">
-        <img src="Image/Practice Module.png" alt="Module" class="module-icon">
-    </a>
+    <div class="module-group">
+        <a href="./practice-module/pengenalan" class="module-button" id="moduleButton">
+            <img src="Image/Practice Module.png" alt="Module" class="module-icon">
+        </a>
+        <a href="./my-portfolio" class="portfolio-button" id="moduleButton2">
+            <img src="Image/Practice Module.png" alt="Module" class="module-icon">
+        </a>
+    </div>
 
     <div class="main-content">
         <div class="container">
@@ -915,8 +927,9 @@
             icon.setAttribute('role', 'button');
         });
 
-        function setupModuleButton() {
-            const moduleButton = document.getElementById('moduleButton');
+        function setupModuleButton(id) {
+            const moduleButton = document.getElementById(id);
+            if (!moduleButton) return;
             
             moduleButton.addEventListener('click', function(e) {
                 const ripple = document.createElement('span');
@@ -952,8 +965,8 @@
             moduleButton.setAttribute('role', 'button');
         }
 
-        setupModuleButton();
+        setupModuleButton('moduleButton');
+        setupModuleButton('moduleButton2');
     </script>
 </body>
-
 </html>
