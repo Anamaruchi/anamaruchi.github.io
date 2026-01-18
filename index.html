@@ -33,19 +33,19 @@
             flex-grow: 0 !important;
           }
 
-          .module-button {
-    top: clamp(10px, 2vw, 15px) !important;
-    left: clamp(10px, 2vw, 15px) !important;
-    width: clamp(70px, 13vw, 80px);
-    height: clamp(32px, 7vw, 38px);
-    padding: clamp(6px, 1.5vw, 10px);
-}
+          /* Menyesuaikan kedua tombol di atas agar identik */
+          .module-button, .portfolio-button {
+            top: clamp(10px, 2vw, 15px) !important;
+            width: clamp(70px, 13vw, 80px) !important;
+            height: clamp(32px, 7vw, 38px) !important;
+            padding: clamp(6px, 1.5vw, 10px) !important;
+          }
 
-.module-icon {
-    width: clamp(50px, 10vw, 60px);
-    height: clamp(24px, 5vw, 28px);
-    object-fit: contain;
-}
+          .module-icon, .portfolio-icon {
+            width: clamp(50px, 10vw, 60px) !important;
+            height: clamp(24px, 5vw, 28px) !important;
+            object-fit: contain;
+          }
         }
 
         @media screen and (max-width: 480px) {
@@ -58,19 +58,18 @@
             max-height: 140px !important;
           }
 
-          .module-button {
-    top: clamp(8px, 1.5vw, 12px) !important;
-    left: clamp(8px, 1.5vw, 12px) !important;
-    width: clamp(65px, 12vw, 75px);
-    height: clamp(30px, 6vw, 35px);
-    padding: clamp(5px, 1vw, 8px);
-}
+          .module-button, .portfolio-button {
+            top: clamp(8px, 1.5vw, 12px) !important;
+            width: clamp(65px, 12vw, 75px) !important;
+            height: clamp(30px, 6vw, 35px) !important;
+            padding: clamp(5px, 1vw, 8px) !important;
+          }
 
-.module-icon {
-    width: clamp(45px, 9vw, 55px);
-    height: clamp(22px, 4.5vw, 26px);
-    object-fit: contain;
-}
+          .module-icon, .portfolio-icon {
+            width: clamp(45px, 9vw, 55px) !important;
+            height: clamp(22px, 4.5vw, 26px) !important;
+            object-fit: contain;
+          }
         }
 
         @media screen and (max-width: 360px) {
@@ -83,17 +82,17 @@
             max-height: 120px !important;
           }
 
-          .module-button {
-    width: clamp(60px, 11vw, 70px);
-    height: clamp(28px, 5.5vw, 32px);
-    padding: clamp(4px, 0.8vw, 6px);
-}
+          .module-button, .portfolio-button {
+            width: clamp(60px, 11vw, 70px) !important;
+            height: clamp(28px, 5.5vw, 32px) !important;
+            padding: clamp(4px, 0.8vw, 6px) !important;
+          }
 
-.module-icon {
-    width: clamp(40px, 8vw, 50px);
-    height: clamp(20px, 4vw, 24px);
-    object-fit: contain;
-}
+          .module-icon, .portfolio-icon {
+            width: clamp(40px, 8vw, 50px) !important;
+            height: clamp(20px, 4vw, 24px) !important;
+            object-fit: contain;
+          }
         }
 
         @media (hover: none) and (pointer: coarse) {
@@ -174,64 +173,59 @@
             100% { opacity: 0.3; }
         }
 
-        .module-button {
-    position: fixed !important;
-    top: clamp(10px, 2vw, 20px) !important;
-    left: clamp(10px, 2vw, 20px) !important;
-    background: linear-gradient(135deg, #0060df, #003eaa);
-    color: white;
-    border: none;
-    padding: clamp(8px, 2vw, 12px);
-    border-radius: 10px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 5px 15px rgba(0, 96, 223, 0.3);
-    z-index: 100;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: clamp(80px, 15vw, 90px);
-    height: clamp(35px, 8vw, 40px);
-    transform: none !important;
-}
+        /* Grouping untuk Portfolio di Kiri */
+        .portfolio-group {
+            position: fixed !important;
+            top: clamp(10px, 2vw, 20px) !important;
+            left: clamp(10px, 2vw, 20px) !important;
+            z-index: 100;
+        }
 
-.module-button:visited {
-    background: linear-gradient(135deg, #0060df, #003eaa) !important;
-    color: white !important;
-}
+        /* Grouping untuk Practice di Kanan */
+        .practice-group {
+            position: fixed !important;
+            top: clamp(10px, 2vw, 20px) !important;
+            right: clamp(10px, 2vw, 20px) !important;
+            z-index: 100;
+        }
 
-.module-button:visited:hover {
-    background: linear-gradient(135deg, #003eaa, #0060df) !important;
-    box-shadow: 0 8px 25px rgba(0, 96, 223, 0.4) !important;
-    transform: none !important;
-}
+        .portfolio-button, .module-button {
+            position: relative !important;
+            background: linear-gradient(135deg, #0060df, #003eaa);
+            color: white;
+            border: none;
+            padding: clamp(8px, 2vw, 12px);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 96, 223, 0.3);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: clamp(80px, 15vw, 90px);
+            height: clamp(35px, 8vw, 40px);
+            transform: none !important;
+        }
 
-.module-button:hover {
-    background: linear-gradient(135deg, #003eaa, #0060df);
-    box-shadow: 0 8px 25px rgba(0, 96, 223, 0.4);
-    transform: none !important;
-}
+        .portfolio-button:visited, .module-button:visited {
+            background: linear-gradient(135deg, #0060df, #003eaa) !important;
+            color: white !important;
+        }
 
-.module-button:active {
-    background: linear-gradient(135deg, #002080, #0060df);
-    box-shadow: 0 4px 15px rgba(0, 96, 223, 0.5);
-    transform: none !important;
-}
+        .portfolio-button:hover, .module-button:hover {
+            background: linear-gradient(135deg, #003eaa, #0060df);
+            box-shadow: 0 8px 25px rgba(0, 96, 223, 0.4);
+            transform: none !important;
+        }
 
-.module-button:focus {
-    outline: 2px solid rgba(255, 255, 255, 0.5);
-    outline-offset: 2px;
-    transform: none !important;
-}
-
-.module-icon {
-    width: clamp(60px, 12vw, 70px);
-    height: clamp(28px, 6vw, 32px);
-    filter: brightness(0) invert(1);
-    transition: none;
-    object-fit: contain;
-}
+        .portfolio-icon, .module-icon {
+            width: clamp(60px, 12vw, 70px);
+            height: clamp(28px, 6vw, 32px);
+            filter: brightness(0) invert(1);
+            transition: none;
+            object-fit: contain;
+        }
 
         .main-content {
             flex: 1;
@@ -250,6 +244,7 @@
             width: 100%;
             position: relative;
             z-index: 1;
+            animation: fadeInUp 1s ease-out;
             -webkit-transform: translateZ(0);
             transform: translateZ(0);
         }
@@ -352,30 +347,9 @@
             background: linear-gradient(135deg, #1d4ed8, #3b82f6);
         }
 
-        .btn:active {
-            transform: translateY(-1px);
-        }
-
-        .container {
-            animation: fadeInUp 1s ease-out;
-        }
-
         @keyframes fadeInUp {
-            0% {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes ripple {
-            to {
-                transform: scale(2);
-                opacity: 0;
-            }
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
         }
 
         .footer {
@@ -438,6 +412,11 @@
             box-shadow: 0 15px 30px rgba(255, 0, 0, 0.4);
         }
 
+        .social-icon:hover {
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+        }
+
         .footer-copyright {
             color: #999;
             font-size: 12px;
@@ -446,346 +425,48 @@
             margin-top: 15px;
         }
 
+        /* Responsive Breakpoints sesuai Kode Asli */
         @media (max-width: 768px) {
-            .main-content {
-                flex: 1;
-                justify-content: flex-start;
-                padding: 15px 15px 0;
-                padding-top: 20px;
-            }
-
-            .hello-text {
-                font-size: 2.5rem;
-            }
-
-            .description {
-                font-size: 1rem;
-                padding: 0 10px;
-                margin-bottom: 25px;
-            }
-
-            .buttons-section {
-                flex-direction: column;
-                align-items: center;
-                gap: 10px;
-                margin-bottom: 10px;
-                flex-wrap: wrap;
-                overflow-x: visible;
-            }
-
-            .btn {
-                -webkit-transform: translateZ(0);
-                transform: translateZ(0);
-                backface-visibility: hidden;
-                width: 280px !important;
-                max-width: 280px !important;
-                min-width: 280px !important;
-                padding: 12px 20px;
-                font-size: 0.9rem;
-                text-align: center;
-                display: block;
-                margin: 0 auto;
-            }
-
-            .footer {
-                padding: 12px 0;
-                margin-top: 0;
-            }
-
-            .profile-image {
-                -webkit-transform: translateZ(0);
-                transform: translateZ(0);
-                backface-visibility: hidden;
-            }
-
-            .footer-content {
-                padding: 0 10px;
-            }
-
-            .social-media {
-                gap: 12px;
-                margin-bottom: 8px;
-            }
-
-            .social-icon {
-                width: 36px;
-                height: 36px;
-                border-radius: 8px;
-            }
-
-            .social-icon.youtube {
-                width: 48px;
-                height: 36px;
-            }
-
-            .footer-copyright {
-                font-size: 9px;
-                padding-top: 6px;
-                margin-top: 0;
-                line-height: 1.1;
-            }
+            .main-content { justify-content: flex-start; padding-top: 20px; }
+            .hello-text { font-size: 2.5rem; }
+            .description { font-size: 1rem; margin-bottom: 25px; }
+            .buttons-section { flex-direction: column; align-items: center; gap: 10px; margin-bottom: 10px; }
+            .btn { width: 280px !important; max-width: 280px !important; min-width: 280px !important; display: block; }
+            .social-media { gap: 12px; margin-bottom: 8px; }
+            .social-icon { width: 36px; height: 36px; border-radius: 8px; }
+            .social-icon.youtube { width: 48px; height: 36px; }
+            .footer-copyright { font-size: 9px; padding-top: 6px; }
         }
 
         @media (max-width: 480px) {
-            .main-content {
-                padding: 10px 10px 0;
-                padding-top: 15px;
-            }
-
-            .hello-text {
-                font-size: 2rem;
-            }
-
-            .description {
-                font-size: 0.9rem;
-                margin-bottom: 20px;
-                line-height: 1.4;
-            }
-
-            .buttons-section {
-                margin-bottom: 8px;
-                gap: 8px;
-            }
-
-            .btn {
-                width: 260px !important;
-                max-width: 260px !important;
-                min-width: 260px !important;
-                padding: 10px 18px;
-                font-size: 0.85rem;
-                text-align: center;
-                display: block;
-                margin: 0 auto;
-            }
-
-            .footer {
-                padding: 10px 0;
-            }
-
-            .social-media {
-                gap: 10px;
-                margin-bottom: 6px;
-            }
-
-            .social-icon {
-                width: 32px;
-                height: 32px;
-                border-radius: 6px;
-            }
-
-            .social-icon.youtube {
-                width: 42px;
-                height: 32px;
-            }
-
-            .footer-copyright {
-                font-size: 8px;
-                padding-top: 4px;
-            }
+            .hello-text { font-size: 2rem; }
+            .description { font-size: 0.9rem; margin-bottom: 20px; }
+            .btn { width: 260px !important; }
+            .social-icon { width: 32px; height: 32px; }
+            .social-icon.youtube { width: 42px; height: 32px; }
         }
 
         @media (max-width: 360px) {
-            .main-content {
-                padding: 8px 8px 0;
-                padding-top: 12px;
-            }
-
-            .profile-image {
-                width: 140px;
-                height: 140px;
-                margin-bottom: 20px;
-            }
-
-            .hello-text {
-                font-size: 1.8rem;
-                margin-bottom: 15px;
-            }
-
-            .description {
-                font-size: 0.85rem;
-                margin-bottom: 15px;
-                line-height: 1.3;
-                padding: 0 5px;
-            }
-
-            .description p {
-                margin-bottom: 8px;
-            }
-
-            .buttons-section {
-                margin-bottom: 5px;
-                gap: 6px;
-            }
-
-            .btn {
-                width: 240px !important;
-                max-width: 240px !important;
-                min-width: 240px !important;
-                padding: 9px 15px;
-                font-size: 0.8rem;
-                text-align: center;
-                display: block;
-                margin: 0 auto;
-            }
-
-            .footer {
-                padding: 8px 0;
-            }
-
-            .social-media {
-                gap: 8px;
-                margin-bottom: 4px;
-            }
-
-            .social-icon {
-                width: 28px;
-                height: 28px;
-                border-radius: 5px;
-            }
-
-            .social-icon.youtube {
-                width: 37px;
-                height: 28px;
-            }
-
-            .footer-copyright {
-                font-size: 7px;
-                padding-top: 3px;
-            }
-        }
-
-        @media (max-width: 320px) {
-            .main-content {
-                padding: 5px 5px 0;
-                padding-top: 10px;
-            }
-
-            .profile-image {
-                width: 120px;
-                height: 120px;
-                margin-bottom: 15px;
-            }
-
-            .hello-text {
-                font-size: 1.6rem;
-                margin-bottom: 12px;
-            }
-
-            .description {
-                font-size: 0.8rem;
-                margin-bottom: 12px;
-                line-height: 1.2;
-            }
-
-            .buttons-section {
-                margin-bottom: 3px;
-                gap: 5px;
-            }
-
-            .btn {
-                width: 220px !important;
-                max-width: 220px !important;
-                min-width: 220px !important;
-                padding: 8px 12px;
-                font-size: 0.75rem;
-                text-align: center;
-                display: block;
-                margin: 0 auto;
-            }
-
-            .footer {
-                padding: 6px 0;
-            }
-
-            .social-media {
-                gap: 6px;
-                margin-bottom: 3px;
-            }
-
-            .social-icon {
-                width: 24px;
-                height: 24px;
-                border-radius: 4px;
-            }
-
-            .social-icon.youtube {
-                width: 32px;
-                height: 24px;
-            }
-
-            .footer-copyright {
-                font-size: 6px;
-                padding-top: 2px; 
-            }
-        }
-
-        @media (max-height: 600px) and (max-width: 480px) {
-            .main-content {
-                flex: 1; 
-                min-height: auto; 
-                padding-top: 8px;
-            }
-
-            .profile-section {
-                margin-bottom: 20px;
-            }
-
-            .profile-image {
-                width: 100px;
-                height: 100px;
-                margin-bottom: 15px;
-            }
-
-            .hello-text {
-                font-size: 1.5rem;
-                margin-bottom: 10px;
-            }
-
-            .description {
-                font-size: 0.8rem;
-                margin-bottom: 15px;
-                line-height: 1.2;
-            }
-
-            .description p {
-                margin-bottom: 5px;
-            }
-
-            .buttons-section {
-                margin-bottom: 3px; 
-                gap: 4px;
-            }
-
-            .btn {
-                padding: 6px 10px;
-                font-size: 0.7rem;
-            }
-
-            .footer {
-                padding: 4px 0;
-            }
-
-            .social-icon {
-                width: 20px;
-                height: 20px;
-            }
-
-            .social-icon.youtube {
-                width: 28px;
-                height: 20px;
-            }
-
-            .footer-copyright {
-                font-size: 5px;
-                padding-top: 2px; 
-            }
+            .profile-image { width: 140px; height: 140px; }
+            .hello-text { font-size: 1.8rem; }
+            .btn { width: 240px !important; }
+            .social-icon { width: 28px; height: 28px; }
+            .social-icon.youtube { width: 37px; height: 28px; }
         }
     </style>
 </head>
 <body>
-    <a href="./practice-module/pengenalan" class="module-button" id="moduleButton">
-        <img src="Image/Practice Module.png" alt="Module" class="module-icon">
-    </a>
+    <div class="portfolio-group">
+        <a href="./my-portfolio" class="portfolio-button" id="portfolioButton">
+            <img src="Image/My Portfolio.PNG" alt="Portfolio" class="portfolio-icon">
+        </a>
+    </div>
+
+    <div class="practice-group">
+        <a href="./practice-module/pengenalan" class="module-button" id="moduleButton">
+            <img src="Image/Practice Module.png" alt="Module" class="module-icon">
+        </a>
+    </div>
 
     <div class="main-content">
         <div class="container">
@@ -804,9 +485,8 @@
 
             <div class="buttons-section">
                 <a href="./paper-thickness-calculation" class="btn" id="PaperThicknessCalcBtn">Paper Thickness Calculation</a>
-                 <a href="./print-paper-calculation" class="btn" id="PrintPaperCalcBtn">Print Paper Calculation</a>
-                <a href="./my-portfolio" class="btn" id="PortfolioBtn">My Portfolio</a>
-                 <a href="./auto-layout-recap-invoice" class="btn" id="InvoiceLayoutBtn">Auto Layout Recap Invoice</a>
+                <a href="./print-paper-calculation" class="btn" id="PrintPaperCalcBtn">Print Paper Calculation</a>
+                <a href="./auto-layout-recap-invoice" class="btn" id="InvoiceLayoutBtn">Auto Layout Recap Invoice</a>
                 <a href="./pdf-file-flattener" class="btn" id="PDFFileFlattenerBtn">PDF File Flattener</a>
             </div>
         </div>
@@ -826,18 +506,9 @@
     </footer>
 
     <script>
-        document.querySelectorAll('.btn').forEach(button => {
-            button.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-2px) scale(1.02)';
-            });
-            
-            button.addEventListener('mouseleave', function() {
-                this.style.transform = 'translateY(0) scale(1)';
-            });
-        });
-
-        document.querySelectorAll('.btn').forEach(element => {
-            element.addEventListener('click', function(e) {
+        // Memastikan efek ripple bekerja untuk semua tombol baru
+        document.querySelectorAll('.btn, .module-button, .portfolio-button').forEach(button => {
+            button.addEventListener('click', function(e) {
                 const ripple = document.createElement('span');
                 const rect = this.getBoundingClientRect();
                 const size = Math.max(rect.width, rect.height);
@@ -856,107 +527,14 @@
                     animation: ripple 0.6s ease-out;
                     pointer-events: none;
                 `;
-                
-                this.style.position = 'relative';
-                this.style.overflow = 'hidden';
                 this.appendChild(ripple);
-                
-                setTimeout(() => {
-                    ripple.remove();
-                }, 600);
+                setTimeout(() => ripple.remove(), 600);
             });
         });
 
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes ripple {
-                to {
-                    transform: scale(2);
-                    opacity: 0;
-                }
-            }
-        `;
-        document.head.appendChild(style);
-
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth'
-                    });
-                }
-            });
-        });
-
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' || e.key === ' ') {
-                if (document.activeElement.classList.contains('btn')) {
-                    document.activeElement.click();
-                }
-            }
-        });
-
-        document.getElementById('facebookIcon').addEventListener('click', function() {
-            window.open('https://www.facebook.com/anang.zikri.f', '_blank');
-        });
-
-        document.getElementById('instagramIcon').addEventListener('click', function() {
-            window.open('https://www.instagram.com/04.nang_', '_blank');
-        });
-
-        document.getElementById('youtubeIcon').addEventListener('click', function() {
-            window.open('https://www.youtube.com/LtcoAnangZikri', '_blank');
-        });
-
-        document.querySelectorAll('.social-icon').forEach(icon => {
-            icon.setAttribute('tabindex', '0');
-            icon.setAttribute('role', 'button');
-        });
-
-        function setupModuleButton() {
-            const moduleButton = document.getElementById('moduleButton');
-            
-            moduleButton.addEventListener('click', function(e) {
-                const ripple = document.createElement('span');
-                const rect = this.getBoundingClientRect();
-                const size = Math.max(rect.width, rect.height);
-                const x = e.clientX - rect.left - size / 2;
-                const y = e.clientY - rect.top - size / 2;
-                
-                ripple.style.cssText = `
-                    position: absolute;
-                    width: ${size}px;
-                    height: ${size}px;
-                    left: ${x}px;
-                    top: ${y}px;
-                    background: rgba(255, 255, 255, 0.3);
-                    border-radius: 50%;
-                    transform: scale(0);
-                    animation: ripple 0.6s ease-out;
-                    pointer-events: none;
-                    z-index: 10;
-                `;
-                
-                this.style.position = 'relative';
-                this.style.overflow = 'hidden';
-                this.appendChild(ripple);
-                
-                setTimeout(() => {
-                    ripple.remove();
-                }, 600);
-            });
-
-            moduleButton.setAttribute('tabindex', '0');
-            moduleButton.setAttribute('role', 'button');
-        }
-
-        setupModuleButton();
+        document.getElementById('facebookIcon').addEventListener('click', () => window.open('https://www.facebook.com/anang.zikri.f', '_blank'));
+        document.getElementById('instagramIcon').addEventListener('click', () => window.open('https://www.instagram.com/04.nang_', '_blank'));
+        document.getElementById('youtubeIcon').addEventListener('click', () => window.open('https://www.youtube.com/LtcoAnangZikri', '_blank'));
     </script>
 </body>
-
 </html>
-
-
-
