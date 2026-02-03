@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Hari Sabtu Jalan Yuk Novi</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #ffd6e8, #ffffff);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: white;
+      width: 100%;
+      max-width: 700px;
+      padding: 50px 40px;
+      border-radius: 30px;
+      box-shadow: 0 15px 35px rgba(255, 105, 180, 0.35);
+      text-align: center;
+      position: relative;
+    }
+
+    h1 {
+      color: #ff4f9a;
+      font-size: clamp(28px, 5vw, 46px);
+      margin-bottom: 50px;
+    }
+
+    .buttons {
+      position: relative;
+      height: 240px;
+      width: 100%;
+    }
+
+    button {
+      padding: 18px 45px;
+      border: none;
+      border-radius: 40px;
+      font-size: clamp(18px, 3vw, 26px);
+      cursor: pointer;
+      transition: transform 0.15s ease;
+    }
+
+    #yesBtn {
+      background-color: #ff5fa2;
+      color: white;
+    }
+
+    #yesBtn:hover {
+      transform: scale(1.08);
+      background-color: #ff3f8b;
+    }
+
+    #noBtn {
+      background-color: #ffc1da;
+      color: #ff2f7a;
+      position: absolute;
+      top: 120px;
+      left: 30px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .result img {
+      width: min(320px, 85%);
+      border-radius: 25px;
+      margin-top: 25px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container" id="main">
+    <h1>Hari Sabtu Jalan Yuk Novi ☺️</h1>
+
+    <div class="buttons">
+      <button id="yesBtn">YES ☺️</button>
+      <button id="noBtn">NO 🙃</button>
+    </div>
+  </div>
+
+  <div class="container hidden result" id="result">
+    <h1>Yess kita jalan ya nanti 😆</h1>
+    <img src="https://media1.tenor.com/m/WsWej1C3ePYAAAAd/yippee-cat-kitty.gif" alt="Happy Cat">
+    <h1>Screenshot Jawabannya ke aku 😋</h1>
+  </div>
+
+  <script>
+    const noBtn = document.getElementById("noBtn");
+    const yesBtn = document.getElementById("yesBtn");
+    const main = document.getElementById("main");
+    const result = document.getElementById("result");
+    const area = document.querySelector(".buttons");
+
+    function moveNoButton() {
+      const maxX = area.clientWidth - noBtn.offsetWidth;
+      const maxY = area.clientHeight - noBtn.offsetHeight;
+
+      const randomX = Math.random() * maxX;
+      const randomY = Math.random() * maxY;
+
+      noBtn.style.left = randomX + "px";
+      noBtn.style.top = randomY + "px";
+    }
+
+    noBtn.addEventListener("mouseenter", moveNoButton);
+    noBtn.addEventListener("click", moveNoButton);
+    noBtn.addEventListener("touchstart", moveNoButton);
+
+    yesBtn.addEventListener("click", () => {
+      main.classList.add("hidden");
+      result.classList.remove("hidden");
+    });
+  </script>
+
+</body>
+</html>
