@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anamaruchi</title>
-    <link rel="icon" type="image/x-icon" href="/Image/Anamaruchi.ico">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anamaruchi</title>
+  <link rel="icon" type="image/x-icon" href="/Image/Anamaruchi.ico">
+
   <style>
     * {
       box-sizing: border-box;
@@ -67,8 +68,6 @@
       background-color: #ffc1da;
       color: #ff2f7a;
       position: absolute;
-      top: 120px;
-      left: 30px;
     }
 
     .hidden {
@@ -96,7 +95,7 @@
   <div class="container hidden result" id="result">
     <h1>Yess kita jalan ya nanti 😆</h1>
     <img src="https://media1.tenor.com/m/WsWej1C3ePYAAAAd/yippee-cat-kitty.gif" alt="Happy Cat">
-    <h1>Screenshot Jawabannya ke aku 😁</h1>
+    <h1>Screenshot Jawabannya ke aku ya😁</h1>
   </div>
 
   <script>
@@ -106,16 +105,22 @@
     const result = document.getElementById("result");
     const area = document.querySelector(".buttons");
 
+    function centerNoButton() {
+      const x = (area.clientWidth - noBtn.offsetWidth) / 2;
+      const y = (area.clientHeight - noBtn.offsetHeight) / 2;
+      noBtn.style.left = x + "px";
+      noBtn.style.top = y + "px";
+    }
+
     function moveNoButton() {
       const maxX = area.clientWidth - noBtn.offsetWidth;
       const maxY = area.clientHeight - noBtn.offsetHeight;
-
-      const randomX = Math.random() * maxX;
-      const randomY = Math.random() * maxY;
-
-      noBtn.style.left = randomX + "px";
-      noBtn.style.top = randomY + "px";
+      noBtn.style.left = Math.random() * maxX + "px";
+      noBtn.style.top = Math.random() * maxY + "px";
     }
+
+    window.addEventListener("load", centerNoButton);
+    window.addEventListener("resize", centerNoButton);
 
     noBtn.addEventListener("mouseenter", moveNoButton);
     noBtn.addEventListener("click", moveNoButton);
