@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Anamaruchi</title>
-  <link rel="icon" type="image/x-icon" href="/Image/Anamaruchi.ico">
 
   <style>
     * {
@@ -51,17 +50,11 @@
       border-radius: 40px;
       font-size: clamp(18px, 3vw, 26px);
       cursor: pointer;
-      transition: transform 0.15s ease;
     }
 
     #yesBtn {
       background-color: #ff5fa2;
       color: white;
-    }
-
-    #yesBtn:hover {
-      transform: scale(1.08);
-      background-color: #ff3f8b;
     }
 
     #noBtn {
@@ -79,21 +72,18 @@
       border-radius: 25px;
       margin-top: 25px;
     }
-
-    #mobileBlock {
-      display: none;
-      text-align: center;
-    }
   </style>
 </head>
 <body>
 
-  <div class="container hidden" id="mobileBlock">
-    <h1>Bukanya di PC yaa 😋</h1>
-    <h1>Biar Lebih seru nantinya 🤭</h1>
+  <!-- DEFAULT: tampil ini dulu -->
+  <div class="container" id="mobileBlock">
+    <h1>Website ini cuma bisa dibuka di PC 💻</h1>
+    <h1>Buka pakai laptop yaa 😌</h1>
+  </div>
 
   <div class="container hidden" id="main">
-    <h1>Haii, Kita Jalan Yuk Novi ☺️</h1>
+    <h1>Hari Sabtu Jalan Yuk Novi ☺️</h1>
     <div class="buttons">
       <button id="yesBtn">YES ☺️</button>
       <button id="noBtn">NO 🙃</button>
@@ -102,20 +92,20 @@
 
   <div class="container hidden result" id="result">
     <h1>Yess kita jalan ya nanti 😆</h1>
-    <img src="https://media1.tenor.com/m/WsWej1C3ePYAAAAd/yippee-cat-kitty.gif" alt="Happy Cat">
+    <img src="https://media1.tenor.com/m/WsWej1C3ePYAAAAd/yippee-cat-kitty.gif">
     <h1>Screenshot Jawabannya ke aku 😁</h1>
   </div>
 
   <script>
-    const noBtn = document.getElementById("noBtn");
-    const yesBtn = document.getElementById("yesBtn");
+    const mobileBlock = document.getElementById("mobileBlock");
     const main = document.getElementById("main");
     const result = document.getElementById("result");
-    const mobileBlock = document.getElementById("mobileBlock");
+    const yesBtn = document.getElementById("yesBtn");
+    const noBtn = document.getElementById("noBtn");
     const area = document.querySelector(".buttons");
 
     function isMobile() {
-      return /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || window.innerWidth < 768;
+      return window.innerWidth < 768;
     }
 
     function centerNoButton() {
@@ -133,16 +123,14 @@
     }
 
     window.addEventListener("load", () => {
-      if (isMobile()) {
-        mobileBlock.classList.remove("hidden");
-      } else {
+      if (!isMobile()) {
+        mobileBlock.classList.add("hidden");
         main.classList.remove("hidden");
         centerNoButton();
       }
     });
 
     noBtn.addEventListener("mouseenter", moveNoButton);
-    noBtn.addEventListener("click", moveNoButton);
 
     yesBtn.addEventListener("click", () => {
       main.classList.add("hidden");
