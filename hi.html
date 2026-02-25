@@ -40,7 +40,7 @@
 
     .buttons {
       position: relative;
-      height: 240px;
+      height: 260px;
       width: 100%;
     }
 
@@ -50,11 +50,16 @@
       border-radius: 40px;
       font-size: clamp(18px, 3vw, 26px);
       cursor: pointer;
+      transition: transform 0.1s;
     }
 
     #yesBtn {
       background-color: #ff5fa2;
       color: white;
+    }
+
+    #yesBtn:hover {
+      transform: scale(1.05);
     }
 
     #noBtn {
@@ -76,7 +81,6 @@
 </head>
 <body>
 
-  <!-- DEFAULT: tampil ini dulu -->
   <div class="container" id="mobileBlock">
     <h1>Website ini cuma bisa dibuka di PC 💻</h1>
     <h1>Buka pakai laptop yaa 😌</h1>
@@ -115,11 +119,25 @@
       noBtn.style.top = y + "px";
     }
 
-    function moveNoButton() {
+    function moveNoButtonFar(cursorX, cursorY) {
+      const rect = area.getBoundingClientRect();
       const maxX = area.clientWidth - noBtn.offsetWidth;
       const maxY = area.clientHeight - noBtn.offsetHeight;
-      noBtn.style.left = Math.random() * maxX + "px";
-      noBtn.style.top = Math.random() * maxY + "px";
+
+      let newX, newY, distance;
+
+      do {
+        newX = Math.random() * maxX;
+        newY = Math.random() * maxY;
+
+        const btnCenterX = rect.left + newX + noBtn.offsetWidth / 2;
+        const btnCenterY = rect.top + newY + noBtn.offsetHeight / 2;
+
+        distance = Math.hypot(btnCenterX - cursorX, btnCenterY - cursorY);
+      } while (distance < 220);
+
+      noBtn.style.left = newX + "px";
+      noBtn.style.top = newY + "px";
     }
 
     window.addEventListener("load", () => {
@@ -130,7 +148,22 @@
       }
     });
 
-    noBtn.addEventListener("mouseenter", moveNoButton);
+    document.addEventListener("mousemove", (e) => {
+      const rect = noBtn.getBoundingClientRect();
+      const distance = Math.hypot(
+        e.clientX - (rect.left + rect.width / 2),
+        e.clientY - (rect.top + rect.height / 2)
+      );
+
+      if (distance < 160) {
+        moveNoButtonFar(e.clientX, e.clientY);
+      }
+    });
+
+    noBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      moveNoButtonFar(window.innerWidth / 2, window.innerHeight / 2);
+    });
 
     yesBtn.addEventListener("click", () => {
       main.classList.add("hidden");
