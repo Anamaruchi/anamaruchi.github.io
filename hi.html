@@ -36,7 +36,7 @@
     h1 {
       color: #ff4f9a;
       font-size: clamp(28px, 5vw, 46px);
-      margin-bottom: 50px;
+      margin-bottom: 40px;
     }
 
     .buttons {
@@ -79,13 +79,21 @@
       border-radius: 25px;
       margin-top: 25px;
     }
+
+    #mobileBlock {
+      display: none;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
 
-  <div class="container" id="main">
-    <h1>Hari Sabtu Jalan Yuk Novi ☺️</h1>
+  <div class="container hidden" id="mobileBlock">
+    <h1>Bukanya di PC yaa 😋</h1>
+    <h1>Biar Lebih seru nantinya 🤭</h1>
 
+  <div class="container hidden" id="main">
+    <h1>Haii, Kita Jalan Yuk Novi ☺️</h1>
     <div class="buttons">
       <button id="yesBtn">YES ☺️</button>
       <button id="noBtn">NO 🙃</button>
@@ -95,7 +103,7 @@
   <div class="container hidden result" id="result">
     <h1>Yess kita jalan ya nanti 😆</h1>
     <img src="https://media1.tenor.com/m/WsWej1C3ePYAAAAd/yippee-cat-kitty.gif" alt="Happy Cat">
-    <h1>Screenshot Jawabannya ke aku ya 😁</h1>
+    <h1>Screenshot Jawabannya ke aku 😁</h1>
   </div>
 
   <script>
@@ -103,7 +111,12 @@
     const yesBtn = document.getElementById("yesBtn");
     const main = document.getElementById("main");
     const result = document.getElementById("result");
+    const mobileBlock = document.getElementById("mobileBlock");
     const area = document.querySelector(".buttons");
+
+    function isMobile() {
+      return /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || window.innerWidth < 768;
+    }
 
     function centerNoButton() {
       const x = (area.clientWidth - noBtn.offsetWidth) / 2;
@@ -119,12 +132,17 @@
       noBtn.style.top = Math.random() * maxY + "px";
     }
 
-    window.addEventListener("load", centerNoButton);
-    window.addEventListener("resize", centerNoButton);
+    window.addEventListener("load", () => {
+      if (isMobile()) {
+        mobileBlock.classList.remove("hidden");
+      } else {
+        main.classList.remove("hidden");
+        centerNoButton();
+      }
+    });
 
     noBtn.addEventListener("mouseenter", moveNoButton);
     noBtn.addEventListener("click", moveNoButton);
-    noBtn.addEventListener("touchstart", moveNoButton);
 
     yesBtn.addEventListener("click", () => {
       main.classList.add("hidden");
