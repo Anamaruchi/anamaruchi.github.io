@@ -7,7 +7,6 @@
     <link rel="icon" type="image/x-icon" href="https://anamaruchi.github.io/Image/Anamaruchi.ico">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
     <style>
-        /* --- Base Style (Tampilan Desktop/PC) --- */
         *, *::before, *::after { box-sizing: border-box; }
         html, body { height: 100%; width: 100%; margin: 0; padding: 0; overflow-x: hidden; }
 
@@ -68,6 +67,46 @@
             filter: brightness(0) invert(1);
             transition: none;
             }
+
+        .extension-group {
+            position: fixed !important;
+            top: clamp(10px, 2vw, 20px) !important;
+            right: clamp(10px, 2vw, 20px) !important;
+            z-index: 100;
+        }
+
+        .extension-button {
+            position: relative !important;
+            background: linear-gradient(135deg, #0060df, #003eaa);
+            color: white;
+            border: none;
+            padding: clamp(8px, 2vw, 12px);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 96, 223, 0.3);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: clamp(80px, 15vw, 90px);
+            height: clamp(35px, 8vw, 40px);
+            transform: none !important;
+        }
+
+        .extension-button:hover {
+            background: linear-gradient(135deg, #003eaa, #0060df);
+            box-shadow: 0 8px 25px rgba(0, 96, 223, 0.4);
+            transform: none !important;
+        }
+
+        .extension-icon {
+            width: clamp(60px, 12vw, 70px);
+            height: clamp(28px, 6vw, 32px);
+            filter: brightness(0) invert(1);
+            transition: none;
+            object-fit: contain;
+        }
 
         #ui-panel {
             width: 100%;
@@ -217,25 +256,36 @@
         }
         .credit-line a { color: #60a5fa; text-decoration: none; }
 
-        /* --- Tampilan Khusus Mobile (Aktif jika lebar layar < 600px) --- */
         @media screen and (max-width: 600px) {
             body { 
-                padding: 15px; /* Kurangi padding samping bodi agar panel bisa maksimal lebar */
+                padding: 15px;
             }
             #ui-panel { 
-                grid-template-columns: 1fr; /* Paksa jadi 1 kolom */
+                grid-template-columns: 1fr; 
                 padding: 15px; 
                 gap: 12px;
                 border-radius: 20px;
-                margin-top: 50px; /* Jarak agar tidak tertutup tombol home */
+                margin-top: 50px;
             }
             .group, .step-box, button:not(.dropdown-btn), .credit-line, h3 { 
-                grid-column: span 1 !important; /* Paksa semua elemen mengisi 1 kolom penuh */
+                grid-column: span 1 !important;
             }
             h3 { font-size: 1.3rem; }
             label { font-size: 10px; }
             input, textarea, .dropdown-btn { font-size: 13px; }
             .home-button { width: 45px; height: 45px; top: 15px !important; left: 15px !important; }
+
+            .extension-button {
+                top: clamp(10px, 2vw, 15px) !important;
+                width: clamp(70px, 13vw, 80px) !important;
+                height: clamp(32px, 7vw, 38px) !important;
+                padding: clamp(6px, 1.5vw, 10px) !important;
+            }
+
+            .extension-icon {
+                width: clamp(50px, 10vw, 60px) !important;
+                height: clamp(24px, 5vw, 28px) !important;
+            }
         }
     </style>
 </head>
@@ -244,6 +294,12 @@
 <a href="https://anamaruchi.github.io/" class="home-button">
     <img src="https://anamaruchi.github.io/Image/Home Icon.png" alt="Home" class="home-icon" />
 </a>
+
+<div class="extension-group">
+    <a href="./practice-module/pengenalan" class="extension-button" id="extensionButton">
+        <img src="Image/Practice Module.png" alt="Module" class="extension-icon">
+    </a>
+</div>
 
 <div id="ui-panel">
     <h3>Tanda Terima & Alamat Generator</h3>
@@ -284,7 +340,7 @@
     <button onclick="processExcel()" id="downloadBtn">Download Hasil Excel</button>
 
     <div class="credit-line">
-        Created By Anamaruchi (<a href="https://www.facebook.com/anang.zikri.f" target="_blank">Anang Zikri Febriyansyah</a>) | Made With Love for Novia Auni Azalia
+        <b>Created By Anamaruchi (<a href="https://www.facebook.com/anang.zikri.f" target="_blank">Anang Zikri Febriyansyah</a>) | Made With Love for Novia Auni Azalia</b>
     </div>
 </div>
 
