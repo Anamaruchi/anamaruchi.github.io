@@ -315,7 +315,7 @@
                 <div onclick="selectVersion('4', 'Versi Pendek (4 Baris Barang)')">Versi Pendek (4 Baris Barang)</div>
                 <div onclick="selectVersion('10', 'Versi Panjang (10 Baris Barang)')">Versi Panjang (10 Baris Barang)</div>
             </div>
-            <input type="hidden" id="template-version" value="10">
+            <input type="hidden" id="template-version" value="4">
         </div>
     </div>
     
@@ -425,15 +425,19 @@
         };
 
         if (ver === "10") {
-            ws.getCell('D13').value = d.p; ws.getCell('H28').value = d.i;
-            ws.getCell('H29').value = d.h; ws.getCell('B31').value = d.t;
-            ws.getCell('K38').value = d.u;
-            d.it.forEach((it, i) => { if (i < 10) ws.getCell('H' + (17 + i)).value = it; });
+            ws.getCell('D13').value = d.p;[cite: 3, 4]
+            ws.getCell('H28').value = d.i;[cite: 3, 4]
+            ws.getCell('H29').value = d.h;[cite: 3, 4]
+            ws.getCell('B31').value = d.t;[cite: 3, 4]
+            ws.getCell('K38').value = d.u;[cite: 3, 4]
+            d.it.forEach((it, i) => { if (i < 10) ws.getCell('H' + (17 + i)).value = it; });[cite: 3, 4]
         } else {
-            ws.getCell('D13').value = d.p; ws.getCell('H22').value = d.i;
-            ws.getCell('H23').value = d.h; ws.getCell('B25').value = d.t;
-            ws.getCell('K32').value = d.u;
-            d.it.forEach((it, i) => { if (i < 4) ws.getCell('H' + (17 + i)).value = it; });
+            ws.getCell('D13').value = d.p;[cite: 3]
+            ws.getCell('H22').value = d.i;[cite: 3]
+            ws.getCell('H23').value = d.h;[cite: 3]
+            ws.getCell('B25').value = d.t;[cite: 3]
+            ws.getCell('K32').value = d.u;[cite: 3]
+            d.it.forEach((it, i) => { if (i < 4) ws.getCell('H' + (17 + i)).value = it; });[cite: 3]
         }
         if (wsAlamat && cachedAlamatData) {
             cachedAlamatData.forEach(item => { wsAlamat.getCell(item.cell).value = item.value; });
