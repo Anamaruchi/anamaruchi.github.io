@@ -7,7 +7,7 @@
     <link rel="icon" type="image/x-icon" href="https://anamaruchi.github.io/Image/Anamaruchi.ico">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
     <style>
-        /* Base Style */
+        /* --- Base Style (Tampilan Desktop/PC) --- */
         *, *::before, *::after { box-sizing: border-box; }
         html, body { height: 100%; width: 100%; margin: 0; padding: 0; overflow-x: hidden; }
 
@@ -23,28 +23,51 @@
         }
 
         .home-button {
-            position: fixed !important;
-            top: clamp(10px, 2vw, 20px) !important;
-            left: clamp(10px, 2vw, 20px) !important;
-            background: linear-gradient(135deg, #0060df, #003eaa);
-            color: white;
-            padding: clamp(8px, 2vw, 12px);
-            border-radius: 10px;
-            z-index: 100;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: clamp(40px, 8vw, 50px);
-            height: clamp(40px, 8vw, 50px);
-            text-decoration: none;
-            box-shadow: 0 5px 15px rgba(0, 96, 223, 0.3);
-        }
+	        position: fixed !important;
+	        top: clamp(10px, 2vw, 20px) !important;
+	        left: clamp(10px, 2vw, 20px) !important;
+	        background: linear-gradient(135deg, #0060df, #003eaa);
+	        color: white;
+	        border: none;
+	        padding: clamp(8px, 2vw, 12px);
+	        border-radius: 10px;
+	        cursor: pointer;
+	        transition: background-color 0.3s ease, box-shadow 0.3s ease;
+	        box-shadow: 0 5px 15px rgba(0, 96, 223, 0.3);
+	        z-index: 100;
+	        text-decoration: none;
+	        display: inline-flex;
+	        align-items: center;
+	        justify-content: center;
+	        width: clamp(40px, 8vw, 50px);
+	        height: clamp(40px, 8vw, 50px);
+	        transform: none !important;
+            }
+
+        .home-button:hover {
+            background: linear-gradient(135deg, #003eaa, #0060df);
+            box-shadow: 0 8px 25px rgba(0, 96, 223, 0.4);
+            transform: none !important;
+            }
+
+        .home-button:active {
+	        background: linear-gradient(135deg, #002080, #0060df);
+	        box-shadow: 0 4px 15px rgba(0, 96, 223, 0.5);
+	        transform: none !important;
+            }
+
+        .home-button:focus {
+	        outline: 2px solid rgba(255, 255, 255, 0.5);
+	        outline-offset: 2px;
+	        transform: none !important;
+            }
 
         .home-icon {
             width: clamp(18px, 4vw, 24px);
             height: clamp(18px, 4vw, 24px);
             filter: brightness(0) invert(1);
-        }
+            transition: none;
+            }
 
         #ui-panel {
             width: 100%;
@@ -89,7 +112,6 @@
             opacity: 0.8;
         }
 
-        /* Dropdown Styling */
         .dropdown-container { position: relative; width: 100%; }
 
         .dropdown-btn {
@@ -138,10 +160,7 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .dropdown-content div:hover {
-            background: rgba(255, 255, 255, 0.2);
-            padding-left: 20px;
-        }
+        .dropdown-content div:hover { background: rgba(255, 255, 255, 0.2); padding-left: 20px; }
 
         .dropdown-arrow {
             width: 0; height: 0;
@@ -198,9 +217,25 @@
         }
         .credit-line a { color: #60a5fa; text-decoration: none; }
 
+        /* --- Tampilan Khusus Mobile (Aktif jika lebar layar < 600px) --- */
         @media screen and (max-width: 600px) {
-            #ui-panel { grid-template-columns: 1fr; }
-            .group { grid-column: span 2; }
+            body { 
+                padding: 15px; /* Kurangi padding samping bodi agar panel bisa maksimal lebar */
+            }
+            #ui-panel { 
+                grid-template-columns: 1fr; /* Paksa jadi 1 kolom */
+                padding: 15px; 
+                gap: 12px;
+                border-radius: 20px;
+                margin-top: 50px; /* Jarak agar tidak tertutup tombol home */
+            }
+            .group, .step-box, button:not(.dropdown-btn), .credit-line, h3 { 
+                grid-column: span 1 !important; /* Paksa semua elemen mengisi 1 kolom penuh */
+            }
+            h3 { font-size: 1.3rem; }
+            label { font-size: 10px; }
+            input, textarea, .dropdown-btn { font-size: 13px; }
+            .home-button { width: 45px; height: 45px; top: 15px !important; left: 15px !important; }
         }
     </style>
 </head>
@@ -217,17 +252,15 @@
         <label>Pilih Versi Template Excel: <span id="load-status" class="status-badge">Menghubungkan...</span></label>
         <div class="dropdown-container">
             <button class="dropdown-btn" id="versionBtn">
-                <span id="versionLabel">Versi Panjang (10 Baris Barang)</span>
+                <span id="versionLabel">Versi Pendek (4 Baris Barang)</span>
                 <span class="dropdown-arrow"></span>
             </button>
             <div id="versionDropdown" class="dropdown-content">
-                <div onclick="selectVersion('10', 'Versi Panjang (10 Baris Barang)')">Versi Panjang (10 Baris Barang)</div>
                 <div onclick="selectVersion('4', 'Versi Pendek (4 Baris Barang)')">Versi Pendek (4 Baris Barang)</div>
+                <div onclick="selectVersion('10', 'Versi Panjang (10 Baris Barang)')">Versi Panjang (10 Baris Barang)</div>
             </div>
             <input type="hidden" id="template-version" value="10">
         </div>
-        <!-- Input file disembunyikan, hanya untuk darurat/lokal -->
-        <input type="file" id="excel-template" style="display: none;" accept=".xlsx">
     </div>
     
     <div class="group step-box step-blue">
@@ -260,35 +293,29 @@
     const versionDropdown = document.getElementById('versionDropdown');
     const loadStatus = document.getElementById('load-status');
 
-    // DAFTAR NAMA FILE (Harus sama persis dengan yang diupload ke Github)
     const files = {
-        "10": "Template 10 Baris Barang_Tanda Terima ALG 26.xlsx",
-        "4": "Template 4 Baris Barang_Tanda Terima ALG 26.xlsx"
+        "4": "Template 4 Baris Barang.xlsx",
+        "10": "Template 10 Baris Barang.xlsx"
     };
 
     let excelBuffer = null;
     let cachedAlamatData = null;
 
-    // Fungsi otomatis ambil file dari Github
     async function autoFetchTemplate(ver) {
         loadStatus.innerText = "Loading Template...";
         loadStatus.style.background = "#ffa500";
-        
-        const fileName = files[ver];
         try {
-            const response = await fetch(fileName);
-            if (!response.ok) throw new Error("File tidak ditemukan");
+            const response = await fetch(files[ver]);
+            if (!response.ok) throw new Error("Gagal");
             excelBuffer = await response.arrayBuffer();
             loadStatus.innerText = "Template Ready";
             loadStatus.style.background = "#4caf50";
         } catch (err) {
-            console.error(err);
-            loadStatus.innerText = "Gagal Load File";
+            loadStatus.innerText = "Gagal Load";
             loadStatus.style.background = "#f44336";
         }
     }
 
-    // Jalankan fetch otomatis saat pertama kali buka
     window.onload = () => autoFetchTemplate("10");
 
     versionBtn.addEventListener('click', (e) => {
@@ -302,20 +329,15 @@
         document.getElementById('versionLabel').innerText = text;
         versionBtn.classList.remove('active');
         versionDropdown.classList.remove('show');
-        
-        // Panggil fetch setiap kali dropdown diganti
         autoFetchTemplate(val);
     }
 
     window.addEventListener('click', () => {
-        versionBtn.classList.remove('active');
         versionDropdown.classList.remove('show');
     });
 
     function parseJsonInput() {
         const rawJson = document.getElementById('json-input').value;
-        if (!rawJson.trim()) return alert("Silakan paste data JSON!");
-
         try {
             const data = JSON.parse(rawJson);
             document.getElementById('in-penerima').value = data.customer || "";
@@ -323,63 +345,48 @@
             document.getElementById('in-harga').value = data.total_price || 0;
             document.getElementById('in-tgl').value = data.date || "";
             if (data.alamat_data) cachedAlamatData = data.alamat_data;
-            if (data.items && Array.isArray(data.items)) {
-                let listTeks = "";
-                data.items.forEach((item, index) => {
-                    listTeks += `${index + 1}. ${item}${index < data.items.length - 1 ? "\n\n" : ""}`;
-                });
-                document.getElementById('in-barang').value = listTeks;
+            if (data.items) {
+                document.getElementById('in-barang').value = data.items.map((it, i) => `${i+1}. ${it}`).join("\n\n");
             }
-            alert("Data berhasil dimuat!");
-        } catch (err) { alert("Format JSON salah!"); }
+            alert("Data dimuat!");
+        } catch (err) { alert("JSON salah!"); }
     }
 
     async function processExcel() {
-        if (!excelBuffer) return alert("Template belum siap atau gagal didownload. Coba refresh halaman.");
-        
+        if (!excelBuffer) return alert("Template belum siap!");
         const workbook = new ExcelJS.Workbook();
         await workbook.xlsx.load(excelBuffer);
-        const wsTandaTerima = workbook.getWorksheet("Tanda Terima") || workbook.worksheets[0];
+        const ws = workbook.getWorksheet("Tanda Terima") || workbook.worksheets[0];
         const wsAlamat = workbook.getWorksheet("Alamat");
-        const version = document.getElementById('template-version').value;
-        
-        const fields = {
-            penerima: document.getElementById('in-penerima').value,
-            invoice: document.getElementById('in-invoice').value,
-            harga: parseInt(document.getElementById('in-harga').value) || 0,
-            tgl: document.getElementById('in-tgl').value,
-            user: document.getElementById('in-user').value
+        const ver = document.getElementById('template-version').value;
+        const d = {
+            p: document.getElementById('in-penerima').value,
+            i: document.getElementById('in-invoice').value,
+            h: parseInt(document.getElementById('in-harga').value) || 0,
+            t: document.getElementById('in-tgl').value,
+            u: document.getElementById('in-user').value,
+            it: document.getElementById('in-barang').value.split('\n').filter(l => l.trim() !== "").map(l => l.replace(/^\d+\.\s*/, ""))
         };
 
-        const lines = document.getElementById('in-barang').value.split('\n');
-        const cleanItems = lines.filter(l => l.trim() !== "").map(l => l.replace(/^\d+\.\s*/, ""));
-
-        if (version === "10") {
-            wsTandaTerima.getCell('D13').value = fields.penerima;
-            wsTandaTerima.getCell('H28').value = fields.invoice;
-            wsTandaTerima.getCell('H29').value = fields.harga;
-            wsTandaTerima.getCell('B31').value = fields.tgl;
-            wsTandaTerima.getCell('K38').value = fields.user;
-            cleanItems.forEach((item, i) => { if (i < 10) wsTandaTerima.getCell('H' + (17 + i)).value = item; });
+        if (ver === "10") {
+            ws.getCell('D13').value = d.p; ws.getCell('H28').value = d.i;
+            ws.getCell('H29').value = d.h; ws.getCell('B31').value = d.t;
+            ws.getCell('K38').value = d.u;
+            d.it.forEach((it, i) => { if (i < 10) ws.getCell('H' + (17 + i)).value = it; });
         } else {
-            wsTandaTerima.getCell('D13').value = fields.penerima;
-            wsTandaTerima.getCell('H22').value = fields.invoice;
-            wsTandaTerima.getCell('H23').value = fields.harga;
-            wsTandaTerima.getCell('B25').value = fields.tgl;
-            wsTandaTerima.getCell('K32').value = fields.user;
-            cleanItems.forEach((item, i) => { if (i < 4) wsTandaTerima.getCell('H' + (17 + i)).value = item; });
+            ws.getCell('D13').value = d.p; ws.getCell('H22').value = d.i;
+            ws.getCell('H23').value = d.h; ws.getCell('B25').value = d.t;
+            ws.getCell('K32').value = d.u;
+            d.it.forEach((it, i) => { if (i < 4) ws.getCell('H' + (17 + i)).value = it; });
         }
-
         if (wsAlamat && cachedAlamatData) {
             cachedAlamatData.forEach(item => { wsAlamat.getCell(item.cell).value = item.value; });
         }
-
-        const buffer = await workbook.xlsx.writeBuffer();
-        const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-        const url = window.URL.createObjectURL(blob);
+        const buf = await workbook.xlsx.writeBuffer();
+        const blob = new Blob([buf], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
         const a = document.createElement('a');
-        a.href = url;
-        a.download = `Tanda-Terima-${fields.penerima || 'Print'}.xlsx`;
+        a.href = URL.createObjectURL(blob);
+        a.download = `Tanda-Terima-${d.p || 'Print'}.xlsx`;
         a.click();
     }
 </script>
