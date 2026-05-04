@@ -31,6 +31,16 @@ body {
     box-sizing: border-box;
 }
 
+.input-label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #3b82f6;
+    text-align: left;
+    text-transform: uppercase;
+}
+
 .home-button {
 	position: fixed !important;
 	top: clamp(10px, 2vw, 20px) !important;
@@ -719,16 +729,19 @@ h1, p, span, div, li, input, button {
     
     <div class="input-row">
         <div class="input-container">
-            <input type="number" id="totalPages" placeholder="Total Of Page" min="1">
+            <label class="input-label">Total of Page</label>
+            <input type="number" id="totalPages" placeholder="Input Here" min="1">
         </div>
         
         <div class="input-container">
-            <input type="number" id="qtyTotal" placeholder="Qty Total" min="1">
+            <label class="input-label">Qty Total</label>
+            <input type="number" id="qtyTotal" placeholder="Input Here" min="1">
         </div>
         
         <div class="dropdown-container">
+            <label class="input-label">Finish Media</label>
             <button class="dropdown-btn" id="finishMediaBtn">
-                Finish Media <span class="dropdown-arrow"></span>
+                Select Finish Media <span class="dropdown-arrow"></span>
             </button>
             <div id="finishMediaDropdown" class="dropdown-content">
                 <div data-value="A4/B5/Quarto">A4/B5/Quarto</div>
@@ -738,8 +751,9 @@ h1, p, span, div, li, input, button {
         </div>
         
         <div class="dropdown-container">
+            <label class="input-label">Print Side</label>
             <button class="dropdown-btn" id="printSideBtn">
-                Print Side <span class="dropdown-arrow"></span>
+                Select Print Side <span class="dropdown-arrow"></span>
             </button>
             <div id="printSideDropdown" class="dropdown-content">
                 <div data-value="1 Side">1 Side</div>
@@ -747,7 +761,8 @@ h1, p, span, div, li, input, button {
             </div>
         </div>
         
-        <div class="dropdown-container">
+        <div class="dropdown-container" style="flex: 1 1 100%;">
+            <label class="input-label">Select Paper Size</label>
             <button class="dropdown-btn" id="paperSizeBtn">
                 Select Paper Size <span class="dropdown-arrow"></span>
             </button>
