@@ -6,7 +6,6 @@
     <title>Anamaruchi</title>
     <link rel="icon" type="image/x-icon" href="/Image/Anamaruchi.ico">
     <style>
-        /* --- STYLE DASAR & PENCEGAHAN LENTUR --- */
         * {
             margin: 0;
             padding: 0;
@@ -15,7 +14,6 @@
         }
 
         html, body {
-            /* Menghilangkan efek lentur/bounce saat ditarik di mobile */
             overscroll-behavior: none; 
             overflow-x: hidden;
             width: 100%;
@@ -52,7 +50,6 @@
             100% { opacity: 0.3; }
         }
 
-        /* --- BURGER MENU & SIDEBAR STYLE --- */
         .burger-menu-btn {
             position: fixed;
             top: clamp(10px, 2vw, 20px);
@@ -128,7 +125,6 @@
         }
         .overlay.active { display: block; }
 
-        /* --- STYLE KONTEN ASLI --- */
         .portfolio-group {
             position: fixed !important;
             top: clamp(10px, 2vw, 20px) !important;
@@ -261,7 +257,6 @@
 
         .social-icon:hover { transform: translateY(-5px) scale(1.1); }
 
-        /* Implementasi Glow Sesuai Warna Sosmed[cite: 4] */
         .social-icon.facebook:hover { box-shadow: 0 0 25px rgba(59, 89, 152, 0.8); }
         .social-icon.instagram:hover { box-shadow: 0 0 25px rgba(225, 48, 108, 0.8); }
         .social-icon.youtube { width: 80px; }
@@ -272,7 +267,6 @@
             100% { opacity: 1; transform: translateY(0); }
         }
 
-		/* --- MEDIA QUERIES (HANYA BAGIAN YANG DIUBAH) --- */
         @media screen and (max-width: 768px) {
           .profile-image {
             width: 170px !important; height: 170px !important;
@@ -288,7 +282,6 @@
             flex-grow: 0 !important;
           }
 
-          /* Perubahan posisi tombol agar tidak menumpuk ke tengah */
           .portfolio-group { 
             right: 15px !important; 
             top: 15px !important;
@@ -296,7 +289,7 @@
 
           .practice-group { 
             right: 15px !important; 
-            top: 60px !important; /* Pindah ke bawah tombol portfolio */
+            top: 60px !important;
           }
 
           .module-button, .portfolio-button {
@@ -320,11 +313,12 @@
     <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
 
     <nav class="sidebar" id="sidebar">
-        <h3 style="color: #3b82f6; margin-bottom: 15px; text-align: center;">Project Selection</h3>
+        <h3 style="color: #3b82f6; margin-bottom: 15px; text-align: center;">My Project</h3>
         <a href="./project/paper-thickness-calculation" class="btn">Paper Thickness Calculation</a>
         <a href="./project/print-paper-calculation" class="btn">Print Paper Calculation</a>
-        <a href="./project/auto-layout-recap-invoice" class="btn">Auto Layout Recap Invoice</a>
         <a href="./project/pdf-file-flattener" class="btn">PDF File Flattener</a>
+        <a href="./project/auto-layout-recap-invoice" class="btn">Auto Layout Recap Invoice</a>
+        <a href="./project/receipt-address" class="btn">Receipt & Address Generator</a>
     </nav>
 
     <div class="portfolio-group">
@@ -375,7 +369,6 @@
             overlay.classList.toggle('active');
             burgerBtn.classList.toggle('active');
 
-            // Kunci scroll body saat menu terbuka agar tidak lentur
             if (sidebar.classList.contains('active')) {
                 document.body.style.overflow = 'hidden';
             } else {
@@ -383,7 +376,6 @@
             }
         }
 
-        // Ripple Effect
         document.querySelectorAll('.btn, .module-button, .portfolio-button').forEach(button => {
             button.addEventListener('click', function(e) {
                 const ripple = document.createElement('span');
