@@ -29,13 +29,13 @@
             padding: clamp(5px, 2vw, 30px);
             position: relative;
             box-sizing: border-box;
-            padding-top: clamp(60px, 15vw, 80px);
+            padding-top: clamp(60px, 10vw, 80px);
         }
 
         @media (min-width: 769px) {
             body {
-            align-items: center;
-            padding-top: clamp(5px, 2vw, 30px);
+            align-items: flex-start;
+            padding-top: 50px;
             }
         }
 
@@ -52,7 +52,7 @@
 	    transition: background-color 0.3s ease, box-shadow 0.3s ease;
 	    box-shadow: 0 5px 15px rgba(0, 96, 223, 0.3);
 	    z-index: 100;
-            text-decoration: none;
+        text-decoration: none;
 	    display: inline-flex;
 	    align-items: center;
 	    justify-content: center;
@@ -152,6 +152,7 @@
             box-sizing: border-box;
             min-height: auto;
             margin-bottom: clamp(20px, 5vw, 40px);
+            margin-top: 0;
         }
 
         @keyframes fadeInUp {
@@ -581,7 +582,7 @@
         @media (max-width: 768px) {
             body {
                 align-items: flex-start;
-                padding-top: clamp(60px, 15vw, 80px);
+                padding-top: clamp(70px, 15vw, 90px);
                 padding-bottom: clamp(20px, 5vw, 40px);
             }
 
@@ -688,7 +689,7 @@
         @media (max-width: 320px) {
             body {
                 padding: clamp(3px, 1vw, 5px);
-                padding-top: clamp(50px, 12vw, 60px);
+                padding-top: clamp(60px, 15vw, 80px);
             }
             
             .calculator-container, .spiral-reference {
