@@ -121,9 +121,15 @@
             grid-template-columns: 1fr 1fr;
             gap: 15px;
             margin: auto;
+            transition: all 0.3s ease; /* Ditambahkan sesuai print paper */
         }
 
-        h3 {
+        #ui-panel:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(59, 130, 246, 0.4);
+        }
+
+        h1 {
             text-align: center;
             grid-column: span 2;
             margin: 0 0 15px 0;
@@ -131,6 +137,8 @@
             border-bottom: 3px solid rgba(59, 130, 246, 0.5);
             padding-bottom: 15px;
             font-size: 1.8rem;
+			font-weight: 600;
+			text-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
         }
 
         .group { display: flex; flex-direction: column; }
@@ -225,24 +233,51 @@
             font-weight: bold;
         }
 
-        button:not(.dropdown-btn) {
+        #downloadBtn {
             grid-column: span 2;
             padding: 15px;
-            background: linear-gradient(135deg, #0060df, #003eaa);
+            background: linear-gradient(135deg, #003eaa, #002080);
             color: white;
             border: none;
             cursor: pointer;
             font-weight: bold;
             border-radius: 10px;
             font-size: 16px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 96, 223, 0.3);
         }
 
-        .btn-process {
-            background: linear-gradient(135deg, #3b82f6, #1d4ed8) !important;
-            padding: 10px !important;
-            font-size: 12px !important;
+        #downloadBtn:hover {
+            background: linear-gradient(135deg, #002080, #003eaa);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 96, 223, 0.5);
+        }
+
+		.btn-process {
+            background: linear-gradient(135deg, #003eaa, #002080);
+            padding: 12px !important;
+            font-size: 14px !important;
             margin-top: 10px;
             width: 100%;
+            border-radius: 8px !important;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease !important;
+            box-shadow: 0 4px 12px rgba(29, 78, 216, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-process:hover {
+            background: linear-gradient(135deg, #002080, #003eaa);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(29, 78, 216, 0.4);
+        }
+
+        .btn-process:active {
+            transform: translateY(0);
         }
 
         .credit-line {
@@ -267,10 +302,14 @@
                 border-radius: 20px;
                 margin-top: 50px;
             }
-            .group, .step-box, button:not(.dropdown-btn), .credit-line, h3 { 
+            #ui-panel:hover {
+                transform: none;
+                box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
+            }
+            .group, .step-box, #downloadBtn, .credit-line, h1 { 
                 grid-column: span 1 !important;
             }
-            h3 { font-size: 1.3rem; }
+            h1 { font-size: 1.3rem; }
             label { font-size: 10px; }
             input, textarea, .dropdown-btn { font-size: 13px; }
             .home-button { width: 45px; height: 45px; top: 15px !important; left: 15px !important; }
@@ -285,6 +324,11 @@
             .extension-icon {
                 width: clamp(50px, 10vw, 60px) !important;
                 height: clamp(24px, 5vw, 28px) !important;
+            }
+            
+            #downloadBtn:hover {
+                transform: none;
+                box-shadow: 0 5px 15px rgba(0, 96, 223, 0.3);
             }
         }
     </style>
@@ -302,7 +346,7 @@
 </div>
 
 <div id="ui-panel">
-    <h3>Tanda Terima & Alamat Generator</h3>
+    <h1>Receipt & Address Generator</h1>
     
     <div class="group step-box step-green">
         <label>Pilih Versi Template Excel: <span id="load-status" class="status-badge">Menghubungkan...</span></label>
@@ -408,7 +452,7 @@
         } catch (err) { alert("JSON salah!"); }
     }
 
-    async function processExcel() {
+		async function processExcel() {
         if (!excelBuffer) return alert("Template belum siap!");
         const workbook = new ExcelJS.Workbook();
         await workbook.xlsx.load(excelBuffer);
@@ -446,7 +490,9 @@
         const blob = new Blob([buf], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
-        a.download = `Tanda-Terima-${d.p || 'Print'}.xlsx`;
+        
+        a.download = `${d.t} - Tanda Terima - ${d.p || 'Print'}.xlsx`;
+        
         a.click();
     }
 </script>
