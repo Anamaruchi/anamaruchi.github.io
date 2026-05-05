@@ -357,7 +357,9 @@
             </button>
             <div id="versionDropdown" class="dropdown-content">
                 <div onclick="selectVersion('4', 'Versi Pendek (4 Baris Barang)')">Versi Pendek (4 Baris Barang)</div>
+                <div onclick="selectVersion('4ns', 'Versi Pendek (4 Baris Barang) Tanpa Stempel Digital')">Versi Pendek (4 Baris Barang) Tanpa Stempel Digital</div>
                 <div onclick="selectVersion('10', 'Versi Panjang (10 Baris Barang)')">Versi Panjang (10 Baris Barang)</div>
+                <div onclick="selectVersion('10ns', 'Versi Panjang (10 Baris Barang) Tanpa Stempel Digital')">Versi Panjang (10 Baris Barang) Tanpa Stempel Digital</div>
             </div>
             <input type="hidden" id="template-version" value="4">
         </div>
@@ -395,7 +397,9 @@
 
     const files = {
         "4": "Template4.xlsx",
-        "10": "Template10.xlsx"
+        "4ns": "Template4_NoStamp.xlsx",
+        "10": "Template10.xlsx",
+        "10ns": "Template10_NoStamp.xlsx"
     };
 
     let excelBuffer = null;
@@ -468,7 +472,7 @@
             it: document.getElementById('in-barang').value.split('\n').filter(l => l.trim() !== "").map(l => l.replace(/^\d+\.\s*/, ""))
         };
 
-        if (ver === "10") {
+        if (ver === "10" || ver === "10ns") {
             ws.getCell('D13').value = d.p;
             ws.getCell('H28').value = d.i;
             ws.getCell('H29').value = d.h;
