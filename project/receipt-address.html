@@ -121,7 +121,7 @@
             grid-template-columns: 1fr 1fr;
             gap: 15px;
             margin: auto;
-            transition: all 0.3s ease; /* Ditambahkan sesuai print paper */
+            transition: all 0.3s ease;
         }
 
         #ui-panel:hover {
@@ -192,7 +192,6 @@
             border-radius: 12px;
             margin-top: 6px;
             border: 1px solid rgba(255, 255, 255, 0.2);
-            overflow: hidden;
         }
 
         .dropdown-content.show { display: block; }
@@ -352,14 +351,20 @@
         <label>Pilih Versi Template Excel: <span id="load-status" class="status-badge">Menghubungkan...</span></label>
         <div class="dropdown-container">
             <button class="dropdown-btn" id="versionBtn">
-                <span id="versionLabel">Versi Pendek (4 Baris Barang)</span>
+                <span id="versionLabel">Versi 4 Baris Barang</span>
                 <span class="dropdown-arrow"></span>
             </button>
             <div id="versionDropdown" class="dropdown-content">
-                <div onclick="selectVersion('4', 'Versi Pendek (4 Baris Barang)')">Versi Pendek (4 Baris Barang)</div>
-                <div onclick="selectVersion('4ns', 'Versi Pendek (4 Baris Barang) Tanpa Stempel Digital')">Versi Pendek (4 Baris Barang) Tanpa Stempel Digital</div>
-                <div onclick="selectVersion('10', 'Versi Panjang (10 Baris Barang)')">Versi Panjang (10 Baris Barang)</div>
-                <div onclick="selectVersion('10ns', 'Versi Panjang (10 Baris Barang) Tanpa Stempel Digital')">Versi Panjang (10 Baris Barang) Tanpa Stempel Digital</div>
+                <div onclick="selectVersion('4', 'Versi 4 Baris Barang')">Versi 4 Baris Barang</div>
+                <div onclick="selectVersion('4ns', 'Versi 4 Baris Barang Tanpa Stempel Digital')">Versi 4 Baris Barang Tanpa Stempel Digital</div>
+                <div onclick="selectVersion('8', 'Versi 8 Baris Barang')">Versi 8 Baris Barang</div>
+				<div onclick="selectVersion('8ns', 'Versi 8 Baris Barang Tanpa Stempel Digital')">Versi 8 Baris Barang Tanpa Stempel Digital</div>
+                <div onclick="selectVersion('10', 'Versi 10 Baris Barang')">Versi 10 Baris Barang</div>
+                <div onclick="selectVersion('10ns, 'Versi 4 Baris Barang Tanpa Stempel Digital')">Versi 10 Baris Barang Tanpa Stempel Digital</div>
+                <div onclick="selectVersion('12', 'Versi 12 Baris Barang')">Versi 12 Baris Barang</div>
+				<div onclick="selectVersion('12ns', 'Versi 12 Baris Barang Tanpa Stempel Digital')">Versi 12 Baris Barang Tanpa Stempel Digital</div>
+                <div onclick="selectVersion('19', 'Versi 19 Baris Barang')">Versi 19 Baris Barang</div>
+				<div onclick="selectVersion('19ns', 'Versi 19 Baris Barang Tanpa Stempel Digital')">Versi 19 Baris Barang Tanpa Stempel Digital</div>
             </div>
             <input type="hidden" id="template-version" value="4">
         </div>
@@ -398,8 +403,14 @@
     const files = {
         "4": "Template4.xlsx",
         "4ns": "Template4_NoStamp.xlsx",
+        "8": "Template8.xlsx",
+		"8ns": "Template8_NoStamp.xlsx",
         "10": "Template10.xlsx",
-        "10ns": "Template10_NoStamp.xlsx"
+        "10ns": "Template10_NoStamp.xlsx",
+        "12": "Template12.xlsx",
+		"12ns": "Template12_NoStamp.xlsx",
+        "19": "Template19.xlsx",
+		"19ns": "Template19_NoStamp.xlsx"
     };
 
     let excelBuffer = null;
@@ -456,7 +467,7 @@
         } catch (err) { alert("JSON salah!"); }
     }
 
-		async function processExcel() {
+	async function processExcel() {
         if (!excelBuffer) return alert("Template belum siap!");
         const workbook = new ExcelJS.Workbook();
         await workbook.xlsx.load(excelBuffer);
@@ -472,13 +483,34 @@
             it: document.getElementById('in-barang').value.split('\n').filter(l => l.trim() !== "").map(l => l.replace(/^\d+\.\s*/, ""))
         };
 
-        if (ver === "10" || ver === "10ns") {
+        if (ver === "8" || ver === "8ns") {
+            ws.getCell('D13').value = d.p;
+            ws.getCell('H26').value = d.i;
+            ws.getCell('H27').value = d.h;
+            ws.getCell('B29').value = d.t;
+            ws.getCell('K36').value = d.u;
+            d.it.forEach((it, i) => { if (i < 8) ws.getCell('H' + (17 + i)).value = it; });
+        } else if (ver === "10" || ver === "10ns") {
             ws.getCell('D13').value = d.p;
             ws.getCell('H28').value = d.i;
             ws.getCell('H29').value = d.h;
             ws.getCell('B31').value = d.t;
             ws.getCell('K38').value = d.u;
             d.it.forEach((it, i) => { if (i < 10) ws.getCell('H' + (17 + i)).value = it; });
+        } else if (ver === "12" || ver === "12ns") {
+            ws.getCell('D13').value = d.p;
+            ws.getCell('H30').value = d.i;
+            ws.getCell('H31').value = d.h;
+            ws.getCell('B33').value = d.t;
+            ws.getCell('K40').value = d.u;
+            d.it.forEach((it, i) => { if (i < 12) ws.getCell('H' + (17 + i)).value = it; });
+        } else if (ver === "19" || ver === "19ns") {
+            ws.getCell('D13').value = d.p;
+            ws.getCell('H37').value = d.i;
+            ws.getCell('H38').value = d.h;
+            ws.getCell('B40').value = d.t;
+            ws.getCell('K47').value = d.u;
+            d.it.forEach((it, i) => { if (i < 19) ws.getCell('H' + (17 + i)).value = it; });
         } else {
             ws.getCell('D13').value = d.p;
             ws.getCell('H22').value = d.i;
@@ -487,6 +519,7 @@
             ws.getCell('K32').value = d.u;
             d.it.forEach((it, i) => { if (i < 4) ws.getCell('H' + (17 + i)).value = it; });
         }
+
         if (wsAlamat && cachedAlamatData) {
             cachedAlamatData.forEach(item => { wsAlamat.getCell(item.cell).value = item.value; });
         }
@@ -494,9 +527,7 @@
         const blob = new Blob([buf], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
-        
         a.download = `${d.t} - Tanda Terima - ${d.p || 'Print'}.xlsx`;
-        
         a.click();
     }
 </script>
