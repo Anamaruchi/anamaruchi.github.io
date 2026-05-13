@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Anamaruchi - Receipt & Address Generator</title>
+    <title>Anamaruchi - Tanda Terima & Alamat Generator</title>
     <link rel="icon" type="image/x-icon" href="https://anamaruchi.github.io/Image/Anamaruchi.ico">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
     <style>
@@ -196,7 +196,25 @@
 
         .dropdown-content.show { display: block; }
 
-        .dropdown-content div {
+        .search-container {
+            padding: 8px;
+            position: sticky;
+            top: 0;
+            background: #2563eb;
+            z-index: 10;
+        }
+
+        .search-dropdown {
+            width: 100%;
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid rgba(255,255,255,0.3);
+            background: rgba(0,0,0,0.2);
+            color: white !important;
+            font-size: 12px;
+        }
+
+        .dropdown-content div.option-item {
             color: white;
             padding: 14px 16px;
             cursor: pointer;
@@ -206,7 +224,7 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .dropdown-content div:hover { background: rgba(255, 255, 255, 0.2); padding-left: 20px; }
+        .dropdown-content div.option-item:hover { background: rgba(255, 255, 255, 0.2); padding-left: 20px; }
 
         .dropdown-arrow {
             width: 0; height: 0;
@@ -265,7 +283,7 @@
             font-weight: 600;
             transition: all 0.3s ease !important;
             box-shadow: 0 4px 12px rgba(29, 78, 216, 0.3);
-            text-transform: none;
+            text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
@@ -355,16 +373,19 @@
                 <span class="dropdown-arrow"></span>
             </button>
             <div id="versionDropdown" class="dropdown-content">
-                <div onclick="selectVersion('4', 'Versi 4 Baris Barang')">Versi 4 Baris Barang</div>
-                <div onclick="selectVersion('4ns', 'Versi 4 Baris Barang Tanpa Stempel Digital')">Versi 4 Baris Barang Tanpa Stempel Digital</div>
-                <div onclick="selectVersion('8', 'Versi 8 Baris Barang')">Versi 8 Baris Barang</div>
-				<div onclick="selectVersion('8ns', 'Versi 8 Baris Barang Tanpa Stempel Digital')">Versi 8 Baris Barang Tanpa Stempel Digital</div>
-                <div onclick="selectVersion('10', 'Versi 10 Baris Barang')">Versi 10 Baris Barang</div>
-                <div onclick="selectVersion('10ns', 'Versi 10 Baris Barang Tanpa Stempel Digital')">Versi 10 Baris Barang Tanpa Stempel Digital</div>
-                <div onclick="selectVersion('12', 'Versi 12 Baris Barang')">Versi 12 Baris Barang</div>
-				<div onclick="selectVersion('12ns', 'Versi 12 Baris Barang Tanpa Stempel Digital')">Versi 12 Baris Barang Tanpa Stempel Digital</div>
-                <div onclick="selectVersion('19', 'Versi 19 Baris Barang')">Versi 19 Baris Barang</div>
-				<div onclick="selectVersion('19ns', 'Versi 19 Baris Barang Tanpa Stempel Digital')">Versi 19 Baris Barang Tanpa Stempel Digital</div>
+                <div class="search-container">
+                    <input type="text" id="verSearch" class="search-dropdown" placeholder="Cari template..." onkeyup="filterVersions()">
+                </div>
+                <div class="option-item" onclick="selectVersion('4', 'Versi 4 Baris Barang')">Versi 4 Baris Barang</div>
+                <div class="option-item" onclick="selectVersion('4ns', 'Versi 4 Baris Barang Tanpa Stempel Digital')">Versi 4 Baris Barang Tanpa Stempel Digital</div>
+                <div class="option-item" onclick="selectVersion('8', 'Versi 8 Baris Barang')">Versi 8 Baris Barang</div>
+				<div class="option-item" onclick="selectVersion('8ns', 'Versi 8 Baris Barang Tanpa Stempel Digital')">Versi 8 Baris Barang Tanpa Stempel Digital</div>
+                <div class="option-item" onclick="selectVersion('10', 'Versi 10 Baris Barang')">Versi 10 Baris Barang</div>
+                <div class="option-item" onclick="selectVersion('10ns', 'Versi 10 Baris Barang Tanpa Stempel Digital')">Versi 10 Baris Barang Tanpa Stempel Digital</div>
+                <div class="option-item" onclick="selectVersion('12', 'Versi 12 Baris Barang')">Versi 12 Baris Barang</div>
+				<div class="option-item" onclick="selectVersion('12ns', 'Versi 12 Baris Barang Tanpa Stempel Digital')">Versi 12 Baris Barang Tanpa Stempel Digital</div>
+                <div class="option-item" onclick="selectVersion('19', 'Versi 19 Baris Barang')">Versi 19 Baris Barang</div>
+				<div class="option-item" onclick="selectVersion('19ns', 'Versi 19 Baris Barang Tanpa Stempel Digital')">Versi 19 Baris Barang Tanpa Stempel Digital</div>
             </div>
             <input type="hidden" id="template-version" value="4">
         </div>
@@ -437,6 +458,9 @@
         e.stopPropagation();
         versionBtn.classList.toggle('active');
         versionDropdown.classList.toggle('show');
+        if(versionDropdown.classList.contains('show')) {
+            document.getElementById('verSearch').focus();
+        }
     });
 
     function selectVersion(val, text) {
@@ -447,8 +471,28 @@
         autoFetchTemplate(val);
     }
 
+    function filterVersions() {
+        const input = document.getElementById('verSearch');
+        const filter = input.value.toLowerCase();
+        const items = document.querySelectorAll('.option-item');
+        
+        items.forEach(item => {
+            const text = item.textContent || item.innerText;
+            if (text.toLowerCase().indexOf(filter) > -1) {
+                item.style.display = "";
+            } else {
+                item.style.display = "none";
+            }
+        });
+    }
+
     window.addEventListener('click', () => {
         versionDropdown.classList.remove('show');
+        versionBtn.classList.remove('active');
+    });
+
+    document.querySelector('.search-container').addEventListener('click', (e) => {
+        e.stopPropagation();
     });
 
     function parseJsonInput() {
