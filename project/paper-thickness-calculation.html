@@ -749,6 +749,42 @@
             overflow-wrap: break-word;
             hyphens: auto;
         }
+
+        .search-container {
+            padding: 8px;
+            position: sticky;
+            top: 0;
+            background: #1d4ed8;
+            z-index: 10;
+        }
+
+        .search-dropdown {
+            width: 100%;
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid rgba(255,255,255,0.3);
+            background: rgba(0,0,0,0.2);
+            color: white !important;
+            font-size: 12px;
+            min-height: auto;
+            box-shadow: none;
+            text-align: left;
+        }
+        
+        .search-dropdown:focus {
+            transform: none;
+            box-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+            outline: none;
+        }
+
+        .dropdown-content div.search-container {
+            min-height: auto;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .dropdown-content div.search-container:hover, .dropdown-content div.search-container:active {
+            background: #1d4ed8;
+        }
     </style>
 </head>
 <body>
@@ -768,6 +804,9 @@
             
             <div class="paper-select form-width">
                 <div class="dropdown-content" id="paperOptions">
+                    <div class="search-container">
+                        <input type="text" id="paperSearch" class="search-dropdown" placeholder="Search paper..." onkeyup="filterPapers()">
+                    </div>
                     <div data-value="art120" data-thickness="0.01052" data-name="Art Paper 120gsm">Art Paper 120gsm</div>
                     <div data-value="art150" data-thickness="0.0142" data-name="Art Paper 150gsm">Art Paper 150gsm</div>
                     <div data-value="matte120" data-thickness="0.01052" data-name="Matte Paper 120gsm">Matte Paper 120gsm</div>
@@ -976,7 +1015,7 @@
                 return "No More Use Spiral";
             }
 
-            paperOptions.querySelectorAll('div').forEach(option => {
+            paperOptions.querySelectorAll('div[data-value]').forEach(option => {
                 const value = option.getAttribute('data-value');
                 const thickness = parseFloat(option.getAttribute('data-thickness'));
                 const name = option.getAttribute('data-name');
@@ -1000,6 +1039,11 @@
                 
                 positionDropdown();
                 paperOptions.classList.add('show');
+                
+                const searchInput = document.getElementById('paperSearch');
+                if (searchInput && window.innerWidth > 768) {
+                    setTimeout(() => { searchInput.focus(); }, 100);
+                }
             }
 
             function closeDropdown() {
@@ -1074,7 +1118,24 @@
             document.addEventListener('click', handleOutsideClick);
             document.addEventListener('touchstart', handleOutsideClick, { passive: true });
 
-            paperOptions.querySelectorAll('div').forEach(option => {
+            const searchContainer = document.querySelector('.search-container');
+            if (searchContainer) {
+                searchContainer.addEventListener('click', (e) => e.stopPropagation());
+                searchContainer.addEventListener('touchstart', (e) => e.stopPropagation(), { passive: true });
+            }
+            
+            const paperSearch = document.getElementById('paperSearch');
+            if (paperSearch) {
+                paperSearch.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    paperSearch.focus();
+                });
+                paperSearch.addEventListener('touchstart', (e) => {
+                    e.stopPropagation();
+                }, { passive: true });
+            }
+
+            paperOptions.querySelectorAll('div[data-value]').forEach(option => {
                 let optionTouchStartTime = 0;
 
                 option.addEventListener('click', function(e) {
@@ -1300,6 +1361,21 @@
                 lastTouchEnd = now;
             }, false);
         });
+
+        function filterPapers() {
+            const input = document.getElementById('paperSearch');
+            const filter = input.value.toLowerCase();
+            const items = document.querySelectorAll('#paperOptions div[data-value]');
+            
+            items.forEach(item => {
+                const text = item.textContent || item.innerText;
+                if (text.toLowerCase().indexOf(filter) > -1) {
+                    item.style.display = "";
+                } else {
+                    item.style.display = "none";
+                }
+            });
+        }
     </script>
 </body>
 </html>
