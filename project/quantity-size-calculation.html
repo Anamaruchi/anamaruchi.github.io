@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Anamaruchi - Quantity Size Calculation</title>
+<link rel="icon" type="image/x-icon" href="https://anamaruchi.web.id/Image/Anamaruchi.ico">
+<style>
+  *, *::before, *::after{ box-sizing: border-box; }
+
+  html, body{ min-height:100%; width:100%; margin:0; padding:0; overflow-x:hidden; }
+  html{ -webkit-text-size-adjust:100%; }
+
+  body{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+    color: #fff;
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: clamp(12px, 4vw, 30px) clamp(12px, 4vw, 30px) 0;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  ::selection{ background:#3b82f6; color:#0b0b0d; }
+
+  .main-container{
+    display:flex;
+    flex-direction:row;
+    flex-wrap:wrap;
+    gap: clamp(14px, 3vw, 22px);
+    justify-content:center;
+    align-items:flex-start;
+    width:100%;
+    max-width: 980px;
+    animation: fadeInUp 0.8s ease-out;
+  }
+
+  @keyframes fadeInUp{
+    0%{ opacity:0; transform:translateY(24px); }
+    100%{ opacity:1; transform:translateY(0); }
+  }
+
+  .control-panel{ width:100%; }
+  .right-column{ flex:1 1 360px; width:100%; max-width:min(920px, 100%); display:flex; flex-direction:column; gap: clamp(14px, 3vw, 22px); }
+
+  .corner-btn{
+    position: fixed;
+    top: clamp(12px, 3vw, 20px);
+    z-index: 1001;
+    width: clamp(40px, 8vw, 50px);
+    height: clamp(40px, 8vw, 50px);
+    border-radius: 10px;
+    border: none;
+    background: linear-gradient(135deg, #0060df, #003eaa);
+    box-shadow: 0 5px 15px rgba(0, 96, 223, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    cursor: pointer;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+    transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease, opacity 0.25s ease;
+  }
+  .corner-btn:hover{
+    background: linear-gradient(135deg, #003eaa, #0060df);
+    box-shadow: 0 8px 25px rgba(0, 96, 223, 0.4);
+  }
+  .corner-btn:active{
+    background: linear-gradient(135deg, #002080, #0060df);
+    box-shadow: 0 4px 15px rgba(0, 96, 223, 0.5);
+    transform: scale(0.94);
+  }
+  .corner-btn:focus-visible{ outline:2px solid rgba(255,255,255,0.5); outline-offset:2px; }
+  .corner-btn svg{ width: clamp(18px, 4vw, 24px); height: clamp(18px, 4vw, 24px); }
+
+  .gear-btn{ left: clamp(12px, 3vw, 20px); }
+  .gear-btn.menu-open-hide{
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.85);
+  }
+
+  .home-btn{ 
+        position: fixed !important;
+        top: clamp(10px, 2vw, 20px) !important;
+        right: clamp(10px, 2vw, 30px) !important;
+	    background: linear-gradient(135deg, #0060df, #003eaa);
+	    color: white;
+	    border: none;
+	    padding: clamp(8px, 2vw, 12px);
+	    border-radius: 10px;
+	    cursor: pointer;
+	    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+	    box-shadow: 0 5px 15px rgba(0, 96, 223, 0.3);
+	    z-index: 100;
+        text-decoration: none;
+	    display: inline-flex;
+	    align-items: center;
+	    justify-content: center;
+	    width: clamp(40px, 8vw, 50px);
+	    height: clamp(40px, 8vw, 50px);
+	    transform: none !important;
+		right: clamp(12px, 3vw, 20px);
+   }
+  .home-btn:hover {
+    	    background: linear-gradient(135deg, #003eaa, #0060df);
+    	    box-shadow: 0 8px 25px rgba(0, 96, 223, 0.4);
+    	    transform: none !important;
+	}
+
+  .home-btn:active {
+	    background: linear-gradient(135deg, #002080, #0060df);
+	    box-shadow: 0 4px 15px rgba(0, 96, 223, 0.5);
+	    transform: none !important;
+	}
+
+  .home-btn:focus {
+	    outline: 2px solid rgba(255, 255, 255, 0.5);
+	    outline-offset: 2px;
+	    transform: none !important;
+	}
+
+  .home-icon {
+   	    width: clamp(18px, 4vw, 24px);
+    	    height: clamp(18px, 4vw, 24px);
+   	    filter: brightness(0) invert(1);
+    	transition: none;
+	}
+	
+
+  .sidebar-overlay{
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    z-index: 999;
+  }
+  .sidebar-overlay.open{ opacity:1; pointer-events:auto; }
+
+  .sidebar{
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    height: 100dvh;
+    width: min(380px, 88vw);
+    background: linear-gradient(160deg, #1a1a1a 0%, #232323 100%);
+    border-right: 2px solid rgba(59,130,246,0.3);
+    box-shadow: 10px 0 40px rgba(0,0,0,0.5);
+    z-index: 1000;
+    transform: translateX(-105%);
+    transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: clamp(16px, 4vw, 24px);
+    padding-top: 70px;
+    padding-bottom: calc(clamp(16px, 4vw, 24px) + env(safe-area-inset-bottom, 0px));
+  }
+  .sidebar.open{ transform: translateX(0); }
+  .sidebar .panel{ border:none; box-shadow:none; backdrop-filter:none; background:transparent; padding:0; }
+  .sidebar .panel:hover{ transform:none; box-shadow:none; }
+
+  .sidebar-header{
+    position:absolute;
+    top:0; left:0; right:0;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding: clamp(14px, 3.5vw, 18px) clamp(16px, 4vw, 24px);
+    border-bottom: 1px solid rgba(59,130,246,0.2);
+  }
+  .sidebar-title{ margin:0; font-size:15px; font-weight:700; letter-spacing:0.02em; }
+  .sidebar-close-btn{
+    background: rgba(59,130,246,0.1);
+    border: 1px solid rgba(59,130,246,0.3);
+    color:#fff;
+    width:30px; height:30px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:15px;
+    line-height:1;
+    display:flex; align-items:center; justify-content:center;
+    transition: all 0.25s ease;
+  }
+  .sidebar-close-btn:hover{ background: rgba(59,130,246,0.25); border-color: rgba(59,130,246,0.6); }
+  .sidebar-close-btn:focus-visible{ outline:2px solid #60a5fa; outline-offset:2px; }
+
+  .panel{
+    width:100%;
+    background: linear-gradient(135deg, rgba(26,26,26,0.9), rgba(45,45,45,0.9));
+    backdrop-filter: blur(10px);
+    border-radius:15px;
+    padding: clamp(16px, 4vw, 24px);
+    border: 2px solid rgba(59,130,246,0.3);
+    box-shadow: 0 10px 30px rgba(59,130,246,0.3);
+    transition: all 0.3s ease;
+  }
+  .panel:hover{ transform: translateY(-4px); box-shadow: 0 15px 40px rgba(59,130,246,0.4); }
+
+  .section{ margin-bottom: clamp(16px, 4vw, 22px); }
+  .section:last-child{ margin-bottom:0; }
+
+  .eyebrow{
+    font-size:11px;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    font-weight:700;
+    color:#3b82f6;
+    margin: 0 0 10px 0;
+  }
+
+  .option-group{ display:flex; flex-direction:column; gap:8px; }
+  .option-group.cols-2{ display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  .option-group.cols-3{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; }
+
+  .option-btn{
+    background: rgba(59,130,246,0.08);
+    border: 2px solid rgba(59,130,246,0.25);
+    color: rgba(255,255,255,1);
+    border-radius:10px;
+    padding: clamp(10px, 2.5vw, 12px);
+    cursor:pointer;
+    font-family:inherit;
+    text-align:left;
+    display:flex;
+    flex-direction:column;
+    gap:2px;
+    transition: all 0.3s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .option-btn.center{ flex-direction:row; align-items:baseline; justify-content:center; gap:6px; text-align:center; }
+  .option-btn .name{ font-size:14px; font-weight:600; }
+  .option-btn .sub{ font-size:11px; opacity:0.7; }
+  .option-btn .mm-val{ font-size:15px; font-weight:700; }
+  .option-btn .mm-unit{ font-size:10px; opacity:0.7; }
+
+  .option-btn:hover{ border-color: rgba(59,130,246,0.55); background: rgba(59,130,246,0.16); }
+  .option-btn.active{
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    border-color: transparent;
+    color:#fff;
+    box-shadow: 0 8px 25px rgba(59,130,246,0.4);
+    transform: translateY(-2px);
+  }
+  .option-btn:focus-visible{ outline:2px solid #60a5fa; outline-offset:2px; }
+  .option-group.disabled{ opacity:0.45; }
+  .option-group.disabled .option-btn{ cursor:not-allowed; pointer-events:none; }
+
+  .grid-2{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .field-label{ display:block; font-size:12px; color:rgba(255,255,255,0.6); margin-bottom:6px; }
+  .field-input-wrap{ position:relative; }
+  .field-input{
+    width:100%;
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    border:none;
+    color:#fff;
+    text-align:center;
+    border-radius:10px;
+    padding: clamp(10px, 2.5vw, 12px) 34px clamp(10px, 2.5vw, 12px) 10px;
+    font-size: max(14px, 16px);
+    font-family:inherit;
+    box-shadow: 0 5px 15px rgba(59,130,246,0.3);
+    transition: all 0.3s ease;
+  }
+  .field-input:focus{ outline:none; transform:translateY(-2px); box-shadow:0 8px 25px rgba(59,130,246,0.4); }
+  .field-input::-webkit-inner-spin-button, .field-input::-webkit-outer-spin-button{ -webkit-appearance:none; margin:0; }
+  .field-input{ -moz-appearance:textfield; }
+  .field-unit{ position:absolute; right:10px; top:50%; transform:translateY(-50%); font-size:12px; color:rgba(255,255,255,0.8); pointer-events:none; }
+
+  .hint{ font-size:11px; color:rgba(255,255,255,1); margin: 8px 0 0; line-height:1.5; }
+
+  .actions{ display:flex; align-items:center; gap:14px; margin-top:4px; }
+  .btn-primary{
+    flex:1;
+    background: linear-gradient(135deg, #003eaa, #002080);
+    color:#fff;
+    border:none;
+    border-radius:10px;
+    padding: clamp(12px, 3vw, 14px);
+    font-weight:600;
+    font-size:14px;
+    letter-spacing:0.03em;
+    text-transform:uppercase;
+    cursor:pointer;
+    box-shadow: 0 5px 15px rgba(0,96,223,0.3);
+    transition: all 0.3s ease;
+    font-family:inherit;
+  }
+  .btn-primary:hover{ background: linear-gradient(135deg, #002080, #003eaa); transform:translateY(-3px); box-shadow:0 6px 20px rgba(0,96,223,0.5); }
+  .btn-primary:active{ transform:translateY(-1px); }
+  .btn-primary:focus-visible{ outline:2px solid #60a5fa; outline-offset:2px; }
+
+  .btn-link{
+    background:none; border:none; color:rgba(255,255,255,1);
+    font-size:12px; text-decoration:underline; cursor:pointer; font-family:inherit;
+    transition: color 0.3s ease;
+  }
+  .btn-link:hover{ color:#60a5fa; }
+  .btn-link:focus-visible{ outline:2px solid #60a5fa; outline-offset:2px; }
+
+  .empty-state{ font-size:13px; color:rgba(255,255,255,0.55); padding:6px 0; }
+
+  @keyframes slideUp{ 0%{ opacity:0; transform:translateY(16px); } 100%{ opacity:1; transform:translateY(0); } }
+  .result-body{ animation: slideUp 0.4s ease; }
+
+  .qty-label{ font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:rgba(255,255,255,1); margin:0 0 4px; }
+  .qty-headline{ display:flex; align-items:baseline; gap:8px; }
+  .qty-number{ font-size: clamp(38px, 10vw, 52px); font-weight:700; color:#3b82f6; text-shadow:0 0 20px rgba(59,130,246,0.5); line-height:1; }
+  .qty-unit{ font-size:13px; color:rgba(255,255,255,1); }
+
+  .stats-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px 20px; margin-top:16px; padding-top:16px; border-top:1px solid rgba(59,130,246,0.25); }
+  .stat-label{ font-size:11px; color:rgba(255,255,255,1); text-transform:uppercase; letter-spacing:0.05em; margin:0; }
+  .stat-value{ font-size:14px; color:#60a5fa; font-weight:600; margin:2px 0 0; }
+
+  .warning-box{ margin-top:14px; font-size:13px; padding:10px 12px; border-radius:10px; background: rgba(255,82,82,0.12); border:1px solid rgba(255,82,82,0.4); color:#ff5252; }
+
+  .a3-orient-section{ margin-top:12px; padding-top:12px; border-top:1px solid rgba(59,130,246,0.25); }
+  .a3-orient-section .eyebrow{ margin: 0 0 6px 0; }
+  .a3-orient-section .option-group.cols-2{ gap:6px; }
+  .a3-orient-section .option-btn{ padding: clamp(7px, 1.8vw, 9px) clamp(9px, 2.2vw, 11px); gap:1px; }
+  .a3-orient-section .option-btn .name{ font-size:13px; }
+  .a3-orient-section .option-btn .sub{ font-size:10px; }
+  .a3-best-info{
+    margin: 8px 0 0;
+    font-size:11px;
+    font-weight:600;
+    line-height:1.4;
+    color:#60a5fa;
+    background: rgba(59,130,246,0.1);
+    border: 1px solid rgba(59,130,246,0.25);
+    border-radius:8px;
+    padding:6px 9px;
+  }
+
+  .compare-line{ margin-top:14px; font-size:11px; color:rgba(255,255,255,0.4); border-top:1px solid rgba(59,130,246,0.2); padding-top:10px; }
+
+  .visual-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; gap:8px; flex-wrap:wrap; }
+  .visual-meta{ font-size:11px; color:rgba(255,255,255,1); margin:0; }
+
+  .canvas-wrap{
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    min-height: clamp(220px, 32vw, 360px);
+  }
+  .paper-outer{
+    position:relative;
+    background:#FAFAF8;
+    border-radius:2px;
+    max-width:100%;
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.08), 0 20px 40px -15px rgba(0,0,0,0.6);
+  }
+  .area-box{ position:absolute; border:1.5px dashed rgba(59,130,246,0.6); display:flex; align-items:center; justify-content:center; }
+
+  .reg-mark{ position:absolute; width:14px; height:14px; pointer-events:none; }
+  .reg-mark::before, .reg-mark::after{ content:''; position:absolute; background:#ff5252; }
+  .reg-mark::before{ left:50%; top:0; width:1.5px; height:100%; transform:translateX(-50%); }
+  .reg-mark::after{ top:50%; left:0; height:1.5px; width:100%; transform:translateY(-50%); }
+  .reg-mark .dot{ position:absolute; left:50%; top:50%; width:3px; height:3px; border-radius:50%; background:#ff5252; transform:translate(-50%,-50%); }
+
+  .obj-cell{ box-sizing:border-box; }
+  .obj-fill{ background: linear-gradient(135deg, #3b82f6, #1d4ed8); border:1px solid rgba(96,165,250,0.55); border-radius:2px; }
+  .obj-fill.round{ border-radius:50%; }
+
+  .obj-fill.bleed-visible{
+    border: 2.5px solid #ff2d2d;
+  }
+
+  .preview-note{ margin-top:12px; font-size:11px; color:#f5a524; }
+
+  .bleed-note{
+    margin-top:12px;
+    font-size:12px;
+    color:#f5a524;
+    background: rgba(245,165,36,0.1);
+    border: 1px solid rgba(245,165,36,0.35);
+    border-radius:8px;
+    padding:8px 10px;
+  }
+
+
+  .visual-legend{ display:flex; align-items:center; justify-content:center; gap:18px; flex-wrap:wrap; margin-top:14px; padding-top:14px; }
+  .legend-item{ display:flex; align-items:center; gap:8px; font-size:12px; color:rgba(255,255,255,1); }
+  .legend-swatch{ width:14px; height:14px; border-radius:3px; flex-shrink:0; }
+  .legend-swatch.legend-blue{ background: linear-gradient(135deg, #3b82f6, #1d4ed8); border:1px solid rgba(96,165,250,0.6); }
+  .legend-swatch.legend-red{ background: linear-gradient(135deg, #ff0000, #d90000); border:1px solid rgb(255 255 255 / 60%); }
+
+  .results-grid{ display:flex; flex-direction:column; gap: clamp(16px, 3.5vw, 24px); width:100%; }
+  .panel-qty{ width:100%; }
+  .panel-visual{ width:100%; }
+
+  @media (min-width: 860px){
+    .results-grid{ flex-direction:row; align-items:flex-start; gap: clamp(22px, 3vw, 32px); }
+    .panel-qty{ flex:0 0 260px; }
+    .panel-visual{ flex:1 1 auto; min-width:0; }
+  }
+
+  .hidden{ display:none !important; }
+
+  .page-shell{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    width:100%;
+    max-width:980px;
+    flex: 1 1 auto;
+
+    padding-bottom: calc(clamp(20px, 5vw, 34px) + env(safe-area-inset-bottom, 0px));
+  }
+
+  .page-content{
+    width:100%;
+    flex: 1 0 auto;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap: clamp(18px, 4vw, 28px);
+  }
+
+  .page-title{
+    width:100%;
+    text-align:center;
+    font-size: clamp(20px, 3.4vw, 28px);
+    font-weight:700;
+    letter-spacing:0.01em;
+    color:#3b82f6;
+    margin:0;
+    text-shadow: 0 0 24px rgba(59,130,246,0.35);
+  }
+
+  .panel-credit{
+    width:100%;
+    text-align:center;
+    font-size: clamp(11px, 2vw, 12px);
+    font-weight:600;
+    letter-spacing:0.02em;
+    color: rgba(255,255,255,1);
+    margin: clamp(16px, 3.5vw, 22px) 0 0;
+    padding-top: clamp(14px, 3vw, 18px);
+    border-top: 1px solid rgba(59,130,246,0.15);
+  }
+  .panel-credit a{
+    color:#60a5fa;
+    font-weight:700;
+    text-decoration:none;
+    transition: color 0.25s ease;
+  }
+  .panel-credit a:hover{ color:#93c5fd; text-decoration:underline; }
+  .panel-credit a:focus-visible{ outline:2px solid #60a5fa; outline-offset:2px; }
+
+  @media (max-width:768px){
+    .panel{ backdrop-filter:none; background: rgba(26,26,26,0.95); }
+    .panel:hover{ transform:none; box-shadow: 0 10px 30px rgba(59,130,246,0.3); }
+    .main-container{ flex-direction:column; align-items:stretch; }
+    .right-column{ max-width:100%; }
+
+    .page-shell{ padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
+  }
+
+  @media (max-width:480px){
+    .option-btn.center{ flex-direction:column; gap:2px; }
+
+    .page-shell{ padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px)); }
+  }
+
+  @supports (-webkit-touch-callout: none){
+    body{ min-height: -webkit-fill-available; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ transition-duration:0.001ms !important; animation-duration:0.001ms !important; }
+  }
+</style>
+</head>
+
+<body>
+
+  <button id="menuToggle" class="corner-btn gear-btn" type="button" aria-label="Open Setting Menu" aria-expanded="false" aria-controls="sidebar">
+    <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="3"></circle>
+      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+    </svg>
+  </button>
+
+  <a href="https://anamaruchi.web.id/" class="corner-btn home-btn" id="homeButton">
+        <img src="https://anamaruchi.web.id/Image/Home Icon.png" alt="Home" class="home-icon">
+  </a>
+
+  <div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+  <aside id="sidebar" class="sidebar" aria-hidden="true">
+    <div class="sidebar-header">
+      <p class="sidebar-title">Print Setting</p>
+      <button id="sidebarClose" class="sidebar-close-btn" type="button" aria-label="Close Menu">✕</button>
+    </div>
+
+    <section class="panel control-panel">
+
+      <div class="section">
+        <p class="eyebrow">01 · Print Mode</p>
+        <div id="modeGroup" class="option-group" role="radiogroup" aria-label="Print Mode"></div>
+      </div>
+
+      <div class="section">
+        <p class="eyebrow">02 · Object Size</p>
+        <div class="grid-2">
+          <div>
+            <span class="field-label">Lenght</span>
+            <div class="field-input-wrap">
+              <input id="inputWidth" type="number" inputmode="decimal" min="0.1" step="0.1" value="5" class="field-input" />
+              <span class="field-unit">cm</span>
+            </div>
+          </div>
+          <div>
+            <span class="field-label">Width</span>
+            <div class="field-input-wrap">
+              <input id="inputHeight" type="number" inputmode="decimal" min="0.1" step="0.1" value="5" class="field-input" />
+              <span class="field-unit">cm</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <p class="eyebrow">03 · Object Shape</p>
+        <div id="shapeGroup" class="option-group cols-2" role="radiogroup" aria-label="Object Shape"></div>
+      </div>
+
+      <div class="section">
+        <p class="eyebrow"><span id="extraLabel">Bleed</span></p>
+        <div id="extraGroup" class="option-group cols-3" role="radiogroup" aria-label="Bleed or Distance"></div>
+      </div>
+    </section>
+  </aside>
+
+  <div class="page-shell">
+
+    <div class="page-content">
+
+      <h2 class="page-title">Quantity Size Calculation</h2>
+
+      <div class="main-container">
+
+      <div class="right-column">
+
+        <div class="results-grid">
+
+          <section class="panel panel-qty">
+            <div id="resultEmpty" class="empty-state">
+              Enter the object's width and height dimensions to start calculating the print capacity.
+            </div>
+
+            <div id="resultBody" class="result-body hidden">
+              <p class="qty-label">Qty per Sheet</p>
+              <div class="qty-headline">
+                <span id="qtyTotal" class="qty-number">0</span>
+                <span class="qty-unit">pcs</span>
+              </div>
+
+              <div id="a3OrientationSection" class="a3-orient-section hidden">
+                <p class="eyebrow">Paper Orientation (A3+)</p>
+                <div id="a3OrientGroup" class="option-group cols-2" role="radiogroup" aria-label="Pilih orientasi kertas A3+"></div>
+                <p id="a3BestInfo" class="a3-best-info"></p>
+              </div>
+
+              <div class="stats-grid">
+                <div>
+                  <p class="stat-label">Layout</p>
+                  <p id="qtyRows" class="stat-value">—</p>
+                  <p id="qtyCols" class="stat-value">—</p>
+                </div>
+                <div><p class="stat-label">Object Shape</p><p id="qtyShape" class="stat-value">—</p></div>
+                <div><p class="stat-label">Area Efficiency</p><p id="qtyEfficiency" class="stat-value">—</p></div>
+                <div><p class="stat-label">Remaining Space</p><p id="qtyLeftover" class="stat-value">—</p></div>
+              </div>
+
+              <div id="warningBox" class="warning-box hidden"></div>
+            </div>
+          </section>
+
+          <section class="panel panel-visual">
+            <div class="visual-head">
+              <p class="eyebrow" style="margin:0;">Layout Visualization</p>
+              <p id="paperMeta" class="visual-meta"></p>
+            </div>
+
+            <div id="canvasWrap" class="canvas-wrap">
+              <div id="paperOuter" class="paper-outer">
+                <div id="areaBox" class="area-box">
+                  <div id="gridBox"></div>
+                </div>
+              </div>
+            </div>
+
+            <p id="previewNote" class="preview-note hidden">
+              Preview simplified for viewing, totals remain calculated accurately.
+            </p>
+
+            <p id="bleedNote" class="bleed-note hidden">
+              Bleed is not available for sizes below 4×4 cm
+            </p>
+
+            <div id="visualLegend" class="visual-legend hidden">
+              <span class="legend-item"><span class="legend-swatch legend-blue"></span>Total Quantity</span>
+              <span class="legend-item"><span class="legend-swatch legend-red"></span>Bleed</span>
+            </div>
+
+            <p class="panel-credit">Created By Anamaruchi (<a href="https://www.facebook.com/anang.zikri.f" target="_blank">Anang Zikri Febriyansyah</a>)
+          </section>
+
+        </div>
+      </div>
+
+    </div>
+
+    </div>
+
+  </div>
+
+<script>
+(function(){
+  "use strict";
+
+  const MODE_CONFIG = {
+    a3: {
+      key: 'a3',
+      name: 'A3+ Standard',
+      desc: '32 × 48 cm · Portrait/Landscape',
+      paperMm: { w: 320, h: 480 },
+      areaMm:  { w: 315, h: 475 },
+      extraLabel: 'Bleed'
+    },
+    kiss: {
+      key: 'kiss',
+      name: 'Kiss Cutting',
+      desc: '32 × 48 cm · Portrait',
+      paperMm: { w: 320, h: 480 },
+      areaMm:  { w: 280, h: 440 },
+      extraLabel: 'Distance Between Quantities'
+    },
+    die: {
+      key: 'die',
+      name: 'Die Cutting',
+      desc: '48 × 32 cm · Landscape',
+      paperMm: { w: 480, h: 320 },
+      areaMm:  { w: 440, h: 280 },
+      extraLabel: 'Distance Between Quantities'
+    }
+  };
+
+  const EXTRA_OPTIONS = [0, 2, 3];
+  const SHAPE_OPTIONS = [
+    { key:'kotak', label:'Square', icon: shapeIconSquare() },
+    { key:'bulat', label:'Circle', icon: shapeIconCircle() }
+  ];
+
+  let state = {
+    mode: 'a3',
+    widthCm: 5,
+    heightCm: 5,
+    shape: 'kotak',
+    extraMm: 2,
+    a3Orientation: 'portrait',
+    a3AutoMode: true
+  };
+
+  let lastResult = null;
+
+  const el = {
+    modeGroup: document.getElementById('modeGroup'),
+    shapeGroup: document.getElementById('shapeGroup'),
+    extraGroup: document.getElementById('extraGroup'),
+    extraLabel: document.getElementById('extraLabel'),
+    inputWidth: document.getElementById('inputWidth'),
+    inputHeight: document.getElementById('inputHeight'),
+
+    resultEmpty: document.getElementById('resultEmpty'),
+    resultBody: document.getElementById('resultBody'),
+    qtyTotal: document.getElementById('qtyTotal'),
+    qtyRows: document.getElementById('qtyRows'),
+    qtyCols: document.getElementById('qtyCols'),
+    qtyShape: document.getElementById('qtyShape'),
+    qtyEfficiency: document.getElementById('qtyEfficiency'),
+    qtyLeftover: document.getElementById('qtyLeftover'),
+    warningBox: document.getElementById('warningBox'),
+
+    a3OrientationSection: document.getElementById('a3OrientationSection'),
+    a3OrientGroup: document.getElementById('a3OrientGroup'),
+    a3BestInfo: document.getElementById('a3BestInfo'),
+
+    paperMeta: document.getElementById('paperMeta'),
+    canvasWrap: document.getElementById('canvasWrap'),
+    paperOuter: document.getElementById('paperOuter'),
+    areaBox: document.getElementById('areaBox'),
+    gridBox: document.getElementById('gridBox'),
+    previewNote: document.getElementById('previewNote'),
+    bleedNote: document.getElementById('bleedNote'),
+    visualLegend: document.getElementById('visualLegend'),
+
+    menuToggle: document.getElementById('menuToggle'),
+    sidebar: document.getElementById('sidebar'),
+    sidebarOverlay: document.getElementById('sidebarOverlay'),
+    sidebarClose: document.getElementById('sidebarClose'),
+  };
+
+  function openSidebar(){
+    el.sidebar.classList.add('open');
+    el.sidebarOverlay.classList.add('open');
+    el.menuToggle.classList.add('menu-open-hide');
+    el.menuToggle.setAttribute('aria-expanded', 'true');
+    el.sidebar.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeSidebar(){
+    el.sidebar.classList.remove('open');
+    el.sidebarOverlay.classList.remove('open');
+    el.menuToggle.classList.remove('menu-open-hide');
+    el.menuToggle.setAttribute('aria-expanded', 'false');
+    el.sidebar.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  function toggleSidebar(){
+    if(el.sidebar.classList.contains('open')) closeSidebar();
+    else openSidebar();
+  }
+
+  el.menuToggle.addEventListener('click', toggleSidebar);
+  el.sidebarOverlay.addEventListener('click', closeSidebar);
+  el.sidebarClose.addEventListener('click', closeSidebar);
+  document.addEventListener('keydown', (e) => {
+    if(e.key === 'Escape' && el.sidebar.classList.contains('open')) closeSidebar();
+  });
+
+  function buildModeButtons(){
+    el.modeGroup.innerHTML = '';
+    Object.values(MODE_CONFIG).forEach(cfg => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.setAttribute('role','radio');
+      btn.dataset.mode = cfg.key;
+      btn.className = modeBtnClass(cfg.key === state.mode);
+      btn.innerHTML = `<span class="name">${cfg.name}</span><span class="sub">${cfg.desc}</span>`;
+      btn.addEventListener('click', () => {
+        const enteringA3 = (cfg.key === 'a3' && state.mode !== 'a3');
+        state.mode = cfg.key;
+
+        if(enteringA3){
+          state.a3AutoMode = true;
+        }
+        refreshModeButtons();
+        refreshExtraLabel();
+        calculate();
+      });
+      el.modeGroup.appendChild(btn);
+    });
+  }
+
+  function modeBtnClass(active){ return 'option-btn' + (active ? ' active' : ''); }
+
+  function refreshModeButtons(){
+    [...el.modeGroup.children].forEach(btn => {
+      const active = btn.dataset.mode === state.mode;
+      btn.className = modeBtnClass(active);
+      btn.setAttribute('aria-checked', active ? 'true' : 'false');
+    });
+  }
+
+  function refreshExtraLabel(){
+    const cfg = MODE_CONFIG[state.mode];
+    el.extraLabel.textContent = cfg.extraLabel;
+  }
+
+  function buildShapeButtons(){
+    el.shapeGroup.innerHTML = '';
+    SHAPE_OPTIONS.forEach(opt => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.setAttribute('role','radio');
+      btn.dataset.shape = opt.key;
+      btn.className = shapeBtnClass(opt.key === state.shape);
+      btn.innerHTML = `${opt.icon}<span>${opt.label}</span>`;
+      btn.addEventListener('click', () => {
+        state.shape = opt.key;
+        refreshShapeButtons();
+        calculate();
+      });
+      el.shapeGroup.appendChild(btn);
+    });
+  }
+
+  function shapeBtnClass(active){ return 'option-btn center' + (active ? ' active' : ''); }
+
+  function refreshShapeButtons(){
+    [...el.shapeGroup.children].forEach(btn => {
+      const active = btn.dataset.shape === state.shape;
+      btn.className = shapeBtnClass(active);
+      btn.setAttribute('aria-checked', active ? 'true' : 'false');
+    });
+  }
+
+  function buildExtraButtons(){
+    el.extraGroup.innerHTML = '';
+    EXTRA_OPTIONS.forEach(mm => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.setAttribute('role','radio');
+      btn.dataset.mm = String(mm);
+      btn.className = extraBtnClass(mm === state.extraMm);
+      btn.innerHTML = `<span class="mm-val">${mm}</span><span class="mm-unit">mm</span>`;
+      btn.addEventListener('click', () => {
+        state.extraMm = mm;
+        refreshExtraButtons();
+        calculate();
+      });
+      el.extraGroup.appendChild(btn);
+    });
+  }
+
+  function extraBtnClass(active){ return 'option-btn center' + (active ? ' active' : ''); }
+
+  function refreshExtraButtons(){
+    [...el.extraGroup.children].forEach(btn => {
+      const active = Number(btn.dataset.mm) === state.extraMm;
+      btn.className = extraBtnClass(active);
+      btn.setAttribute('aria-checked', active ? 'true' : 'false');
+    });
+  }
+
+  function setExtraGroupDisabled(disabled){
+    el.extraGroup.classList.toggle('disabled', disabled);
+    [...el.extraGroup.children].forEach(btn => {
+      btn.disabled = disabled;
+      btn.setAttribute('aria-disabled', disabled ? 'true' : 'false');
+    });
+  }
+
+  function shapeIconSquare(){
+    return `<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2.5" y="2.5" width="11" height="11" rx="1.5" stroke="currentColor" stroke-width="1.4"/></svg>`;
+  }
+  function shapeIconCircle(){
+    return `<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="5.5" stroke="currentColor" stroke-width="1.4"/></svg>`;
+  }
+
+  function getA3Cfg(orientation){
+    if(orientation === 'landscape'){
+      return {
+        key: 'a3',
+        name: 'A3+ Standar',
+        desc: '48 × 32 cm · Landscape',
+        paperMm: { w: 480, h: 320 },
+        areaMm:  { w: 475, h: 315 },
+        extraLabel: 'Bleed'
+      };
+    }
+    return {
+      key: 'a3',
+      name: 'A3+ Standar',
+      desc: '32 × 48 cm · Portrait',
+      paperMm: { w: 320, h: 480 },
+      areaMm:  { w: 315, h: 475 },
+      extraLabel: 'Bleed'
+    };
+  }
+
+  const A3_ORIENT_OPTIONS = [
+    { key:'portrait',  label:'Portrait',  sub:'32×48 cm' },
+    { key:'landscape', label:'Landscape', sub:'48×32 cm' }
+  ];
+
+  function buildA3OrientButtons(){
+    el.a3OrientGroup.innerHTML = '';
+    A3_ORIENT_OPTIONS.forEach(opt => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.setAttribute('role','radio');
+      btn.dataset.orient = opt.key;
+      btn.className = a3OrientBtnClass(opt.key === state.a3Orientation);
+      btn.innerHTML = `<span class="name">${opt.label}</span><span class="sub">${opt.sub} · Preview</span>`;
+      btn.addEventListener('click', () => {
+        state.a3Orientation = opt.key;
+        state.a3AutoMode = false;
+        refreshA3OrientButtons();
+        calculate();
+      });
+      el.a3OrientGroup.appendChild(btn);
+    });
+  }
+
+  function a3OrientBtnClass(active){ return 'option-btn' + (active ? ' active' : ''); }
+
+  function refreshA3OrientButtons(){
+    [...el.a3OrientGroup.children].forEach(btn => {
+      const active = btn.dataset.orient === state.a3Orientation;
+      btn.className = a3OrientBtnClass(active);
+      btn.setAttribute('aria-checked', active ? 'true' : 'false');
+    });
+  }
+
+  function updateA3CompareInfo(rP, rL){
+    const totalP = rP.valid ? rP.total : 0;
+    const totalL = rL.valid ? rL.total : 0;
+    let text;
+    if(totalP === totalL){
+      text = `Both orientations are equivalent: ${fmt(totalP)} pcs`;
+    } else if(totalL > totalP){
+      text = `Most Qty In Landscape: ${fmt(totalL)} pcs (Portrait: ${fmt(totalP)} pcs)`;
+    } else {
+      text = `Most Qty In Portrait: ${fmt(totalP)} pcs (Landscape: ${fmt(totalL)} pcs)`;
+    }
+    el.a3BestInfo.textContent = text;
+  }
+
+  function computeLayout(cfg, s){
+    const wCm = parseFloat(s.widthCm);
+    const hCm = parseFloat(s.heightCm);
+
+    if(!isFinite(wCm) || !isFinite(hCm) || wCm <= 0 || hCm <= 0){
+      return { valid:false };
+    }
+
+    const realWmm = wCm * 10;
+    const realHmm = hCm * 10;
+    const bleedMm = Number(s.extraMm) || 0;
+    const objWmm = realWmm + bleedMm;
+    const objHmm = realHmm + bleedMm;
+    const area = cfg.areaMm;
+
+    const cols = Math.floor(area.w / objWmm);
+    const rows = Math.floor(area.h / objHmm);
+    const total = cols * rows;
+
+    const footprintW = cols * objWmm;
+    const footprintH = rows * objHmm;
+    const totalAreaMm2 = area.w * area.h;
+    const efficiency = totalAreaMm2 > 0 ? ((footprintW * footprintH) / totalAreaMm2) * 100 : 0;
+
+    const leftoverWmm = Math.max(0, area.w - footprintW);
+    const leftoverHmm = Math.max(0, area.h - footprintH);
+
+    return {
+      valid: true,
+      objWmm, objHmm,
+      cols, rows, total,
+      cellWmm: objWmm, cellHmm: objHmm,
+      realCellWmm: realWmm, realCellHmm: realHmm,
+      efficiency,
+      leftoverWmm, leftoverHmm,
+      area,
+      bleedMm
+    };
+  }
+
+  function fmt(n){ return Math.round(n).toLocaleString('id-ID'); }
+  function fmt1(n){ return (Math.round(n*10)/10).toLocaleString('id-ID'); }
+
+  function renderResult(cfg, result){
+    if(!result.valid){
+      el.resultEmpty.classList.remove('hidden');
+      el.resultBody.classList.add('hidden');
+      return;
+    }
+    el.resultEmpty.classList.add('hidden');
+    el.resultBody.classList.remove('hidden');
+
+    el.qtyTotal.textContent = fmt(result.total);
+    el.qtyRows.textContent = `${result.rows} Rows`;
+    el.qtyCols.textContent = `${result.cols} Columns`;
+    const shapeOpt = SHAPE_OPTIONS.find(o => o.key === state.shape);
+    el.qtyShape.textContent = shapeOpt ? shapeOpt.label : '—';
+    el.qtyEfficiency.textContent = `${fmt1(result.efficiency)}%`;
+
+    const lw = result.leftoverWmm / 10, lh = result.leftoverHmm / 10;
+    el.qtyLeftover.textContent = (lw < 0.05 && lh < 0.05)
+      ? 'Fully utilized'
+      : `${fmt1(lw)} × ${fmt1(lh)} cm`;
+
+    if(result.total === 0){
+      el.warningBox.classList.remove('hidden');
+      el.warningBox.textContent = 'The object size (including bleed/distance) exceeds the effective print area for this mode. Reduce the size, reduce the bleed, or select another print mode.';
+    } else {
+      el.warningBox.classList.add('hidden');
+    }
+
+    el.paperMeta.textContent = `Paper ${cfg.paperMm.w/10}×${cfg.paperMm.h/10} cm · Print ${cfg.areaMm.w/10}×${cfg.areaMm.h/10} cm`;
+  }
+
+  function clearEl(node){ while(node.firstChild) node.removeChild(node.firstChild); }
+
+  function drawVisualization(cfg, result){
+
+    requestAnimationFrame(() => {
+      const wrapRect = el.canvasWrap.getBoundingClientRect();
+      const boxW = wrapRect.width;
+      const boxH = wrapRect.height;
+      if(boxW <= 0 || boxH <= 0) return;
+
+      const PREVIEW_BOX_MAX = 400;
+      const boxSize = Math.min(boxW, boxH, PREVIEW_BOX_MAX);
+
+      const paperAspect = cfg.paperMm.w / cfg.paperMm.h;
+      let paperWpx = boxSize;
+      let paperHpx = paperWpx / paperAspect;
+      if(paperHpx > boxSize){
+        paperHpx = boxSize;
+        paperWpx = paperHpx * paperAspect;
+      }
+
+      el.paperOuter.style.width = paperWpx + 'px';
+      el.paperOuter.style.height = paperHpx + 'px';
+
+      const pxPerMm = paperWpx / cfg.paperMm.w;
+      drawAreaAndGrid(cfg, result, pxPerMm);
+    });
+  }
+
+  function drawAreaAndGrid(cfg, result, pxPerMm){
+    const paper = cfg.paperMm;
+    const area = cfg.areaMm;
+
+    const marginXmm = (paper.w - area.w) / 2;
+    const marginYmm = (paper.h - area.h) / 2;
+
+    const areaLeftPx = marginXmm * pxPerMm;
+    const areaTopPx = marginYmm * pxPerMm;
+    const areaWPx = area.w * pxPerMm;
+    const areaHPx = area.h * pxPerMm;
+
+    el.areaBox.style.left = areaLeftPx + 'px';
+    el.areaBox.style.top = areaTopPx + 'px';
+    el.areaBox.style.width = areaWPx + 'px';
+    el.areaBox.style.height = areaHPx + 'px';
+
+    [...el.areaBox.querySelectorAll('.reg-mark')].forEach(n => n.remove());
+    const corners = [
+      { x: 0, y: 0 }, { x: areaWPx, y: 0 },
+      { x: 0, y: areaHPx }, { x: areaWPx, y: areaHPx }
+    ];
+    corners.forEach(c => {
+      const m = document.createElement('div');
+      m.className = 'reg-mark';
+      m.style.left = (c.x - 7) + 'px';
+      m.style.top = (c.y - 7) + 'px';
+      m.innerHTML = '<span class="dot"></span>';
+      el.areaBox.appendChild(m);
+    });
+
+    clearEl(el.gridBox);
+    if(!result.valid || result.total === 0){
+      el.previewNote.classList.add('hidden');
+      return;
+    }
+
+    const MAX_PREVIEW_CELLS = 900;
+    let pCols = result.cols, pRows = result.rows, capped = false;
+    if(pCols * pRows > MAX_PREVIEW_CELLS){
+      const scale = Math.sqrt(MAX_PREVIEW_CELLS / (pCols * pRows));
+      pCols = Math.max(1, Math.floor(pCols * scale));
+      pRows = Math.max(1, Math.floor(pRows * scale));
+      capped = true;
+    }
+    el.previewNote.classList.toggle('hidden', !capped);
+    const showBleed = cfg.key === 'a3' && Number(result.bleedMm) > 0;
+    const fillWPercent = Math.max(10, Math.min(100, (result.realCellWmm / result.cellWmm) * 100));
+    const fillHPercent = Math.max(10, Math.min(100, (result.realCellHmm / result.cellHmm) * 100));
+
+    if(capped){
+
+      el.gridBox.style.width = areaWPx + 'px';
+      el.gridBox.style.height = areaHPx + 'px';
+      el.gridBox.style.display = 'grid';
+      el.gridBox.style.gridTemplateColumns = `repeat(${pCols}, 1fr)`;
+      el.gridBox.style.gridTemplateRows = `repeat(${pRows}, 1fr)`;
+      el.gridBox.style.gap = '0px';
+      for(let i = 0; i < pCols * pRows; i++){
+        el.gridBox.appendChild(makeObjCell(fillWPercent, fillHPercent, showBleed));
+      }
+    } else {
+      const cellWpx = result.cellWmm * pxPerMm;
+      const cellHpx = result.cellHmm * pxPerMm;
+
+      el.gridBox.style.width = (pCols * cellWpx) + 'px';
+      el.gridBox.style.height = (pRows * cellHpx) + 'px';
+      el.gridBox.style.display = 'grid';
+      el.gridBox.style.gridTemplateColumns = `repeat(${pCols}, ${cellWpx}px)`;
+      el.gridBox.style.gridTemplateRows = `repeat(${pRows}, ${cellHpx}px)`;
+      el.gridBox.style.gap = '0px';
+      for(let i = 0; i < pCols * pRows; i++){
+        el.gridBox.appendChild(makeObjCell(fillWPercent, fillHPercent, showBleed));
+      }
+    }
+  }
+
+  function makeObjCell(fillWPercent, fillHPercent, showBleed){
+    const wrap = document.createElement('div');
+    wrap.className = 'obj-cell';
+    wrap.style.width = '100%';
+    wrap.style.height = '100%';
+    wrap.style.display = 'flex';
+    wrap.style.alignItems = 'center';
+    wrap.style.justifyContent = 'center';
+    const inner = document.createElement('div');
+
+    const w = showBleed ? 100 : fillWPercent;
+    const h = showBleed ? 100 : fillHPercent;
+    inner.style.width = w + '%';
+    inner.style.height = h + '%';
+    inner.className = 'obj-fill'
+      + (state.shape === 'bulat' ? ' round' : '')
+      + (showBleed ? ' bleed-visible' : '');
+    wrap.appendChild(inner);
+    return wrap;
+  }
+
+  function calculate(){
+    state.widthCm = el.inputWidth.value;
+    state.heightCm = el.inputHeight.value;
+
+    const wCmNum = parseFloat(state.widthCm);
+    const hCmNum = parseFloat(state.heightCm);
+    const bleedBlocked = state.mode === 'a3'
+      && isFinite(wCmNum) && isFinite(hCmNum) && wCmNum > 0 && hCmNum > 0
+      && (wCmNum < 4 || hCmNum < 4);
+    const calcState = bleedBlocked ? Object.assign({}, state, { extraMm: 0 }) : state;
+
+    setExtraGroupDisabled(bleedBlocked);
+    el.bleedNote.classList.toggle('hidden', !bleedBlocked);
+
+    let cfg;
+
+    if(state.mode === 'a3'){
+
+
+      const rPortrait  = computeLayout(getA3Cfg('portrait'),  calcState);
+      const rLandscape = computeLayout(getA3Cfg('landscape'), calcState);
+      const totalP = rPortrait.valid ? rPortrait.total : 0;
+      const totalL = rLandscape.valid ? rLandscape.total : 0;
+
+      if(state.a3AutoMode){
+        state.a3Orientation = (totalL > totalP) ? 'landscape' : 'portrait';
+        refreshA3OrientButtons();
+      }
+
+      updateA3CompareInfo(rPortrait, rLandscape);
+      cfg = getA3Cfg(state.a3Orientation);
+      el.a3OrientationSection.classList.remove('hidden');
+    } else {
+      cfg = MODE_CONFIG[state.mode];
+      el.a3OrientationSection.classList.add('hidden');
+    }
+
+    const result = computeLayout(cfg, calcState);
+    lastResult = { cfg, result };
+
+    renderResult(cfg, result);
+    drawVisualization(cfg, result.valid ? result : { valid:false, total:0 });
+
+
+    el.visualLegend.classList.toggle('hidden', !(cfg.key === 'a3' && Number(result.bleedMm) > 0));
+  }
+
+  function handleSizeInput(){
+    state.a3AutoMode = true;
+    calculate();
+  }
+  el.inputWidth.addEventListener('input', handleSizeInput);
+  el.inputHeight.addEventListener('input', handleSizeInput);
+
+  let resizeRaf = null;
+  window.addEventListener('resize', () => {
+    if(resizeRaf) cancelAnimationFrame(resizeRaf);
+    resizeRaf = requestAnimationFrame(() => {
+      if(lastResult) drawVisualization(lastResult.cfg, lastResult.result.valid ? lastResult.result : { valid:false, total:0 });
+    });
+  });
+
+  buildModeButtons();
+  buildShapeButtons();
+  buildExtraButtons();
+  buildA3OrientButtons();
+  refreshExtraLabel();
+  calculate();
+
+})();
+</script>
+</body>
+</html>
