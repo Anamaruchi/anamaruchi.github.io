@@ -219,6 +219,12 @@
   .option-group.cols-2{ display:grid; grid-template-columns:1fr 1fr; gap:8px; }
   .option-group.cols-3{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; }
 
+  #extraGroup{ gap:6px; }
+  #extraGroup .option-btn{ padding: clamp(8px, 2vw, 10px) 4px; }
+  #extraGroup .option-btn .name{ font-size: clamp(10px, 2.8vw, 12px); white-space: nowrap; }
+  #extraGroup .option-btn .mm-val{ font-size: clamp(13px, 3.2vw, 15px); }
+  #extraGroup .option-btn .mm-unit{ font-size: clamp(9px, 2.2vw, 10px); }
+
   .option-btn{
     background: rgba(59,130,246,0.08);
     border: 2px solid rgba(59,130,246,0.25);
@@ -608,10 +614,7 @@
               Bleed is not available for sizes below 4×4 cm
             </p>
 
-            <div id="visualLegend" class="visual-legend hidden">
-              <span class="legend-item"><span class="legend-swatch legend-blue"></span>Total Quantity</span>
-              <span class="legend-item"><span class="legend-swatch legend-red"></span>Bleed</span>
-            </div>
+            <div id="visualLegend" class="visual-legend hidden"></div>
 
             <p class="panel-credit">Created By Anamaruchi (<a href="https://www.facebook.com/anang.zikri.f" target="_blank">Anang Zikri Febriyansyah</a>)
           </section>
@@ -656,7 +659,27 @@
     }
   };
 
-  const EXTRA_OPTIONS = [0, 2, 3];
+  const EXTRA_OPTIONS_BY_MODE = {
+    a3: [
+      { mm: 0, label: 'No Bleed', special: true },
+      { mm: 2, label: '2mm' },
+      { mm: 3, label: '3mm' }
+    ],
+    kiss: [
+      { mm: 0, label: 'No Distance', special: true },
+      { mm: 3, label: '3mm' },
+      { mm: 5, label: '5mm' }
+    ],
+    die: [
+      { mm: 0, label: 'No Distance', special: true },
+      { mm: 3, label: '3mm' },
+      { mm: 5, label: '5mm' }
+    ]
+  };
+
+  function getExtraOptions(){
+    return EXTRA_OPTIONS_BY_MODE[state.mode] || EXTRA_OPTIONS_BY_MODE.a3;
+  }
   const SHAPE_OPTIONS = [
     { key:'kotak', label:'Square', icon: shapeIconSquare() },
     { key:'bulat', label:'Circle', icon: shapeIconCircle() }
@@ -668,6 +691,7 @@
     heightCm: 5,
     shape: 'kotak',
     extraMm: 2,
+    extraMmByMode: { a3: 2 },
     a3Orientation: 'portrait',
     a3AutoMode: true
   };
@@ -757,8 +781,19 @@
         if(enteringA3){
           state.a3AutoMode = true;
         }
+
+        const opts = getExtraOptions();
+        const remembered = state.extraMmByMode[state.mode];
+        if(remembered !== undefined && opts.some(o => o.mm === remembered)){
+          state.extraMm = remembered;
+        } else {
+          state.extraMm = opts[1] ? opts[1].mm : opts[0].mm;
+        }
+        state.extraMmByMode[state.mode] = state.extraMm;
+
         refreshModeButtons();
         refreshExtraLabel();
+        buildExtraButtons();
         calculate();
       });
       el.modeGroup.appendChild(btn);
@@ -810,15 +845,20 @@
 
   function buildExtraButtons(){
     el.extraGroup.innerHTML = '';
-    EXTRA_OPTIONS.forEach(mm => {
+    getExtraOptions().forEach(opt => {
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.setAttribute('role','radio');
-      btn.dataset.mm = String(mm);
-      btn.className = extraBtnClass(mm === state.extraMm);
-      btn.innerHTML = `<span class="mm-val">${mm}</span><span class="mm-unit">mm</span>`;
+      btn.dataset.mm = String(opt.mm);
+      const active = opt.mm === state.extraMm;
+      btn.className = extraBtnClass(active);
+      btn.setAttribute('aria-checked', active ? 'true' : 'false');
+      btn.innerHTML = opt.special
+        ? `<span class="name">${opt.label}</span>`
+        : `<span class="mm-val">${opt.mm}</span><span class="mm-unit">mm</span>`;
       btn.addEventListener('click', () => {
-        state.extraMm = mm;
+        state.extraMm = opt.mm;
+        state.extraMmByMode[state.mode] = opt.mm;
         refreshExtraButtons();
         calculate();
       });
@@ -1164,8 +1204,27 @@
     renderResult(cfg, result);
     drawVisualization(cfg, result.valid ? result : { valid:false, total:0 });
 
+    updateLegend(cfg, calcState);
+  }
 
-    el.visualLegend.classList.toggle('hidden', !(cfg.key === 'a3' && Number(result.bleedMm) > 0));
+  function updateLegend(cfg, calcState){
+    const isA3 = cfg.key === 'a3';
+    el.visualLegend.classList.toggle('hidden', !isA3);
+    clearEl(el.visualLegend);
+    if(!isA3) return;
+
+    const qtyItem = document.createElement('span');
+    qtyItem.className = 'legend-item';
+    qtyItem.innerHTML = '<span class="legend-swatch legend-blue"></span>Total Quantity';
+    el.visualLegend.appendChild(qtyItem);
+
+    const bleedMm = Number(calcState.extraMm) || 0;
+    if(bleedMm > 0){
+      const bleedItem = document.createElement('span');
+      bleedItem.className = 'legend-item';
+      bleedItem.innerHTML = `<span class="legend-swatch legend-red"></span>Bleed ${bleedMm}mm`;
+      el.visualLegend.appendChild(bleedItem);
+    }
   }
 
   function handleSizeInput(){
