@@ -11,11 +11,12 @@
 }
 
 html, body {
-    height: 100%;
+    min-height: 100%;
     width: 100%;
     margin: 0;
     padding: 0;
     overflow-x: hidden;
+    overflow-y: auto;
 }
 
 body {
@@ -26,9 +27,12 @@ body {
     justify-content: center;
     align-items: flex-start;
     min-height: 100vh;
+    min-height: 100dvh;
     padding: clamp(5px, 2vw, 15px);
+    padding-bottom: calc(clamp(5px, 2vw, 15px) + env(safe-area-inset-bottom, 0px));
     position: relative;
     box-sizing: border-box;
+    -webkit-overflow-scrolling: touch;
 }
 
 .input-label {
@@ -127,7 +131,9 @@ body {
     justify-content: center;
     align-items: flex-start;
     min-height: 100vh;
+    min-height: 100dvh;
     padding-top: clamp(20px, 5vh, 60px);
+    padding-bottom: clamp(20px, 5vh, 60px);
 }
 
 .calculator-container {
@@ -220,13 +226,13 @@ input:focus {
 
 .input-container {
     flex: 1 1 45%;
-    min-width: 250px;
+    min-width: min(250px, 100%);
 }
 
 .dropdown-container {
     position: relative;
     flex: 1 1 45%;
-    min-width: 250px;
+    min-width: min(250px, 100%);
 }
 
 .dropdown-btn {
@@ -565,7 +571,7 @@ input:focus {
         background: rgba(26, 26, 26, 0.95);
         border-radius: 15px;
         padding: 15px;
-        margin-bottom: clamp(15px, 3vh, 30px);
+        margin-bottom: calc(clamp(40px, 10vh, 90px) + env(safe-area-inset-bottom, 0px));
         max-width: 100%;
     }
 
@@ -598,6 +604,7 @@ input:focus {
 
     .credit-line {
         font-size: 1rem;
+        padding-bottom: env(safe-area-inset-bottom, 10px);
     }
 
     .calculator-container:hover {
@@ -697,8 +704,105 @@ input:focus {
     }
 }
 
+@media screen and (max-width: 400px) {
+    .input-row {
+        gap: 12px;
+    }
+
+    .input-container,
+    .dropdown-container {
+        flex: 1 1 100%;
+        min-width: 100%;
+    }
+
+    .home-button {
+        width: clamp(36px, 9vw, 44px) !important;
+        height: clamp(36px, 9vw, 44px) !important;
+    }
+
+    .scroll-to-top {
+        width: clamp(40px, 11vw, 50px) !important;
+        height: clamp(40px, 11vw, 50px) !important;
+    }
+
+    h1 {
+        font-size: 1.1rem;
+    }
+
+    .paper-container {
+        width: 170px;
+        height: 120px;
+    }
+
+    .legend {
+        gap: 8px;
+    }
+
+    .legend-item {
+        font-size: 10px;
+    }
+
+    .calculation-details {
+        font-size: 11px;
+    }
+}
+
+@media screen and (max-width: 340px) {
+    body {
+        padding: 8px;
+    }
+
+    .calculator-container {
+        padding: 8px;
+    }
+
+    h1 {
+        font-size: 1rem;
+    }
+
+    input,
+    .dropdown-btn {
+        padding: 8px;
+        font-size: 13px;
+    }
+
+    .paper-container {
+        width: 140px;
+        height: 100px;
+    }
+
+    .legend {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+    }
+}
+
+@media screen and (max-height: 600px) and (orientation: landscape) {
+    .main-wrapper {
+        padding-top: clamp(10px, 3vh, 20px);
+        padding-bottom: clamp(10px, 3vh, 20px);
+    }
+
+    .calculator-container {
+        margin-bottom: clamp(20px, 6vh, 40px);
+    }
+
+    .home-button {
+        top: 8px !important;
+    }
+
+    .scroll-to-top {
+        bottom: 8px !important;
+    }
+}
+
 @supports (-webkit-touch-callout: none) {
     body {
+        min-height: -webkit-fill-available;
+    }
+
+    .main-wrapper {
         min-height: -webkit-fill-available;
     }
 }
