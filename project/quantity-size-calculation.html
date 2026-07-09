@@ -454,17 +454,6 @@
   .obj-fill{ background: linear-gradient(135deg, #3b82f6, #1d4ed8); border:1px solid rgba(96,165,250,0.55); border-radius:2px; }
   .obj-fill.round{ border-radius:50%; }
 
-  .obj-fill.bleed-visible{
-    border-style: solid;
-    border-color: #ff2d2d;
-    border-width: 2.5px;
-  }
-  .obj-fill.distance-visible{
-    border-style: solid;
-    border-color: #facc15;
-    border-width: 2.5px;
-  }
-
   .preview-note{ margin-top:12px; font-size:11px; color:#f5a524; }
 
   .bleed-note{
@@ -610,14 +599,14 @@
           <div>
             <span class="field-label">Lenght</span>
             <div class="field-input-wrap">
-              <input id="inputWidth" type="number" inputmode="decimal" min="0.1" step="0.1" value="5" class="field-input" />
+              <input id="inputWidth" type="text" inputmode="decimal" autocomplete="off" value="5" class="field-input" />
               <span class="field-unit">cm</span>
             </div>
           </div>
           <div>
             <span class="field-label">Width</span>
             <div class="field-input-wrap">
-              <input id="inputHeight" type="number" inputmode="decimal" min="0.1" step="0.1" value="5" class="field-input" />
+              <input id="inputHeight" type="text" inputmode="decimal" autocomplete="off" value="5" class="field-input" />
               <span class="field-unit">cm</span>
             </div>
           </div>
@@ -679,7 +668,7 @@
                 <div><p class="stat-label">Area Efficiency</p><p id="qtyEfficiency" class="stat-value">—</p></div>
                 <div><p class="stat-label">Remaining Space</p><p id="qtyLeftover" class="stat-value">—</p></div>
                 <div id="sizeObjectBlock" class="hidden">
-                  <p class="stat-label">Size Object</p>
+                  <p class="stat-label">Object Size</p>
                   <p id="qtySizeObject" class="stat-value">—</p>
                   <p id="qtySizeObjectNote" class="stat-note hidden"></p>
                 </div>
@@ -708,7 +697,7 @@
             </p>
 
             <p id="bleedNote" class="bleed-note hidden">
-              Bleed is not available for sizes below 4×4 cm
+              For sizes below 4 cm, even when using bleed, there is still a possibility of shifting during the cutting.
             </p>
 
             <div id="visualLegend" class="visual-legend hidden"></div>
@@ -980,10 +969,9 @@
     el.extraGroup.innerHTML = '';
 
     const customInput = document.createElement('input');
-    customInput.type = 'number';
+    customInput.type = 'text';
     customInput.inputMode = 'decimal';
-    customInput.min = '0';
-    customInput.step = 'any';
+    customInput.autocomplete = 'off';
     customInput.placeholder = 'Custom';
     customInput.dataset.role = 'extra-custom';
     customInput.setAttribute('aria-label', 'Custom bleed or distance in millimeters');
@@ -991,7 +979,7 @@
     if(state.extraCustom) customInput.value = String(state.extraMm);
     customInput.addEventListener('input', () => {
       const raw = customInput.value.trim();
-      const num = parseFloat(raw);
+      const num = parseDecimal(raw);
       if(raw !== '' && isFinite(num) && num >= 0){
         state.extraMm = num;
         state.extraCustom = true;
@@ -1057,14 +1045,6 @@
       const active = Number(node.dataset.mm) === state.extraMm && !state.extraCustom;
       node.className = extraBtnClass(active);
       node.setAttribute('aria-checked', active ? 'true' : 'false');
-    });
-  }
-
-  function setExtraGroupDisabled(disabled){
-    el.extraGroup.classList.toggle('disabled', disabled);
-    [...el.extraGroup.children].forEach(btn => {
-      btn.disabled = disabled;
-      btn.setAttribute('aria-disabled', disabled ? 'true' : 'false');
     });
   }
 
@@ -1149,8 +1129,8 @@
   }
 
   function computeLayout(cfg, s){
-    const wCm = parseFloat(s.widthCm);
-    const hCm = parseFloat(s.heightCm);
+    const wCm = parseDecimal(s.widthCm);
+    const hCm = parseDecimal(s.heightCm);
 
     if(!isFinite(wCm) || !isFinite(hCm) || wCm <= 0 || hCm <= 0){
       return { valid:false };
@@ -1190,6 +1170,10 @@
 
   function fmt(n){ return Math.round(n).toLocaleString('id-ID'); }
   function fmt1(n){ return (Math.round(n*10)/10).toLocaleString('id-ID'); }
+  function parseDecimal(value){
+    if(value === undefined || value === null) return NaN;
+    return parseFloat(String(value).trim().replace(',', '.'));
+  }
 
   function renderResult(cfg, result){
     if(!result.valid){
@@ -1348,8 +1332,8 @@
 
   function computeBorderPx(bleedMm, pxPerMm, cellMinPx){
     if(bleedMm <= 0) return 2.5;
-    const raw = bleedMm * pxPerMm;
-    const maxPx = Math.max(2, cellMinPx * 0.45);
+    const raw = (bleedMm / 2) * pxPerMm;
+    const maxPx = Math.max(2, cellMinPx * 0.5);
     return Math.min(Math.max(raw, 1.5), maxPx);
   }
 
@@ -1363,18 +1347,15 @@
     wrap.style.justifyContent = 'center';
     const inner = document.createElement('div');
 
+    inner.style.width = fillWPercent + '%';
+    inner.style.height = fillHPercent + '%';
+
     const highlightEdge = showBleed || showDistance;
-    const w = highlightEdge ? 100 : fillWPercent;
-    const h = highlightEdge ? 100 : fillHPercent;
-    inner.style.width = w + '%';
-    inner.style.height = h + '%';
     if(highlightEdge && borderPx !== undefined){
-      inner.style.borderWidth = borderPx + 'px';
+      const strokeColor = showBleed ? '#ff2d2d' : '#facc15';
+      inner.style.boxShadow = `0 0 0 ${borderPx}px ${strokeColor}`;
     }
-    inner.className = 'obj-fill'
-      + (state.shape === 'bulat' ? ' round' : '')
-      + (showBleed ? ' bleed-visible' : '')
-      + (showDistance ? ' distance-visible' : '');
+    inner.className = 'obj-fill' + (state.shape === 'bulat' ? ' round' : '');
     wrap.appendChild(inner);
     return wrap;
   }
@@ -1383,24 +1364,21 @@
     state.widthCm = el.inputWidth.value;
     state.heightCm = el.inputHeight.value;
 
-    const wCmNum = parseFloat(state.widthCm);
-    const hCmNum = parseFloat(state.heightCm);
-    const bleedBlocked = state.mode === 'a3'
-      && isFinite(wCmNum) && isFinite(hCmNum) && wCmNum > 0 && hCmNum > 0
+    const wCmNum = parseDecimal(state.widthCm);
+    const hCmNum = parseDecimal(state.heightCm);
+    const sizeUnder4 = isFinite(wCmNum) && isFinite(hCmNum) && wCmNum > 0 && hCmNum > 0
       && (wCmNum < 4 || hCmNum < 4);
-    const baseCalcState = bleedBlocked ? Object.assign({}, state, { extraMm: 0 }) : state;
-
-    setExtraGroupDisabled(bleedBlocked);
-    el.bleedNote.classList.toggle('hidden', !bleedBlocked);
+    const showSmallBleedWarning = state.mode === 'a3' && sizeUnder4 && Number(state.extraMm) > 0;
+    el.bleedNote.classList.toggle('hidden', !showSmallBleedWarning);
 
     let cfg;
-    let calcState = baseCalcState;
+    let calcState = state;
     let autoRotated = false;
 
     if(state.mode === 'a3'){
 
-      const rPortrait  = computeLayout(getA3Cfg('portrait'),  baseCalcState);
-      const rLandscape = computeLayout(getA3Cfg('landscape'), baseCalcState);
+      const rPortrait  = computeLayout(getA3Cfg('portrait'),  state);
+      const rLandscape = computeLayout(getA3Cfg('landscape'), state);
       const totalP = rPortrait.valid ? rPortrait.total : 0;
       const totalL = rLandscape.valid ? rLandscape.total : 0;
 
@@ -1416,11 +1394,11 @@
       cfg = MODE_CONFIG[state.mode];
       el.a3OrientationSection.classList.add('hidden');
 
-      const wCm = parseFloat(baseCalcState.widthCm);
-      const hCm = parseFloat(baseCalcState.heightCm);
+      const wCm = parseDecimal(state.widthCm);
+      const hCm = parseDecimal(state.heightCm);
       if(isFinite(wCm) && isFinite(hCm) && wCm > 0 && hCm > 0 && wCm !== hCm){
-        const rotatedState = Object.assign({}, baseCalcState, { widthCm: hCm, heightCm: wCm });
-        const rNormal = computeLayout(cfg, baseCalcState);
+        const rotatedState = Object.assign({}, state, { widthCm: hCm, heightCm: wCm });
+        const rNormal = computeLayout(cfg, state);
         const rRotated = computeLayout(cfg, rotatedState);
         const totalNormal = rNormal.valid ? rNormal.total : 0;
         const totalRotated = rRotated.valid ? rRotated.total : 0;
@@ -1455,8 +1433,8 @@
   function updateSizeObjectInfo(cfg, calcState, autoRotated){
     el.sizeObjectBlock.classList.remove('hidden');
 
-    const wCm = parseFloat(calcState.widthCm);
-    const hCm = parseFloat(calcState.heightCm);
+    const wCm = parseDecimal(calcState.widthCm);
+    const hCm = parseDecimal(calcState.heightCm);
     if(!isFinite(wCm) || !isFinite(hCm) || wCm <= 0 || hCm <= 0){
       el.qtySizeObject.textContent = '—';
       el.qtySizeObjectNote.classList.add('hidden');
