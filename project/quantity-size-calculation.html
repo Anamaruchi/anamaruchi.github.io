@@ -218,12 +218,31 @@
   .option-group{ display:flex; flex-direction:column; gap:8px; }
   .option-group.cols-2{ display:grid; grid-template-columns:1fr 1fr; gap:8px; }
   .option-group.cols-3{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; }
+  .option-group.cols-4{ display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:6px; }
 
   #extraGroup{ gap:6px; }
-  #extraGroup .option-btn{ padding: clamp(8px, 2vw, 10px) 4px; }
-  #extraGroup .option-btn .name{ font-size: clamp(10px, 2.8vw, 12px); white-space: nowrap; }
-  #extraGroup .option-btn .mm-val{ font-size: clamp(13px, 3.2vw, 15px); }
-  #extraGroup .option-btn .mm-unit{ font-size: clamp(9px, 2.2vw, 10px); }
+  #extraGroup .option-btn{ padding: clamp(6px, 1.6vw, 8px) 2px; }
+  #extraGroup .option-btn .name{ font-size: clamp(9px, 2.4vw, 11px); white-space: nowrap; }
+  #extraGroup .option-btn .mm-val{ font-size: clamp(11px, 2.8vw, 13px); }
+  #extraGroup .option-btn .mm-unit{ font-size: clamp(8px, 2vw, 9px); }
+
+  .extra-custom-input{
+    width:100%;
+    box-sizing:border-box;
+    outline:none;
+    cursor:text;
+    -moz-appearance:textfield;
+  }
+  .extra-custom-input::-webkit-outer-spin-button,
+  .extra-custom-input::-webkit-inner-spin-button{
+    -webkit-appearance:none;
+    margin:0;
+  }
+  .extra-custom-input::placeholder{
+    color: rgba(255,255,255,0.45);
+    font-size: clamp(9px, 2.4vw, 11px);
+    font-weight:600;
+  }
 
   .option-btn{
     background: rgba(59,130,246,0.08);
@@ -279,7 +298,16 @@
   .field-input{ -moz-appearance:textfield; }
   .field-unit{ position:absolute; right:10px; top:50%; transform:translateY(-50%); font-size:12px; color:rgba(255,255,255,0.8); pointer-events:none; }
 
-  .hint{ font-size:11px; color:rgba(255,255,255,1); margin: 8px 0 0; line-height:1.5; }
+  .hint{
+    font-size:11px;
+    color:rgba(255,255,255,0.85);
+    margin: 8px 0 0;
+    line-height:1.5;
+    background: rgba(59,130,246,0.08);
+    border: 1px solid rgba(59,130,246,0.25);
+    border-radius:8px;
+    padding:8px 10px;
+  }
 
   .actions{ display:flex; align-items:center; gap:14px; margin-top:4px; }
   .btn-primary{
@@ -320,9 +348,34 @@
   .qty-number{ font-size: clamp(38px, 10vw, 52px); font-weight:700; color:#3b82f6; text-shadow:0 0 20px rgba(59,130,246,0.5); line-height:1; }
   .qty-unit{ font-size:13px; color:rgba(255,255,255,1); }
 
+  .auto-rotate-note{
+    margin: 10px 0 0;
+    font-size:11px;
+    font-weight:600;
+    line-height:1.4;
+    color:#60a5fa;
+    background: rgba(59,130,246,0.1);
+    border: 1px solid rgba(59,130,246,0.25);
+    border-radius:8px;
+    padding:6px 9px;
+  }
+
   .stats-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px 20px; margin-top:16px; padding-top:16px; border-top:1px solid rgba(59,130,246,0.25); }
+  #sizeObjectBlock{ grid-column: 1 / -1; }
   .stat-label{ font-size:11px; color:rgba(255,255,255,1); text-transform:uppercase; letter-spacing:0.05em; margin:0; }
   .stat-value{ font-size:14px; color:#60a5fa; font-weight:600; margin:2px 0 0; }
+  .stat-note{
+    display:inline-block;
+    font-size:11px;
+    color:#f5a524;
+    font-weight:600;
+    margin:6px 0 0;
+    line-height:1.4;
+    background: rgba(245,165,36,0.1);
+    border: 1px solid rgba(245,165,36,0.35);
+    border-radius:8px;
+    padding:5px 9px;
+  }
 
   .warning-box{ margin-top:14px; font-size:13px; padding:10px 12px; border-radius:10px; background: rgba(255,82,82,0.12); border:1px solid rgba(255,82,82,0.4); color:#ff5252; }
 
@@ -366,18 +419,50 @@
   }
   .area-box{ position:absolute; border:1.5px dashed rgba(59,130,246,0.6); display:flex; align-items:center; justify-content:center; }
 
+  .barcode-mark{
+    position:absolute;
+    display:flex;
+    align-items:center;
+    gap: clamp(3px, 1vw, 5px);
+    z-index:3;
+    pointer-events:none;
+  }
+  .barcode-mark .barcode-block{
+    width: clamp(5px, 2.6vw, 9px);
+    height: clamp(5px, 2.6vw, 9px);
+    background:#111111;
+    border-radius:2px;
+  }
+  .barcode-mark.pos-bottom-right{ right:-2px; bottom:-10px; }
+  .barcode-mark.pos-bottom-center{ left:50%; bottom:-10px; transform:translateX(-50%); }
+
   .reg-mark{ position:absolute; width:14px; height:14px; pointer-events:none; }
   .reg-mark::before, .reg-mark::after{ content:''; position:absolute; background:#ff5252; }
   .reg-mark::before{ left:50%; top:0; width:1.5px; height:100%; transform:translateX(-50%); }
   .reg-mark::after{ top:50%; left:0; height:1.5px; width:100%; transform:translateY(-50%); }
   .reg-mark .dot{ position:absolute; left:50%; top:50%; width:3px; height:3px; border-radius:50%; background:#ff5252; transform:translate(-50%,-50%); }
 
+  .reg-mark.mark-barcode-dot::before,
+  .reg-mark.mark-barcode-dot::after{ display:none; }
+  .reg-mark.mark-barcode-dot .dot{
+    width: clamp(2px, 1.8vw, 7px);
+    height: clamp(2px, 1.8vw, 7px);
+    background:#111111;
+  }
+
   .obj-cell{ box-sizing:border-box; }
   .obj-fill{ background: linear-gradient(135deg, #3b82f6, #1d4ed8); border:1px solid rgba(96,165,250,0.55); border-radius:2px; }
   .obj-fill.round{ border-radius:50%; }
 
   .obj-fill.bleed-visible{
-    border: 2.5px solid #ff2d2d;
+    border-style: solid;
+    border-color: #ff2d2d;
+    border-width: 2.5px;
+  }
+  .obj-fill.distance-visible{
+    border-style: solid;
+    border-color: #facc15;
+    border-width: 2.5px;
   }
 
   .preview-note{ margin-top:12px; font-size:11px; color:#f5a524; }
@@ -398,6 +483,8 @@
   .legend-swatch{ width:14px; height:14px; border-radius:3px; flex-shrink:0; }
   .legend-swatch.legend-blue{ background: linear-gradient(135deg, #3b82f6, #1d4ed8); border:1px solid rgba(96,165,250,0.6); }
   .legend-swatch.legend-red{ background: linear-gradient(135deg, #ff0000, #d90000); border:1px solid rgb(255 255 255 / 60%); }
+  .legend-swatch.legend-gold{ background: linear-gradient(135deg, #ffdb29, #ffb42c); 1px solid rgb(179 143 2 / 60%); }
+  .legend-swatch.legend-barcode{ background:#111111; border:1.5px solid rgba(255,255,255,0.5); }
 
   .results-grid{ display:flex; flex-direction:column; gap: clamp(16px, 3.5vw, 24px); width:100%; }
   .panel-qty{ width:100%; }
@@ -473,6 +560,8 @@
 
   @media (max-width:480px){
     .option-btn.center{ flex-direction:column; gap:2px; }
+    #extraGroup .option-btn.center,
+    #extraGroup .extra-custom-input.center{ flex-direction:row; align-items:baseline; }
 
     .page-shell{ padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px)); }
   }
@@ -541,8 +630,9 @@
       </div>
 
       <div class="section">
-        <p class="eyebrow"><span id="extraLabel">Bleed</span></p>
-        <div id="extraGroup" class="option-group cols-3" role="radiogroup" aria-label="Bleed or Distance"></div>
+        <p class="eyebrow"><span id="extraLabel">04 · Bleed</span></p>
+        <div id="extraGroup" class="option-group cols-4" role="radiogroup" aria-label="Bleed or Distance"></div>
+        <p id="extraInfoNote" class="hint"></p>
       </div>
     </section>
   </aside>
@@ -571,6 +661,8 @@
                 <span class="qty-unit">pcs</span>
               </div>
 
+              <p id="autoRotateNote" class="auto-rotate-note hidden"></p>
+
               <div id="a3OrientationSection" class="a3-orient-section hidden">
                 <p class="eyebrow">Paper Orientation (A3+)</p>
                 <div id="a3OrientGroup" class="option-group cols-2" role="radiogroup" aria-label="Pilih orientasi kertas A3+"></div>
@@ -586,6 +678,11 @@
                 <div><p class="stat-label">Object Shape</p><p id="qtyShape" class="stat-value">—</p></div>
                 <div><p class="stat-label">Area Efficiency</p><p id="qtyEfficiency" class="stat-value">—</p></div>
                 <div><p class="stat-label">Remaining Space</p><p id="qtyLeftover" class="stat-value">—</p></div>
+                <div id="sizeObjectBlock" class="hidden">
+                  <p class="stat-label">Size Object</p>
+                  <p id="qtySizeObject" class="stat-value">—</p>
+                  <p id="qtySizeObjectNote" class="stat-note hidden"></p>
+                </div>
               </div>
 
               <div id="warningBox" class="warning-box hidden"></div>
@@ -594,7 +691,7 @@
 
           <section class="panel panel-visual">
             <div class="visual-head">
-              <p class="eyebrow" style="margin:0;">Layout Visualization</p>
+              <p id="visualTitle" class="eyebrow" style="margin:0;">Layout Visualization</p>
               <p id="paperMeta" class="visual-meta"></p>
             </div>
 
@@ -639,7 +736,7 @@
       desc: '32 × 48 cm · Portrait/Landscape',
       paperMm: { w: 320, h: 480 },
       areaMm:  { w: 315, h: 475 },
-      extraLabel: 'Bleed'
+      extraLabel: '04 · Bleed'
     },
     kiss: {
       key: 'kiss',
@@ -647,7 +744,7 @@
       desc: '32 × 48 cm · Portrait',
       paperMm: { w: 320, h: 480 },
       areaMm:  { w: 280, h: 440 },
-      extraLabel: 'Distance Between Quantities'
+      extraLabel: '04 · Distance'
     },
     die: {
       key: 'die',
@@ -655,7 +752,7 @@
       desc: '48 × 32 cm · Landscape',
       paperMm: { w: 480, h: 320 },
       areaMm:  { w: 440, h: 280 },
-      extraLabel: 'Distance Between Quantities'
+      extraLabel: '04 · Distance'
     }
   };
 
@@ -691,7 +788,9 @@
     heightCm: 5,
     shape: 'kotak',
     extraMm: 2,
+    extraCustom: false,
     extraMmByMode: { a3: 2 },
+    extraCustomByMode: { a3: false },
     a3Orientation: 'portrait',
     a3AutoMode: true
   };
@@ -709,12 +808,21 @@
     resultEmpty: document.getElementById('resultEmpty'),
     resultBody: document.getElementById('resultBody'),
     qtyTotal: document.getElementById('qtyTotal'),
+    autoRotateNote: document.getElementById('autoRotateNote'),
     qtyRows: document.getElementById('qtyRows'),
     qtyCols: document.getElementById('qtyCols'),
     qtyShape: document.getElementById('qtyShape'),
     qtyEfficiency: document.getElementById('qtyEfficiency'),
     qtyLeftover: document.getElementById('qtyLeftover'),
     warningBox: document.getElementById('warningBox'),
+
+    sizeObjectBlock: document.getElementById('sizeObjectBlock'),
+    qtySizeObject: document.getElementById('qtySizeObject'),
+    qtySizeObjectNote: document.getElementById('qtySizeObjectNote'),
+
+    extraInfoNote: document.getElementById('extraInfoNote'),
+
+    visualTitle: document.getElementById('visualTitle'),
 
     a3OrientationSection: document.getElementById('a3OrientationSection'),
     a3OrientGroup: document.getElementById('a3OrientGroup'),
@@ -784,15 +892,20 @@
 
         const opts = getExtraOptions();
         const remembered = state.extraMmByMode[state.mode];
-        if(remembered !== undefined && opts.some(o => o.mm === remembered)){
+        const rememberedCustom = state.extraCustomByMode[state.mode];
+        if(remembered !== undefined && (rememberedCustom || opts.some(o => o.mm === remembered))){
           state.extraMm = remembered;
+          state.extraCustom = !!rememberedCustom;
         } else {
           state.extraMm = opts[1] ? opts[1].mm : opts[0].mm;
+          state.extraCustom = false;
         }
         state.extraMmByMode[state.mode] = state.extraMm;
+        state.extraCustomByMode[state.mode] = state.extraCustom;
 
         refreshModeButtons();
         refreshExtraLabel();
+        refreshExtraNote();
         buildExtraButtons();
         calculate();
       });
@@ -813,6 +926,26 @@
   function refreshExtraLabel(){
     const cfg = MODE_CONFIG[state.mode];
     el.extraLabel.textContent = cfg.extraLabel;
+  }
+
+  const EXTRA_NOTE_BY_MODE = {
+    a3: 'Bleed adds extra margin around the object for safer cropping tolerances. Select "No Bleed" if the object does not require additional cropping margin.',
+    kiss: 'Distance controls the distance between objects on a single sheet to ensure a safer cutting pattern. Object sizes will automatically rotate if the result produces more quantity.',
+    die: 'Distance controls the distance between objects on a single sheet to ensure a safer cutting pattern. Object sizes will automatically rotate if the result produces more quantity.'
+  };
+
+  function refreshExtraNote(){
+    el.extraInfoNote.textContent = EXTRA_NOTE_BY_MODE[state.mode] || '';
+  }
+
+  const VISUAL_TITLE_BY_MODE = {
+    a3: 'Layout Visualization - A3+ Standard',
+    kiss: 'Layout Visualization - Kiss Cutting',
+    die: 'Layout Visualization - Die Cutting'
+  };
+
+  function updateVisualTitle(){
+    el.visualTitle.textContent = VISUAL_TITLE_BY_MODE[state.mode] || 'Layout Visualization';
   }
 
   function buildShapeButtons(){
@@ -845,12 +978,51 @@
 
   function buildExtraButtons(){
     el.extraGroup.innerHTML = '';
+
+    const customInput = document.createElement('input');
+    customInput.type = 'number';
+    customInput.inputMode = 'decimal';
+    customInput.min = '0';
+    customInput.step = 'any';
+    customInput.placeholder = 'Custom';
+    customInput.dataset.role = 'extra-custom';
+    customInput.setAttribute('aria-label', 'Custom bleed or distance in millimeters');
+    customInput.className = extraCustomClass(state.extraCustom);
+    if(state.extraCustom) customInput.value = String(state.extraMm);
+    customInput.addEventListener('input', () => {
+      const raw = customInput.value.trim();
+      const num = parseFloat(raw);
+      if(raw !== '' && isFinite(num) && num >= 0){
+        state.extraMm = num;
+        state.extraCustom = true;
+        state.extraMmByMode[state.mode] = num;
+        state.extraCustomByMode[state.mode] = true;
+        refreshExtraButtons();
+        calculate();
+      }
+    });
+    customInput.addEventListener('blur', () => {
+      if(customInput.value.trim() === ''){
+        const opts = getExtraOptions();
+        state.extraMm = opts[1] ? opts[1].mm : opts[0].mm;
+        state.extraCustom = false;
+        state.extraMmByMode[state.mode] = state.extraMm;
+        state.extraCustomByMode[state.mode] = false;
+        refreshExtraButtons();
+        calculate();
+      }
+    });
+    customInput.addEventListener('keydown', (e) => {
+      if(e.key === 'Enter') customInput.blur();
+    });
+    el.extraGroup.appendChild(customInput);
+
     getExtraOptions().forEach(opt => {
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.setAttribute('role','radio');
       btn.dataset.mm = String(opt.mm);
-      const active = opt.mm === state.extraMm;
+      const active = opt.mm === state.extraMm && !state.extraCustom;
       btn.className = extraBtnClass(active);
       btn.setAttribute('aria-checked', active ? 'true' : 'false');
       btn.innerHTML = opt.special
@@ -858,7 +1030,9 @@
         : `<span class="mm-val">${opt.mm}</span><span class="mm-unit">mm</span>`;
       btn.addEventListener('click', () => {
         state.extraMm = opt.mm;
+        state.extraCustom = false;
         state.extraMmByMode[state.mode] = opt.mm;
+        state.extraCustomByMode[state.mode] = false;
         refreshExtraButtons();
         calculate();
       });
@@ -867,12 +1041,22 @@
   }
 
   function extraBtnClass(active){ return 'option-btn center' + (active ? ' active' : ''); }
+  function extraCustomClass(active){ return 'option-btn center extra-custom-input' + (active ? ' active' : ''); }
 
   function refreshExtraButtons(){
-    [...el.extraGroup.children].forEach(btn => {
-      const active = Number(btn.dataset.mm) === state.extraMm;
-      btn.className = extraBtnClass(active);
-      btn.setAttribute('aria-checked', active ? 'true' : 'false');
+    [...el.extraGroup.children].forEach(node => {
+      if(node.dataset.role === 'extra-custom'){
+        const active = state.extraCustom;
+        node.className = extraCustomClass(active);
+        node.setAttribute('aria-checked', active ? 'true' : 'false');
+        if(!active && document.activeElement !== node){
+          node.value = '';
+        }
+        return;
+      }
+      const active = Number(node.dataset.mm) === state.extraMm && !state.extraCustom;
+      node.className = extraBtnClass(active);
+      node.setAttribute('aria-checked', active ? 'true' : 'false');
     });
   }
 
@@ -891,6 +1075,10 @@
     return `<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="5.5" stroke="currentColor" stroke-width="1.4"/></svg>`;
   }
 
+  function barcodeMarkContent(){
+    return '<span class="barcode-block"></span><span class="barcode-dot"></span>';
+  }
+
   function getA3Cfg(orientation){
     if(orientation === 'landscape'){
       return {
@@ -899,7 +1087,7 @@
         desc: '48 × 32 cm · Landscape',
         paperMm: { w: 480, h: 320 },
         areaMm:  { w: 475, h: 315 },
-        extraLabel: 'Bleed'
+        extraLabel: '04 · Bleed'
       };
     }
     return {
@@ -908,7 +1096,7 @@
       desc: '32 × 48 cm · Portrait',
       paperMm: { w: 320, h: 480 },
       areaMm:  { w: 315, h: 475 },
-      extraLabel: 'Bleed'
+      extraLabel: '04 · Bleed'
     };
   }
 
@@ -1031,7 +1219,10 @@
       el.warningBox.classList.add('hidden');
     }
 
-    el.paperMeta.textContent = `Paper ${cfg.paperMm.w/10}×${cfg.paperMm.h/10} cm · Print ${cfg.areaMm.w/10}×${cfg.areaMm.h/10} cm`;
+    const paperText = (cfg.key === 'kiss' || cfg.key === 'die')
+      ? `Paper Size ${cfg.paperMm.w/10}×${cfg.paperMm.h/10} cm · Cutting Area ${cfg.areaMm.w/10}×${cfg.areaMm.h/10} cm`
+      : `Paper Size ${cfg.paperMm.w/10}×${cfg.paperMm.h/10} cm · Print Area ${cfg.areaMm.w/10}×${cfg.areaMm.h/10} cm`;
+    el.paperMeta.textContent = paperText;
   }
 
   function clearEl(node){ while(node.firstChild) node.removeChild(node.firstChild); }
@@ -1081,18 +1272,27 @@
     el.areaBox.style.height = areaHPx + 'px';
 
     [...el.areaBox.querySelectorAll('.reg-mark')].forEach(n => n.remove());
-    const corners = [
+    const isCuttingMode = cfg.key === 'kiss' || cfg.key === 'die';
+    const marks = [
       { x: 0, y: 0 }, { x: areaWPx, y: 0 },
       { x: 0, y: areaHPx }, { x: areaWPx, y: areaHPx }
     ];
-    corners.forEach(c => {
+    marks.forEach(c => {
       const m = document.createElement('div');
-      m.className = 'reg-mark';
+      m.className = 'reg-mark' + (isCuttingMode ? ' mark-barcode-dot' : '');
       m.style.left = (c.x - 7) + 'px';
       m.style.top = (c.y - 7) + 'px';
       m.innerHTML = '<span class="dot"></span>';
       el.areaBox.appendChild(m);
     });
+
+    [...el.areaBox.querySelectorAll('.barcode-mark')].forEach(n => n.remove());
+    if(isCuttingMode){
+      const mark = document.createElement('div');
+      mark.className = 'barcode-mark ' + (cfg.key === 'kiss' ? 'pos-bottom-center' : 'pos-bottom-right');
+      mark.innerHTML = barcodeMarkContent();
+      el.areaBox.appendChild(mark);
+    }
 
     clearEl(el.gridBox);
     if(!result.valid || result.total === 0){
@@ -1110,6 +1310,8 @@
     }
     el.previewNote.classList.toggle('hidden', !capped);
     const showBleed = cfg.key === 'a3' && Number(result.bleedMm) > 0;
+    const showDistance = (cfg.key === 'kiss' || cfg.key === 'die') && Number(result.bleedMm) > 0;
+    const bleedMm = Number(result.bleedMm) || 0;
     const fillWPercent = Math.max(10, Math.min(100, (result.realCellWmm / result.cellWmm) * 100));
     const fillHPercent = Math.max(10, Math.min(100, (result.realCellHmm / result.cellHmm) * 100));
 
@@ -1121,8 +1323,11 @@
       el.gridBox.style.gridTemplateColumns = `repeat(${pCols}, 1fr)`;
       el.gridBox.style.gridTemplateRows = `repeat(${pRows}, 1fr)`;
       el.gridBox.style.gap = '0px';
+      const approxCellWpx = areaWPx / pCols;
+      const approxCellHpx = areaHPx / pRows;
+      const borderPx = computeBorderPx(bleedMm, pxPerMm, Math.min(approxCellWpx, approxCellHpx));
       for(let i = 0; i < pCols * pRows; i++){
-        el.gridBox.appendChild(makeObjCell(fillWPercent, fillHPercent, showBleed));
+        el.gridBox.appendChild(makeObjCell(fillWPercent, fillHPercent, showBleed, showDistance, borderPx));
       }
     } else {
       const cellWpx = result.cellWmm * pxPerMm;
@@ -1134,13 +1339,21 @@
       el.gridBox.style.gridTemplateColumns = `repeat(${pCols}, ${cellWpx}px)`;
       el.gridBox.style.gridTemplateRows = `repeat(${pRows}, ${cellHpx}px)`;
       el.gridBox.style.gap = '0px';
+      const borderPx = computeBorderPx(bleedMm, pxPerMm, Math.min(cellWpx, cellHpx));
       for(let i = 0; i < pCols * pRows; i++){
-        el.gridBox.appendChild(makeObjCell(fillWPercent, fillHPercent, showBleed));
+        el.gridBox.appendChild(makeObjCell(fillWPercent, fillHPercent, showBleed, showDistance, borderPx));
       }
     }
   }
 
-  function makeObjCell(fillWPercent, fillHPercent, showBleed){
+  function computeBorderPx(bleedMm, pxPerMm, cellMinPx){
+    if(bleedMm <= 0) return 2.5;
+    const raw = bleedMm * pxPerMm;
+    const maxPx = Math.max(2, cellMinPx * 0.45);
+    return Math.min(Math.max(raw, 1.5), maxPx);
+  }
+
+  function makeObjCell(fillWPercent, fillHPercent, showBleed, showDistance, borderPx){
     const wrap = document.createElement('div');
     wrap.className = 'obj-cell';
     wrap.style.width = '100%';
@@ -1150,13 +1363,18 @@
     wrap.style.justifyContent = 'center';
     const inner = document.createElement('div');
 
-    const w = showBleed ? 100 : fillWPercent;
-    const h = showBleed ? 100 : fillHPercent;
+    const highlightEdge = showBleed || showDistance;
+    const w = highlightEdge ? 100 : fillWPercent;
+    const h = highlightEdge ? 100 : fillHPercent;
     inner.style.width = w + '%';
     inner.style.height = h + '%';
+    if(highlightEdge && borderPx !== undefined){
+      inner.style.borderWidth = borderPx + 'px';
+    }
     inner.className = 'obj-fill'
       + (state.shape === 'bulat' ? ' round' : '')
-      + (showBleed ? ' bleed-visible' : '');
+      + (showBleed ? ' bleed-visible' : '')
+      + (showDistance ? ' distance-visible' : '');
     wrap.appendChild(inner);
     return wrap;
   }
@@ -1170,18 +1388,19 @@
     const bleedBlocked = state.mode === 'a3'
       && isFinite(wCmNum) && isFinite(hCmNum) && wCmNum > 0 && hCmNum > 0
       && (wCmNum < 4 || hCmNum < 4);
-    const calcState = bleedBlocked ? Object.assign({}, state, { extraMm: 0 }) : state;
+    const baseCalcState = bleedBlocked ? Object.assign({}, state, { extraMm: 0 }) : state;
 
     setExtraGroupDisabled(bleedBlocked);
     el.bleedNote.classList.toggle('hidden', !bleedBlocked);
 
     let cfg;
+    let calcState = baseCalcState;
+    let autoRotated = false;
 
     if(state.mode === 'a3'){
 
-
-      const rPortrait  = computeLayout(getA3Cfg('portrait'),  calcState);
-      const rLandscape = computeLayout(getA3Cfg('landscape'), calcState);
+      const rPortrait  = computeLayout(getA3Cfg('portrait'),  baseCalcState);
+      const rLandscape = computeLayout(getA3Cfg('landscape'), baseCalcState);
       const totalP = rPortrait.valid ? rPortrait.total : 0;
       const totalL = rLandscape.valid ? rLandscape.total : 0;
 
@@ -1196,6 +1415,20 @@
     } else {
       cfg = MODE_CONFIG[state.mode];
       el.a3OrientationSection.classList.add('hidden');
+
+      const wCm = parseFloat(baseCalcState.widthCm);
+      const hCm = parseFloat(baseCalcState.heightCm);
+      if(isFinite(wCm) && isFinite(hCm) && wCm > 0 && hCm > 0 && wCm !== hCm){
+        const rotatedState = Object.assign({}, baseCalcState, { widthCm: hCm, heightCm: wCm });
+        const rNormal = computeLayout(cfg, baseCalcState);
+        const rRotated = computeLayout(cfg, rotatedState);
+        const totalNormal = rNormal.valid ? rNormal.total : 0;
+        const totalRotated = rRotated.valid ? rRotated.total : 0;
+        if(totalRotated > totalNormal){
+          calcState = rotatedState;
+          autoRotated = true;
+        }
+      }
     }
 
     const result = computeLayout(cfg, calcState);
@@ -1204,26 +1437,72 @@
     renderResult(cfg, result);
     drawVisualization(cfg, result.valid ? result : { valid:false, total:0 });
 
+    updateVisualTitle();
     updateLegend(cfg, calcState);
+    updateSizeObjectInfo(cfg, calcState, autoRotated);
+    updateAutoRotateNote(cfg, result, autoRotated);
+  }
+
+  function updateAutoRotateNote(cfg, result, autoRotated){
+    const isCutting = cfg.key === 'kiss' || cfg.key === 'die';
+    const show = isCutting && autoRotated && result.valid;
+    el.autoRotateNote.classList.toggle('hidden', !show);
+    if(show){
+      el.autoRotateNote.textContent = 'Auto Rotate is applied, the object size is automatically rotated because it produces more quantity.';
+    }
+  }
+
+  function updateSizeObjectInfo(cfg, calcState, autoRotated){
+    el.sizeObjectBlock.classList.remove('hidden');
+
+    const wCm = parseFloat(calcState.widthCm);
+    const hCm = parseFloat(calcState.heightCm);
+    if(!isFinite(wCm) || !isFinite(hCm) || wCm <= 0 || hCm <= 0){
+      el.qtySizeObject.textContent = '—';
+      el.qtySizeObjectNote.classList.add('hidden');
+      return;
+    }
+
+    el.qtySizeObject.textContent = `${fmt1(wCm)} × ${fmt1(hCm)} cm`;
+    const isCutting = cfg.key === 'kiss' || cfg.key === 'die';
+    el.qtySizeObjectNote.classList.toggle('hidden', !(isCutting && autoRotated));
+    if(isCutting && autoRotated){
+      el.qtySizeObjectNote.textContent = 'Auto Rotated for maximum quantity';
+    }
   }
 
   function updateLegend(cfg, calcState){
     const isA3 = cfg.key === 'a3';
-    el.visualLegend.classList.toggle('hidden', !isA3);
+    const isCutting = cfg.key === 'kiss' || cfg.key === 'die';
+    el.visualLegend.classList.toggle('hidden', !(isA3 || isCutting));
     clearEl(el.visualLegend);
-    if(!isA3) return;
+    if(!(isA3 || isCutting)) return;
 
     const qtyItem = document.createElement('span');
     qtyItem.className = 'legend-item';
     qtyItem.innerHTML = '<span class="legend-swatch legend-blue"></span>Total Quantity';
     el.visualLegend.appendChild(qtyItem);
 
-    const bleedMm = Number(calcState.extraMm) || 0;
-    if(bleedMm > 0){
-      const bleedItem = document.createElement('span');
-      bleedItem.className = 'legend-item';
-      bleedItem.innerHTML = `<span class="legend-swatch legend-red"></span>Bleed ${bleedMm}mm`;
-      el.visualLegend.appendChild(bleedItem);
+    if(isA3){
+      const bleedMm = Number(calcState.extraMm) || 0;
+      if(bleedMm > 0){
+        const bleedItem = document.createElement('span');
+        bleedItem.className = 'legend-item';
+        bleedItem.innerHTML = `<span class="legend-swatch legend-red"></span>Bleed ${bleedMm}mm`;
+        el.visualLegend.appendChild(bleedItem);
+      }
+    } else if(isCutting){
+      const distMm = Number(calcState.extraMm) || 0;
+      if(distMm > 0){
+        const distItem = document.createElement('span');
+        distItem.className = 'legend-item';
+        distItem.innerHTML = `<span class="legend-swatch legend-gold"></span>Distance ${distMm}mm`;
+        el.visualLegend.appendChild(distItem);
+      }
+      const barcodeItem = document.createElement('span');
+      barcodeItem.className = 'legend-item';
+      barcodeItem.innerHTML = '<span class="legend-swatch legend-barcode"></span>Barcode Cutting';
+      el.visualLegend.appendChild(barcodeItem);
     }
   }
 
@@ -1247,6 +1526,7 @@
   buildExtraButtons();
   buildA3OrientButtons();
   refreshExtraLabel();
+  refreshExtraNote();
   calculate();
 
 })();
