@@ -5,19 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale: 1.0, user-scalable=no">
     <title>Anamaruchi - PDF File Flattener</title>
     <link rel="icon" type="image/x-icon" href="https://anamaruchi.web.id/Image/Anamaruchi.ico">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script> <!-- Awusome Lib UWU -->	
-    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script> <!-- Awusome Lib UWU -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>	
+    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
     <style>
         *, *::before, *::after {
             box-sizing: border-box;
         }
 
-        html, body {
-            height: 100%;
+        html {
             width: 100%;
             margin: 0;
             padding: 0;
             overflow-x: hidden;
+        }
+
+        body {
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         body {
@@ -28,7 +36,9 @@
             justify-content: center;
             align-items: flex-start;
             min-height: 100vh;
+            min-height: 100dvh;
             padding: clamp(5px, 2vw, 10px);
+            padding-bottom: max(clamp(5px, 2vw, 10px), env(safe-area-inset-bottom));
             position: relative;
             box-sizing: border-box;
         }
@@ -122,7 +132,9 @@
             justify-content: center;
             align-items: flex-start;
             min-height: 100vh;
+            min-height: 100dvh;
             padding-top: clamp(15px, 3vh, 40px);
+            padding-bottom: env(safe-area-inset-bottom);
         }
 
         .container {
@@ -266,6 +278,7 @@
             text-align: center;
             color: white;
             box-shadow: 0 3px 12px rgba(59, 130, 246, 0.2);
+            position: relative;
         }
 
         .dpi-option:hover, .compression-option:hover {
@@ -275,9 +288,10 @@
         }
 
         .dpi-option.selected, .compression-option.selected {
-            border-color: #60a5fa;
-            background: linear-gradient(135deg, #1d4ed8, #3b82f6);
-            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+            border-color: #ffffff;
+            background: linear-gradient(135deg, #1d4ed8, #0ea5e9);
+            box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.5), 0 8px 25px rgba(59, 130, 246, 0.6);
+            transform: scale(1.03);
         }
 
         .dpi-option input[type="radio"], .compression-option input[type="radio"] {
@@ -876,20 +890,95 @@
 
         @media screen and (max-width: 768px) {
             body {
-                padding: 8px;
+                padding: 5px;
             }
 
             .main-wrapper {
-                padding-top: clamp(10px, 2vh, 25px);
+                padding-top: clamp(5px, 1.2vh, 12px);
             }
 
             .container {
                 backdrop-filter: none !important;
                 background: rgba(26, 26, 26, 0.95);
-                border-radius: 15px;
-                padding: 15px;
-                margin-bottom: 8px;
+                border-radius: 14px;
+                padding: 10px;
+                margin-bottom: 5px;
                 max-width: 100%;
+            }
+
+            .header {
+                margin-bottom: 10px;
+            }
+
+            .header h1 {
+                margin: 0 0 4px 0;
+                padding-bottom: 5px;
+            }
+
+            .warning-section {
+                padding: 5px 8px 8px 8px;
+                margin-bottom: 10px;
+            }
+
+            .settings-section {
+                padding: 10px;
+                margin-bottom: 10px;
+            }
+
+            .setting-group {
+                padding: 2px 6px 6px 6px;
+            }
+
+            .settings-grid {
+                gap: 8px;
+            }
+
+            .dpi-options, .compression-options {
+                gap: 5px;
+            }
+
+            .dpi-option, .compression-option {
+                padding: 7px;
+            }
+
+            .custom-dpi-section, .quality-slider-section {
+                margin-top: 8px;
+                padding: 8px;
+            }
+
+            .size-estimate {
+                margin-top: 6px;
+                padding: 2px 6px 6px 6px;
+            }
+
+            .upload-section {
+                padding: 6px 0;
+            }
+
+            .progress-container {
+                padding: 12px;
+                margin-bottom: 10px;
+            }
+
+            .size-comparison {
+                margin-bottom: 10px;
+            }
+
+            .result-stats {
+                gap: 6px;
+                margin-bottom: 10px;
+            }
+
+            .stat-card {
+                padding: 8px;
+            }
+
+            .download-section {
+                padding: 10px;
+            }
+
+            .action-buttons, .download-buttons {
+                gap: 6px;
             }
 
             .warning-section,
@@ -956,24 +1045,24 @@
             }
 
             .footer-credit {
-                margin-top: 8px;
-                padding: 8px 12px;
+                margin-top: 6px;
+                padding: 6px 10px;
                 border-radius: 6px;
             }
 
             .footer-text {
-                font-size: 0.8rem;
+                font-size: 0.78rem;
             }
 
             .header h1 {
-                font-size: 1.5rem;
-                margin-bottom: 8px;
-                padding-bottom: 8px;
+                font-size: 1.4rem;
+                margin-bottom: 4px;
+                padding-bottom: 5px;
             }
 
             .settings-grid {
                 grid-template-columns: 1fr;
-                gap: 15px;
+                gap: 8px;
             }
 
             .dpi-options {
@@ -981,11 +1070,11 @@
             }
 
             .upload-section, .processing-section, .result-section {
-                padding: 10px 0;
+                padding: 5px 0;
             }
 
             .upload-area {
-                padding: 25px 12px;
+                padding: 14px 10px;
             }
 
             .action-buttons, .download-buttons {
@@ -1075,32 +1164,32 @@
 
         @media screen and (max-width: 480px) {
             .container {
-                padding: 12px;
+                padding: 10px;
                 border-radius: 12px;
             }
 
             .footer-credit {
-                margin-top: 6px;
-                padding: 6px 8px;
+                margin-top: 5px;
+                padding: 5px 8px;
                 border-radius: 4px;
             }
 
             .footer-text {
-                font-size: 0.75rem;
+                font-size: 0.72rem;
             }
 
             .header h1 {
-                font-size: 1.3rem;
+                font-size: 1.2rem;
             }
 
             .btn {
-                padding: 10px 20px;
-                font-size: 0.8rem;
+                padding: 9px 18px;
+                font-size: 0.78rem;
             }
 
             .btn-primary {
-                font-size: 0.85rem;
-                padding: 12px 24px;
+                font-size: 0.82rem;
+                padding: 11px 20px;
             }
 
             .result-stats {
@@ -1109,18 +1198,18 @@
             }
 
             .size-comparison {
-                padding: 10px 12px 18px 12px;
+                padding: 8px 10px 14px 10px;
             }
 
             .size-comparison h4 {
                 font-size: 0.95rem;
-                margin-bottom: 12px;
+                margin-bottom: 10px;
             }
 
             .size-bars {
-                gap: 12px;
+                gap: 10px;
                 padding: 0 5px;
-                margin-bottom: 12px;
+                margin-bottom: 10px;
             }
 
             .size-bar {
@@ -1160,7 +1249,7 @@
             }
 
             .upload-section, .processing-section, .result-section {
-                padding: 8px 0;
+                padding: 6px 0;
             }
         }
 
@@ -1188,6 +1277,124 @@
             }
         }
 
+        @media screen and (max-width: 400px) {
+            .container {
+                padding: 8px;
+                border-radius: 10px;
+            }
+
+            .header h1 {
+                font-size: 1.1rem;
+                gap: 5px;
+                flex-wrap: wrap;
+            }
+
+            .header p {
+                font-size: 0.78rem;
+            }
+
+            .warning-section {
+                padding: 5px 8px 8px 8px;
+            }
+
+            .warning-title {
+                font-size: 0.85rem;
+            }
+
+            .warning-text {
+                font-size: 0.75rem;
+            }
+
+            .setting-title {
+                font-size: 0.9rem;
+            }
+
+            .dpi-value {
+                font-size: 1rem;
+            }
+
+            .dpi-label, .compression-label {
+                font-size: 0.7rem;
+            }
+
+            .compression-desc {
+                font-size: 0.65rem;
+            }
+
+            .action-buttons, .download-buttons {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .btn, .btn-primary, .btn-secondary {
+                width: 100%;
+            }
+
+            .upload-area {
+                padding: 14px 10px;
+            }
+
+            .upload-text {
+                font-size: 0.85rem;
+            }
+
+            .upload-subtext {
+                font-size: 0.7rem;
+            }
+
+            .home-button, .scroll-to-top {
+                width: 36px !important;
+                height: 36px !important;
+            }
+        }
+
+        @media screen and (max-width: 320px) {
+            .container {
+                padding: 6px;
+            }
+
+            .header h1 {
+                font-size: 1rem;
+            }
+
+            .dpi-options {
+                gap: 6px;
+            }
+
+            .dpi-option, .compression-option {
+                padding: 8px;
+            }
+
+            .custom-dpi-controls, .quality-controls {
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+        }
+
+        @media screen and (max-height: 500px) and (orientation: landscape) {
+            .main-wrapper {
+                padding-top: 8px;
+                align-items: flex-start;
+            }
+
+            .container {
+                margin-bottom: 8px;
+            }
+
+            .header {
+                margin-bottom: 8px;
+            }
+
+            .home-button, .scroll-to-top {
+                width: 32px !important;
+                height: 32px !important;
+            }
+
+            .upload-area {
+                padding: 12px 10px;
+            }
+        }
+
         @supports (-webkit-touch-callout: none) {
             body {
                 min-height: -webkit-fill-available;
@@ -1211,7 +1418,7 @@
 
         .result-section {
             width: 100%;
-            overflow: hidden;
+            overflow-x: hidden;
         }
     </style>
 </head>
@@ -1325,7 +1532,7 @@
                         <polyline points="10,9 9,9 8,9" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                     <div class="upload-text">Drop your PDF file here</div>
-                    <div class="upload-subtext">or click to browse files (Max 100MB)</div>
+                    <div class="upload-subtext">or click to browse files (Max 200MB)</div>
                     <input type="file" id="fileInput" accept=".pdf" />
                 </div>
                 <div class="file-info" id="fileInfo">
@@ -1432,8 +1639,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Footer Credit -->
             <div class="footer-credit">
                 <p class="footer-text">
                     Created By Anamaruchi (<a href="https://www.facebook.com/anang.zikri.f" target="_blank" class="footer-link">Anang Zikri Febriyansyah</a>)
@@ -1443,7 +1648,6 @@
     </div>
 
     <script>
-        // Set up PDF.js worker
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
         let optimizedPdfBytes = null;
@@ -1462,7 +1666,6 @@
             processingTime: 0
         };
 
-        // More realistic compression settings
         const compressionSettings = {
             'aggressive': { quality: 40, format: 'jpeg' },
             'balanced': { quality: 60, format: 'jpeg' },
@@ -1470,7 +1673,6 @@
             'custom': { quality: 40, format: 'jpeg' }
         };
 
-        // Initialize when DOM is loaded
         document.addEventListener('DOMContentLoaded', function() {
             initializeControls();
             initializeUpload();
@@ -1517,7 +1719,6 @@
         }
 
         function initializeControls() {
-            // DPI options
             document.querySelectorAll('input[name="dpi"]').forEach(option => {
                 option.addEventListener('change', function() {
                     document.querySelectorAll('.dpi-option').forEach(opt => opt.classList.remove('selected'));
@@ -1533,12 +1734,10 @@
                 });
             });
 
-            // Custom DPI input
             document.getElementById('customDpiInput').addEventListener('input', function() {
                 updateSizeEstimate();
             });
 
-            // Compression options
             document.querySelectorAll('input[name="compression"]').forEach(option => {
                 option.addEventListener('change', function() {
                     document.querySelectorAll('.compression-option').forEach(opt => opt.classList.remove('selected'));
@@ -1554,7 +1753,6 @@
                 });
             });
 
-            // Quality slider
             const qualitySlider = document.getElementById('qualitySlider');
             const qualityValue = document.getElementById('qualityValue');
             
@@ -1606,8 +1804,8 @@
         }
 
         async function loadFile(file) {
-            if (file.size > 100 * 1024 * 1024) {
-                showError('File size too large. Please select a PDF smaller than 100MB.');
+            if (file.size > 200 * 1024 * 1024) {
+                showError('File size too large. Please select a PDF smaller than 200MB.');
                 return;
             }
             
@@ -1617,17 +1815,14 @@
             }
             
             try {
-                // Store file info
                 currentFile = file;
                 originalFileName = file.name.replace('.pdf', '');
                 originalFileSize = file.size;
                 
-                // Analyze PDF
                 const arrayBuffer = await file.arrayBuffer();
                 const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
                 pdfPageCount = pdf.numPages;
                 
-                // Update UI
                 showFileInfo(file.name, file.size, pdfPageCount);
                 updateSizeEstimate();
                 
@@ -1642,7 +1837,6 @@
             const fileInfo = document.getElementById('fileInfo');
             const uploadIcon = uploadArea.querySelector('svg');
             
-            // Update upload area
             uploadArea.classList.add('file-loaded');
             if (uploadIcon) {
                 uploadIcon.style.filter = 'drop-shadow(0 0 20px rgba(59, 130, 246, 0.5))';
@@ -1650,7 +1844,6 @@
             uploadArea.querySelector('.upload-text').textContent = 'File loaded successfully!';
             uploadArea.querySelector('.upload-subtext').textContent = 'Configure settings and click "Start Processing"';
             
-            // Show file info
             document.getElementById('fileName').textContent = fileName;
             document.getElementById('fileSize').textContent = formatFileSize(fileSize);
             document.getElementById('pageCount').textContent = pageCount;
@@ -1686,34 +1879,28 @@
         }
 
         function calculateRealisticSize(originalSize, pageCount, settings) {
-            // More realistic calculation based on actual PDF flattening behavior
             
-            // Base size per page when converted to image (varies by DPI)
             const baseSizePerPage = {
-                72: 30 * 1024,    // ~30KB per page at 72 DPI
-                120: 50 * 1024,   // ~50KB per page at 120 DPI
-                150: 80 * 1024,   // ~80KB per page at 150 DPI  
-                200: 140 * 1024,  // ~140KB per page at 200 DPI
-                300: 300 * 1024,  // ~300KB per page at 300 DPI
-                600: 1200 * 1024  // ~1.2MB per page at 600 DPI
+                72: 30 * 1024,
+                120: 50 * 1024,
+                150: 80 * 1024,
+                200: 140 * 1024,
+                300: 300 * 1024,
+                600: 1200 * 1024
             };
             
             const baseSize = baseSizePerPage[settings.dpi] || baseSizePerPage[150];
             
-            // Calculate base image size
             let estimatedSize = baseSize * pageCount;
             
-            // Apply compression
             const compressionFactor = settings.quality / 100;
             estimatedSize *= compressionFactor;
             
-            // Add PDF overhead (structure, metadata, etc.)
-            const pdfOverhead = Math.max(50 * 1024, originalSize * 0.1); // At least 50KB overhead
+            const pdfOverhead = Math.max(50 * 1024, originalSize * 0.1);
             estimatedSize += pdfOverhead;
             
-            // For very small original files (text-heavy), the increase is usually significant
-            if (originalSize < 1024 * 1024) { // Less than 1MB
-                estimatedSize = Math.max(estimatedSize, originalSize * 1.5); // At least 50% increase
+            if (originalSize < 1024 * 1024) {
+                estimatedSize = Math.max(estimatedSize, originalSize * 1.5);
             }
             
             return Math.round(estimatedSize);
@@ -1727,7 +1914,6 @@
             if (selectedDpi && selectedDpi.value === 'custom') {
                 const customDpiInput = document.getElementById('customDpiInput');
                 dpi = parseInt(customDpiInput.value) || 120;
-                // Clamp DPI to valid range
                 dpi = Math.max(72, Math.min(600, dpi));
             } else {
                 dpi = selectedDpi ? parseInt(selectedDpi.value) : 150;
@@ -1790,7 +1976,6 @@
                 
                 if (processingCancelled) return;
                 
-                // Create new PDF document
                 const pdfDoc = await PDFLib.PDFDocument.create();
                 
                 for (let pageNum = 1; pageNum <= numPages; pageNum++) {
@@ -1810,14 +1995,12 @@
                 
                 updateProgress(85, 'Finalizing flattened PDF...', 'Applying final compression and optimization');
                 
-                // Generate final PDF with aggressive optimization
                 optimizedPdfBytes = await pdfDoc.save({
-                    useObjectStreams: true, // Enable compression
+                    useObjectStreams: true,
                     addDefaultPage: false,
                     objectsPerTick: 50
                 });
                 
-                // Calculate final stats
                 const endTime = Date.now();
                 const compressionRatio = Math.round((optimizedPdfBytes.length / originalFileSize - 1) * 100);
                 
@@ -1847,34 +2030,29 @@
         async function optimizePage(pdfDoc, page, settings) {
             const viewport = page.getViewport({ scale: settings.scale });
             
-            // Create canvas with exact dimensions
             const canvas = document.createElement('canvas');
             const context = canvas.getContext('2d');
             
             canvas.width = viewport.width;
             canvas.height = viewport.height;
             
-            // Render with optimization settings
             const renderContext = {
                 canvasContext: context,
                 viewport: viewport,
                 enableWebGL: false,
                 renderInteractiveForms: false,
-                textLayerMode: 0, // Disable text layer completely
-                annotationMode: 0 // Disable annotations
+                textLayerMode: 0,
+                annotationMode: 0
             };
             
             await page.render(renderContext).promise;
             
-            // Convert to highly compressed JPEG
             const imageData = canvas.toDataURL('image/jpeg', settings.quality / 100);
             const jpegImage = await pdfDoc.embedJpg(imageData);
             
-            // Create new page with original dimensions
             const originalViewport = page.getViewport({ scale: 1.0 });
             const newPage = pdfDoc.addPage([originalViewport.width, originalViewport.height]);
             
-            // Draw the compressed image
             newPage.drawImage(jpegImage, {
                 x: 0,
                 y: 0,
@@ -1890,7 +2068,6 @@
             pdfPageCount = 0;
             document.getElementById('fileInput').value = '';
             
-            // Reset upload area
             const uploadArea = document.getElementById('uploadArea');
             const uploadIcon = uploadArea.querySelector('svg');
             uploadArea.classList.remove('file-loaded');
@@ -1898,12 +2075,10 @@
                 uploadIcon.style.filter = 'drop-shadow(0 0 15px rgba(59, 130, 246, 0.3))';
             }
             uploadArea.querySelector('.upload-text').textContent = 'Drop your PDF file here';
-            uploadArea.querySelector('.upload-subtext').textContent = 'or click to browse files (Max 100MB)';
+            uploadArea.querySelector('.upload-subtext').textContent = 'or click to browse files (Max 200MB)';
             
-            // Hide file info
             document.getElementById('fileInfo').classList.remove('show');
             
-            // Reset size estimate
             document.getElementById('sizeEstimate').innerHTML = `
                 <h4>File Size Estimate</h4>
                 <p>Upload a file to see accurate size prediction</p>
@@ -1934,13 +2109,11 @@
             document.getElementById('processingSection').style.display = 'none';
             document.getElementById('resultSection').style.display = 'block';
             
-            // Update stats
             document.getElementById('resultPageCount').textContent = processingStats.pages;
             document.getElementById('outputDpi').textContent = processingStats.dpi;
             document.getElementById('compressionLevel').textContent = processingStats.quality + '%';
             document.getElementById('processingTime').textContent = processingStats.processingTime + 's';
             
-            // Update size comparison
             const originalSizeKB = Math.round(originalFileSize / 1024);
             const optimizedSizeKB = processingStats.fileSize;
             const change = processingStats.compressionRatio;
@@ -1948,7 +2121,6 @@
             document.getElementById('originalSizeDisplay').textContent = formatFileSize(originalFileSize);
             document.getElementById('optimizedSizeDisplay').textContent = formatFileSize(optimizedPdfBytes.length);
             
-            // Update size bars
             const maxSize = Math.max(originalSizeKB, optimizedSizeKB);
             const originalHeight = (originalSizeKB / maxSize) * 80;
             const optimizedHeight = (optimizedSizeKB / maxSize) * 80;
@@ -1956,7 +2128,6 @@
             document.getElementById('originalBar').style.height = originalHeight + 'px';
             document.getElementById('optimizedBar').style.height = optimizedHeight + 'px';
             
-            // Update comparison section styling and text
             const sizeComparison = document.getElementById('sizeComparison');
             const savingsElement = document.getElementById('sizeSavings');
             
