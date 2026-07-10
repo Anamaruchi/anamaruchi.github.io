@@ -226,11 +226,60 @@
   #extraGroup .option-btn .mm-val{ font-size: clamp(11px, 2.8vw, 13px); }
   #extraGroup .option-btn .mm-unit{ font-size: clamp(8px, 2vw, 9px); }
 
+  #extraGroup .extra-custom-wrap{
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    justify-content:center;
+    text-align:left;
+    gap:4px;
+  }
+
+  .extra-stepper-stack{
+    flex:0 0 auto;
+    display:flex;
+    flex-direction:column;
+    gap:2px;
+  }
+
+  .extra-stepper{
+    flex:0 0 auto;
+    width: clamp(13px, 3.6vw, 16px);
+    height: clamp(8px, 2.2vw, 9.5px);
+    border:none;
+    background: rgba(255,255,255,0.08);
+    color:inherit;
+    font-size: clamp(8px, 2vw, 10px);
+    font-weight:700;
+    line-height:1;
+    border-radius:3px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:0;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .extra-stepper:hover{ background: rgba(255,255,255,0.18); }
+  .extra-stepper:active{ background: rgba(255,255,255,0.3); }
+  .extra-custom-wrap.active .extra-stepper{ background: rgba(255,255,255,0.2); color:#fff; }
+  .extra-custom-wrap.active .extra-stepper:hover{ background: rgba(255,255,255,0.32); }
+
   .extra-custom-input{
+    flex:1 1 auto;
+    min-width:0;
     width:100%;
     box-sizing:border-box;
     outline:none;
     cursor:text;
+    border:none;
+    background:transparent;
+    color:inherit;
+    text-align:center;
+    font-family:inherit;
+    font-size: clamp(10px, 2.6vw, 12px);
+    font-weight:700;
+    padding:0;
     -moz-appearance:textfield;
   }
   .extra-custom-input::-webkit-outer-spin-button,
@@ -557,8 +606,7 @@
 
   @media (max-width:480px){
     .option-btn.center{ flex-direction:column; gap:2px; }
-    #extraGroup .option-btn.center,
-    #extraGroup .extra-custom-input.center{ flex-direction:row; align-items:baseline; }
+    #extraGroup .option-btn.center{ flex-direction:row; align-items:center; }
 
     .page-shell{ padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px)); }
   }
@@ -679,6 +727,7 @@
                   <p class="stat-label">Object Size</p>
                   <p id="qtySizeObject" class="stat-value">—</p>
                   <p id="qtySizeObjectNote" class="stat-note hidden"></p>
+                  <p id="qtySizeBleedInfo" class="a3-best-info hidden"></p>
                 </div>
               </div>
 
@@ -756,8 +805,8 @@
   const EXTRA_OPTIONS_BY_MODE = {
     a3: [
       { mm: 0, label: 'No Bleed', special: true },
-      { mm: 2, label: '2mm' },
-      { mm: 3, label: '3mm' }
+      { mm: 3, label: '3mm' },
+      { mm: 4, label: '4mm' }
     ],
     kiss: [
       { mm: 0, label: 'No Distance', special: true },
@@ -784,9 +833,9 @@
     widthCm: 5,
     heightCm: 5,
     shape: 'kotak',
-    extraMm: 2,
+    extraMm: 3,
     extraCustom: false,
-    extraMmByMode: { a3: 2 },
+    extraMmByMode: { a3: 3 },
     extraCustomByMode: { a3: false },
     a3Orientation: 'portrait',
     a3AutoMode: true
@@ -816,6 +865,7 @@
     sizeObjectBlock: document.getElementById('sizeObjectBlock'),
     qtySizeObject: document.getElementById('qtySizeObject'),
     qtySizeObjectNote: document.getElementById('qtySizeObjectNote'),
+    qtySizeBleedInfo: document.getElementById('qtySizeBleedInfo'),
 
     extraInfoNote: document.getElementById('extraInfoNote'),
 
@@ -976,25 +1026,60 @@
   function buildExtraButtons(){
     el.extraGroup.innerHTML = '';
 
+    const wrap = document.createElement('div');
+    wrap.dataset.role = 'extra-custom';
+    wrap.className = extraCustomClass(state.extraCustom);
+
     const customInput = document.createElement('input');
     customInput.type = 'text';
     customInput.inputMode = 'decimal';
     customInput.autocomplete = 'off';
     customInput.placeholder = 'Custom';
-    customInput.dataset.role = 'extra-custom';
+    customInput.className = 'extra-custom-input';
     customInput.setAttribute('aria-label', 'Custom bleed or distance in millimeters');
-    customInput.className = extraCustomClass(state.extraCustom);
-    if(state.extraCustom) customInput.value = String(state.extraMm);
+    if(state.extraCustom) customInput.value = formatExtraValue(state.extraMm);
+
+    const stepperStack = document.createElement('div');
+    stepperStack.className = 'extra-stepper-stack';
+
+    const plusBtn = document.createElement('button');
+    plusBtn.type = 'button';
+    plusBtn.className = 'extra-stepper';
+    plusBtn.textContent = '+';
+    plusBtn.setAttribute('aria-label', 'Increase custom value by 0.1mm');
+
+    const minusBtn = document.createElement('button');
+    minusBtn.type = 'button';
+    minusBtn.className = 'extra-stepper';
+    minusBtn.textContent = '−';
+    minusBtn.setAttribute('aria-label', 'Decrease custom value by 0.1mm');
+
+    function applyCustomValue(num){
+      state.extraMm = num;
+      state.extraCustom = true;
+      state.extraMmByMode[state.mode] = num;
+      state.extraCustomByMode[state.mode] = true;
+      refreshExtraButtons();
+      calculate();
+    }
+
+    function stepCustomValue(dir){
+      const base = Number(state.extraMm) || 0;
+      let next = Math.round((base + dir * 0.1) * 10) / 10;
+      if(next < 0) next = 0;
+      customInput.value = formatExtraValue(next);
+      applyCustomValue(next);
+      customInput.focus();
+    }
+
+    minusBtn.addEventListener('click', () => stepCustomValue(-1));
+    plusBtn.addEventListener('click', () => stepCustomValue(1));
+
     customInput.addEventListener('input', () => {
       const raw = customInput.value.trim();
       const num = parseDecimal(raw);
       if(raw !== '' && isFinite(num) && num >= 0){
-        state.extraMm = num;
-        state.extraCustom = true;
-        state.extraMmByMode[state.mode] = num;
-        state.extraCustomByMode[state.mode] = true;
-        refreshExtraButtons();
-        calculate();
+        applyCustomValue(num);
       }
     });
     customInput.addEventListener('blur', () => {
@@ -1010,8 +1095,15 @@
     });
     customInput.addEventListener('keydown', (e) => {
       if(e.key === 'Enter') customInput.blur();
+      if(e.key === 'ArrowUp'){ e.preventDefault(); stepCustomValue(1); }
+      if(e.key === 'ArrowDown'){ e.preventDefault(); stepCustomValue(-1); }
     });
-    el.extraGroup.appendChild(customInput);
+
+    stepperStack.appendChild(plusBtn);
+    stepperStack.appendChild(minusBtn);
+    wrap.appendChild(customInput);
+    wrap.appendChild(stepperStack);
+    el.extraGroup.appendChild(wrap);
 
     getExtraOptions().forEach(opt => {
       const btn = document.createElement('button');
@@ -1036,17 +1128,22 @@
     });
   }
 
+  function formatExtraValue(num){
+    const rounded = Math.round(Number(num) * 10) / 10;
+    return String(rounded);
+  }
+
   function extraBtnClass(active){ return 'option-btn center' + (active ? ' active' : ''); }
-  function extraCustomClass(active){ return 'option-btn center extra-custom-input' + (active ? ' active' : ''); }
+  function extraCustomClass(active){ return 'option-btn extra-custom-wrap' + (active ? ' active' : ''); }
 
   function refreshExtraButtons(){
     [...el.extraGroup.children].forEach(node => {
       if(node.dataset.role === 'extra-custom'){
         const active = state.extraCustom;
         node.className = extraCustomClass(active);
-        node.setAttribute('aria-checked', active ? 'true' : 'false');
-        if(!active && document.activeElement !== node){
-          node.value = '';
+        const input = node.querySelector('.extra-custom-input');
+        if(!active && document.activeElement !== input){
+          input.value = '';
         }
         return;
       }
@@ -1178,6 +1275,8 @@
 
   function fmt(n){ return Math.round(n).toLocaleString('id-ID'); }
   function fmt1(n){ return (Math.round(n*10)/10).toLocaleString('id-ID'); }
+  function fmt2(n){ return (Math.round(n*100)/100).toLocaleString('id-ID', { minimumFractionDigits:2, maximumFractionDigits:2 }); }
+  function fmtSmart(n){ return (Math.round(n*100)/100).toLocaleString('id-ID', { minimumFractionDigits:0, maximumFractionDigits:2 }); }
   function parseDecimal(value){
     if(value === undefined || value === null) return NaN;
     return parseFloat(String(value).trim().replace(',', '.'));
@@ -1451,6 +1550,7 @@
     if(!isFinite(wCm) || !isFinite(hCm) || wCm <= 0 || hCm <= 0){
       el.qtySizeObject.textContent = '—';
       el.qtySizeObjectNote.classList.add('hidden');
+      el.qtySizeBleedInfo.classList.add('hidden');
       return;
     }
 
@@ -1460,6 +1560,13 @@
     if(isCutting && autoRotated){
       el.qtySizeObjectNote.textContent = 'Auto Rotated for maximum quantity';
     }
+
+    const extraMm = Number(calcState.extraMm) || 0;
+    const extraLabelWord = cfg.key === 'a3' ? 'Bleed' : 'Distance';
+    const totalW = wCm + (extraMm / 10);
+    const totalH = hCm + (extraMm / 10);
+    el.qtySizeBleedInfo.textContent = `With ${extraLabelWord} ${fmt1(extraMm)}mm = ${fmtSmart(totalW)}x${fmtSmart(totalH)} cm`;
+    el.qtySizeBleedInfo.classList.remove('hidden');
   }
 
   function updateLegend(cfg, calcState){
