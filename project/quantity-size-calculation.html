@@ -175,7 +175,7 @@
     padding: clamp(14px, 3.5vw, 18px) clamp(16px, 4vw, 24px);
     border-bottom: 1px solid rgba(59,130,246,0.2);
   }
-  .sidebar-title{ margin:0; font-size:15px; font-weight:700; letter-spacing:0.02em; }
+  .sidebar-title{ margin:0; font-size:15px; font-weight:700; letter-spacing:0.02em; flex:1; text-align:center; }
   .sidebar-close-btn{
     background: rgba(59,130,246,0.1);
     border: 1px solid rgba(59,130,246,0.3);
@@ -450,9 +450,17 @@
     background:#111111;
   }
 
-  .obj-cell{ box-sizing:border-box; }
-  .obj-fill{ background: linear-gradient(135deg, #3b82f6, #1d4ed8); border:1px solid rgba(96,165,250,0.55); border-radius:2px; }
+  .obj-cell{ box-sizing:border-box; position:relative; }
+  .obj-fill{ background: linear-gradient(135deg, #3b82f6, #1d4ed8); border:1px solid rgba(96,165,250,0.55); border-radius:0; }
   .obj-fill.round{ border-radius:50%; }
+  .obj-stroke{
+    position:absolute;
+    top:50%; left:50%;
+    transform:translate(-50%,-50%);
+    border-radius:0;
+    pointer-events:none;
+  }
+  .obj-stroke.round{ border-radius:50%; }
 
   .preview-note{ margin-top:12px; font-size:11px; color:#f5a524; }
 
@@ -1345,16 +1353,21 @@
     wrap.style.display = 'flex';
     wrap.style.alignItems = 'center';
     wrap.style.justifyContent = 'center';
-    const inner = document.createElement('div');
-
-    inner.style.width = fillWPercent + '%';
-    inner.style.height = fillHPercent + '%';
 
     const highlightEdge = showBleed || showDistance;
     if(highlightEdge && borderPx !== undefined){
       const strokeColor = showBleed ? '#ff2d2d' : '#facc15';
-      inner.style.boxShadow = `0 0 0 ${borderPx}px ${strokeColor}`;
+      const stroke = document.createElement('div');
+      stroke.className = 'obj-stroke' + (state.shape === 'bulat' ? ' round' : '');
+      stroke.style.width = fillWPercent + '%';
+      stroke.style.height = fillHPercent + '%';
+      stroke.style.boxShadow = `0 0 0 ${borderPx}px ${strokeColor}`;
+      wrap.appendChild(stroke);
     }
+
+    const inner = document.createElement('div');
+    inner.style.width = fillWPercent + '%';
+    inner.style.height = fillHPercent + '%';
     inner.className = 'obj-fill' + (state.shape === 'bulat' ? ' round' : '');
     wrap.appendChild(inner);
     return wrap;
