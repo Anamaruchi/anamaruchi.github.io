@@ -216,9 +216,9 @@
   }
 
   .option-group{ display:flex; flex-direction:column; gap:8px; }
-  .option-group.cols-2{ display:grid; grid-template-columns:1fr 1fr; gap:8px; }
-  .option-group.cols-3{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; }
-  .option-group.cols-4{ display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:6px; }
+  .option-group.cols-2{ display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:8px; }
+  .option-group.cols-3{ display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:8px; }
+  .option-group.cols-4{ display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:6px; }
 
   #extraGroup{ gap:6px; }
   #extraGroup .option-btn{ padding: clamp(6px, 1.6vw, 8px) 2px; }
@@ -346,6 +346,101 @@
   .field-input::-webkit-inner-spin-button, .field-input::-webkit-outer-spin-button{ -webkit-appearance:none; margin:0; }
   .field-input{ -moz-appearance:textfield; }
   .field-unit{ position:absolute; right:10px; top:50%; transform:translateY(-50%); font-size:12px; color:rgba(255,255,255,0.8); pointer-events:none; }
+
+  .print-mode-select{ position:relative; }
+  .print-mode-trigger{
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    border:none;
+    color:#fff;
+    border-radius:10px;
+    padding: clamp(10px, 2.5vw, 12px) 34px clamp(10px, 2.5vw, 12px) clamp(12px, 3vw, 14px);
+    font-size: max(14px, 16px);
+    font-weight:600;
+    font-family:inherit;
+    box-shadow: 0 5px 15px rgba(59,130,246,0.3);
+    transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+    cursor:pointer;
+    position:relative;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .print-mode-trigger:hover,
+  .print-mode-trigger.active{
+    background: linear-gradient(135deg, #1d4ed8, #3b82f6);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(59,130,246,0.4);
+  }
+  .print-mode-triangle{
+    position:absolute;
+    right:14px;
+    top:50%;
+    width:0; height:0;
+    border-left:5px solid transparent;
+    border-right:5px solid transparent;
+    border-top:6px solid #fff;
+    transform: translateY(-50%);
+    transition: transform 0.3s ease;
+    pointer-events:none;
+  }
+  .print-mode-trigger.active .print-mode-triangle{ transform: translateY(-50%) rotate(180deg); }
+  .print-mode-options{
+    position:absolute;
+    left:0; right:0;
+    top:100%;
+    margin-top:6px;
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    border:1px solid rgba(59,130,246,0.5);
+    border-radius:10px;
+    box-shadow: 0 10px 30px rgba(59,130,246,0.4);
+    overflow:hidden;
+    opacity:0;
+    transform: translateY(-8px);
+    pointer-events:none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    z-index:1000;
+  }
+  .print-mode-options.show{
+    opacity:1;
+    transform: translateY(0);
+    pointer-events:auto;
+  }
+  .print-mode-option{
+    padding: clamp(7px, 1.8vw, 9px) 8px;
+    font-size: clamp(9.5px, 2.4vw, 13px);
+    font-weight:600;
+    letter-spacing:-0.01em;
+    color:#fff;
+    text-align:center;
+    cursor:pointer;
+    border-bottom:1px solid rgba(255,255,255,0.12);
+    transition: background-color 0.15s ease;
+    -webkit-tap-highlight-color:transparent;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .print-mode-option:last-child{ border-bottom:none; }
+  .print-mode-option:hover{ background: rgba(255,255,255,0.2); }
+  .print-mode-option:active{ background: rgba(255,255,255,0.3); }
+  .print-mode-option.selected{ background: rgba(255,255,255,0.15); }
+
+  #printCategoryGroup.option-group.cols-3{ gap:5px; }
+  #printCategoryGroup .option-btn{ padding: clamp(7px, 1.7vw, 9px) 3px; min-width:0; }
+  #printCategoryGroup .option-btn.center{ flex-direction:row; gap:0; }
+  #printCategoryGroup .option-btn .name{
+    font-size: clamp(8.5px, 2.3vw, 11px);
+    line-height:1.2;
+    letter-spacing:-0.01em;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    max-width:100%;
+    min-width:0;
+    display:block;
+  }
 
   .hint{
     font-size:11px;
@@ -511,7 +606,17 @@
   }
   .obj-stroke.round{ border-radius:50%; }
 
-  .preview-note{ margin-top:12px; font-size:11px; color:#f5a524; }
+  .preview-note{
+    margin: 8px 0 0;
+    font-size:11px;
+    font-weight:600;
+    line-height:1.4;
+    color:#f5a524;
+    background: rgba(245,165,36,0.1);
+    border: 1px solid rgba(245,165,36,0.35);
+    border-radius:8px;
+    padding:6px 9px;
+  }
 
   .bleed-note{
     margin-top:12px;
@@ -530,6 +635,7 @@
   .legend-swatch.legend-blue{ background: linear-gradient(135deg, #3b82f6, #1d4ed8); border:1px solid rgba(96,165,250,0.6); }
   .legend-swatch.legend-red{ background: linear-gradient(135deg, #ff0000, #d90000); border:1px solid rgb(255 255 255 / 60%); }
   .legend-swatch.legend-gold{ background: linear-gradient(135deg, #ffdb29, #ffb42c); 1px solid rgb(179 143 2 / 60%); }
+  .legend-swatch.legend-green{ background: linear-gradient(135deg, #4ade80, #16a34a); border:1px solid rgba(22,163,74,0.6); }
   .legend-swatch.legend-barcode{ background:#111111; border:1.5px solid rgba(255,255,255,0.5); }
 
   .results-grid{ display:flex; flex-direction:column; gap: clamp(16px, 3.5vw, 24px); width:100%; }
@@ -646,11 +752,54 @@
 
       <div class="section">
         <p class="eyebrow">01 · Print Mode</p>
-        <div id="modeGroup" class="option-group" role="radiogroup" aria-label="Print Mode"></div>
+        <div id="printCategoryGroup" class="option-group cols-3" role="radiogroup" aria-label="Print Mode"></div>
+      </div>
+
+      <div class="section" id="standardTypeSection">
+        <p class="eyebrow">02 · Print Type</p>
+        <div class="print-mode-select">
+          <button type="button" class="print-mode-trigger" id="modeTrigger" aria-haspopup="listbox" aria-expanded="false">
+            <span id="modeTriggerLabel">A3+ Paper Size</span>
+            <span class="print-mode-triangle"></span>
+          </button>
+          <div class="print-mode-options" id="modeOptions" role="listbox" aria-label="Print Type"></div>
+        </div>
+      </div>
+
+      <div class="section hidden" id="uvInfoSection">
+        <p class="eyebrow">02 · UV Machine</p>
+        <div class="print-mode-select">
+          <button type="button" class="print-mode-trigger" id="uvMachineTrigger" aria-haspopup="listbox" aria-expanded="false">
+            <span id="uvMachineTriggerLabel">Dlican 1250</span>
+            <span class="print-mode-triangle"></span>
+          </button>
+          <div class="print-mode-options" id="uvMachineOptions" role="listbox" aria-label="UV Machine"></div>
+        </div>
+      </div>
+
+      <div class="section hidden" id="customSizeSection">
+        <p class="eyebrow">02 · Canvas Size</p>
+        <div class="grid-2">
+          <div>
+            <span class="field-label">Width</span>
+            <div class="field-input-wrap">
+              <input id="inputCanvasWidth" type="text" inputmode="decimal" autocomplete="off" value="100" class="field-input" />
+              <span class="field-unit">cm</span>
+            </div>
+          </div>
+          <div>
+            <span class="field-label">Height</span>
+            <div class="field-input-wrap">
+              <input id="inputCanvasHeight" type="text" inputmode="decimal" autocomplete="off" value="100" class="field-input" />
+              <span class="field-unit">cm</span>
+            </div>
+          </div>
+        </div>
+        <p class="hint">Canvas size = your input + 2cm margin. Print area follows your input exactly. Maximum size is 300 × 300 cm.</p>
       </div>
 
       <div class="section">
-        <p class="eyebrow">02 · Object Size</p>
+        <p class="eyebrow">03 · Object Size</p>
         <div class="grid-2">
           <div>
             <span class="field-label">Lenght</span>
@@ -670,12 +819,12 @@
       </div>
 
       <div class="section">
-        <p class="eyebrow">03 · Object Shape</p>
+        <p class="eyebrow">04 · Object Shape</p>
         <div id="shapeGroup" class="option-group cols-2" role="radiogroup" aria-label="Object Shape"></div>
       </div>
 
       <div class="section">
-        <p class="eyebrow"><span id="extraLabel">04 · Bleed</span></p>
+        <p class="eyebrow"><span id="extraLabel">05 · Bleed</span></p>
         <div id="extraGroup" class="option-group cols-4" role="radiogroup" aria-label="Bleed or Distance"></div>
         <p id="extraInfoNote" class="hint"></p>
       </div>
@@ -709,7 +858,7 @@
               <p id="autoRotateNote" class="auto-rotate-note hidden"></p>
 
               <div id="a3OrientationSection" class="a3-orient-section hidden">
-                <p class="eyebrow">Paper Orientation (A3+)</p>
+                <p id="a3OrientationLabel" class="eyebrow">Paper Orientation (A3+)</p>
                 <div id="a3OrientGroup" class="option-group cols-2" role="radiogroup" aria-label="Pilih orientasi kertas A3+"></div>
                 <p id="a3BestInfo" class="a3-best-info"></p>
               </div>
@@ -776,13 +925,29 @@
   "use strict";
 
   const MODE_CONFIG = {
+    a4: {
+      key: 'a4',
+      name: 'A4 Paper Size',
+      desc: '21 × 29,7 cm · Portrait/Landscape',
+      paperMm: { w: 210, h: 297 },
+      areaMm:  { w: 205, h: 290 },
+      extraLabel: '05 · Bleed'
+    },
+    a3std: {
+      key: 'a3std',
+      name: 'A3 Paper Size',
+      desc: '29,7 × 42 cm · Portrait/Landscape',
+      paperMm: { w: 297, h: 420 },
+      areaMm:  { w: 290, h: 415 },
+      extraLabel: '05 · Bleed'
+    },
     a3: {
       key: 'a3',
-      name: 'A3+ Standard',
+      name: 'A3+ Paper Size',
       desc: '32 × 48 cm · Portrait/Landscape',
       paperMm: { w: 320, h: 480 },
       areaMm:  { w: 315, h: 475 },
-      extraLabel: '04 · Bleed'
+      extraLabel: '05 · Bleed'
     },
     kiss: {
       key: 'kiss',
@@ -790,7 +955,7 @@
       desc: '32 × 48 cm · Portrait',
       paperMm: { w: 320, h: 480 },
       areaMm:  { w: 280, h: 440 },
-      extraLabel: '04 · Distance'
+      extraLabel: '05 · Distance'
     },
     die: {
       key: 'die',
@@ -798,11 +963,92 @@
       desc: '48 × 32 cm · Landscape',
       paperMm: { w: 480, h: 320 },
       areaMm:  { w: 440, h: 280 },
-      extraLabel: '04 · Distance'
+      extraLabel: '05 · Distance'
     }
   };
 
+  const UV_MACHINES = {
+    dlican: {
+      key: 'dlican',
+      machine: 'Dlican 1250',
+      paperMm: { w: 1200, h: 1500 },
+      areaMm:  { w: 1150, h: 1400 },
+      areaMarginTopMm: 75,
+      distancePresets: [10, 15, 20],
+      distanceDefault: 10
+    },
+    nocai: {
+      key: 'nocai',
+      machine: 'Nocai',
+      paperMm: { w: 600, h: 1100 },
+      areaMm:  { w: 590, h: 900 },
+      areaMarginTopMm: 300,
+      distancePresets: [5, 10, 15],
+      distanceDefault: 5
+    },
+    times: {
+      key: 'times',
+      machine: 'Times TF 9050 G5i',
+      paperMm: { w: 900, h: 600 },
+      areaMm:  { w: 890, h: 590 },
+      distancePresets: [5, 10, 15],
+      distanceDefault: 5
+    }
+  };
+
+  function uvOrientationLabel(m){
+    return m.paperMm.h >= m.paperMm.w ? 'Portrait' : 'Landscape';
+  }
+
+  function getUvConfig(){
+    const m = UV_MACHINES[state.uvMachine] || UV_MACHINES.times;
+    return {
+      key: 'uv',
+      name: 'UV Print',
+      desc: `${m.paperMm.w/10} × ${m.paperMm.h/10} cm`,
+      machine: m.machine,
+      paperMm: m.paperMm,
+      areaMm: m.areaMm,
+      areaMarginTopMm: m.areaMarginTopMm,
+      extraLabel: '05 · Distance'
+    };
+  }
+
+  function getCustomConfig(){
+    const wCmRaw = parseDecimal(state.customWidthCm);
+    const hCmRaw = parseDecimal(state.customHeightCm);
+    const wCm = (isFinite(wCmRaw) && wCmRaw > 0) ? Math.min(wCmRaw, 300) : 0;
+    const hCm = (isFinite(hCmRaw) && hCmRaw > 0) ? Math.min(hCmRaw, 300) : 0;
+    const areaWmm = wCm * 10;
+    const areaHmm = hCm * 10;
+    return {
+      key: 'custom',
+      name: 'Custom Size Print',
+      desc: `${fmtSmart(wCm)} × ${fmtSmart(hCm)} cm`,
+      paperMm: { w: areaWmm + 20, h: areaHmm + 20 },
+      areaMm: { w: areaWmm, h: areaHmm },
+      extraLabel: '05 · Bleed'
+    };
+  }
+
+  function getModeCfg(mode){
+    if(mode === 'uv') return getUvConfig();
+    if(mode === 'custom') return getCustomConfig();
+    if(isPaperMode(mode)) return getPaperCfg(mode, state.paperOrientation[mode] || 'portrait');
+    return MODE_CONFIG[mode];
+  }
+
   const EXTRA_OPTIONS_BY_MODE = {
+    a4: [
+      { mm: 0, label: 'No Bleed', special: true },
+      { mm: 3, label: '3mm' },
+      { mm: 4, label: '4mm' }
+    ],
+    a3std: [
+      { mm: 0, label: 'No Bleed', special: true },
+      { mm: 3, label: '3mm' },
+      { mm: 4, label: '4mm' }
+    ],
     a3: [
       { mm: 0, label: 'No Bleed', special: true },
       { mm: 3, label: '3mm' },
@@ -817,34 +1063,84 @@
       { mm: 0, label: 'No Distance', special: true },
       { mm: 3, label: '3mm' },
       { mm: 5, label: '5mm' }
+    ],
+    custom: [
+      { mm: 0, label: 'No Bleed', special: true },
+      { mm: 3, label: '3mm' },
+      { mm: 4, label: '4mm' }
     ]
   };
 
+  function extraModeKey(){
+    return state.mode === 'uv' ? ('uv:' + state.uvMachine) : state.mode;
+  }
+
   function getExtraOptions(){
+    if(state.mode === 'uv'){
+      const m = UV_MACHINES[state.uvMachine] || UV_MACHINES.times;
+      return m.distancePresets.map(mm => ({ mm, label: mm + 'mm' }));
+    }
     return EXTRA_OPTIONS_BY_MODE[state.mode] || EXTRA_OPTIONS_BY_MODE.a3;
+  }
+
+  function getDefaultExtraMm(opts){
+    if(state.mode === 'uv'){
+      const m = UV_MACHINES[state.uvMachine] || UV_MACHINES.times;
+      return m.distanceDefault;
+    }
+    return opts[1] ? opts[1].mm : opts[0].mm;
   }
   const SHAPE_OPTIONS = [
     { key:'kotak', label:'Square', icon: shapeIconSquare() },
     { key:'bulat', label:'Circle', icon: shapeIconCircle() }
   ];
 
+  function isPaperMode(mode){
+    return mode === 'a4' || mode === 'a3std' || mode === 'a3';
+  }
+
   let state = {
+    printCategory: 'standard',
     mode: 'a3',
+    standardMode: 'a3',
+    uvMachine: 'dlican',
     widthCm: 5,
     heightCm: 5,
+    customWidthCm: 100,
+    customHeightCm: 100,
     shape: 'kotak',
     extraMm: 4,
     extraCustom: false,
-    extraMmByMode: { a3: 4 },
-    extraCustomByMode: { a3: false },
-    a3Orientation: 'portrait',
-    a3AutoMode: true
+    extraMmByMode: { a3: 4, custom: 4, 'uv:dlican': 10, 'uv:nocai': 5, 'uv:times': 5 },
+    extraCustomByMode: { a3: false, custom: false, 'uv:dlican': false, 'uv:nocai': false, 'uv:times': false },
+    sizeCmByMode: {
+      a4: { w: 5, h: 5 },
+      a3std: { w: 5, h: 5 },
+      a3: { w: 5, h: 5 },
+      kiss: { w: 5, h: 5 },
+      die: { w: 5, h: 5 },
+      uv: { w: 10, h: 10 },
+      custom: { w: 15, h: 15 }
+    },
+    paperOrientation: { a4: 'portrait', a3std: 'portrait', a3: 'portrait' },
+    paperAutoMode: { a4: true, a3std: true, a3: true }
   };
 
   let lastResult = null;
 
   const el = {
-    modeGroup: document.getElementById('modeGroup'),
+    printCategoryGroup: document.getElementById('printCategoryGroup'),
+    standardTypeSection: document.getElementById('standardTypeSection'),
+    uvInfoSection: document.getElementById('uvInfoSection'),
+    uvMachineTrigger: document.getElementById('uvMachineTrigger'),
+    uvMachineTriggerLabel: document.getElementById('uvMachineTriggerLabel'),
+    uvMachineOptions: document.getElementById('uvMachineOptions'),
+    customSizeSection: document.getElementById('customSizeSection'),
+    inputCanvasWidth: document.getElementById('inputCanvasWidth'),
+    inputCanvasHeight: document.getElementById('inputCanvasHeight'),
+    modeTrigger: document.getElementById('modeTrigger'),
+    modeTriggerLabel: document.getElementById('modeTriggerLabel'),
+    modeOptions: document.getElementById('modeOptions'),
     shapeGroup: document.getElementById('shapeGroup'),
     extraGroup: document.getElementById('extraGroup'),
     extraLabel: document.getElementById('extraLabel'),
@@ -872,6 +1168,7 @@
     visualTitle: document.getElementById('visualTitle'),
 
     a3OrientationSection: document.getElementById('a3OrientationSection'),
+    a3OrientationLabel: document.getElementById('a3OrientationLabel'),
     a3OrientGroup: document.getElementById('a3OrientGroup'),
     a3BestInfo: document.getElementById('a3BestInfo'),
 
@@ -920,65 +1217,228 @@
     if(e.key === 'Escape' && el.sidebar.classList.contains('open')) closeSidebar();
   });
 
-  function buildModeButtons(){
-    el.modeGroup.innerHTML = '';
+  function buildModeDropdown(){
+    el.modeOptions.innerHTML = '';
     Object.values(MODE_CONFIG).forEach(cfg => {
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.setAttribute('role','radio');
-      btn.dataset.mode = cfg.key;
-      btn.className = modeBtnClass(cfg.key === state.mode);
-      btn.innerHTML = `<span class="name">${cfg.name}</span><span class="sub">${cfg.desc}</span>`;
-      btn.addEventListener('click', () => {
-        const enteringA3 = (cfg.key === 'a3' && state.mode !== 'a3');
-        state.mode = cfg.key;
+      const opt = document.createElement('div');
+      opt.className = 'print-mode-option' + (cfg.key === state.mode ? ' selected' : '');
+      opt.dataset.value = cfg.key;
+      opt.setAttribute('role','option');
+      opt.setAttribute('aria-selected', cfg.key === state.mode ? 'true' : 'false');
+      opt.textContent = `${cfg.name} · ${cfg.desc}`;
+      opt.addEventListener('click', () => {
+        const newMode = cfg.key;
+        const enteringPaperMode = (isPaperMode(newMode) && state.mode !== newMode);
 
-        if(enteringA3){
-          state.a3AutoMode = true;
+        state.sizeCmByMode[state.mode] = { w: el.inputWidth.value, h: el.inputHeight.value };
+
+        state.mode = newMode;
+        state.standardMode = newMode;
+
+        if(enteringPaperMode){
+          state.paperAutoMode[newMode] = true;
         }
 
-        const opts = getExtraOptions();
-        const remembered = state.extraMmByMode[state.mode];
-        const rememberedCustom = state.extraCustomByMode[state.mode];
-        if(remembered !== undefined && (rememberedCustom || opts.some(o => o.mm === remembered))){
-          state.extraMm = remembered;
-          state.extraCustom = !!rememberedCustom;
-        } else {
-          state.extraMm = opts[1] ? opts[1].mm : opts[0].mm;
-          state.extraCustom = false;
-        }
-        state.extraMmByMode[state.mode] = state.extraMm;
-        state.extraCustomByMode[state.mode] = state.extraCustom;
+        const size = state.sizeCmByMode[newMode];
+        el.inputWidth.value = size.w;
+        el.inputHeight.value = size.h;
 
-        refreshModeButtons();
+        applyExtraDefaultsForMode();
+
+        updateModeTriggerLabel();
+        refreshModeOptionsSelected();
+        closeAllDropdowns();
         refreshExtraLabel();
         refreshExtraNote();
         buildExtraButtons();
+        if(isPaperMode(newMode)) buildA3OrientButtons();
         calculate();
       });
-      el.modeGroup.appendChild(btn);
+      el.modeOptions.appendChild(opt);
     });
   }
 
-  function modeBtnClass(active){ return 'option-btn' + (active ? ' active' : ''); }
+  function refreshModeOptionsSelected(){
+    [...el.modeOptions.children].forEach(opt => {
+      const selected = opt.dataset.value === state.mode;
+      opt.classList.toggle('selected', selected);
+      opt.setAttribute('aria-selected', selected ? 'true' : 'false');
+    });
+  }
 
-  function refreshModeButtons(){
-    [...el.modeGroup.children].forEach(btn => {
-      const active = btn.dataset.mode === state.mode;
-      btn.className = modeBtnClass(active);
+  function updateModeTriggerLabel(){
+    const cfg = MODE_CONFIG[state.mode] || MODE_CONFIG.a3;
+    el.modeTriggerLabel.textContent = cfg.name;
+  }
+
+  function applyExtraDefaultsForMode(){
+    const opts = getExtraOptions();
+    const key = extraModeKey();
+    const remembered = state.extraMmByMode[key];
+    const rememberedCustom = state.extraCustomByMode[key];
+    if(remembered !== undefined && (rememberedCustom || opts.some(o => o.mm === remembered))){
+      state.extraMm = remembered;
+      state.extraCustom = !!rememberedCustom;
+    } else {
+      state.extraMm = getDefaultExtraMm(opts);
+      state.extraCustom = false;
+    }
+    state.extraMmByMode[key] = state.extraMm;
+    state.extraCustomByMode[key] = state.extraCustom;
+  }
+
+  const PRINT_CATEGORY_OPTIONS = [
+    { key: 'standard', label: 'Standard Print' },
+    { key: 'uv', label: 'UV Print' },
+    { key: 'custom', label: 'Custom Size Print' }
+  ];
+
+  function buildPrintCategoryButtons(){
+    el.printCategoryGroup.innerHTML = '';
+    PRINT_CATEGORY_OPTIONS.forEach(opt => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.setAttribute('role','radio');
+      btn.dataset.category = opt.key;
+      btn.className = printCategoryBtnClass(opt.key === state.printCategory);
+      btn.setAttribute('aria-checked', opt.key === state.printCategory ? 'true' : 'false');
+      btn.innerHTML = `<span class="name">${opt.label}</span>`;
+      btn.addEventListener('click', () => {
+        setPrintCategory(opt.key);
+      });
+      el.printCategoryGroup.appendChild(btn);
+    });
+  }
+
+  function printCategoryBtnClass(active){ return 'option-btn center' + (active ? ' active' : ''); }
+
+  function refreshPrintCategoryButtons(){
+    [...el.printCategoryGroup.children].forEach(btn => {
+      const active = btn.dataset.category === state.printCategory;
+      btn.className = printCategoryBtnClass(active);
       btn.setAttribute('aria-checked', active ? 'true' : 'false');
     });
   }
 
+  function setPrintCategory(category){
+    state.sizeCmByMode[state.mode] = { w: el.inputWidth.value, h: el.inputHeight.value };
+    state.printCategory = category;
+
+    el.standardTypeSection.classList.toggle('hidden', category !== 'standard');
+    el.uvInfoSection.classList.toggle('hidden', category !== 'uv');
+    el.customSizeSection.classList.toggle('hidden', category !== 'custom');
+
+    if(category === 'uv'){
+      state.mode = 'uv';
+      updateUvMachineTriggerLabel();
+      refreshUvMachineOptionsSelected();
+    } else if(category === 'custom'){
+      state.mode = 'custom';
+    } else {
+      state.mode = state.standardMode || 'a3';
+      if(isPaperMode(state.mode)) state.paperAutoMode[state.mode] = true;
+      updateModeTriggerLabel();
+      refreshModeOptionsSelected();
+    }
+
+    const size = state.sizeCmByMode[state.mode];
+    el.inputWidth.value = size.w;
+    el.inputHeight.value = size.h;
+
+    applyExtraDefaultsForMode();
+    refreshExtraLabel();
+    refreshExtraNote();
+    buildExtraButtons();
+    if(isPaperMode(state.mode)) buildA3OrientButtons();
+    updateVisualTitle();
+    refreshPrintCategoryButtons();
+    calculate();
+  }
+
+  const dropdowns = [];
+  function registerDropdown(trigger, options){
+    function close(){
+      trigger.classList.remove('active');
+      trigger.setAttribute('aria-expanded', 'false');
+      options.classList.remove('show');
+    }
+    function open(){
+      dropdowns.forEach(d => { if(d.trigger !== trigger) d.close(); });
+      trigger.classList.add('active');
+      trigger.setAttribute('aria-expanded', 'true');
+      options.classList.add('show');
+    }
+    trigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if(options.classList.contains('show')) close(); else open();
+    });
+    const entry = { trigger, options, close, open };
+    dropdowns.push(entry);
+    return entry;
+  }
+  function closeAllDropdowns(){
+    dropdowns.forEach(d => d.close());
+  }
+  document.addEventListener('click', (e) => {
+    dropdowns.forEach(d => {
+      if(!d.trigger.contains(e.target) && !d.options.contains(e.target)) d.close();
+    });
+  });
+  document.addEventListener('keydown', (e) => {
+    if(e.key === 'Escape') closeAllDropdowns();
+  });
+
+  registerDropdown(el.uvMachineTrigger, el.uvMachineOptions);
+  registerDropdown(el.modeTrigger, el.modeOptions);
+
+  function buildUvMachineDropdown(){
+    el.uvMachineOptions.innerHTML = '';
+    Object.values(UV_MACHINES).forEach(m => {
+      const opt = document.createElement('div');
+      opt.className = 'print-mode-option' + (m.key === state.uvMachine ? ' selected' : '');
+      opt.dataset.value = m.key;
+      opt.setAttribute('role','option');
+      opt.setAttribute('aria-selected', m.key === state.uvMachine ? 'true' : 'false');
+      opt.textContent = `${m.machine} · ${m.paperMm.w/10} × ${m.paperMm.h/10}cm · ${uvOrientationLabel(m)}`;
+      opt.addEventListener('click', () => {
+        state.uvMachine = m.key;
+        updateUvMachineTriggerLabel();
+        refreshUvMachineOptionsSelected();
+        closeAllDropdowns();
+        applyExtraDefaultsForMode();
+        buildExtraButtons();
+        calculate();
+      });
+      el.uvMachineOptions.appendChild(opt);
+    });
+  }
+
+  function refreshUvMachineOptionsSelected(){
+    [...el.uvMachineOptions.children].forEach(opt => {
+      const selected = opt.dataset.value === state.uvMachine;
+      opt.classList.toggle('selected', selected);
+      opt.setAttribute('aria-selected', selected ? 'true' : 'false');
+    });
+  }
+
+  function updateUvMachineTriggerLabel(){
+    const m = UV_MACHINES[state.uvMachine] || UV_MACHINES.times;
+    el.uvMachineTriggerLabel.textContent = m.machine;
+  }
+
   function refreshExtraLabel(){
-    const cfg = MODE_CONFIG[state.mode];
+    const cfg = getModeCfg(state.mode);
     el.extraLabel.textContent = cfg.extraLabel;
   }
 
   const EXTRA_NOTE_BY_MODE = {
+    a4: 'Bleed adds extra margin around the object for safer cropping tolerances. Select "No Bleed" if the object does not require additional cropping margin.',
+    a3std: 'Bleed adds extra margin around the object for safer cropping tolerances. Select "No Bleed" if the object does not require additional cropping margin.',
     a3: 'Bleed adds extra margin around the object for safer cropping tolerances. Select "No Bleed" if the object does not require additional cropping margin.',
     kiss: 'Distance controls the distance between objects on a single sheet to ensure a safer cutting pattern. Object sizes will automatically rotate if the result produces more quantity.',
-    die: 'Distance controls the distance between objects on a single sheet to ensure a safer cutting pattern. Object sizes will automatically rotate if the result produces more quantity.'
+    die: 'Distance controls the distance between objects on a single sheet to ensure a safer cutting pattern. Object sizes will automatically rotate if the result produces more quantity.',
+    uv: 'Distance controls the distance between objects on the flatboard to ensure a safer print object. Object sizes will automatically rotate if the result produces more quantity.',
+    custom: 'Bleed adds extra margin around the object for safer cropping tolerances. Select "No Bleed" if the object does not require additional cropping margin. Object sizes will automatically rotate if the result produces more quantity.'
   };
 
   function refreshExtraNote(){
@@ -986,9 +1446,13 @@
   }
 
   const VISUAL_TITLE_BY_MODE = {
-    a3: 'Layout Visualization - A3+ Standard',
+    a4: 'Layout Visualization - A4 Paper Size',
+    a3std: 'Layout Visualization - A3 Paper Size',
+    a3: 'Layout Visualization - A3+ Paper Size',
     kiss: 'Layout Visualization - Kiss Cutting',
-    die: 'Layout Visualization - Die Cutting'
+    die: 'Layout Visualization - Die Cutting',
+    uv: 'Layout Visualization - UV Print',
+    custom: 'Layout Visualization - Custom Size Print'
   };
 
   function updateVisualTitle(){
@@ -1057,8 +1521,8 @@
     function applyCustomValue(num){
       state.extraMm = num;
       state.extraCustom = true;
-      state.extraMmByMode[state.mode] = num;
-      state.extraCustomByMode[state.mode] = true;
+      state.extraMmByMode[extraModeKey()] = num;
+      state.extraCustomByMode[extraModeKey()] = true;
       refreshExtraButtons();
       calculate();
     }
@@ -1085,10 +1549,10 @@
     customInput.addEventListener('blur', () => {
       if(customInput.value.trim() === ''){
         const opts = getExtraOptions();
-        state.extraMm = opts[1] ? opts[1].mm : opts[0].mm;
+        state.extraMm = getDefaultExtraMm(opts);
         state.extraCustom = false;
-        state.extraMmByMode[state.mode] = state.extraMm;
-        state.extraCustomByMode[state.mode] = false;
+        state.extraMmByMode[extraModeKey()] = state.extraMm;
+        state.extraCustomByMode[extraModeKey()] = false;
         refreshExtraButtons();
         calculate();
       }
@@ -1119,8 +1583,8 @@
       btn.addEventListener('click', () => {
         state.extraMm = opt.mm;
         state.extraCustom = false;
-        state.extraMmByMode[state.mode] = opt.mm;
-        state.extraCustomByMode[state.mode] = false;
+        state.extraMmByMode[extraModeKey()] = opt.mm;
+        state.extraCustomByMode[extraModeKey()] = false;
         refreshExtraButtons();
         calculate();
       });
@@ -1164,44 +1628,64 @@
     return '<span class="barcode-block"></span><span class="barcode-dot"></span>';
   }
 
-  function getA3Cfg(orientation){
-    if(orientation === 'landscape'){
-      return {
-        key: 'a3',
-        name: 'A3+ Standar',
-        desc: '48 × 32 cm · Landscape',
-        paperMm: { w: 480, h: 320 },
-        areaMm:  { w: 475, h: 315 },
-        extraLabel: '04 · Bleed'
-      };
+  const PAPER_MODE_SPECS = {
+    a4: {
+      name: 'A4 Paper Size',
+      short: 'A4',
+      portrait:  { paperMm: { w: 210, h: 297 }, areaMm: { w: 205, h: 290 } },
+      landscape: { paperMm: { w: 297, h: 210 }, areaMm: { w: 290, h: 205 } }
+    },
+    a3std: {
+      name: 'A3 Paper Size',
+      short: 'A3',
+      portrait:  { paperMm: { w: 297, h: 420 }, areaMm: { w: 290, h: 415 } },
+      landscape: { paperMm: { w: 420, h: 297 }, areaMm: { w: 415, h: 290 } }
+    },
+    a3: {
+      name: 'A3+ Paper Size',
+      short: 'A3+',
+      portrait:  { paperMm: { w: 320, h: 480 }, areaMm: { w: 315, h: 475 } },
+      landscape: { paperMm: { w: 480, h: 320 }, areaMm: { w: 475, h: 315 } }
     }
+  };
+
+  function getPaperCfg(mode, orientation){
+    const spec = PAPER_MODE_SPECS[mode];
+    const dims = orientation === 'landscape' ? spec.landscape : spec.portrait;
+    const wCm = dims.paperMm.w / 10;
+    const hCm = dims.paperMm.h / 10;
     return {
-      key: 'a3',
-      name: 'A3+ Standar',
-      desc: '32 × 48 cm · Portrait',
-      paperMm: { w: 320, h: 480 },
-      areaMm:  { w: 315, h: 475 },
-      extraLabel: '04 · Bleed'
+      key: mode,
+      name: spec.name,
+      desc: `${fmtSmart(wCm)} × ${fmtSmart(hCm)} cm · ${orientation === 'landscape' ? 'Landscape' : 'Portrait'}`,
+      paperMm: dims.paperMm,
+      areaMm: dims.areaMm,
+      extraLabel: '05 · Bleed'
     };
   }
 
-  const A3_ORIENT_OPTIONS = [
-    { key:'portrait',  label:'Portrait',  sub:'32×48 cm' },
-    { key:'landscape', label:'Landscape', sub:'48×32 cm' }
-  ];
-
   function buildA3OrientButtons(){
+    const spec = PAPER_MODE_SPECS[state.mode];
+    if(!spec) return;
+
+    el.a3OrientationLabel.textContent = `Paper Orientation (${spec.short})`;
+
+    const options = [
+      { key:'portrait',  label:'Portrait',  sub:`${fmtSmart(spec.portrait.paperMm.w/10)}×${fmtSmart(spec.portrait.paperMm.h/10)} cm` },
+      { key:'landscape', label:'Landscape', sub:`${fmtSmart(spec.landscape.paperMm.w/10)}×${fmtSmart(spec.landscape.paperMm.h/10)} cm` }
+    ];
+
     el.a3OrientGroup.innerHTML = '';
-    A3_ORIENT_OPTIONS.forEach(opt => {
+    options.forEach(opt => {
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.setAttribute('role','radio');
       btn.dataset.orient = opt.key;
-      btn.className = a3OrientBtnClass(opt.key === state.a3Orientation);
+      btn.className = a3OrientBtnClass(opt.key === state.paperOrientation[state.mode]);
       btn.innerHTML = `<span class="name">${opt.label}</span><span class="sub">${opt.sub} · Preview</span>`;
       btn.addEventListener('click', () => {
-        state.a3Orientation = opt.key;
-        state.a3AutoMode = false;
+        state.paperOrientation[state.mode] = opt.key;
+        state.paperAutoMode[state.mode] = false;
         refreshA3OrientButtons();
         calculate();
       });
@@ -1213,7 +1697,7 @@
 
   function refreshA3OrientButtons(){
     [...el.a3OrientGroup.children].forEach(btn => {
-      const active = btn.dataset.orient === state.a3Orientation;
+      const active = btn.dataset.orient === state.paperOrientation[state.mode];
       btn.className = a3OrientBtnClass(active);
       btn.setAttribute('aria-checked', active ? 'true' : 'false');
     });
@@ -1310,9 +1794,16 @@
       el.warningBox.classList.add('hidden');
     }
 
-    const paperText = (cfg.key === 'kiss' || cfg.key === 'die')
-      ? `Paper Size ${cfg.paperMm.w/10}×${cfg.paperMm.h/10} cm · Cutting Area ${cfg.areaMm.w/10}×${cfg.areaMm.h/10} cm`
-      : `Paper Size ${cfg.paperMm.w/10}×${cfg.paperMm.h/10} cm · Print Area ${cfg.areaMm.w/10}×${cfg.areaMm.h/10} cm`;
+    let paperText;
+    if(cfg.key === 'kiss' || cfg.key === 'die'){
+      paperText = `Paper Size ${cfg.paperMm.w/10}×${cfg.paperMm.h/10} cm · Cutting Area ${cfg.areaMm.w/10}×${cfg.areaMm.h/10} cm`;
+    } else if(cfg.key === 'uv'){
+      paperText = `${cfg.machine} · Flatboard ${cfg.paperMm.w/10}×${cfg.paperMm.h/10} cm · Print Area ${cfg.areaMm.w/10}×${cfg.areaMm.h/10} cm`;
+    } else if(cfg.key === 'custom'){
+      paperText = `Canvas Size ${cfg.paperMm.w/10}×${cfg.paperMm.h/10} cm · Print Area ${cfg.areaMm.w/10}×${cfg.areaMm.h/10} cm`;
+    } else {
+      paperText = `Paper Size ${fmtSmart(cfg.paperMm.w/10)}×${fmtSmart(cfg.paperMm.h/10)} cm · Print Area ${fmtSmart(cfg.areaMm.w/10)}×${fmtSmart(cfg.areaMm.h/10)} cm`;
+    }
     el.paperMeta.textContent = paperText;
   }
 
@@ -1350,7 +1841,9 @@
     const area = cfg.areaMm;
 
     const marginXmm = (paper.w - area.w) / 2;
-    const marginYmm = (paper.h - area.h) / 2;
+    const marginYmm = (cfg.areaMarginTopMm !== undefined)
+      ? Math.max(0, Math.min(cfg.areaMarginTopMm, paper.h - area.h))
+      : (paper.h - area.h) / 2;
 
     const areaLeftPx = marginXmm * pxPerMm;
     const areaTopPx = marginYmm * pxPerMm;
@@ -1400,8 +1893,12 @@
       capped = true;
     }
     el.previewNote.classList.toggle('hidden', !capped);
-    const showBleed = cfg.key === 'a3' && Number(result.bleedMm) > 0;
-    const showDistance = (cfg.key === 'kiss' || cfg.key === 'die') && Number(result.bleedMm) > 0;
+    const highlightActive = Number(result.bleedMm) > 0
+      && (isPaperMode(cfg.key) || cfg.key === 'kiss' || cfg.key === 'die' || cfg.key === 'uv' || cfg.key === 'custom');
+    const strokeColor = (isPaperMode(cfg.key) || cfg.key === 'custom') ? '#ff2d2d'
+      : (cfg.key === 'kiss' || cfg.key === 'die') ? '#facc15'
+      : cfg.key === 'uv' ? '#22c55e'
+      : null;
     const bleedMm = Number(result.bleedMm) || 0;
     const fillWPercent = Math.max(10, Math.min(100, (result.realCellWmm / result.cellWmm) * 100));
     const fillHPercent = Math.max(10, Math.min(100, (result.realCellHmm / result.cellHmm) * 100));
@@ -1418,7 +1915,7 @@
       const approxCellHpx = areaHPx / pRows;
       const borderPx = computeBorderPx(bleedMm, pxPerMm, Math.min(approxCellWpx, approxCellHpx));
       for(let i = 0; i < pCols * pRows; i++){
-        el.gridBox.appendChild(makeObjCell(fillWPercent, fillHPercent, showBleed, showDistance, borderPx));
+        el.gridBox.appendChild(makeObjCell(fillWPercent, fillHPercent, highlightActive, strokeColor, borderPx));
       }
     } else {
       const cellWpx = result.cellWmm * pxPerMm;
@@ -1432,7 +1929,7 @@
       el.gridBox.style.gap = '0px';
       const borderPx = computeBorderPx(bleedMm, pxPerMm, Math.min(cellWpx, cellHpx));
       for(let i = 0; i < pCols * pRows; i++){
-        el.gridBox.appendChild(makeObjCell(fillWPercent, fillHPercent, showBleed, showDistance, borderPx));
+        el.gridBox.appendChild(makeObjCell(fillWPercent, fillHPercent, highlightActive, strokeColor, borderPx));
       }
     }
   }
@@ -1444,7 +1941,7 @@
     return Math.min(Math.max(raw, 1.5), maxPx);
   }
 
-  function makeObjCell(fillWPercent, fillHPercent, showBleed, showDistance, borderPx){
+  function makeObjCell(fillWPercent, fillHPercent, highlightEdge, strokeColor, borderPx){
     const wrap = document.createElement('div');
     wrap.className = 'obj-cell';
     wrap.style.width = '100%';
@@ -1453,9 +1950,7 @@
     wrap.style.alignItems = 'center';
     wrap.style.justifyContent = 'center';
 
-    const highlightEdge = showBleed || showDistance;
-    if(highlightEdge && borderPx !== undefined){
-      const strokeColor = showBleed ? '#ff2d2d' : '#facc15';
+    if(highlightEdge && strokeColor && borderPx !== undefined){
       const stroke = document.createElement('div');
       stroke.className = 'obj-stroke' + (state.shape === 'bulat' ? ' round' : '');
       stroke.style.width = fillWPercent + '%';
@@ -1475,35 +1970,38 @@
   function calculate(){
     state.widthCm = el.inputWidth.value;
     state.heightCm = el.inputHeight.value;
+    state.customWidthCm = el.inputCanvasWidth.value;
+    state.customHeightCm = el.inputCanvasHeight.value;
 
     const wCmNum = parseDecimal(state.widthCm);
     const hCmNum = parseDecimal(state.heightCm);
     const sizeUnder4 = isFinite(wCmNum) && isFinite(hCmNum) && wCmNum > 0 && hCmNum > 0
       && (wCmNum < 4 || hCmNum < 4);
-    const showSmallBleedWarning = state.mode === 'a3' && sizeUnder4 && Number(state.extraMm) > 0;
+    const showSmallBleedWarning = (isPaperMode(state.mode) || state.mode === 'uv' || state.mode === 'custom') && sizeUnder4 && Number(state.extraMm) > 0;
     el.bleedNote.classList.toggle('hidden', !showSmallBleedWarning);
 
     let cfg;
     let calcState = state;
     let autoRotated = false;
 
-    if(state.mode === 'a3'){
+    if(isPaperMode(state.mode)){
+      const mode = state.mode;
 
-      const rPortrait  = computeLayout(getA3Cfg('portrait'),  state);
-      const rLandscape = computeLayout(getA3Cfg('landscape'), state);
+      const rPortrait  = computeLayout(getPaperCfg(mode, 'portrait'),  state);
+      const rLandscape = computeLayout(getPaperCfg(mode, 'landscape'), state);
       const totalP = rPortrait.valid ? rPortrait.total : 0;
       const totalL = rLandscape.valid ? rLandscape.total : 0;
 
-      if(state.a3AutoMode){
-        state.a3Orientation = (totalL > totalP) ? 'landscape' : 'portrait';
+      if(state.paperAutoMode[mode]){
+        state.paperOrientation[mode] = (totalL > totalP) ? 'landscape' : 'portrait';
         refreshA3OrientButtons();
       }
 
       updateA3CompareInfo(rPortrait, rLandscape);
-      cfg = getA3Cfg(state.a3Orientation);
+      cfg = getPaperCfg(mode, state.paperOrientation[mode]);
       el.a3OrientationSection.classList.remove('hidden');
     } else {
-      cfg = MODE_CONFIG[state.mode];
+      cfg = getModeCfg(state.mode);
       el.a3OrientationSection.classList.add('hidden');
 
       const wCm = parseDecimal(state.widthCm);
@@ -1534,8 +2032,8 @@
   }
 
   function updateAutoRotateNote(cfg, result, autoRotated){
-    const isCutting = cfg.key === 'kiss' || cfg.key === 'die';
-    const show = isCutting && autoRotated && result.valid;
+    const usesRotation = cfg.key === 'kiss' || cfg.key === 'die' || cfg.key === 'uv' || cfg.key === 'custom';
+    const show = usesRotation && autoRotated && result.valid;
     el.autoRotateNote.classList.toggle('hidden', !show);
     if(show){
       el.autoRotateNote.textContent = 'Auto Rotate is applied, the object size is automatically rotated because it produces more quantity.';
@@ -1555,33 +2053,39 @@
     }
 
     el.qtySizeObject.textContent = `${fmt1(wCm)} × ${fmt1(hCm)} cm`;
-    const isCutting = cfg.key === 'kiss' || cfg.key === 'die';
-    el.qtySizeObjectNote.classList.toggle('hidden', !(isCutting && autoRotated));
-    if(isCutting && autoRotated){
+    const usesRotation = cfg.key === 'kiss' || cfg.key === 'die' || cfg.key === 'uv' || cfg.key === 'custom';
+    el.qtySizeObjectNote.classList.toggle('hidden', !(usesRotation && autoRotated));
+    if(usesRotation && autoRotated){
       el.qtySizeObjectNote.textContent = 'Auto Rotated for maximum quantity';
     }
 
     const extraMm = Number(calcState.extraMm) || 0;
-    const extraLabelWord = cfg.key === 'a3' ? 'Bleed' : 'Distance';
-    const totalW = wCm + (extraMm / 10);
-    const totalH = hCm + (extraMm / 10);
-    el.qtySizeBleedInfo.textContent = `With ${extraLabelWord} ${fmt1(extraMm)}mm = ${fmtSmart(totalW)}x${fmtSmart(totalH)} cm`;
-    el.qtySizeBleedInfo.classList.remove('hidden');
+    if(extraMm <= 0){
+      el.qtySizeBleedInfo.classList.add('hidden');
+    } else {
+      const extraLabelWord = (isPaperMode(cfg.key) || cfg.key === 'custom') ? 'Bleed' : 'Distance';
+      const totalW = wCm + (extraMm / 10);
+      const totalH = hCm + (extraMm / 10);
+      el.qtySizeBleedInfo.textContent = `With ${extraLabelWord} ${fmt1(extraMm)}mm = ${fmtSmart(totalW)}x${fmtSmart(totalH)} cm`;
+      el.qtySizeBleedInfo.classList.remove('hidden');
+    }
   }
 
   function updateLegend(cfg, calcState){
-    const isA3 = cfg.key === 'a3';
+    const isA3 = isPaperMode(cfg.key);
     const isCutting = cfg.key === 'kiss' || cfg.key === 'die';
-    el.visualLegend.classList.toggle('hidden', !(isA3 || isCutting));
+    const isUv = cfg.key === 'uv';
+    const isCustom = cfg.key === 'custom';
+    el.visualLegend.classList.toggle('hidden', !(isA3 || isCutting || isUv || isCustom));
     clearEl(el.visualLegend);
-    if(!(isA3 || isCutting)) return;
+    if(!(isA3 || isCutting || isUv || isCustom)) return;
 
     const qtyItem = document.createElement('span');
     qtyItem.className = 'legend-item';
     qtyItem.innerHTML = '<span class="legend-swatch legend-blue"></span>Total Quantity';
     el.visualLegend.appendChild(qtyItem);
 
-    if(isA3){
+    if(isA3 || isCustom){
       const bleedMm = Number(calcState.extraMm) || 0;
       if(bleedMm > 0){
         const bleedItem = document.createElement('span');
@@ -1601,15 +2105,40 @@
       barcodeItem.className = 'legend-item';
       barcodeItem.innerHTML = '<span class="legend-swatch legend-barcode"></span>Barcode Cutting';
       el.visualLegend.appendChild(barcodeItem);
+    } else if(isUv){
+      const distMm = Number(calcState.extraMm) || 0;
+      if(distMm > 0){
+        const distItem = document.createElement('span');
+        distItem.className = 'legend-item';
+        distItem.innerHTML = `<span class="legend-swatch legend-green"></span>Distance ${distMm}mm`;
+        el.visualLegend.appendChild(distItem);
+      }
     }
   }
 
   function handleSizeInput(){
-    state.a3AutoMode = true;
+    state.sizeCmByMode[state.mode] = { w: el.inputWidth.value, h: el.inputHeight.value };
     calculate();
   }
   el.inputWidth.addEventListener('input', handleSizeInput);
   el.inputHeight.addEventListener('input', handleSizeInput);
+
+  el.inputCanvasWidth.addEventListener('input', calculate);
+  el.inputCanvasHeight.addEventListener('input', calculate);
+  el.inputCanvasWidth.addEventListener('blur', () => {
+    const n = parseDecimal(el.inputCanvasWidth.value);
+    if(isFinite(n) && n > 300){
+      el.inputCanvasWidth.value = '300';
+      calculate();
+    }
+  });
+  el.inputCanvasHeight.addEventListener('blur', () => {
+    const n = parseDecimal(el.inputCanvasHeight.value);
+    if(isFinite(n) && n > 300){
+      el.inputCanvasHeight.value = '300';
+      calculate();
+    }
+  });
 
   let resizeRaf = null;
   window.addEventListener('resize', () => {
@@ -1619,7 +2148,11 @@
     });
   });
 
-  buildModeButtons();
+  buildPrintCategoryButtons();
+  buildModeDropdown();
+  updateModeTriggerLabel();
+  buildUvMachineDropdown();
+  updateUvMachineTriggerLabel();
   buildShapeButtons();
   buildExtraButtons();
   buildA3OrientButtons();
