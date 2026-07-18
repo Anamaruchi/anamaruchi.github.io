@@ -78,7 +78,7 @@
   .corner-btn svg{ width: clamp(18px, 4vw, 24px); height: clamp(18px, 4vw, 24px); }
 
   .gear-btn{ left: clamp(12px, 3vw, 20px); }
-  .gear-btn.menu-open-hide{
+  .gear-btn.menu-active{
     opacity: 0;
     pointer-events: none;
     transform: scale(0.85);
@@ -982,7 +982,7 @@
       machine: 'Nocai',
       paperMm: { w: 600, h: 1100 },
       areaMm:  { w: 590, h: 900 },
-      areaMarginTopMm: 300,
+      areaMarginTopMm: 195,
       distancePresets: [5, 10, 15],
       distanceDefault: 5
     },
@@ -1111,8 +1111,8 @@
     shape: 'kotak',
     extraMm: 4,
     extraCustom: false,
-    extraMmByMode: { a3: 4, custom: 4, 'uv:dlican': 10, 'uv:nocai': 5, 'uv:times': 5 },
-    extraCustomByMode: { a3: false, custom: false, 'uv:dlican': false, 'uv:nocai': false, 'uv:times': false },
+    extraMmByMode: { a4: 4, a3std: 4, a3: 4, custom: 4, 'uv:dlican': 10, 'uv:nocai': 5, 'uv:times': 5 },
+    extraCustomByMode: { a4: false, a3std: false, a3: false, custom: false, 'uv:dlican': false, 'uv:nocai': false, 'uv:times': false },
     sizeCmByMode: {
       a4: { w: 5, h: 5 },
       a3std: { w: 5, h: 5 },
@@ -1190,8 +1190,9 @@
   function openSidebar(){
     el.sidebar.classList.add('open');
     el.sidebarOverlay.classList.add('open');
-    el.menuToggle.classList.add('menu-open-hide');
+    el.menuToggle.classList.add('menu-active');
     el.menuToggle.setAttribute('aria-expanded', 'true');
+    el.menuToggle.setAttribute('aria-label', 'Close Setting Menu');
     el.sidebar.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
   }
@@ -1199,8 +1200,9 @@
   function closeSidebar(){
     el.sidebar.classList.remove('open');
     el.sidebarOverlay.classList.remove('open');
-    el.menuToggle.classList.remove('menu-open-hide');
+    el.menuToggle.classList.remove('menu-active');
     el.menuToggle.setAttribute('aria-expanded', 'false');
+    el.menuToggle.setAttribute('aria-label', 'Open Setting Menu');
     el.sidebar.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
   }
