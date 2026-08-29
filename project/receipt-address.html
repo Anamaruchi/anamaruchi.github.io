@@ -305,8 +305,56 @@
             color: #fff;
             border-top: 1px solid rgba(59, 130, 246, 0.3);
             padding-top: 15px;
+            overflow: hidden;
         }
         .credit-line a { color: #60a5fa; text-decoration: none; }
+        .credit-line b {
+            display: inline-block;
+            white-space: nowrap;
+        }
+
+        .textarea-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .textarea-wrapper textarea {
+            width: 100%;
+            display: block;
+        }
+
+        .btn-clear-barang {
+            position: absolute;
+            bottom: 12px;
+            right: 10px;
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(135deg, #ef4444, #b91c1c);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 3px 10px rgba(220, 38, 38, 0.5);
+            transition: all 0.2s ease;
+            z-index: 5;
+        }
+
+        .btn-clear-barang:hover {
+            background: linear-gradient(135deg, #dc2626, #991b1b);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 14px rgba(220, 38, 38, 0.6);
+        }
+
+        .btn-clear-barang:active {
+            transform: translateY(0);
+        }
+
+        .btn-clear-barang svg {
+            width: 15px;
+            height: 15px;
+        }
 
         @media screen and (max-width: 600px) {
             body { 
@@ -346,6 +394,18 @@
             #downloadBtn:hover {
                 transform: none;
                 box-shadow: 0 5px 15px rgba(0, 96, 223, 0.3);
+            }
+
+            .btn-clear-barang {
+                width: 26px;
+                height: 26px;
+                bottom: 10px;
+                right: 8px;
+            }
+
+            .btn-clear-barang svg {
+                width: 13px;
+                height: 13px;
             }
         }
     </style>
@@ -402,7 +462,18 @@
     
     <div class="group" style="grid-column: span 2;">
         <label>Detail Barang (1 Nomer Perbaris)</label>
-        <textarea id="in-barang" rows="8" placeholder="Detail barang..."></textarea>
+        <div class="textarea-wrapper">
+            <textarea id="in-barang" rows="8" placeholder="Detail barang..."></textarea>
+            <button type="button" class="btn-clear-barang" onclick="clearBarang()" title="Hapus Semua Detail Barang">
+                <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path>
+                    <path d="M10 11v6"></path>
+                    <path d="M14 11v6"></path>
+                    <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"></path>
+                </svg>
+            </button>
+        </div>
     </div>
 
     <div class="group"><label>Total Harga</label><input type="number" id="in-harga"></div>
@@ -495,6 +566,12 @@
         e.stopPropagation();
     });
 
+    function clearBarang() {
+        const el = document.getElementById('in-barang');
+        el.value = '';
+        el.focus();
+    }
+
     function parseJsonInput() {
         const rawJson = document.getElementById('json-input').value;
         try {
@@ -574,6 +651,24 @@
         a.download = `${d.t} - Tanda Terima - ${d.p || 'Print'}.xlsx`;
         a.click();
     }
+
+    function fitCreditLine() {
+        const wrap = document.querySelector('.credit-line');
+        const text = wrap ? wrap.querySelector('b') : null;
+        if (!wrap || !text) return;
+        text.style.fontSize = '';
+        const baseSize = parseFloat(window.getComputedStyle(text).fontSize);
+        const wrapWidth = wrap.clientWidth;
+        const textWidth = text.scrollWidth;
+        if (textWidth > wrapWidth && wrapWidth > 0 && baseSize > 0) {
+            const newSize = (baseSize * (wrapWidth / textWidth)) * 0.97;
+            text.style.fontSize = newSize + 'px';
+        }
+    }
+
+    fitCreditLine();
+    window.addEventListener('load', fitCreditLine);
+    window.addEventListener('resize', fitCreditLine);
 </script>
 </body>
 </html>
