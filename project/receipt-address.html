@@ -453,7 +453,18 @@
     
     <div class="group step-box step-blue">
         <label>Paste Data JSON dari Extension:</label>
-        <textarea id="json-input" rows="3" placeholder="Paste kode JSON di sini..."></textarea>
+        <div class="textarea-wrapper">
+            <textarea id="json-input" rows="3" placeholder="Paste kode JSON di sini..."></textarea>
+            <button type="button" class="btn-clear-barang" onclick="clearJsonInput()" title="Hapus Data JSON">
+                <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path>
+                    <path d="M10 11v6"></path>
+                    <path d="M14 11v6"></path>
+                    <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"></path>
+                </svg>
+            </button>
+        </div>
         <button class="btn-process" onclick="parseJsonInput()">Proses Data JSON</button>
     </div>
 
@@ -568,6 +579,12 @@
 
     function clearBarang() {
         const el = document.getElementById('in-barang');
+        el.value = '';
+        el.focus();
+    }
+
+    function clearJsonInput() {
+        const el = document.getElementById('json-input');
         el.value = '';
         el.focus();
     }
