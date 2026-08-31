@@ -865,17 +865,17 @@ html.drag-scroll-lock, body.drag-scroll-lock { overflow: hidden !important; over
   </button>
   <button type="button" class="page-context-item" id="context-add-page-toggle" data-action="toggle-add">
     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M12 12v6"/><path d="M9 15h6"/></svg>
-    Add Page
+    Add Blank Page
     <svg class="page-context-chevron" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
   </button>
   <div id="context-add-submenu" class="page-context-submenu">
     <button type="button" class="page-context-item sub" data-action="before">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="9" width="14" height="12" rx="1.5"/><path d="M12 6V2"/><path d="M9 5l3-3 3 3"/></svg>
-      Add Page Before This Page
+      Before This Page
     </button>
     <button type="button" class="page-context-item sub" data-action="after">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="12" rx="1.5"/><path d="M12 18v4"/><path d="M9 19l3 3 3-3"/></svg>
-      Add Page After This Page
+      After This Page
     </button>
   </div>
   <div class="page-context-divider"></div>
@@ -1353,7 +1353,7 @@ function checkPageCountWarning() {
   }
   const short = 4 - remainder;
   const over = remainder;
-  pageCountWarningDetail.innerHTML = `Current total: <strong>${total} pages</strong>.<br>Short by <strong>${short} page${short > 1 ? 's' : ''}</strong> (add ${short}) or Over by <strong>${over} page${over > 1 ? 's' : ''}</strong> (remove ${over}) to match a multiple of 4.`;
+  pageCountWarningDetail.innerHTML = `Current total: <strong>${total} pages</strong><br>Add by <strong>${short} page${short > 1 ? 's' : ''}</strong> or Delete by <strong>${over} pages<br></strong>To match a multiple of 4`;
   pageCountWarning.classList.remove('hidden');
   pageCountWarning.classList.add('flex');
 }
