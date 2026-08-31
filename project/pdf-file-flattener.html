@@ -654,6 +654,7 @@
             background: linear-gradient(135deg, #ef4444, #dc2626);
             color: white;
             border: 1px solid rgba(239, 68, 68, 0.3);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
         }
 
         .btn-secondary:hover {
@@ -786,9 +787,13 @@
             margin: 0 auto 10px;
             position: relative;
             border: 1px solid rgba(59, 130, 246, 0.2);
+            display: flex;
+            align-items: flex-end;
+            overflow: hidden;
         }
 
         .bar-fill {
+            width: 100%;
             background: linear-gradient(135deg, #3b82f6, #1d4ed8);
             border-radius: 6px;
             transition: height 0.8s ease;
