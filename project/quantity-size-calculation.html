@@ -2417,7 +2417,7 @@ function t(key, fallback){
     try{
       fetch('quantity-size-calculation-lang.json')
         .then(function(res){
-          if(!res.ok) throw new Error('Gagal memuat quantity-size-calculation-lang.json (status ' + res.status + ')');
+          if(!res.ok) throw new Error('Failed to load lang.json (status ' + res.status + ')');
           return res.json();
         })
         .then(function(data){
@@ -2425,10 +2425,10 @@ function t(key, fallback){
           applyTranslations(__i18nLang);
         })
         .catch(function(err){
-          console.warn('i18n: quantity-size-calculation-lang.json tidak dapat dimuat.', err);
+          console.warn('i18n: lang.json could not be loaded.', err);
         });
     }catch(err){
-      console.warn('i18n: fetch tidak tersedia di browser ini.', err);
+      console.warn('i18n: fetch is not available in this browser.', err);
     }
   }
 
