@@ -214,7 +214,7 @@
     color:#3b82f6;
     margin: 0 0 10px 0;
   }
-
+  
   .option-group{ display:flex; flex-direction:column; gap:8px; }
   .option-group.cols-2{ display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:8px; }
   .option-group.cols-3{ display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:8px; }
@@ -530,6 +530,7 @@
   .a3-orient-section .option-btn .name{ font-size:13px; }
   .a3-orient-section .option-btn .sub{ font-size:10px; }
   .a3-best-info{
+	white-space: pre-line;
     margin: 8px 0 0;
     font-size:11px;
     font-weight:600;
@@ -539,6 +540,85 @@
     border: 1px solid rgba(59,130,246,0.25);
     border-radius:8px;
     padding:6px 9px;
+  }
+
+  .a3-best-info.bleed-highlight{
+    color:#f5a524;
+    background: rgba(245,165,36,0.1);
+    border: 1px solid rgba(245,165,36,0.35);
+    display:flex;
+    align-items:center;
+    gap:6px;
+  }
+
+  .info-tooltip-btn{
+    position:relative;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:15px;
+    height:15px;
+    padding:0;
+    margin:0;
+    border:none;
+    background:transparent;
+    cursor:pointer;
+    flex-shrink:0;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .info-tooltip-btn.hidden{ display:none; }
+  .info-tooltip-icon{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:15px;
+    height:15px;
+    border-radius:50%;
+    border:1px solid rgba(245,165,36,0.6);
+    background:rgba(245,165,36,0.18);
+    color:#f5a524;
+    font-size:10px;
+    font-weight:700;
+    font-style:italic;
+    line-height:1;
+  }
+  .info-tooltip-bubble{
+    position:absolute;
+    bottom:calc(100% + 8px);
+    right:0;
+    left:auto;
+    width:max-content;
+    max-width:220px;
+    background:#1a1a1a;
+    border:1px solid rgba(245,165,36,0.4);
+    color:#f5a524;
+    font-size:11px;
+    font-weight:600;
+    line-height:1.4;
+    padding:8px 10px;
+    border-radius:8px;
+    text-align:left;
+    box-shadow:0 8px 20px rgba(0,0,0,0.4);
+    opacity:0;
+    transform:translateY(4px);
+    pointer-events:none;
+    transition:opacity 0.2s ease, transform 0.2s ease;
+    z-index:20;
+    white-space:normal;
+  }
+  .info-tooltip-bubble::after{
+    content:'';
+    position:absolute;
+    top:100%;
+    right:4px;
+    border:6px solid transparent;
+    border-top-color:#1a1a1a;
+  }
+  .info-tooltip-btn.open .info-tooltip-bubble,
+  .info-tooltip-btn:hover .info-tooltip-bubble{
+    opacity:1;
+    pointer-events:auto;
+    transform:translateY(0);
   }
 
   .compare-line{ margin-top:14px; font-size:11px; color:rgba(255,255,255,0.4); border-top:1px solid rgba(59,130,246,0.2); padding-top:10px; }
@@ -802,14 +882,14 @@
         <p class="eyebrow">03 · Object Size</p>
         <div class="grid-2">
           <div>
-            <span class="field-label">Lenght</span>
+            <span class="field-label">Width</span>
             <div class="field-input-wrap">
               <input id="inputWidth" type="text" inputmode="decimal" autocomplete="off" value="5" class="field-input" />
               <span class="field-unit">cm</span>
             </div>
           </div>
           <div>
-            <span class="field-label">Width</span>
+            <span class="field-label">Height</span>
             <div class="field-input-wrap">
               <input id="inputHeight" type="text" inputmode="decimal" autocomplete="off" value="5" class="field-input" />
               <span class="field-unit">cm</span>
@@ -876,7 +956,7 @@
                   <p class="stat-label">Object Size</p>
                   <p id="qtySizeObject" class="stat-value">—</p>
                   <p id="qtySizeObjectNote" class="stat-note hidden"></p>
-                  <p id="qtySizeBleedInfo" class="a3-best-info hidden"></p>
+                  <p id="qtySizeBleedInfo" class="a3-best-info bleed-highlight hidden"><span id="qtySizeBleedInfoText"></span><button type="button" id="bleedInfoTooltipBtn" class="info-tooltip-btn hidden" aria-label="Bleed info"><span class="info-tooltip-icon">i</span><span id="bleedInfoTooltipText" class="info-tooltip-bubble"></span></button></p>
                 </div>
               </div>
 
@@ -902,11 +982,11 @@
               Preview simplified for viewing, totals remain calculated accurately.
             </p>
 
+            <div id="visualLegend" class="visual-legend hidden"></div>
+
             <p id="bleedNote" class="bleed-note hidden">
               For sizes below 4 cm, even when using bleed, there is still a possibility of shifting during the cutting.
             </p>
-
-            <div id="visualLegend" class="visual-legend hidden"></div>
 
             <p class="panel-credit">Created By Anamaruchi (<a href="https://www.facebook.com/anang.zikri.f" target="_blank">Anang Zikri Febriyansyah</a>)
           </section>
@@ -1162,6 +1242,9 @@
     qtySizeObject: document.getElementById('qtySizeObject'),
     qtySizeObjectNote: document.getElementById('qtySizeObjectNote'),
     qtySizeBleedInfo: document.getElementById('qtySizeBleedInfo'),
+    qtySizeBleedInfoText: document.getElementById('qtySizeBleedInfoText'),
+    bleedInfoTooltipBtn: document.getElementById('bleedInfoTooltipBtn'),
+    bleedInfoTooltipText: document.getElementById('bleedInfoTooltipText'),
 
     extraInfoNote: document.getElementById('extraInfoNote'),
 
@@ -1710,11 +1793,11 @@
     const totalL = rL.valid ? rL.total : 0;
     let text;
     if(totalP === totalL){
-      text = `Both orientations are equivalent: ${fmt(totalP)} pcs`;
+      text = `Both orientations are equivalent:\n${fmt(totalP)} pcs`;
     } else if(totalL > totalP){
-      text = `Most Qty In Landscape: ${fmt(totalL)} pcs (Portrait: ${fmt(totalP)} pcs)`;
+      text = `Most Qty In Landscape: ${fmt(totalL)} pcs\n(Portrait: ${fmt(totalP)} pcs)`;
     } else {
-      text = `Most Qty In Portrait: ${fmt(totalP)} pcs (Landscape: ${fmt(totalL)} pcs)`;
+      text = `Most Qty In Portrait: ${fmt(totalP)} pcs\n(Landscape: ${fmt(totalL)} pcs)`;
     }
     el.a3BestInfo.textContent = text;
   }
@@ -2064,14 +2147,28 @@
     const extraMm = Number(calcState.extraMm) || 0;
     if(extraMm <= 0){
       el.qtySizeBleedInfo.classList.add('hidden');
+      el.bleedInfoTooltipBtn.classList.add('hidden');
     } else {
       const extraLabelWord = (isPaperMode(cfg.key) || cfg.key === 'custom') ? 'Bleed' : 'Distance';
       const totalW = wCm + (extraMm / 10);
       const totalH = hCm + (extraMm / 10);
-      el.qtySizeBleedInfo.textContent = `With ${extraLabelWord} ${fmt1(extraMm)}mm = ${fmtSmart(totalW)}x${fmtSmart(totalH)} cm`;
+      const isBleedWord = extraLabelWord === 'Bleed';
+      el.bleedInfoTooltipBtn.classList.remove('hidden');
+      const tooltipWord = isBleedWord ? 'bleed' : 'distance';
+      el.bleedInfoTooltipBtn.setAttribute('aria-label', isBleedWord ? 'Bleed info' : 'Distance info');
+      el.qtySizeBleedInfoText.textContent = `With ${extraLabelWord} ${fmt1(extraMm)}mm = ${fmtSmart(totalW)}x${fmtSmart(totalH)} cm`;
       el.qtySizeBleedInfo.classList.remove('hidden');
+      el.bleedInfoTooltipText.textContent = `You choose a ${fmt1(extraMm)} cm ${tooltipWord}, that actually means a ${fmt1(extraMm / 2)} cm ${tooltipWord} around all sides.`;
     }
   }
+
+  el.bleedInfoTooltipBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    el.bleedInfoTooltipBtn.classList.toggle('open');
+  });
+  document.addEventListener('click', () => {
+    el.bleedInfoTooltipBtn.classList.remove('open');
+  });
 
   function updateLegend(cfg, calcState){
     const isA3 = isPaperMode(cfg.key);
