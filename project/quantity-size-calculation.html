@@ -812,27 +812,71 @@
   z-index: 1002;
 }
 .lang-switcher{
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  background: linear-gradient(135deg, #0060df, #003eaa) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>") no-repeat right 10px center/12px 12px;
-  color: #fff;
-  border: none;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+.lang-switcher-input{
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+.lang-switcher-track{
+  position: relative;
+  width: clamp(72px, 16vw, 80px);
+  height: clamp(30px, 7vw, 34px);
+  background: linear-gradient(135deg, #0060df, #003eaa);
   border-radius: 999px;
-  padding: clamp(8px, 2vw, 10px) 30px clamp(8px, 2vw, 10px) clamp(14px, 3vw, 16px);
-  font-family: inherit;
-  font-size: 13px;
+  box-shadow: 0 5px 15px rgba(0, 96, 223, 0.3);
+  transition: box-shadow 0.3s ease;
+}
+.lang-switcher:hover .lang-switcher-track{ box-shadow: 0 8px 25px rgba(0, 96, 223, 0.4); }
+.lang-switcher:active .lang-switcher-track{ box-shadow: 0 4px 15px rgba(0, 96, 223, 0.5); }
+.lang-switcher-input:focus-visible ~ .lang-switcher-track{ outline: 2px solid rgba(255,255,255,0.5); outline-offset: 2px; }
+.lang-switcher-option{
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.03em;
-  cursor: pointer;
-  box-shadow: 0 5px 15px rgba(0, 96, 223, 0.3);
-  outline: none;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  color: rgba(255,255,255,0.65);
+  transition: color 0.3s ease;
+  pointer-events: none;
 }
-.lang-switcher:hover{ box-shadow: 0 8px 25px rgba(0, 96, 223, 0.4); }
-.lang-switcher:active{ box-shadow: 0 4px 15px rgba(0, 96, 223, 0.5); }
-.lang-switcher:focus-visible{ outline: 2px solid rgba(255,255,255,0.5); outline-offset: 2px; }
-.lang-switcher option{ background:#1a1a1a; color:#fff; }
+.lang-switcher-option-en{ left: 0; color: #0060df; }
+.lang-switcher-option-id{ right: 0; }
+.lang-switcher-thumb{
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: calc(50% - 6px);
+  height: calc(100% - 6px);
+  background: #fff;
+  border-radius: 999px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+  transition: transform 0.3s ease;
+  z-index: 1;
+}
+.lang-switcher-input:checked ~ .lang-switcher-track .lang-switcher-thumb{
+  transform: translateX(calc(100% + 6px));
+}
+.lang-switcher-input:checked ~ .lang-switcher-track .lang-switcher-option-en{ color: rgba(255,255,255,0.65); }
+.lang-switcher-input:checked ~ .lang-switcher-track .lang-switcher-option-id{ color: #0060df; }
 </style>
 </head>
 
@@ -850,10 +894,14 @@
   </a>
 
   <div class="lang-switcher-wrap">
-    <select id="langSwitcher" class="lang-switcher" aria-label="Language / Bahasa">
-      <option value="en" selected>EN</option>
-      <option value="id">ID</option>
-    </select>
+    <label class="lang-switcher" for="langSwitcher">
+      <input type="checkbox" id="langSwitcher" class="lang-switcher-input" aria-label="Language / Bahasa">
+      <span class="lang-switcher-track">
+        <span class="lang-switcher-option lang-switcher-option-en">EN</span>
+        <span class="lang-switcher-option lang-switcher-option-id">ID</span>
+        <span class="lang-switcher-thumb"></span>
+      </span>
+    </label>
   </div>
 
   <div id="sidebarOverlay" class="sidebar-overlay"></div>
@@ -2297,6 +2345,12 @@
 
 })();
 
+/* =====================================================================
+   FITUR MULTIBAHASA (ID/EN) - KODE TAMBAHAN
+   Ditambahkan di bagian paling bawah tanpa mengubah logika kalkulasi,
+   struktur layout, maupun CSS yang sudah ada di atas.
+   Sumber teks: lang.json (harus berada di folder yang sama dengan file HTML ini)
+   ===================================================================== */
 (function(){
   "use strict";
 
@@ -2311,12 +2365,12 @@
     try{
       var saved = localStorage.getItem(LANG_STORAGE_KEY);
       if(saved === 'en' || saved === 'id') return saved;
-    }catch(e){}
+    }catch(e){ /* localStorage tidak tersedia, abaikan */ }
     return DEFAULT_LANG;
   }
 
   function saveLang(lang){
-    try{ localStorage.setItem(LANG_STORAGE_KEY, lang); }catch(e){}
+    try{ localStorage.setItem(LANG_STORAGE_KEY, lang); }catch(e){ /* abaikan */ }
   }
 
   function applyTranslations(lang){
@@ -2334,14 +2388,14 @@
 
   function setLanguage(lang){
     currentLang = (lang === 'id') ? 'id' : 'en';
-    if(langSwitcher) langSwitcher.value = currentLang;
+    if(langSwitcher) langSwitcher.checked = (currentLang === 'id');
     applyTranslations(currentLang);
     saveLang(currentLang);
   }
 
   function initI18n(){
     currentLang = getSavedLang();
-    if(langSwitcher) langSwitcher.value = currentLang;
+    if(langSwitcher) langSwitcher.checked = (currentLang === 'id');
 
     try{
       fetch('lang.json')
@@ -2363,7 +2417,7 @@
 
   if(langSwitcher){
     langSwitcher.addEventListener('change', function(){
-      setLanguage(langSwitcher.value);
+      setLanguage(langSwitcher.checked ? 'id' : 'en');
     });
   }
 
