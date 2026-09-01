@@ -808,7 +808,9 @@
 .lang-switcher-wrap{
   position: fixed;
   right: clamp(12px, 3vw, 20px);
-  bottom: calc(clamp(12px, 3vw, 20px) + env(safe-area-inset-bottom, 0px));
+  top: calc(100vh - clamp(30px, 7vw, 34px) - clamp(12px, 3vw, 20px) - env(safe-area-inset-bottom, 0px));
+  top: calc(100dvh - clamp(30px, 7vw, 34px) - clamp(12px, 3vw, 20px) - env(safe-area-inset-bottom, 0px));
+  height: clamp(30px, 7vw, 34px);
   z-index: 1002;
 }
 .lang-switcher{
