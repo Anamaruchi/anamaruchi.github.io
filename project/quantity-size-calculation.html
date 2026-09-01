@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<title>Anamaruchi - Quantity Size Calculation</title>
+<title data-i18n="doc_title">Anamaruchi - Quantity Size Calculation</title>
 <link rel="icon" type="image/x-icon" href="https://anamaruchi.web.id/Image/Anamaruchi.ico">
 <style>
   *, *::before, *::after{ box-sizing: border-box; }
@@ -804,6 +804,35 @@
   @media (prefers-reduced-motion: reduce){
     *{ transition-duration:0.001ms !important; animation-duration:0.001ms !important; }
   }
+/* ===== Language Switcher (i18n) - ADDITIVE ONLY, tidak mengubah style di atas ===== */
+.lang-switcher-wrap{
+  position: fixed;
+  right: clamp(12px, 3vw, 20px);
+  bottom: calc(clamp(12px, 3vw, 20px) + env(safe-area-inset-bottom, 0px));
+  z-index: 1002;
+}
+.lang-switcher{
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background: linear-gradient(135deg, #0060df, #003eaa) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>") no-repeat right 10px center/12px 12px;
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: clamp(8px, 2vw, 10px) 30px clamp(8px, 2vw, 10px) clamp(14px, 3vw, 16px);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  box-shadow: 0 5px 15px rgba(0, 96, 223, 0.3);
+  outline: none;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+.lang-switcher:hover{ box-shadow: 0 8px 25px rgba(0, 96, 223, 0.4); }
+.lang-switcher:active{ box-shadow: 0 4px 15px rgba(0, 96, 223, 0.5); }
+.lang-switcher:focus-visible{ outline: 2px solid rgba(255,255,255,0.5); outline-offset: 2px; }
+.lang-switcher option{ background:#1a1a1a; color:#fff; }
 </style>
 </head>
 
@@ -820,23 +849,30 @@
         <img src="https://anamaruchi.web.id/Image/Home Icon.png" alt="Home" class="home-icon">
   </a>
 
+  <div class="lang-switcher-wrap">
+    <select id="langSwitcher" class="lang-switcher" aria-label="Language / Bahasa">
+      <option value="en" selected>EN</option>
+      <option value="id">ID</option>
+    </select>
+  </div>
+
   <div id="sidebarOverlay" class="sidebar-overlay"></div>
 
   <aside id="sidebar" class="sidebar" aria-hidden="true">
     <div class="sidebar-header">
-      <p class="sidebar-title">Print Setting</p>
+      <p class="sidebar-title" data-i18n="sidebar_title">Print Setting</p>
       <button id="sidebarClose" class="sidebar-close-btn" type="button" aria-label="Close Menu">✕</button>
     </div>
 
     <section class="panel control-panel">
 
       <div class="section">
-        <p class="eyebrow">01 · Print Mode</p>
+        <p class="eyebrow" data-i18n="eyebrow_print_mode">01 · Print Mode</p>
         <div id="printCategoryGroup" class="option-group cols-3" role="radiogroup" aria-label="Print Mode"></div>
       </div>
 
       <div class="section" id="standardTypeSection">
-        <p class="eyebrow">02 · Print Type</p>
+        <p class="eyebrow" data-i18n="eyebrow_print_type">02 · Print Type</p>
         <div class="print-mode-select">
           <button type="button" class="print-mode-trigger" id="modeTrigger" aria-haspopup="listbox" aria-expanded="false">
             <span id="modeTriggerLabel">A3+ Paper Size</span>
@@ -847,7 +883,7 @@
       </div>
 
       <div class="section hidden" id="uvInfoSection">
-        <p class="eyebrow">02 · UV Machine</p>
+        <p class="eyebrow" data-i18n="eyebrow_uv_machine">02 · UV Machine</p>
         <div class="print-mode-select">
           <button type="button" class="print-mode-trigger" id="uvMachineTrigger" aria-haspopup="listbox" aria-expanded="false">
             <span id="uvMachineTriggerLabel">Dlican 1250</span>
@@ -858,38 +894,38 @@
       </div>
 
       <div class="section hidden" id="customSizeSection">
-        <p class="eyebrow">02 · Canvas Size</p>
+        <p class="eyebrow" data-i18n="eyebrow_canvas_size">02 · Canvas Size</p>
         <div class="grid-2">
           <div>
-            <span class="field-label">Width</span>
+            <span class="field-label" data-i18n="field_width">Width</span>
             <div class="field-input-wrap">
               <input id="inputCanvasWidth" type="text" inputmode="decimal" autocomplete="off" value="100" class="field-input" />
               <span class="field-unit">cm</span>
             </div>
           </div>
           <div>
-            <span class="field-label">Height</span>
+            <span class="field-label" data-i18n="field_height">Height</span>
             <div class="field-input-wrap">
               <input id="inputCanvasHeight" type="text" inputmode="decimal" autocomplete="off" value="100" class="field-input" />
               <span class="field-unit">cm</span>
             </div>
           </div>
         </div>
-        <p class="hint">Canvas size = your input + 2cm margin. Print area follows your input exactly. Maximum size is 300 × 300 cm.</p>
+        <p class="hint" data-i18n="hint_canvas_size">Canvas size = your input + 2cm margin. Print area follows your input exactly. Maximum size is 300 × 300 cm.</p>
       </div>
 
       <div class="section">
-        <p class="eyebrow">03 · Object Size</p>
+        <p class="eyebrow" data-i18n="eyebrow_object_size">03 · Object Size</p>
         <div class="grid-2">
           <div>
-            <span class="field-label">Width</span>
+            <span class="field-label" data-i18n="field_width">Width</span>
             <div class="field-input-wrap">
               <input id="inputWidth" type="text" inputmode="decimal" autocomplete="off" value="5" class="field-input" />
               <span class="field-unit">cm</span>
             </div>
           </div>
           <div>
-            <span class="field-label">Height</span>
+            <span class="field-label" data-i18n="field_height">Height</span>
             <div class="field-input-wrap">
               <input id="inputHeight" type="text" inputmode="decimal" autocomplete="off" value="5" class="field-input" />
               <span class="field-unit">cm</span>
@@ -899,7 +935,7 @@
       </div>
 
       <div class="section">
-        <p class="eyebrow">04 · Object Shape</p>
+        <p class="eyebrow" data-i18n="eyebrow_object_shape">04 · Object Shape</p>
         <div id="shapeGroup" class="option-group cols-2" role="radiogroup" aria-label="Object Shape"></div>
       </div>
 
@@ -915,7 +951,7 @@
 
     <div class="page-content">
 
-      <h2 class="page-title">Quantity Size Calculation</h2>
+      <h2 class="page-title" data-i18n="page_title">Quantity Size Calculation</h2>
 
       <div class="main-container">
 
@@ -924,15 +960,15 @@
         <div class="results-grid">
 
           <section class="panel panel-qty">
-            <div id="resultEmpty" class="empty-state">
+            <div id="resultEmpty" class="empty-state" data-i18n="result_empty">
               Enter the object's lenght and width dimensions to start calculating the print capacity.
             </div>
 
             <div id="resultBody" class="result-body hidden">
-              <p class="qty-label">Qty per Sheet</p>
+              <p class="qty-label" data-i18n="qty_label">Qty per Sheet</p>
               <div class="qty-headline">
                 <span id="qtyTotal" class="qty-number">0</span>
-                <span class="qty-unit">pcs</span>
+                <span class="qty-unit" data-i18n="qty_unit">pcs</span>
               </div>
 
               <p id="autoRotateNote" class="auto-rotate-note hidden"></p>
@@ -945,15 +981,15 @@
 
               <div class="stats-grid">
                 <div>
-                  <p class="stat-label">Layout</p>
+                  <p class="stat-label" data-i18n="stat_layout">Layout</p>
                   <p id="qtyRows" class="stat-value">—</p>
                   <p id="qtyCols" class="stat-value">—</p>
                 </div>
-                <div><p class="stat-label">Object Shape</p><p id="qtyShape" class="stat-value">—</p></div>
-                <div><p class="stat-label">Area Efficiency</p><p id="qtyEfficiency" class="stat-value">—</p></div>
-                <div><p class="stat-label">Remaining Space</p><p id="qtyLeftover" class="stat-value">—</p></div>
+                <div><p class="stat-label" data-i18n="stat_object_shape">Object Shape</p><p id="qtyShape" class="stat-value">—</p></div>
+                <div><p class="stat-label" data-i18n="stat_area_efficiency">Area Efficiency</p><p id="qtyEfficiency" class="stat-value">—</p></div>
+                <div><p class="stat-label" data-i18n="stat_remaining_space">Remaining Space</p><p id="qtyLeftover" class="stat-value">—</p></div>
                 <div id="sizeObjectBlock" class="hidden">
-                  <p class="stat-label">Object Size</p>
+                  <p class="stat-label" data-i18n="stat_object_size">Object Size</p>
                   <p id="qtySizeObject" class="stat-value">—</p>
                   <p id="qtySizeObjectNote" class="stat-note hidden"></p>
                   <p id="qtySizeBleedInfo" class="a3-best-info bleed-highlight hidden"><span id="qtySizeBleedInfoText"></span><button type="button" id="bleedInfoTooltipBtn" class="info-tooltip-btn hidden" aria-label="Bleed info"><span class="info-tooltip-icon">i</span><span id="bleedInfoTooltipText" class="info-tooltip-bubble"></span></button></p>
@@ -978,17 +1014,17 @@
               </div>
             </div>
 
-            <p id="previewNote" class="preview-note hidden">
+            <p id="previewNote" class="preview-note hidden" data-i18n="preview_note">
               Preview simplified for viewing, totals remain calculated accurately.
             </p>
 
             <div id="visualLegend" class="visual-legend hidden"></div>
 
-            <p id="bleedNote" class="bleed-note hidden">
+            <p id="bleedNote" class="bleed-note hidden" data-i18n="bleed_note">
               For sizes below 4 cm, even when using bleed, there is still a possibility of shifting during the cutting.
             </p>
 
-            <p class="panel-credit">Created By Anamaruchi (<a href="https://www.facebook.com/anang.zikri.f" target="_blank">Anang Zikri Febriyansyah</a>)
+            <p class="panel-credit"><span data-i18n="credit_prefix">Created By Anamaruchi</span> (<a href="https://www.facebook.com/anang.zikri.f" target="_blank">Anang Zikri Febriyansyah</a>)
           </section>
 
         </div>
@@ -2259,6 +2295,79 @@
   refreshExtraNote();
   calculate();
 
+})();
+
+(function(){
+  "use strict";
+
+  var LANG_STORAGE_KEY = 'anamaruchi_lang';
+  var DEFAULT_LANG = 'en';
+
+  var langData = null;
+  var currentLang = DEFAULT_LANG;
+  var langSwitcher = document.getElementById('langSwitcher');
+
+  function getSavedLang(){
+    try{
+      var saved = localStorage.getItem(LANG_STORAGE_KEY);
+      if(saved === 'en' || saved === 'id') return saved;
+    }catch(e){}
+    return DEFAULT_LANG;
+  }
+
+  function saveLang(lang){
+    try{ localStorage.setItem(LANG_STORAGE_KEY, lang); }catch(e){}
+  }
+
+  function applyTranslations(lang){
+    if(!langData || !langData[lang]) return;
+    var dict = langData[lang];
+    var nodes = document.querySelectorAll('[data-i18n]');
+    for(var i = 0; i < nodes.length; i++){
+      var node = nodes[i];
+      var key = node.getAttribute('data-i18n');
+      if(Object.prototype.hasOwnProperty.call(dict, key)){
+        node.textContent = dict[key];
+      }
+    }
+  }
+
+  function setLanguage(lang){
+    currentLang = (lang === 'id') ? 'id' : 'en';
+    if(langSwitcher) langSwitcher.value = currentLang;
+    applyTranslations(currentLang);
+    saveLang(currentLang);
+  }
+
+  function initI18n(){
+    currentLang = getSavedLang();
+    if(langSwitcher) langSwitcher.value = currentLang;
+
+    try{
+      fetch('lang.json')
+        .then(function(res){
+          if(!res.ok) throw new Error('Gagal memuat lang.json (status ' + res.status + ')');
+          return res.json();
+        })
+        .then(function(data){
+          langData = data;
+          applyTranslations(currentLang);
+        })
+        .catch(function(err){
+          console.warn('i18n: lang.json tidak dapat dimuat.', err);
+        });
+    }catch(err){
+      console.warn('i18n: fetch tidak tersedia di browser ini.', err);
+    }
+  }
+
+  if(langSwitcher){
+    langSwitcher.addEventListener('change', function(){
+      setLanguage(langSwitcher.value);
+    });
+  }
+
+  initI18n();
 })();
 </script>
 </body>
