@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Anamaruchi - Paper Thickness Calculation</title>
+    <title data-i18n="doc_title">Anamaruchi - Paper Thickness Calculation</title>
     <link rel="icon" type="image/x-icon" href="https://anamaruchi.web.id/Image/Anamaruchi.ico">
     <style>
         *, *::before, *::after {
@@ -784,12 +784,98 @@
             box-shadow: 0 0 5px rgba(255, 255, 255, 0.3) !important;
             outline: none !important;
         }
+
+        .lang-switcher-wrap{
+            position: fixed;
+            top: clamp(10px, 2vw, 20px);
+            right: clamp(10px, 2vw, 20px);
+            height: clamp(30px, 7vw, 34px);
+            z-index: 1002;
+        }
+        .lang-switcher{
+            position: relative;
+			right: clamp(0px, 1vw, 15px) !important;
+            display: inline-flex;
+            align-items: center;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+        .lang-switcher-input{
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0,0,0,0);
+            white-space: nowrap;
+            border: 0;
+        }
+        .lang-switcher-track{
+            position: relative;
+            width: clamp(72px, 16vw, 80px);
+            height: clamp(30px, 7vw, 34px);
+            background: linear-gradient(135deg, #0060df, #003eaa);
+            border-radius: 999px;
+            box-shadow: 0 5px 15px rgba(0, 96, 223, 0.3);
+            transition: box-shadow 0.3s ease;
+        }
+        .lang-switcher:hover .lang-switcher-track{ box-shadow: 0 8px 25px rgba(0, 96, 223, 0.4); }
+        .lang-switcher:active .lang-switcher-track{ box-shadow: 0 4px 15px rgba(0, 96, 223, 0.5); }
+        .lang-switcher-input:focus-visible ~ .lang-switcher-track{ outline: 2px solid rgba(255,255,255,0.5); outline-offset: 2px; }
+        .lang-switcher-option{
+            position: absolute;
+            top: 0;
+            width: 50%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.03em;
+            color: rgba(255,255,255,0.65);
+            transition: color 0.3s ease;
+            pointer-events: none;
+        }
+        .lang-switcher-option-en{ left: 0; color: #0060df; }
+        .lang-switcher-option-id{ right: 0; }
+        .lang-switcher-thumb{
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: calc(50% - 6px);
+            height: calc(100% - 6px);
+            background: #fff;
+            border-radius: 999px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+            transition: transform 0.3s ease;
+            z-index: 1;
+        }
+        .lang-switcher-input:checked ~ .lang-switcher-track .lang-switcher-thumb{
+            transform: translateX(calc(100% + 6px));
+        }
+        .lang-switcher-input:checked ~ .lang-switcher-track .lang-switcher-option-en{ color: rgba(255,255,255,0.65); }
+        .lang-switcher-input:checked ~ .lang-switcher-track .lang-switcher-option-id{ color: #0060df; }
     </style>
 </head>
 <body>
     <a href="https://anamaruchi.web.id/" class="home-button" id="homeButton">
         <img src="https://anamaruchi.web.id/Image/Home Icon.png" alt="Home" class="home-icon">
     </a>
+
+    <div class="lang-switcher-wrap">
+        <label class="lang-switcher" for="langSwitcher">
+            <input type="checkbox" id="langSwitcher" class="lang-switcher-input" aria-label="Language / Bahasa">
+            <span class="lang-switcher-track">
+                <span class="lang-switcher-option lang-switcher-option-en">EN</span>
+                <span class="lang-switcher-option lang-switcher-option-id">ID</span>
+                <span class="lang-switcher-thumb"></span>
+            </span>
+        </label>
+    </div>
 
     <button class="scroll-to-top" id="scrollToTop">
         <img src="Image/Go Up Icon.PNG" alt="Go to top" class="go-up-icon">
@@ -798,13 +884,13 @@
     <div class="main-container">
         <div class="calculator-container">
             <div class="calculator-header">
-                <h1>Paper Thickness Calculation</h1>
+                <h1 data-i18n="page_title">Paper Thickness Calculation</h1>
             </div>
             
             <div class="paper-select form-width">
                 <div class="dropdown-content" id="paperOptions">
                     <div class="search-container">
-                        <input type="text" id="paperSearch" class="search-dropdown" placeholder="Search paper..." onkeyup="filterPapers()">
+                        <input type="text" id="paperSearch" class="search-dropdown" placeholder="Search paper..." data-i18n-placeholder="search_paper_placeholder" onkeyup="filterPapers()">
                     </div>
                     <div data-value="art120" data-thickness="0.01052" data-name="Art Paper 120gsm">Art Paper 120gsm</div>
                     <div data-value="art150" data-thickness="0.0142" data-name="Art Paper 150gsm">Art Paper 150gsm</div>
@@ -821,55 +907,65 @@
                     <div data-value="bookpaper" data-thickness="0.01322" data-name="Bookpaper">Bookpaper</div>
                 </div>
                 <div class="select-dropdown" id="selectedPaper">
-                    Select Paper
+                    <span data-i18n="select_paper_placeholder">Select Paper</span>
                     <span class="triangle"></span>
                 </div>
             </div>
             
             <div class="input-group form-width">
                 <div class="input-wrapper">
-                    <input type="number" id="inputValue" placeholder="Number of Paper" inputmode="numeric" min="1" step="1">
-                    <div id="inputError" class="error-message">Minimum value is 1</div>
+                    <input type="number" id="inputValue" placeholder="Number of Paper" data-i18n-placeholder="input_number_placeholder" inputmode="numeric" min="1" step="1">
+                    <div id="inputError" class="error-message" data-i18n="error_min_value">Minimum value is 1</div>
                 </div>
                 <div class="input-wrapper">
-                    <input type="text" id="valueAnswer" placeholder="Result" readonly>
+                    <input type="text" id="valueAnswer" placeholder="Result" data-i18n-placeholder="result_placeholder" readonly>
                 </div>
             </div>
             <div class="form-width" style="margin-top: 15px;">
-                <button id="calculateBtn">Calculate</button>
+                <button id="calculateBtn" data-i18n="calculate_button">Calculate</button>
             </div>
             
             <div class="creator-info form-width">
-                <b>Created By Anamaruchi (<a href="https://www.facebook.com/anang.zikri.f" target="_blank">Anang Zikri Febriyansyah</a>)</b>
+                <b><span data-i18n="credit_prefix">Created By Anamaruchi</span> (<a href="https://www.facebook.com/anang.zikri.f" target="_blank">Anang Zikri Febriyansyah</a>)</b>
             </div>
 
             <div class="result-details" id="resultDetails">
-                <p>Paper Type : <span id="paperTypeDetail" class="highlight"></span></p>
-                <p>Paper Weight : <span id="paperWeightDetail" class="highlight"></span></p> 	
-                <p>Thickness Total : <span id="stackHeightDetail" class="highlight"></span></p>
-                <p>Spiral Binding : <span id="spiralNumberDetail" class="spiral-highlight"></span></p>
+                <p><span data-i18n="label_paper_type">Paper Type :</span> <span id="paperTypeDetail" class="highlight"></span></p>
+                <p><span data-i18n="label_paper_weight">Paper Weight :</span> <span id="paperWeightDetail" class="highlight"></span></p> 	
+                <p><span data-i18n="label_thickness_total">Thickness Total :</span> <span id="stackHeightDetail" class="highlight"></span></p>
+                <p><span data-i18n="label_spiral_binding">Spiral Binding :</span> <span id="spiralNumberDetail" class="spiral-highlight"></span></p>
             </div>
         </div>
 
         <div class="spiral-reference">
             <div class="spiral-header">
-                <h1>Spiral Binding</h1>
+                <h1 data-i18n="spiral_section_title">Spiral Binding</h1>
             </div>
             <ul class="spiral-list">
-                <li>Number 5 (Max 0,5 cm)</li>
-                <li>Number 6 (Max 0,7 cm)</li>
-                <li>Number 7 (Max 0,8 cm)</li>
-                <li>Number 8 (Max 0,9 cm)</li>
-                <li>Number 9 (Max 1,1 cm)</li>
-                <li>Number 10 (Max 1,3 cm)</li>
-                <li>Number 12 (Max 1,6 cm)</li>
-                <li>Number 14 (Max 1,8 cm)</li>
-                <li>Number 16 (Max 2,1 cm)</li>
-                <li>Number 20 (Max 3 cm)</li>
+                <li data-i18n="spiral_number_5">Number 5 (Max 0,5 cm)</li>
+                <li data-i18n="spiral_number_6">Number 6 (Max 0,7 cm)</li>
+                <li data-i18n="spiral_number_7">Number 7 (Max 0,8 cm)</li>
+                <li data-i18n="spiral_number_8">Number 8 (Max 0,9 cm)</li>
+                <li data-i18n="spiral_number_9">Number 9 (Max 1,1 cm)</li>
+                <li data-i18n="spiral_number_10">Number 10 (Max 1,3 cm)</li>
+                <li data-i18n="spiral_number_12">Number 12 (Max 1,6 cm)</li>
+                <li data-i18n="spiral_number_14">Number 14 (Max 1,8 cm)</li>
+                <li data-i18n="spiral_number_16">Number 16 (Max 2,1 cm)</li>
+                <li data-i18n="spiral_number_20">Number 20 (Max 3 cm)</li>
             </ul>
         </div>
     </div>
 
+    <script>
+var __i18nDict = null;
+var __i18nLang = 'en';
+var refreshDynamicI18nText = null;
+function t(key, fallback){
+  var dict = (__i18nDict && __i18nDict[__i18nLang]) ? __i18nDict[__i18nLang] : null;
+  if(dict && Object.prototype.hasOwnProperty.call(dict, key)) return dict[key];
+  return fallback !== undefined ? fallback : key;
+}
+    </script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const paperRates = {
@@ -908,6 +1004,7 @@
             let currentSelection = '';
             let currentPaperName = '';
             let currentThickness = 0;
+            let lastExactThickness = null;
             let isDropdownOpen = false;
             let dropdownTimeout = null;
             let touchStartTime = 0;
@@ -995,23 +1092,23 @@
                 
                 if (thickness > 3) {
                     spiralNumberDetail.className = 'warning-highlight';
-                    return "No More Use Spiral";
+                    return t('spiral_no_more', 'No More Use Spiral');
                 }
                 
                 spiralNumberDetail.className = 'spiral-highlight';
                 
-                if (thickness <= 0.5) return "Number 5 (Max 0,5 cm)";
-                if (thickness <= 0.7) return "Number 6 (Max 0,7 cm)";
-                if (thickness <= 0.8) return "Number 7 (Max 0,8 cm)";
-                if (thickness <= 0.9) return "Number 8 (Max 0,9 cm)";
-                if (thickness <= 1.1) return "Number 9 (Max 1,1 cm)";
-                if (thickness <= 1.3) return "Number 10 (Max 1,3 cm)";
-                if (thickness <= 1.6) return "Number 12 (Max 1,6 cm)";
-                if (thickness <= 1.8) return "Number 14 (Max 1,8 cm)";
-                if (thickness <= 2.1) return "Number 16 (Max 2,1 cm)";
-                if (thickness <= 2.6) return "Number 20 (Max 2,6 cm)";
-                if (thickness <= 3.0) return "Number 20 (Max 3 cm)";
-                return "No More Use Spiral";
+                if (thickness <= 0.5) return t('spiral_number_5', 'Number 5 (Max 0,5 cm)');
+                if (thickness <= 0.7) return t('spiral_number_6', 'Number 6 (Max 0,7 cm)');
+                if (thickness <= 0.8) return t('spiral_number_7', 'Number 7 (Max 0,8 cm)');
+                if (thickness <= 0.9) return t('spiral_number_8', 'Number 8 (Max 0,9 cm)');
+                if (thickness <= 1.1) return t('spiral_number_9', 'Number 9 (Max 1,1 cm)');
+                if (thickness <= 1.3) return t('spiral_number_10', 'Number 10 (Max 1,3 cm)');
+                if (thickness <= 1.6) return t('spiral_number_12', 'Number 12 (Max 1,6 cm)');
+                if (thickness <= 1.8) return t('spiral_number_14', 'Number 14 (Max 1,8 cm)');
+                if (thickness <= 2.1) return t('spiral_number_16', 'Number 16 (Max 2,1 cm)');
+                if (thickness <= 2.6) return t('spiral_number_20_alt', 'Number 20 (Max 2,6 cm)');
+                if (thickness <= 3.0) return t('spiral_number_20', 'Number 20 (Max 3 cm)');
+                return t('spiral_no_more', 'No More Use Spiral');
             }
 
             paperOptions.querySelectorAll('div[data-value]').forEach(option => {
@@ -1216,7 +1313,7 @@
 
             calculateBtn.addEventListener('click', function(e) {
                 if (!currentSelection) {
-                    alert('Please Select a Paper Type First!');
+                    alert(t('alert_select_paper_first', 'Please Select a Paper Type First!'));
                     return;
                 }
 
@@ -1230,6 +1327,8 @@
                 const exactThickness = currentThickness * input;
                 
                 const thicknessInCm = exactThickness.toFixed(4);
+                
+                lastExactThickness = exactThickness;
                 
                 const spiralNumber = getSpiralNumber(exactThickness);
                 
@@ -1319,6 +1418,12 @@
                 document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
             }
 
+            refreshDynamicI18nText = function(){
+                if (resultDetails.style.display === 'block' && lastExactThickness !== null) {
+                    spiralNumberDetail.textContent = getSpiralNumber(lastExactThickness);
+                }
+            };
+
             setupHomeButton();
             setupScrollToTop();
             handleResponsiveLayout();
@@ -1375,6 +1480,87 @@
                 }
             });
         }
+    </script>
+    <script>
+(function(){
+  "use strict";
+
+  var LANG_STORAGE_KEY = 'anamaruchi_paper_thickness_lang';
+  var DEFAULT_LANG = 'en';
+
+  var langSwitcher = document.getElementById('langSwitcher');
+
+  function getSavedLang(){
+    try{
+      var saved = localStorage.getItem(LANG_STORAGE_KEY);
+      if(saved === 'en' || saved === 'id') return saved;
+    }catch(e){}
+    return DEFAULT_LANG;
+  }
+
+  function saveLang(lang){
+    try{ localStorage.setItem(LANG_STORAGE_KEY, lang); }catch(e){}
+  }
+
+  function applyTranslations(lang){
+    if(!__i18nDict || !__i18nDict[lang]) return;
+    var dict = __i18nDict[lang];
+    var nodes = document.querySelectorAll('[data-i18n]');
+    for(var i = 0; i < nodes.length; i++){
+      var node = nodes[i];
+      var key = node.getAttribute('data-i18n');
+      if(Object.prototype.hasOwnProperty.call(dict, key)){
+        node.textContent = dict[key];
+      }
+    }
+    var placeholderNodes = document.querySelectorAll('[data-i18n-placeholder]');
+    for(var j = 0; j < placeholderNodes.length; j++){
+      var pnode = placeholderNodes[j];
+      var pkey = pnode.getAttribute('data-i18n-placeholder');
+      if(Object.prototype.hasOwnProperty.call(dict, pkey)){
+        pnode.setAttribute('placeholder', dict[pkey]);
+      }
+    }
+    if(typeof refreshDynamicI18nText === 'function') refreshDynamicI18nText();
+  }
+
+  function setLanguage(lang){
+    __i18nLang = (lang === 'id') ? 'id' : 'en';
+    if(langSwitcher) langSwitcher.checked = (__i18nLang === 'id');
+    applyTranslations(__i18nLang);
+    saveLang(__i18nLang);
+  }
+
+  function initI18n(){
+    __i18nLang = getSavedLang();
+    if(langSwitcher) langSwitcher.checked = (__i18nLang === 'id');
+
+    try{
+      fetch('paper-thickness-calculation-lang.json')
+        .then(function(res){
+          if(!res.ok) throw new Error('Failed to load lang.json (status ' + res.status + ')');
+          return res.json();
+        })
+        .then(function(data){
+          __i18nDict = data;
+          applyTranslations(__i18nLang);
+        })
+        .catch(function(err){
+          console.warn('i18n: lang.json could not be loaded.', err);
+        });
+    }catch(err){
+      console.warn('i18n: fetch is not available in this browser.', err);
+    }
+  }
+
+  if(langSwitcher){
+    langSwitcher.addEventListener('change', function(){
+      setLanguage(langSwitcher.checked ? 'id' : 'en');
+    });
+  }
+
+  initI18n();
+})();
     </script>
 </body>
 </html>
