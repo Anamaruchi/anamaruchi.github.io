@@ -167,43 +167,60 @@ body {
 .lang-switcher-input:checked ~ .lang-switcher-track .lang-switcher-option-id{ color: #0060df; }
 
 .scroll-to-top {
-    position: fixed !important;
-    bottom: clamp(15px, 3vw, 30px) !important;
-    right: clamp(15px, 3vw, 30px) !important;
-    background: linear-gradient(135deg, #0060df, #003eaa);
-    border: none;
-    padding: clamp(10px, 2.5vw, 15px);
-    border-radius: 50%;
-    cursor: pointer;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease, visibility 0.3s ease;
-    box-shadow: 0 5px 15px rgba(0, 96, 223, 0.3);
-    z-index: 100;
-    width: clamp(45px, 10vw, 60px);
-    height: clamp(45px, 10vw, 60px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(100px) !important;
-}
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, #0060df, #003eaa);
+            border: none;
+            padding: 15px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 96, 223, 0.3);
+            z-index: 100;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(100px);
+        }
 
-.scroll-to-top.show {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0) !important;
-}
+        .scroll-to-top.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
 
-.scroll-to-top:hover {
-    background: linear-gradient(135deg, #003eaa, #0060df);
-    box-shadow: 0 10px 25px rgba(0, 96, 223, 0.5);
-}
+        .scroll-to-top:hover {
+            background: linear-gradient(135deg, #003eaa, #0060df);
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 10px 25px rgba(0, 96, 223, 0.5);
+        }
 
-.go-up-icon {
-    width: clamp(20px, 5vw, 28px);
-    height: clamp(20px, 5vw, 28px);
-    transition: none;
-}
+        .scroll-to-top.show:hover {
+            transform: translateY(-5px) scale(1.1);
+        }
+
+        .scroll-to-top:active {
+            transform: translateY(-2px) scale(1.05);
+        }
+
+        .scroll-to-top.show:active {
+            transform: translateY(-2px) scale(1.05);
+        }
+
+        .go-up-icon {
+            width: 28px;
+            height: 28px;
+            transition: all 0.3s ease;
+        }
+
+        .scroll-to-top:hover .go-up-icon {
+            transform: scale(1.2) translateY(-2px);
+        }
 
 .main-wrapper {
     width: 100%;
@@ -1023,6 +1040,12 @@ function t(key, fallback){
   return fallback !== undefined ? fallback : key;
 }
 
+function getPrintSideLabel(value){
+  if(value === '1 Side') return t('print_side_1', '1 Side');
+  if(value === '2 Side') return t('print_side_2', '2 Side');
+  return value;
+}
+
 let selectedFinishMedia = '';
 let selectedPrintSide = '';
 let selectedPaperSize = '';
@@ -1167,7 +1190,7 @@ function selectOption(type, value) {
             selectedPrintSide = value;
             const btn = document.getElementById('printSideBtn');
             if (btn) {
-                btn.innerHTML = value + ' <span class="dropdown-arrow"></span>';
+                btn.innerHTML = getPrintSideLabel(value) + ' <span class="dropdown-arrow"></span>';
             }
         } else if (type === 'paperSize') {
             selectedPaperSize = value;
@@ -1987,7 +2010,7 @@ function calculate() {
                 </div>
                 <div class="result-row">
                     <div class="result-label">${t('print_side_word', 'Print Side')}:</div>
-                    <div class="result-value">${selectedPrintSide}</div>
+                    <div class="result-value">${getPrintSideLabel(selectedPrintSide)}</div>
                 </div>
                 <div class="result-row">
                     <div class="result-label">${t('result_total_paper', 'Total Paper')}:</div>
@@ -2010,7 +2033,7 @@ function calculate() {
                 </div>
                 <div class="result-row">
                     <div class="result-label">${t('print_side_word', 'Print Side')} :</div>
-                    <div class="result-value"> ${selectedPrintSide}</div>
+                    <div class="result-value"> ${getPrintSideLabel(selectedPrintSide)}</div>
                 </div>
                 <div class="result-row">
                     <div class="result-label">${t('result_total_paper', 'Total Paper')} :</div>
@@ -2142,6 +2165,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
 refreshDynamicI18nText = function(){
   try{
+    if(selectedPrintSide){
+      var printSideBtn = document.getElementById('printSideBtn');
+      if(printSideBtn){
+        printSideBtn.innerHTML = getPrintSideLabel(selectedPrintSide) + ' <span class="dropdown-arrow"></span>';
+      }
+    }
     updatePaperPreview();
     var resultContainer = document.getElementById('resultContainer');
     if(resultContainer && resultContainer.style.display === 'block'){
