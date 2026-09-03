@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title data-i18n="doc_title">Anamaruchi - Paper Thickness Calculation</title>
-    <link rel="icon" type="image/x-icon" href="https://anamaruchi.web.id/Image/Anamaruchi.ico">
+    <title data-i18n="doc_title">Anamaruchi - Auto Layout Recap Invoice</title>
+	<link rel="icon" type="image/x-icon" href="https://anamaruchi.web.id/Image/Anamaruchi.ico">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script> <!-- Awusome Lib UWU -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script> <!-- Awusome Lib UWU -->
     <style>
         *, *::before, *::after {
             box-sizing: border-box;
@@ -26,133 +28,80 @@
             justify-content: center;
             align-items: flex-start;
             min-height: 100vh;
-            padding: clamp(5px, 2vw, 30px);
+            padding: clamp(5px, 2vw, 15px);
             position: relative;
             box-sizing: border-box;
-            padding-top: clamp(60px, 10vw, 80px);
         }
 
-        @media (min-width: 769px) {
-            body {
-            align-items: flex-start;
-            padding-top: 50px;
-            }
-        }
-
-	.home-button {
-	    position: fixed !important;
-	    top: clamp(10px, 2vw, 20px) !important;
-	    left: clamp(10px, 2vw, 20px) !important;
-	    background: linear-gradient(135deg, #0060df, #003eaa);
-	    color: white;
-	    border: none;
-	    padding: clamp(8px, 2vw, 12px);
-	    border-radius: 10px;
-	    cursor: pointer;
-	    transition: background-color 0.3s ease, box-shadow 0.3s ease;
-	    box-shadow: 0 5px 15px rgba(0, 96, 223, 0.3);
-	    z-index: 100;
-        text-decoration: none;
-	    display: inline-flex;
-	    align-items: center;
-	    justify-content: center;
-	    width: clamp(40px, 8vw, 50px);
-	    height: clamp(40px, 8vw, 50px);
-	    transform: none !important;
-	}
-
-	.home-button:hover {
-    	    background: linear-gradient(135deg, #003eaa, #0060df);
-    	    box-shadow: 0 8px 25px rgba(0, 96, 223, 0.4);
-    	    transform: none !important;
-	}
-
-	.home-button:active {
-	    background: linear-gradient(135deg, #002080, #0060df);
-	    box-shadow: 0 4px 15px rgba(0, 96, 223, 0.5);
-	    transform: none !important;
-	}
-
-	.home-button:focus {
-	    outline: 2px solid rgba(255, 255, 255, 0.5);
-	    outline-offset: 2px;
-	    transform: none !important;
-	}
-
-	.home-icon {
-   	    width: clamp(18px, 4vw, 24px);
-    	    height: clamp(18px, 4vw, 24px);
-   	    filter: brightness(0) invert(1);
-    	transition: none;
-	}
-        .scroll-to-top {
+        .home-button {
             position: fixed !important;
-            bottom: clamp(15px, 3vw, 30px) !important;
-            right: clamp(15px, 3vw, 30px) !important;
+            top: clamp(10px, 2vw, 20px) !important;
+            left: clamp(10px, 2vw, 20px) !important;
             background: linear-gradient(135deg, #0060df, #003eaa);
+            color: white;
             border: none;
-            padding: clamp(10px, 2.5vw, 15px);
-            border-radius: 50%;
+            padding: clamp(8px, 2vw, 12px);
+            border-radius: 10px;
             cursor: pointer;
-            transition: background-color 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease, visibility 0.3s ease;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
             box-shadow: 0 5px 15px rgba(0, 96, 223, 0.3);
             z-index: 100;
-            width: clamp(45px, 10vw, 60px);
-            height: clamp(45px, 10vw, 60px);
-            display: flex;
+            text-decoration: none;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(100px) !important;
+            width: clamp(40px, 8vw, 50px);
+            height: clamp(40px, 8vw, 50px);
+            transform: none !important;
         }
 
-        .scroll-to-top.show {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0) !important;
-        }
-
-        .scroll-to-top:hover {
+        .home-button:hover {
             background: linear-gradient(135deg, #003eaa, #0060df);
-            box-shadow: 0 10px 25px rgba(0, 96, 223, 0.5);
+            box-shadow: 0 8px 25px rgba(0, 96, 223, 0.4);
+            transform: none !important;
         }
 
-        .scroll-to-top:active {
+        .home-button:active {
             background: linear-gradient(135deg, #002080, #0060df);
-            box-shadow: 0 6px 20px rgba(0, 96, 223, 0.6);
+            box-shadow: 0 4px 15px rgba(0, 96, 223, 0.5);
+            transform: none !important;
         }
 
-        .scroll-to-top.show:hover {
-            transform: translateY(0) !important;
+        .home-button:focus {
+            outline: 2px solid rgba(255, 255, 255, 0.5);
+            outline-offset: 2px;
+            transform: none !important;
         }
 
-        .scroll-to-top.show:active {
-            transform: translateY(0) !important;
-        }
-
-        .go-up-icon {
-            width: clamp(20px, 5vw, 28px);
-            height: clamp(20px, 5vw, 28px);
+        .home-icon {
+            width: clamp(18px, 4vw, 24px);
+            height: clamp(18px, 4vw, 24px);
+            filter: brightness(0) invert(1);
             transition: none;
         }
 
-        .main-container {
+        .main-wrapper {
+            width: 100%;
             display: flex;
-            flex-direction: row;
-            gap: clamp(10px, 3vw, 20px);
             justify-content: center;
             align-items: flex-start;
+            min-height: 100vh;
+            padding-top: clamp(15px, 3vh, 40px);
+        }
+
+        .container {
             width: 100%;
-            max-width: min(800px, calc(100vw - 20px));
-            flex-wrap: wrap;
-            position: relative;
-            z-index: 1;
+            max-width: 800px;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(26, 26, 26, 0.9), rgba(45, 45, 45, 0.9));
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 2px solid rgba(59, 130, 246, 0.3);
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+            transition: all 0.3s ease;
             animation: fadeInUp 1s ease-out;
+            margin-bottom: clamp(15px, 3vh, 40px);
             box-sizing: border-box;
-            min-height: auto;
-            margin-bottom: clamp(20px, 5vw, 40px);
-            margin-top: 0;
         }
 
         @keyframes fadeInUp {
@@ -166,571 +115,671 @@
             }
         }
 
-        .calculator-container, .spiral-reference {
-            background: linear-gradient(135deg, rgba(26, 26, 26, 0.9), rgba(45, 45, 45, 0.9));
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: clamp(12px, 4vw, 20px);
-            border: 2px solid rgba(59, 130, 246, 0.3);
-            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
-            transition: all 0.3s ease;
-            box-sizing: border-box;
-            max-width: 100%;
-        }
-
-        .calculator-container:hover, .spiral-reference:hover {
+        .container:hover {
             transform: translateY(-5px);
             box-shadow: 0 15px 40px rgba(59, 130, 246, 0.4);
         }
 
-        .calculator-container {
-            width: 100%;
-            max-width: min(385px, calc(100vw - 40px));
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            flex: 1;
-            min-width: min(280px, calc(100vw - 40px));
-        }
-
-        .spiral-reference {
-            width: 100%;
-            max-width: min(180px, calc(100vw - 40px));
-            flex: 0 1 auto;
-            min-width: min(280px, calc(100vw - 40px));
-        }
-
-        .calculator-header, .spiral-header {
-            width: 100%;
+        .header {
             text-align: center;
-            margin-bottom: clamp(15px, 4vw, 20px);
-            padding-top: clamp(8px, 2vw, 10px);
-            border-bottom: 2px solid rgba(59, 130, 246, 0.5);
-            padding-bottom: clamp(8px, 2vw, 10px);
+            margin-bottom: 20px;
         }
 
-        .calculator-header h1, .spiral-header h1 {
-            margin: 0;
-            font-size: clamp(16px, 5vw, 22px);
-            font-weight: 600;
+        .header h1 {
             color: #3b82f6;
-            text-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            hyphens: auto;
+            margin: 0 0 8px 0;
+            border-bottom: 2px solid rgba(59, 130, 246, 0.5);
+            padding-bottom: 10px;
+            font-size: 1.6rem;
+            text-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+            font-weight: 600;
         }
 
-        .form-width {
-            width: 100%;
-            max-width: min(352px, 100%);
+        .header p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1rem;
+            margin: 0;
         }
 
-        .paper-select {
-            position: relative;
-            margin-bottom: clamp(12px, 3vw, 15px);
-            width: 100%;
+        .title-editor {
+            margin-bottom: 20px;
+            text-align: center;
         }
 
-        .select-dropdown {
-            width: 100%;
+        .title-input {
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
             background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-            border: none;
-            padding: clamp(8px, 2vw, 12px) clamp(25px, 6vw, 35px) clamp(8px, 2vw, 12px) clamp(8px, 2vw, 12px);
-            font-size: clamp(13px, 3.5vw, 14px);
-            cursor: pointer;
-            text-align: center;	
-            position: relative;
-            border-radius: 10px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            min-height: clamp(36px, 9vw, 40px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
             color: white;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
-            user-select: none;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-        }
-
-        .select-dropdown:hover {
-            background: linear-gradient(135deg, #1d4ed8, #3b82f6);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
-        }
-
-        .select-dropdown.active {
-            background: linear-gradient(135deg, #1d4ed8, #3b82f6);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
-        }
-
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-            width: 100%;
-            max-width: 100%;
-            max-height: min(200px, 60vh);
-            overflow-y: auto;
-            overflow-x: hidden;
-            z-index: 1000;
-            left: 0;
-            top: 100%;
-            margin-top: 5px;
-            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
+            border: none;
             border-radius: 10px;
-            backdrop-filter: blur(10px);
-            opacity: 0;
-            transform: translateY(-10px);
-            transition: opacity 0.2s ease, transform 0.2s ease;
-            pointer-events: none;
-            box-sizing: border-box;
-            border: 1px solid rgba(59, 130, 246, 0.5);
-            -webkit-overflow-scrolling: touch;
-            overscroll-behavior: contain;
-        }
-
-        .dropdown-content.show {
+            padding: 12px;
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
             display: block;
-            opacity: 1;
-            transform: translateY(0);
-            pointer-events: auto;
-        }
-	
-        .dropdown-content div {
-            padding: clamp(12px, 3vw, 15px);
-            cursor: pointer;
-            font-size: clamp(13px, 3.5vw, 14px);
-            white-space: normal;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            color: white;
-            transition: background-color 0.15s ease;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            position: relative;
-            min-height: clamp(40px, 10vw, 48px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-        }
-
-        .dropdown-content div:last-child {
-            border-bottom: none;
-        }
-
-        .dropdown-content div:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .dropdown-content div:active {
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        .dropdown-content div.touched {
-            background: rgba(255, 255, 255, 0.3);
-        }
-	
-        .triangle {
-            position: absolute;
-            right: clamp(8px, 2vw, 10px);
-            top: 50%;
-            transform: translateY(-50%);
-            width: 0;
-            height: 0;
-            border-left: clamp(5px, 1.5vw, 6px) solid transparent;
-            border-right: clamp(5px, 1.5vw, 6px) solid transparent;
-            border-top: clamp(5px, 1.5vw, 6px) solid white;
-            pointer-events: none;
             transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
         }
 
-        .select-dropdown:hover .triangle,
-        .select-dropdown.active .triangle {
-            transform: translateY(-50%) scale(1.1);
-        }
-
-        .select-dropdown.active .triangle {
-            transform: translateY(-50%) rotate(180deg);
-        }
-        
-        .input-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: clamp(8px, 2vw, 10px);
-            margin-top: 1px;
-            justify-content: space-between;
-            width: 100%;
-        }
-
-        .input-wrapper {
-            position: relative;
-            width: calc(50% - clamp(4px, 1vw, 5px));
-            min-width: min(120px, calc(50% - 5px));
-        }
-
-        .error-message {
-            position: absolute;
-            left: 0;
-            right: 0;
-            bottom: clamp(-20px, -4vw, -18px);
-            font-size: clamp(10px, 2.5vw, 11px);
-            color: #ff5252;
-            text-align: center;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            pointer-events: none;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-        }
-
-        .error-message.visible {
-            opacity: 1;
-        }
-
-        input, button {
-            padding: clamp(8px, 2vw, 10px) 0;
-            border: none;
-            font-size: clamp(13px, 3.5vw, 14px);
-            text-align: center;
-            border-radius: 10px;
-            min-height: clamp(36px, 9vw, 40px);
-            transition: all 0.3s ease;
-            box-sizing: border-box;
-        }
-
-        input {
-            width: 100%;
-            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-            color: white;
-            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
-        }
-
-        input::placeholder {
+        .title-input::placeholder {
             color: rgba(255, 255, 255, 0.7);
-            font-size: clamp(12px, 3vw, 13px);
         }
 
-        input:focus {
+        .title-input:focus {
             outline: none;
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
         }
 
-        input.error {
-            border: 2px solid #ff5252;
-            background: linear-gradient(135deg, rgba(255, 82, 82, 0.2), rgba(244, 67, 54, 0.2));
-            animation: shake 0.5s ease-in-out;
+        .instructions {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(29, 78, 216, 0.1));
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 12px;
+            padding: 10px 12px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
         }
 
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
-        }
-
-        #valueAnswer {
-            text-align: center;
-            white-space: normal;
-            height: auto;
-            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-            font-weight: 500;
-        }
-
-        button {
-            background: linear-gradient(135deg, #003eaa, #002080);
-            color: white;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            -webkit-tap-highlight-color: transparent;
-            width: 100%;
+        .instructions h4 {
+            margin-bottom: 6px;
+            margin-top: 0;
+            color: #3b82f6;
+            font-size: 1.1rem;
+            text-shadow: 0 0 8px rgba(59, 130, 246, 0.5);
             font-weight: 600;
-            box-shadow: 0 5px 15px rgba(0, 96, 223, 0.3);
+        }
+
+        .instructions ul {
+            margin-left: 16px;
+            margin-top: 0;
+            margin-bottom: 0;
+            line-height: 1.4;
+        }
+
+        .instructions li {
+            margin-bottom: 4px;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 14px;
+        }
+
+        .instructions li:last-child {
+            margin-bottom: 0;
+        }
+
+        .instructions strong {
+            color: #60a5fa;
+        }
+
+        .upload-section {
+            margin-bottom: 20px;
+            padding: 18px;
+            border: 2px dashed rgba(59, 130, 246, 0.4);
+            border-radius: 15px;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), rgba(29, 78, 216, 0.05));
+            backdrop-filter: blur(5px);
+        }
+
+        .upload-btn {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            margin: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .upload-btn:hover {
+            background: linear-gradient(135deg, #1d4ed8, #3b82f6);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+        }
+
+        .clear-btn {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            margin-left: 12px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+        }
+
+        .clear-btn:hover {
+            background: linear-gradient(135deg, #c82333, #dc3545);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(220, 53, 69, 0.4);
+        }
+
+        .upload-section p {
+            margin-top: 12px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 13px;
+        }
+
+        .controls {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .print-btn {
+            background: linear-gradient(135deg, #0060df, #003eaa);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            margin: 0 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 96, 223, 0.3);
+        }
+
+        .print-btn:hover {
+            background: linear-gradient(135deg, #003eaa, #0060df);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 96, 223, 0.4);
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            row-gap: 12px;
+            margin: 15px 0;
+            padding: 15px;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), rgba(29, 78, 216, 0.05));
+            border-radius: 15px;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            width: 100%;
+            box-sizing: border-box;
+            justify-items: center;
+        }
+
+        .invoice-box {
+            width: 100%;
+            max-width: 110px;
+            aspect-ratio: 3.2/3.9;
+            border: 2px solid rgba(59, 130, 246, 0.3);
+            display: flex;
+            flex-direction: column;
+            background: linear-gradient(135deg, rgba(26, 26, 26, 0.8), rgba(45, 45, 45, 0.8));
             position: relative;
             overflow: hidden;
-        }
-
-        button:hover, button:active {
-            background: linear-gradient(135deg, #002080, #003eaa);
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(0, 96, 223, 0.5);
-        }
-
-        button:active {
-            transform: translateY(-1px);
-        }
-
-        .result-details {
-            width: 100%;
-            max-width: min(352px, 100%);
-            margin-top: clamp(10px, 4vw, 10px);
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(29, 78, 216, 0.1));
+            cursor: pointer;
+            transition: all 0.3s ease;
             border-radius: 10px;
-            padding: clamp(8px, 2vw, 10px);
-            font-size: clamp(12px, 3.5vw, 14px);
-            display: none;
-            border: 1px solid rgba(59, 130, 246, 0.3);
             backdrop-filter: blur(10px);
-            animation: slideUp 0.5s ease forwards;
+            box-sizing: border-box;
         }
 
-        @keyframes slideUp {
-            0% {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .invoice-box:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+            border-color: #3b82f6;
         }
 
-        .result-details p {
-            margin: clamp(4px, 1vw, 5px) 0;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
+        .invoice-box.has-image {
+            cursor: default;
+            border-color: rgba(96, 165, 250, 0.6);
         }
 
-        .result-details .highlight {
+        .invoice-box.upload-hover {
+            border-color: #28a745;
+            border-width: 3px;
+            background: linear-gradient(135deg, rgba(40, 167, 69, 0.1), rgba(40, 167, 69, 0.05));
+            box-shadow: 0 8px 25px rgba(40, 167, 69, 0.3);
+        }
+
+        .invoice-name {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(29, 78, 216, 0.2));
+            padding: 4px 6px;
+            font-size: 9px;
+            font-weight: bold;
+            text-align: center;
+            border-bottom: 1px solid rgba(59, 130, 246, 0.3);
+            min-height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            word-break: break-all;
+            position: relative;
             color: #60a5fa;
-            font-weight: bold;
+            line-height: 1.1;
         }
 
-        .spiral-highlight {
-            color: #4caf50;
-            font-weight: bold;
-            font-size: clamp(12px, 3.5vw, 14px);
+        .invoice-image {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(26, 26, 26, 0.3);
+            position: relative;
         }
 
-        .warning-highlight {
-            color: #ff5252;
-            font-weight: bold;
-            font-size: clamp(12px, 3.5vw, 14px);
+        .invoice-image img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
         }
 
-        .spiral-list {
-            list-style-type: none;
+        .placeholder-text {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 7px;
+            text-align: center;
+            pointer-events: none;
+            line-height: 1.1;
+            padding: 2px;
+        }
+
+        .remove-btn {
+            position: absolute;
+            top: 3px;
+            right: 3px;
+            background: linear-gradient(135deg, #dc3545, #c82333);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            font-size: 10px;
+            cursor: pointer;
+            display: none;
+            z-index: 10;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 6px rgba(220, 53, 69, 0.4);
+        }
+
+        .hidden-input {
+            display: none;
+        }
+
+        .bulk-upload-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .bulk-upload-content {
+            background: linear-gradient(135deg, rgba(26, 26, 26, 0.95), rgba(45, 45, 45, 0.95));
+            backdrop-filter: blur(20px);
+            padding: 30px;
+            border-radius: 20px;
+            border: 2px solid rgba(59, 130, 246, 0.3);
+            box-shadow: 0 20px 40px rgba(59, 130, 246, 0.3);
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .bulk-upload-content h3 {
+            margin-bottom: 15px;
+            margin-top: 5px;
+            text-align: left;
+            padding-left: 10px;
+            color: #3b82f6;
+            font-size: 1.3rem;
+            text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+        }
+
+        .bulk-upload-content h3 + p {
+            text-align: left;
+            padding-left: 10px;
+            margin-bottom: 20px;
+            color: rgba(255,255,255,0.8);
+        }
+
+        .bulk-upload-list {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 12px;
+            padding: 10px;
+            margin: 15px 0;
+            background: rgba(26, 26, 26, 0.3);
+        }
+
+        .bulk-upload-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 8px;
+            margin-bottom: 5px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .bulk-upload-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .bulk-upload-item:hover {
+            background: rgba(59, 130, 246, 0.1);
+            transform: translateX(5px);
+        }
+
+        .bulk-upload-item img {
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
+            border-radius: 6px;
+            margin-right: 15px;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .bulk-upload-info {
+            flex: 1;
+            font-size: 14px;
+        }
+
+        .bulk-upload-info strong {
+            color: #60a5fa;
+        }
+
+        .bulk-upload-actions {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .bulk-upload-actions button {
+            margin: 0 10px;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #1d4ed8, #3b82f6);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #6c757d, #545b62);
+            color: white;
+            box-shadow: 0 5px 15px rgba(108, 117, 125, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #545b62, #6c757d);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(108, 117, 125, 0.4);
+        }
+
+        .crop-overlay {
+            position: absolute;
+            border: 2px dashed #3b82f6;
+            background: rgba(59, 130, 246, 0.1);
+            pointer-events: none;
+            display: none;
+        }
+
+        .pdf-container {
+            width: 210mm;
+            min-height: auto;
+            margin: 0 auto;
+            background: white;
+            padding: 6mm;
+            box-sizing: border-box;
+        }
+
+        .pdf-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 1.5mm;
+            row-gap: 2mm;
+            width: 100%;
+        }
+
+        .pdf-mode .invoice-box {
+            width: 33mm;
+            height: 55mm;
+            border: 1px solid #000;
+            page-break-inside: avoid;
+            cursor: default;
+            background: white;
+            backdrop-filter: none;
+            border-radius: 0 !important;
+            padding: 0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .pdf-mode .invoice-name {
+            font-size: 8px;
+            min-height: 6mm;
+            padding: 1mm;
+            cursor: default;
+            background: #f8f9fa;
+            color: #333;
+        }
+
+        .pdf-mode .invoice-image {
+            background: white;
+            overflow: hidden;
             padding: 0;
             margin: 0;
         }
 
-        .spiral-list li {
-            margin-bottom: clamp(8px, 2vw, 10px);
-            font-size: clamp(14px, 4vw, 16px);
-            padding: clamp(6px, 1.5vw, 8px);
-            background: rgba(59, 130, 246, 0.1);
-            border-radius: 8px;
-            border-left: 3px solid #3b82f6;
-            transition: all 0.3s ease;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
+        .pdf-mode .placeholder-text {
+            font-size: 6px;
+            color: #666;
         }
 
-        .spiral-list li:hover {
-            background: rgba(59, 130, 246, 0.2);
-            transform: translateX(5px);
-        }
-
-        .creator-info {
+        .pdf-loading {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
-            text-align: center;
-            font-size: clamp(11px, 3.5vw, 12px);
-            padding: clamp(15px, 4vw, 20px) 0 clamp(8px, 2vw, 10px) 0;
-            margin-top: clamp(15px, 4vw, 20px);
-            border-top: 1px solid rgba(59, 130, 246, 0.3);
-            word-wrap: break-word;
-            overflow-wrap: break-word;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
         }
 
-        .creator-info a {
+        .pdf-loading-content {
+            background: linear-gradient(135deg, rgba(26, 26, 26, 0.95), rgba(45, 45, 45, 0.95));
+            backdrop-filter: blur(20px);
+            padding: 30px;
+            border-radius: 20px;
+            border: 2px solid rgba(59, 130, 246, 0.3);
+            box-shadow: 0 20px 40px rgba(59, 130, 246, 0.3);
+            text-align: center;
+            color: white;
+        }
+
+        .pdf-loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(59, 130, 246, 0.3);
+            border-top: 4px solid #3b82f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .credit-line {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #fff;
+            border-top: 1px solid rgba(59, 130, 246, 0.3);
+            padding-top: 15px;
+        }
+
+        .credit-line a {
             color: #60a5fa;
             text-decoration: none;
             transition: all 0.3s ease;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
         }
 
-        .creator-info a:hover, .creator-info a:active {
+        .credit-line a:hover {
             color: #90caf9;
             text-decoration: underline;
             text-shadow: 0 0 10px rgba(144, 202, 249, 0.5);
         }
 
-        @keyframes ripple {
-            to {
-                transform: scale(2);
-                opacity: 0;
-            }
-        }
-
-        @media (hover: none) {
-            .select-dropdown, button, .dropdown-content div, .creator-info a {
-                cursor: default;
+        @media print {
+            body {
+                background: white;
+                padding: 0;
             }
             
-            input, button, .select-dropdown {
-                font-size: 16px;
+            .upload-section,
+            .controls,
+            .instructions,
+            .home-button,
+            .lang-switcher-wrap,
+            .credit-line {
+                display: none;
+            }
+            
+            .container {
+                box-shadow: none;
+                padding: 10px;
+                background: white;
+                backdrop-filter: none;
+            }
+            
+            .remove-btn {
+                display: none !important;
+            }
+
+            .pdf-mode .invoice-box {
+                border-radius: 0 !important;
             }
         }
 
-        @media (max-width: 768px) {
+        @media screen and (max-width: 768px) {
             body {
-                align-items: flex-start;
-                padding-top: clamp(70px, 15vw, 90px);
-                padding-bottom: clamp(20px, 5vw, 40px);
+                padding: 10px;
             }
 
-            .calculator-container, .spiral-reference {
+            .main-wrapper {
+                padding-top: clamp(15px, 3vh, 30px);
+            }
+
+            .container {
                 backdrop-filter: none;
                 background: rgba(26, 26, 26, 0.95);
-            }
-
-            .dropdown-content {
-                backdrop-filter: none;
-                max-height: min(250px, 50vh);
-                border: 2px solid rgba(59, 130, 246, 0.5);
-            }
-
-            .result-details {
-                backdrop-filter: none;
-            }
-
-            .main-container {
-                flex-direction: column;
-                align-items: center;
-                margin-bottom: clamp(40px, 10vw, 60px);
-            }
-
-            .calculator-container, .spiral-reference {
+                border-radius: 15px;
+                padding: 15px;
+                margin-bottom: clamp(10px, 2vh, 20px);
                 max-width: 100%;
-                width: 100%;
-            }
-            
-            .spiral-reference {
-                margin-top: clamp(15px, 4vw, 20px);
             }
 
-            .calculator-container:hover, .spiral-reference:hover {
+            .container:hover {
                 transform: none;
                 box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
             }
 
-            .spiral-list li:hover {
-                background: rgba(59, 130, 246, 0.1);
-                transform: none;
+            .header h1 {
+                font-size: 1.3rem;
+                margin-bottom: 10px;
+                padding-bottom: 8px;
             }
 
-            .select-dropdown:hover {
-                background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-                transform: none;
-                box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+            .grid-container {
+                grid-template-columns: repeat(3, 1fr);
+                padding: 12px;
+                gap: 6px;
+            }
+            
+            .invoice-box {
+                max-width: none;
+                width: 100%;
+                aspect-ratio: 3.2/3.9;
             }
 
-            .dropdown-content div:hover {
-                background: transparent;
-                transform: none;
+            .bulk-upload-content {
+                backdrop-filter: none;
+                background: rgba(26, 26, 26, 0.98);
+                border-radius: 15px;
+                padding: 20px;
             }
 
-            input:focus {
-                transform: none;
-                box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
-            }
-
-            button:hover, button:active {
-                transform: none;
-                box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+            .credit-line {
+                font-size: 1rem;
             }
         }
 
-        @media (max-width: 480px) {
-            .input-group {
-                flex-direction: column;
+        @media screen and (max-width: 480px) {
+            .container {
+                padding: 12px;
+                border-radius: 10px;
             }
 
-            .input-wrapper {
-                width: 100%;
-                margin-bottom: clamp(18px, 4vw, 20px);
-            }
-            
-            .input-wrapper:last-child {
-                margin-bottom: 0;
-            }
-            
-            .spiral-list {
-                display: grid;
-                grid-template-columns: repeat(auto-fill, minmax(clamp(110px, 28vw, 120px), 1fr));
-                gap: clamp(4px, 1vw, 5px);
-            }
-            
-            .spiral-list li {
-                margin-bottom: clamp(4px, 1vw, 5px);
-                font-size: clamp(12px, 3.5vw, 14px);
-                text-align: center;
+            .header h1 {
+                font-size: 1.2rem;
             }
 
-            .dropdown-content {
-                max-height: min(300px, 60vh);
+            .title-input {
+                font-size: 15px;
+                padding: 10px;
+            }
+
+            .upload-btn, .print-btn {
+                padding: 10px 18px;
+                font-size: 13px;
+            }
+
+            .grid-container {
+                grid-template-columns: repeat(2, 1fr);
+                padding: 8px;
+                gap: 4px;
+            }
+
+            .bulk-upload-content {
+                padding: 15px;
                 border-radius: 12px;
             }
 
-            .dropdown-content div {
-                padding: clamp(15px, 4vw, 18px);
-                min-height: clamp(44px, 11vw, 52px);
-                font-size: clamp(14px, 4vw, 16px);
-            }
-        }
-
-        @media (max-width: 320px) {
-            body {
-                padding: clamp(3px, 1vw, 5px);
-                padding-top: clamp(60px, 15vw, 80px);
-            }
-            
-            .calculator-container, .spiral-reference {
-                padding: clamp(8px, 2.5vw, 10px);
-                border-width: 1px;
-                background: rgba(26, 26, 26, 1);
-            }
-            
-            .calculator-header, .spiral-header {
-                padding: clamp(4px, 1vw, 5px) 0;
-                margin-bottom: clamp(8px, 2vw, 10px);
-            }
-
-            .spiral-list {
-                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-                gap: 3px;
-            }
-
-            .spiral-list li {
-                padding: clamp(4px, 1vw, 6px);
-                font-size: clamp(10px, 3vw, 12px);
-            }
-        }
-
-        @media (max-width: 280px) {
-            .spiral-list {
-                grid-template-columns: 1fr 1fr;
-                gap: 2px;
-            }
-
-            .spiral-list li {
-                padding: 4px;
-                font-size: 10px;
-            }
-
-            .calculator-header h1, .spiral-header h1 {
-                font-size: clamp(14px, 4vw, 16px);
-            }
-
-            .input-wrapper {
-                min-width: 100%;
+            .credit-line {
+                font-size: 0.9rem;
             }
         }
 
@@ -750,49 +799,20 @@
             hyphens: auto;
         }
 
-        .dropdown-content div.search-container {
-            padding: 8px !important;
-            position: sticky !important;
-            top: 0 !important;
-            background: #1d4ed8 !important;
-            z-index: 100 !important;
-            display: block !important;
-            min-height: auto !important;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+        .invoice-box:hover .remove-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .dropdown-content div.search-container:hover, 
-        .dropdown-content div.search-container:active {
-            background: #1d4ed8 !important;
-        }
-
-        .search-dropdown {
-            width: 100%;
-            padding: 8px !important;
-            border-radius: 6px !important;
-            border: 1px solid rgba(255,255,255,0.3) !important;
-            background: rgba(0,0,0,0.2) !important;
-            color: white !important;
-            font-size: 12px !important;
-            min-height: auto !important;
-            box-shadow: none !important;
-            text-align: left !important;
-        }
-        
-        .search-dropdown:focus {
-            transform: none !important;
-            box-shadow: 0 0 5px rgba(255, 255, 255, 0.3) !important;
-            outline: none !important;
-        }
-
-        .lang-switcher-wrap{
+        .lang-switcher-wrap {
             position: fixed;
             top: clamp(10px, 2vw, 20px);
             right: clamp(10px, 2vw, 20px);
             height: clamp(30px, 7vw, 34px);
             z-index: 1002;
         }
-        .lang-switcher{
+        .lang-switcher {
             position: relative;
 			right: clamp(0px, 1vw, 15px) !important;
             display: inline-flex;
@@ -801,7 +821,7 @@
             -webkit-tap-highlight-color: transparent;
             user-select: none;
         }
-        .lang-switcher-input{
+        .lang-switcher-input {
             position: absolute;
             width: 1px;
             height: 1px;
@@ -812,7 +832,7 @@
             white-space: nowrap;
             border: 0;
         }
-        .lang-switcher-track{
+        .lang-switcher-track {
             position: relative;
             width: clamp(72px, 16vw, 80px);
             height: clamp(30px, 7vw, 34px);
@@ -821,10 +841,10 @@
             box-shadow: 0 5px 15px rgba(0, 96, 223, 0.3);
             transition: box-shadow 0.3s ease;
         }
-        .lang-switcher:hover .lang-switcher-track{ box-shadow: 0 8px 25px rgba(0, 96, 223, 0.4); }
-        .lang-switcher:active .lang-switcher-track{ box-shadow: 0 4px 15px rgba(0, 96, 223, 0.5); }
-        .lang-switcher-input:focus-visible ~ .lang-switcher-track{ outline: 2px solid rgba(255,255,255,0.5); outline-offset: 2px; }
-        .lang-switcher-option{
+        .lang-switcher:hover .lang-switcher-track { box-shadow: 0 8px 25px rgba(0, 96, 223, 0.4); }
+        .lang-switcher:active .lang-switcher-track { box-shadow: 0 4px 15px rgba(0, 96, 223, 0.5); }
+        .lang-switcher-input:focus-visible ~ .lang-switcher-track { outline: 2px solid rgba(255,255,255,0.5); outline-offset: 2px; }
+        .lang-switcher-option {
             position: absolute;
             top: 0;
             width: 50%;
@@ -840,9 +860,9 @@
             transition: color 0.3s ease;
             pointer-events: none;
         }
-        .lang-switcher-option-en{ left: 0; color: #0060df; }
-        .lang-switcher-option-id{ right: 0; }
-        .lang-switcher-thumb{
+        .lang-switcher-option-en { left: 0; color: #0060df; }
+        .lang-switcher-option-id { right: 0; }
+        .lang-switcher-thumb {
             position: absolute;
             top: 3px;
             left: 3px;
@@ -854,16 +874,23 @@
             transition: transform 0.3s ease;
             z-index: 1;
         }
-        .lang-switcher-input:checked ~ .lang-switcher-track .lang-switcher-thumb{
+        .lang-switcher-input:checked ~ .lang-switcher-track .lang-switcher-thumb {
             transform: translateX(calc(100% + 6px));
         }
-        .lang-switcher-input:checked ~ .lang-switcher-track .lang-switcher-option-en{ color: rgba(255,255,255,0.65); }
-        .lang-switcher-input:checked ~ .lang-switcher-track .lang-switcher-option-id{ color: #0060df; }
+        .lang-switcher-input:checked ~ .lang-switcher-track .lang-switcher-option-en { color: rgba(255,255,255,0.65); }
+        .lang-switcher-input:checked ~ .lang-switcher-track .lang-switcher-option-id { color: #0060df; }
+
+        @media screen and (max-width: 480px) {
+            .lang-switcher-wrap {
+                top: clamp(8px, 2vw, 14px);
+                right: clamp(8px, 2vw, 14px);
+            }
+        }
     </style>
 </head>
 <body>
     <a href="https://anamaruchi.web.id/" class="home-button" id="homeButton">
-        <img src="https://anamaruchi.web.id/Image/Home Icon.png" alt="Home" class="home-icon">
+        <img src="https://anamaruchi.web.id/Image/Home Icon.png" alt="Home" class="home-icon" />
     </a>
 
     <div class="lang-switcher-wrap">
@@ -877,690 +904,696 @@
         </label>
     </div>
 
-    <button class="scroll-to-top" id="scrollToTop">
-        <img src="Image/Go Up Icon.PNG" alt="Go to top" class="go-up-icon">
-    </button>
-
-    <div class="main-container">
-        <div class="calculator-container">
-            <div class="calculator-header">
-                <h1 data-i18n="page_title">Paper Thickness Calculation</h1>
-            </div>
-            
-            <div class="paper-select form-width">
-                <div class="dropdown-content" id="paperOptions">
-                    <div class="search-container">
-                        <input type="text" id="paperSearch" class="search-dropdown" placeholder="Search paper..." data-i18n-placeholder="search_paper_placeholder" onkeyup="filterPapers()">
-                    </div>
-                    <div data-value="art120" data-thickness="0.01052" data-name="Art Paper 120gsm">Art Paper 120gsm</div>
-                    <div data-value="art150" data-thickness="0.0142" data-name="Art Paper 150gsm">Art Paper 150gsm</div>
-                    <div data-value="matte120" data-thickness="0.01052" data-name="Matte Paper 120gsm">Matte Paper 120gsm</div>
-                    <div data-value="matte150" data-thickness="0.0142" data-name="Matte Paper 150gsm">Matte Paper 150gsm</div>
-                    <div data-value="carton400" data-thickness="0.05" data-name="Art Carton 400gsm">Art Carton 400gsm</div>
-                    <div data-value="carton310" data-thickness="0.036" data-name="Art Carton 310gsm">Art Carton 310gsm</div>
-                    <div data-value="carton260" data-thickness="0.03125" data-name="Art Carton 260gsm">Art Carton 260gsm</div>
-                    <div data-value="carton230" data-thickness="0.025" data-name="Art Carton 230gsm">Art Carton 230gsm</div>
-                    <div data-value="carton210" data-thickness="0.023" data-name="Art Carton 210gsm">Art Carton 210gsm</div>
-                    <div data-value="hvs75" data-thickness="0.00995" data-name="HVS 75gsm">HVS 75gsm</div>
-                    <div data-value="hvs80" data-thickness="0.01041" data-name="HVS 80gsm">HVS 80gsm</div>
-                    <div data-value="hvs100" data-thickness="0.01266" data-name="HVS 100gsm">HVS 100gsm</div>
-                    <div data-value="bookpaper" data-thickness="0.01322" data-name="Bookpaper">Bookpaper</div>
-                </div>
-                <div class="select-dropdown" id="selectedPaper">
-                    <span data-i18n="select_paper_placeholder">Select Paper</span>
-                    <span class="triangle"></span>
-                </div>
-            </div>
-            
-            <div class="input-group form-width">
-                <div class="input-wrapper">
-                    <input type="number" id="inputValue" placeholder="Number of Paper" data-i18n-placeholder="input_number_placeholder" inputmode="numeric" min="1" step="1">
-                    <div id="inputError" class="error-message" data-i18n="error_min_value">Minimum value is 1</div>
-                </div>
-                <div class="input-wrapper">
-                    <input type="text" id="valueAnswer" placeholder="Result" data-i18n-placeholder="result_placeholder" readonly>
-                </div>
-            </div>
-            <div class="form-width" style="margin-top: 15px;">
-                <button id="calculateBtn" data-i18n="calculate_button">Calculate</button>
-            </div>
-            
-            <div class="creator-info form-width">
-                <b><span data-i18n="credit_prefix">Created By Anamaruchi</span> (<a href="https://www.facebook.com/anang.zikri.f" target="_blank">Anang Zikri Febriyansyah</a>)</b>
+    <div class="main-wrapper">
+        <div class="container">
+            <div class="header">
+                <h1 data-i18n="page_title">Auto Layout Recap Invoice</h1>
+                <p data-i18n="page_subtitle">Upload Image to Create Auto Layout Invoice [Max 25 Images]</p>
             </div>
 
-            <div class="result-details" id="resultDetails">
-                <p><span data-i18n="label_paper_type">Paper Type :</span> <span id="paperTypeDetail" class="highlight"></span></p>
-                <p><span data-i18n="label_paper_weight">Paper Weight :</span> <span id="paperWeightDetail" class="highlight"></span></p> 	
-                <p><span data-i18n="label_thickness_total">Thickness Total :</span> <span id="stackHeightDetail" class="highlight"></span></p>
-                <p><span data-i18n="label_spiral_binding">Spiral Binding :</span> <span id="spiralNumberDetail" class="spiral-highlight"></span></p>
+            <div class="title-editor">
+                <input type="text" class="title-input" id="layoutTitle" data-i18n-value="title_input_default" data-i18n-placeholder="title_input_placeholder" value="Change Tittle Name Here" placeholder="Enter layout title...">
             </div>
-        </div>
 
-        <div class="spiral-reference">
-            <div class="spiral-header">
-                <h1 data-i18n="spiral_section_title">Spiral Binding</h1>
+            <div class="instructions">
+                <h4 data-i18n="instructions_title">How to use:</h4>
+                <ul>
+                    <li><strong data-i18n="howto_edit_title_label">Edit Title:</strong> <span data-i18n="howto_edit_title_desc">Click on the title above to change it</span></li>
+                    <li><strong data-i18n="howto_upload_multiple_label">Upload Multiple Images:</strong> <span data-i18n="howto_upload_multiple_desc">Use "Upload All Images" to select multiple files and place them manually</span></li>
+                    <li><strong data-i18n="howto_upload_specific_label">Upload to Specific Box:</strong> <span data-i18n="howto_upload_specific_desc">Click on any empty box to upload an image to that position</span></li>
+                    <li><strong data-i18n="howto_remove_images_label">Remove Images:</strong> <span data-i18n="howto_remove_images_desc">Hover over image and click × button</span></li>
+                    <li><strong data-i18n="howto_clear_all_label">Clear All:</strong> <span data-i18n="howto_clear_all_desc">Remove all images at once</span></li>
+                </ul>
             </div>
-            <ul class="spiral-list">
-                <li data-i18n="spiral_number_5">Number 5 (Max 0,5 cm)</li>
-                <li data-i18n="spiral_number_6">Number 6 (Max 0,7 cm)</li>
-                <li data-i18n="spiral_number_7">Number 7 (Max 0,8 cm)</li>
-                <li data-i18n="spiral_number_8">Number 8 (Max 0,9 cm)</li>
-                <li data-i18n="spiral_number_9">Number 9 (Max 1,1 cm)</li>
-                <li data-i18n="spiral_number_10">Number 10 (Max 1,3 cm)</li>
-                <li data-i18n="spiral_number_12">Number 12 (Max 1,6 cm)</li>
-                <li data-i18n="spiral_number_14">Number 14 (Max 1,8 cm)</li>
-                <li data-i18n="spiral_number_16">Number 16 (Max 2,1 cm)</li>
-                <li data-i18n="spiral_number_20">Number 20 (Max 3 cm)</li>
-            </ul>
+
+            <div class="upload-section">
+                <input type="file" id="bulkFileInput" multiple accept="image/*" style="display: none;">
+                <button class="upload-btn" onclick="document.getElementById('bulkFileInput').click()" data-i18n="upload_all_btn">
+                    Upload All Images
+                </button>
+                <button class="clear-btn" onclick="clearAll()" data-i18n="clear_all_btn">
+                    Clear All Images
+                </button>
+                <p data-i18n="upload_section_hint">Use "Upload All Images" for multiple files, or click individual boxes below for specific positions.</p>
+            </div>
+
+            <div class="controls">
+                <button class="print-btn" onclick="downloadLayout()" data-i18n="save_pdf_btn">
+                    Save as PDF (A4)
+                </button>
+            </div>
+
+            <div class="grid-container" id="gridContainer">
+            </div>
+
+            <div id="fileInputs"></div>
+
+            <div class="credit-line">
+                <span data-i18n="credit_prefix">Created By Anamaruchi</span> (<a href="https://www.facebook.com/anang.zikri.f" target="_blank">Anang Zikri Febriyansyah</a>)
+            </div>
         </div>
     </div>
 
     <script>
-var __i18nDict = null;
-var __i18nLang = 'en';
-var refreshDynamicI18nText = null;
-function t(key, fallback){
-  var dict = (__i18nDict && __i18nDict[__i18nLang]) ? __i18nDict[__i18nLang] : null;
-  if(dict && Object.prototype.hasOwnProperty.call(dict, key)) return dict[key];
-  return fallback !== undefined ? fallback : key;
-}
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const paperRates = {
-                'art120': 0.01052,
-                'art150': 0.0142,
-                'matte120': 0.01052,
-                'matte150': 0.0142,
-                'carton400': 0.05,
-                'carton310': 0.036,
-                'carton260': 0.03125,
-                'carton230': 0.025,
-                'carton210': 0.023,
-                'hvs75': 0.00995,
-                'hvs80': 0.01041,
-                'hvs100': 0.01266,
-                'bookpaper': 0.01322
-            };
+        var __i18nDict = null;
+        var __i18nLang = 'en';
+        var refreshDynamicI18nText = null;
+        function t(key, fallback) {
+            var dict = (__i18nDict && __i18nDict[__i18nLang]) ? __i18nDict[__i18nLang] : null;
+            if (dict && Object.prototype.hasOwnProperty.call(dict, key)) return dict[key];
+            return fallback !== undefined ? fallback : key;
+        }
 
-            const paperDetails = {};
+        let gridImages = new Array(25).fill(null);
+        let bulkUploadImages = [];
+        const maxBoxes = 25;
+        let selectedBulkImageIndex = null;
 
-            const selectedPaper = document.getElementById('selectedPaper');
-            const paperOptions = document.getElementById('paperOptions');
-            const inputValue = document.getElementById('inputValue');
-            const inputError = document.getElementById('inputError');
-            const valueAnswer = document.getElementById('valueAnswer');
-            const calculateBtn = document.getElementById('calculateBtn');
-            const resultDetails = document.getElementById('resultDetails');
-            const homeButton = document.getElementById('homeButton');
-            const scrollToTopBtn = document.getElementById('scrollToTop');
+        function initializeGrid() {
+            const container = document.getElementById('gridContainer');
+            const fileInputsContainer = document.getElementById('fileInputs');
+            container.innerHTML = '';
+            fileInputsContainer.innerHTML = '';
             
-            const paperTypeDetail = document.getElementById('paperTypeDetail');
-            const paperWeightDetail = document.getElementById('paperWeightDetail');
-            const stackHeightDetail = document.getElementById('stackHeightDetail');
-            const spiralNumberDetail = document.getElementById('spiralNumberDetail');
-            
-            let currentSelection = '';
-            let currentPaperName = '';
-            let currentThickness = 0;
-            let lastExactThickness = null;
-            let isDropdownOpen = false;
-            let dropdownTimeout = null;
-            let touchStartTime = 0;
-            let isTouch = false;
-
-            function setupHomeButton() {
-                homeButton.addEventListener('click', function(e) {
-                    const ripple = document.createElement('span');
-                    const rect = this.getBoundingClientRect();
-                    const size = Math.max(rect.width, rect.height);
-                    const x = e.clientX - rect.left - size / 2;
-                    const y = e.clientY - rect.top - size / 2;
-                    
-                    ripple.style.cssText = `
-                        position: absolute;
-                        width: ${size}px;
-                        height: ${size}px;
-                        left: ${x}px;
-                        top: ${y}px;
-                        background: rgba(255, 255, 255, 0.3);
-                        border-radius: 50%;
-                        opacity: 0.7;
-                        pointer-events: none;
-                        z-index: 10;
-                    `;
-                    
-                    this.style.position = 'relative';
-                    this.style.overflow = 'hidden';
-                    this.appendChild(ripple);
-                    
-                    setTimeout(() => {
-                        ripple.remove();
-                    }, 300);
-                });
-
-                homeButton.setAttribute('tabindex', '0');
-                homeButton.setAttribute('role', 'button');
+            for (let i = 0; i < maxBoxes; i++) {
+                const box = createBox(i);
+                container.appendChild(box);
+                
+                const fileInput = document.createElement('input');
+                fileInput.type = 'file';
+                fileInput.accept = 'image/*';
+                fileInput.className = 'hidden-input';
+                fileInput.id = `fileInput-${i}`;
+                fileInput.addEventListener('change', (e) => handleFileUpload(e, i));
+                fileInputsContainer.appendChild(fileInput);
             }
+        }
 
-            function setupScrollToTop() {
-                let isScrolling = false;
-
-                function checkScrollPosition() {
-                    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-                    
-                    if (scrollTop > 300) {
-                        scrollToTopBtn.classList.add('show');
-                    } else {
-                        scrollToTopBtn.classList.remove('show');
-                    }
+        function fitImageToBox(imageSrc, callback) {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+            
+            img.onload = function() {
+                const outputWidth = 320;
+                const outputHeight = 390;
+                canvas.width = outputWidth;
+                canvas.height = outputHeight;
+                
+                const imageAspectRatio = img.width / img.height;
+                const boxAspectRatio = outputWidth / outputHeight;
+                
+                let drawWidth, drawHeight, drawX, drawY;
+                
+                if (imageAspectRatio > boxAspectRatio) {
+                    drawHeight = outputHeight;
+                    drawWidth = outputHeight * imageAspectRatio;
+                    drawX = (outputWidth - drawWidth) / 2;
+                    drawY = 0;
+                } else {
+                    drawWidth = outputWidth;
+                    drawHeight = outputWidth / imageAspectRatio;
+                    drawX = 0;
+                    drawY = (outputHeight - drawHeight) / 2;
                 }
+                
+                ctx.fillStyle = 'white';
+                ctx.fillRect(0, 0, outputWidth, outputHeight);
+                
+                ctx.drawImage(img, drawX, drawY, drawWidth, drawHeight);
+                
+                const fittedImageUrl = canvas.toDataURL('image/png', 0.9);
+                callback(fittedImageUrl);
+            };
+            
+            img.src = imageSrc;
+        }
 
-                window.addEventListener('scroll', function() {
-                    if (!isScrolling) {
-                        requestAnimationFrame(function() {
-                            checkScrollPosition();
-                            isScrolling = false;
-                        });
-                        isScrolling = true;
+        function createBox(index) {
+            const box = document.createElement('div');
+            box.className = 'invoice-box';
+            box.setAttribute('data-index', index);
+            
+            const imageData = gridImages[index];
+            
+            if (imageData) {
+                const fileName = imageData.name.replace(/\.[^/.]+$/, "");
+                box.classList.add('has-image');
+                box.innerHTML = `
+                    <div class="invoice-name">${fileName}</div>
+                    <div class="invoice-image">
+                        <img src="${imageData.url}" alt="${fileName}">
+                        <button class="remove-btn" onclick="removeImage(${index})" title="Remove">×</button>
+                    </div>
+                `;
+            } else {
+                box.innerHTML = `
+                    <div class="invoice-name"></div>
+                    <div class="invoice-image">
+                        <div class="placeholder-text">${t('placeholder_text', 'Click to Upload or Drag Drop Image')}</div>
+                    </div>
+                `;
+        
+                box.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    
+                    if (selectedBulkImageIndex !== null && gridImages[index] === null) {
+                        gridImages[index] = {
+                            name: bulkUploadImages[selectedBulkImageIndex].name,
+                            url: bulkUploadImages[selectedBulkImageIndex].url
+                        };
+                        
+                        bulkUploadImages.splice(selectedBulkImageIndex, 1);
+                        selectedBulkImageIndex = null;
+                        
+                        updateGrid();
+                        
+                        if (bulkUploadImages.length > 0) {
+                            showBulkUploadModal();
+                        } else {
+                            closeBulkUploadModal();
+                        }
+                    } else if (gridImages[index] === null) {
+                        document.getElementById(`fileInput-${index}`).click();
                     }
                 });
+                
+                setupDropZone(box, index);
+            }
+            
+            return box;
+        }
 
-                scrollToTopBtn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    
-                    window.scrollTo({
-                        top: 0,
-                        behavior: 'smooth'
+        function handleFileUpload(event, boxIndex) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    fitImageToBox(e.target.result, function(fittedImageUrl) {
+                        gridImages[boxIndex] = {
+                            name: file.name,
+                            url: fittedImageUrl
+                        };
+                        updateGrid();
                     });
-
-                    setTimeout(function() {
-                        checkScrollPosition();
-                    }, 100);
-                });
-
-                scrollToTopBtn.setAttribute('tabindex', '0');
-                scrollToTopBtn.setAttribute('role', 'button');
-                scrollToTopBtn.setAttribute('aria-label', 'Scroll to top');
-
-                checkScrollPosition();
-            }
-
-            function getSpiralNumber(thicknessInCm) {
-                const thickness = parseFloat(thicknessInCm);
-                
-                if (thickness > 3) {
-                    spiralNumberDetail.className = 'warning-highlight';
-                    return t('spiral_no_more', 'No More Use Spiral');
-                }
-                
-                spiralNumberDetail.className = 'spiral-highlight';
-                
-                if (thickness <= 0.5) return t('spiral_number_5', 'Number 5 (Max 0,5 cm)');
-                if (thickness <= 0.7) return t('spiral_number_6', 'Number 6 (Max 0,7 cm)');
-                if (thickness <= 0.8) return t('spiral_number_7', 'Number 7 (Max 0,8 cm)');
-                if (thickness <= 0.9) return t('spiral_number_8', 'Number 8 (Max 0,9 cm)');
-                if (thickness <= 1.1) return t('spiral_number_9', 'Number 9 (Max 1,1 cm)');
-                if (thickness <= 1.3) return t('spiral_number_10', 'Number 10 (Max 1,3 cm)');
-                if (thickness <= 1.6) return t('spiral_number_12', 'Number 12 (Max 1,6 cm)');
-                if (thickness <= 1.8) return t('spiral_number_14', 'Number 14 (Max 1,8 cm)');
-                if (thickness <= 2.1) return t('spiral_number_16', 'Number 16 (Max 2,1 cm)');
-                if (thickness <= 2.6) return t('spiral_number_20_alt', 'Number 20 (Max 2,6 cm)');
-                if (thickness <= 3.0) return t('spiral_number_20', 'Number 20 (Max 3 cm)');
-                return t('spiral_no_more', 'No More Use Spiral');
-            }
-
-            paperOptions.querySelectorAll('div[data-value]').forEach(option => {
-                const value = option.getAttribute('data-value');
-                const thickness = parseFloat(option.getAttribute('data-thickness'));
-                const name = option.getAttribute('data-name');
-                
-                paperDetails[value] = {
-                    thickness: thickness,
-                    name: name
                 };
-            });
-
-            function openDropdown() {
-                if (isDropdownOpen) return;
-                
-                isDropdownOpen = true;
-                selectedPaper.classList.add('active');
-                
-                if (dropdownTimeout) {
-                    clearTimeout(dropdownTimeout);
-                    dropdownTimeout = null;
-                }
-                
-                positionDropdown();
-                paperOptions.classList.add('show');
-                
-                const searchInput = document.getElementById('paperSearch');
-                if (searchInput && window.innerWidth > 768) {
-                    setTimeout(() => { searchInput.focus(); }, 100);
-                }
+                reader.readAsDataURL(file);
             }
+            event.target.value = '';
+        }
 
-            function closeDropdown() {
-                if (!isDropdownOpen) return;
-                
-                isDropdownOpen = false;
-                selectedPaper.classList.remove('active');
-                paperOptions.classList.remove('show');
-                
-                dropdownTimeout = setTimeout(() => {
-                    if (!isDropdownOpen) {
-                        paperOptions.style.display = 'none';
-                    }
-                }, 200);
-            }
-
-            function toggleDropdown(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                
-                if (isDropdownOpen) {
-                    closeDropdown();
-                } else {
-                    openDropdown();
-                }
-            }
-
-            function isTouchDevice() {
-                return (('ontouchstart' in window) ||
-                       (navigator.maxTouchPoints > 0) ||
-                       (navigator.msMaxTouchPoints > 0));
-            }
-
-            selectedPaper.addEventListener('click', function(e) {
-                if (!isTouch) {
-                    toggleDropdown(e);
-                }
-            });
-
-            selectedPaper.addEventListener('touchstart', function(e) {
-                isTouch = true;
-                touchStartTime = Date.now();
-            }, { passive: true });
-
-            selectedPaper.addEventListener('touchend', function(e) {
-                e.preventDefault();
-                const touchDuration = Date.now() - touchStartTime;
-                
-                if (touchDuration < 300) {
-                    setTimeout(() => {
-                        toggleDropdown(e);
-                    }, 50);
-                }
-                
-                setTimeout(() => {
-                    isTouch = false;
-                }, 300);
-            });
-
-            function handleOutsideClick(event) {
-                if (!event.target.closest('.paper-select')) {
-                    if (isTouchDevice()) {
-                        setTimeout(() => {
-                            closeDropdown();
-                        }, 100);
-                    } else {
-                        closeDropdown();
-                    }
-                }
-            }
-
-            document.addEventListener('click', handleOutsideClick);
-            document.addEventListener('touchstart', handleOutsideClick, { passive: true });
-
-            const searchContainer = document.querySelector('.search-container');
-            if (searchContainer) {
-                searchContainer.addEventListener('click', (e) => e.stopPropagation());
-                searchContainer.addEventListener('touchstart', (e) => e.stopPropagation(), { passive: true });
-            }
+        document.getElementById('bulkFileInput').addEventListener('change', function(e) {
+            const files = Array.from(e.target.files);
+            if (files.length === 0) return;
             
-            const paperSearch = document.getElementById('paperSearch');
-            if (paperSearch) {
-                paperSearch.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    paperSearch.focus();
-                });
-                paperSearch.addEventListener('touchstart', (e) => {
-                    e.stopPropagation();
-                }, { passive: true });
-            }
-
-            paperOptions.querySelectorAll('div[data-value]').forEach(option => {
-                let optionTouchStartTime = 0;
-
-                option.addEventListener('click', function(e) {
-                    if (!isTouch) {
-                        selectOption(this, e);
-                    }
-                });
-
-                option.addEventListener('touchstart', function(e) {
-                    optionTouchStartTime = Date.now();
-                    this.classList.add('touched');
-                }, { passive: true });
-
-                option.addEventListener('touchend', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    
-                    const touchDuration = Date.now() - optionTouchStartTime;
-                    
-                    if (touchDuration < 300) {
-                        setTimeout(() => {
-                            selectOption(this, e);
-                        }, 50);
-                    }
-                    
-                    this.classList.remove('touched');
-                });
-
-                option.addEventListener('touchcancel', function(e) {
-                    this.classList.remove('touched');
-                });
-
-                function selectOption(element, e) {
-                    const value = element.getAttribute('data-value');
-                    const text = element.textContent;
-                    const thickness = parseFloat(element.getAttribute('data-thickness'));
-                    const name = element.getAttribute('data-name');
-                    
-                    selectedPaper.innerHTML = '';
-                    
-                    const textNode = document.createTextNode(text);
-                    selectedPaper.appendChild(textNode);
-                    
-                    const triangle = document.createElement('span');
-                    triangle.className = 'triangle';
-                    selectedPaper.appendChild(triangle);
-                    
-                    currentSelection = value;
-                    currentPaperName = name;
-                    currentThickness = thickness;
-                    
-                    closeDropdown();
-                }
-            });
-
-            function validateInput() {
-                const value = parseInt(inputValue.value);
-                
-                if (isNaN(value) || value < 1) {
-                    inputValue.classList.add('error');
-                    inputError.classList.add('visible');
-                    return false;
-                } else {
-                    inputValue.classList.remove('error');
-                    inputError.classList.remove('visible');
-                    return true;
-                }
-            }
-
-            inputValue.addEventListener('input', validateInput);
-            inputValue.addEventListener('change', validateInput);
+            bulkUploadImages = [];
+            let loadedCount = 0;
             
-            inputValue.addEventListener('blur', function() {
-                if (this.value === '' || parseInt(this.value) < 1) {
-                    this.value = 1;
-                    validateInput();
-                }
-            });
-
-            calculateBtn.addEventListener('click', function(e) {
-                if (!currentSelection) {
-                    alert(t('alert_select_paper_first', 'Please Select a Paper Type First!'));
-                    return;
-                }
-
-                if (!validateInput()) {
-                    inputValue.focus();
-                    return;
-                }
-
-                const input = parseInt(inputValue.value);
-                
-                const exactThickness = currentThickness * input;
-                
-                const thicknessInCm = exactThickness.toFixed(4);
-                
-                lastExactThickness = exactThickness;
-                
-                const spiralNumber = getSpiralNumber(exactThickness);
-                
-                const gsmMatch = currentPaperName.match(/(\d+)gsm/i);
-                const gsm = gsmMatch ? gsmMatch[1] : 'N/A';
-                
-                valueAnswer.value = `${thicknessInCm} cm`;
-                
-                paperTypeDetail.textContent = currentPaperName;
-                paperWeightDetail.textContent = `${gsm} gsm`;
-                stackHeightDetail.textContent = `${thicknessInCm} cm`;
-                spiralNumberDetail.textContent = spiralNumber;
-                
-                resultDetails.style.display = 'block';
-                
-                document.activeElement.blur();
+            files.forEach((file, index) => {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    bulkUploadImages.push({
+                        name: file.name,
+                        url: event.target.result,
+                        index: index
+                    });
+                    loadedCount++;
+                    
+                    if (loadedCount === files.length) {
+                        showBulkUploadModal();
+                    }
+                };
+                reader.readAsDataURL(file);
             });
             
-            inputValue.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    calculateBtn.click();
-                }
-            });
-
-            function positionDropdown() {
-                paperOptions.style.display = 'block';
-                
-                const parentWidth = selectedPaper.offsetWidth;
-                
-                paperOptions.style.width = parentWidth + 'px';
-
-                const paperSelectRect = document.querySelector('.paper-select').getBoundingClientRect();
-                const viewportWidth = window.innerWidth;
-                const viewportHeight = window.innerHeight;
-                
-                if (paperSelectRect.left + parentWidth > viewportWidth) {
-                    const adjustment = (paperSelectRect.left + parentWidth) - viewportWidth + 10; 
-                    paperOptions.style.left = `-${adjustment}px`;
-                } else {
-                    paperOptions.style.left = '0';
-                }
-                
-                const isMobile = window.innerWidth <= 768;
-                const maxDropdownHeight = isMobile ? Math.min(300, viewportHeight * 0.6) : 180;
-                const spaceBelow = viewportHeight - paperSelectRect.bottom - 20;
-                const spaceAbove = paperSelectRect.top - 20;
-
-                if (maxDropdownHeight > spaceBelow && spaceAbove > spaceBelow && spaceAbove > 150) {
-                    paperOptions.style.top = 'auto';
-                    paperOptions.style.bottom = '100%';
-                    paperOptions.style.marginTop = '0';
-                    paperOptions.style.marginBottom = '5px';
-                    paperOptions.style.maxHeight = Math.min(maxDropdownHeight, spaceAbove) + 'px';
-                } else {
-                    paperOptions.style.top = '100%';
-                    paperOptions.style.bottom = 'auto';
-                    paperOptions.style.marginTop = '5px';
-                    paperOptions.style.marginBottom = '0';
-                    paperOptions.style.maxHeight = Math.min(maxDropdownHeight, spaceBelow) + 'px';
-                }
-            }
-
-            function handleResponsiveLayout() {
-                const windowWidth = window.innerWidth;
-                const calculatorWidth = document.querySelector('.calculator-container').offsetWidth;
-
-                paperOptions.style.maxWidth = (calculatorWidth - 40) + 'px'; 
-                
-                const spiralReference = document.querySelector('.spiral-reference');
-                const spiralList = document.querySelector('.spiral-list');
-                
-                if (spiralReference && spiralList) {
-                    const containerWidth = spiralReference.offsetWidth;
-                    
-                    if (containerWidth > 300 && windowWidth > 480) {
-                        spiralList.style.display = 'block';
-                    } else if (windowWidth <= 480) {
-                        spiralList.style.display = 'grid';
-                        spiralList.style.gridTemplateColumns = 'repeat(auto-fill, minmax(120px, 1fr))';
-                    } else {
-                        spiralList.style.display = 'block';
-                    }
-                }
-            }
-
-            function setViewportHeight() {
-                document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
-            }
-
-            refreshDynamicI18nText = function(){
-                if (resultDetails.style.display === 'block' && lastExactThickness !== null) {
-                    spiralNumberDetail.textContent = getSpiralNumber(lastExactThickness);
-                }
-            };
-
-            setupHomeButton();
-            setupScrollToTop();
-            handleResponsiveLayout();
-            setViewportHeight();
-            
-            window.addEventListener('resize', function() {
-                handleResponsiveLayout();
-                setViewportHeight();
-            });
-            
-            window.addEventListener('orientationchange', function() {
-                setTimeout(function() {
-                    handleResponsiveLayout();
-                    setViewportHeight();
-                }, 200);
-            });
-            
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape' && isDropdownOpen) {
-                    closeDropdown();
-                }
-                
-                if (e.key === 'Enter' || e.key === ' ') {
-                    if (document.activeElement.classList.contains('home-button') ||
-                        document.activeElement.classList.contains('scroll-to-top')) {
-                        document.activeElement.click();
-                    }
-                }
-            });
-            
-            let lastTouchEnd = 0;
-            document.addEventListener('touchend', function(event) {
-                const now = (new Date()).getTime();
-                if (now - lastTouchEnd <= 300) {
-                    if (!event.target.closest('.dropdown-content')) {
-                        event.preventDefault();
-                    }
-                }
-                lastTouchEnd = now;
-            }, false);
+            e.target.value = '';
         });
 
-        function filterPapers() {
-            const input = document.getElementById('paperSearch');
-            const filter = input.value.toLowerCase();
-            const items = document.querySelectorAll('#paperOptions div[data-value]');
+        function showBulkUploadModal() {
+            const modal = document.createElement('div');
+            modal.className = 'bulk-upload-modal';
             
-            items.forEach(item => {
-                const text = item.textContent || item.innerText;
-                if (text.toLowerCase().indexOf(filter) > -1) {
-                    item.style.display = "";
-                } else {
-                    item.style.display = "none";
+            const content = document.createElement('div');
+            content.className = 'bulk-upload-content';
+            
+            content.innerHTML = `
+                <h3>${t('bulk_modal_title', 'Preview Invoice Upload')}</h3>
+                <p style="color: rgba(255,255,255,0.8); text-align: left; padding-left: 10px; margin-bottom: 20px;">${t('bulk_modal_instruction', 'Make sure the invoice image uploaded is the correct data.')}</p>
+                <div class="bulk-upload-list" id="bulkUploadList">
+                    ${bulkUploadImages.map((img, index) => `
+                        <div class="bulk-upload-item" data-index="${index}" onclick="selectBulkImage(${index})">
+                            <img src="${img.url}" alt="${img.name}">
+                            <div class="bulk-upload-info">
+                                <strong>${img.name.replace(/\.[^/.]+$/, "")}</strong>
+                                <div style="font-size: 12px; color: rgba(255,255,255,0.6);">${t('bulk_modal_click_select', 'Click to select')}</div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+                <div class="bulk-upload-actions">
+                    <button class="btn-primary" onclick="autoPlaceBulkImages()">${t('bulk_modal_confirm_btn', 'Confirm Place')}</button>
+                    <button class="btn-secondary" onclick="closeBulkUploadModal()">${t('bulk_modal_cancel_btn', 'Cancel')}</button>
+                </div>
+            `;
+            
+            modal.appendChild(content);
+            document.body.appendChild(modal);
+            
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeBulkUploadModal();
                 }
             });
         }
-    </script>
-    <script>
-(function(){
-  "use strict";
 
-  var LANG_STORAGE_KEY = 'anamaruchi_paper_thickness_lang';
-  var DEFAULT_LANG = 'en';
+        function selectBulkImage(index) {
+            const items = document.querySelectorAll('.bulk-upload-item');
+            items.forEach(item => item.style.background = '');
+            
+            const selectedItem = document.querySelector(`[data-index="${index}"]`);
+            selectedItem.style.background = 'rgba(59, 130, 246, 0.3)';
+            selectedBulkImageIndex = index;
+            
+            const modal = document.querySelector('.bulk-upload-modal');
+            const instruction = modal.querySelector('p');
+            instruction.textContent = t('bulk_modal_selected_template', 'Selected: {{name}}. Now click on an empty grid box to place it.')
+                .split('{{name}}').join(bulkUploadImages[index].name.replace(/\.[^/.]+$/, ""));
+            instruction.style.color = '#60a5fa';
+            instruction.style.fontWeight = 'bold';
+        }
 
-  var langSwitcher = document.getElementById('langSwitcher');
+        function autoPlaceBulkImages() {
+            let placedCount = 0;
+            let processedCount = 0;
+            
+            const processImage = (imageData, targetIndex) => {
+                fitImageToBox(imageData.url, function(fittedImageUrl) {
+                    gridImages[targetIndex] = {
+                        name: imageData.name,
+                        url: fittedImageUrl
+                    };
+                    processedCount++;
+                    
+                    if (processedCount === placedCount) {
+                        updateGrid();
+                        closeBulkUploadModal();
+                        
+                        if (placedCount < bulkUploadImages.length) {
+                            alert(t('alert_placed_partial', "Placed {{placed}} images. {{remaining}} images couldn't be placed due to lack of empty spaces.")
+                                .split('{{placed}}').join(placedCount)
+                                .split('{{remaining}}').join(bulkUploadImages.length - placedCount));
+                        }
+                    }
+                });
+            };
+            
+            for (let i = 0; i < maxBoxes && placedCount < bulkUploadImages.length; i++) {
+                if (gridImages[i] === null) {
+                    processImage(bulkUploadImages[placedCount], i);
+                    placedCount++;
+                }
+            }
+            
+            if (placedCount === 0) {
+                closeBulkUploadModal();
+            }
+        }
 
-  function getSavedLang(){
-    try{
-      var saved = localStorage.getItem(LANG_STORAGE_KEY);
-      if(saved === 'en' || saved === 'id') return saved;
-    }catch(e){}
-    return DEFAULT_LANG;
-  }
+        function closeBulkUploadModal() {
+            const modal = document.querySelector('.bulk-upload-modal');
+            if (modal) {
+                document.body.removeChild(modal);
+            }
+            bulkUploadImages = [];
+            selectedBulkImageIndex = null;
+        }
 
-  function saveLang(lang){
-    try{ localStorage.setItem(LANG_STORAGE_KEY, lang); }catch(e){}
-  }
+        function setupDropZone(box, index) {
+            box.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                box.classList.add('upload-hover');
+                e.dataTransfer.dropEffect = 'copy';
+            });
 
-  function applyTranslations(lang){
-    if(!__i18nDict || !__i18nDict[lang]) return;
-    var dict = __i18nDict[lang];
-    var nodes = document.querySelectorAll('[data-i18n]');
-    for(var i = 0; i < nodes.length; i++){
-      var node = nodes[i];
-      var key = node.getAttribute('data-i18n');
-      if(Object.prototype.hasOwnProperty.call(dict, key)){
-        node.textContent = dict[key];
-      }
-    }
-    var placeholderNodes = document.querySelectorAll('[data-i18n-placeholder]');
-    for(var j = 0; j < placeholderNodes.length; j++){
-      var pnode = placeholderNodes[j];
-      var pkey = pnode.getAttribute('data-i18n-placeholder');
-      if(Object.prototype.hasOwnProperty.call(dict, pkey)){
-        pnode.setAttribute('placeholder', dict[pkey]);
-      }
-    }
-    if(typeof refreshDynamicI18nText === 'function') refreshDynamicI18nText();
-  }
+            box.addEventListener('dragleave', (e) => {
+                e.preventDefault();
+                box.classList.remove('upload-hover');
+            });
 
-  function setLanguage(lang){
-    __i18nLang = (lang === 'id') ? 'id' : 'en';
-    if(langSwitcher) langSwitcher.checked = (__i18nLang === 'id');
-    applyTranslations(__i18nLang);
-    saveLang(__i18nLang);
-  }
+            box.addEventListener('drop', (e) => {
+                e.preventDefault();
+                box.classList.remove('upload-hover');
+                
+                const files = Array.from(e.dataTransfer.files).filter(file => file.type.startsWith('image/'));
+                
+                if (files.length > 0) {
+                    const file = files[0];
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        fitImageToBox(event.target.result, function(fittedImageUrl) {
+                            gridImages[index] = {
+                                name: file.name,
+                                url: fittedImageUrl
+                            };
+                            updateGrid();
+                        });
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
 
-  function initI18n(){
-    __i18nLang = getSavedLang();
-    if(langSwitcher) langSwitcher.checked = (__i18nLang === 'id');
+        function updateGrid() {
+            const container = document.getElementById('gridContainer');
+            container.innerHTML = '';
+            
+            for (let i = 0; i < maxBoxes; i++) {
+                const box = createBox(i);
+                container.appendChild(box);
+            }
+        }
 
-    try{
-      fetch('paper-thickness-calculation-lang.json')
-        .then(function(res){
-          if(!res.ok) throw new Error('Failed to load lang.json (status ' + res.status + ')');
-          return res.json();
-        })
-        .then(function(data){
-          __i18nDict = data;
-          applyTranslations(__i18nLang);
-        })
-        .catch(function(err){
-          console.warn('i18n: lang.json could not be loaded.', err);
+        function removeImage(index) {
+            gridImages[index] = null;
+            updateGrid();
+        }
+
+        function clearAll() {
+            if (confirm(t('confirm_clear_all', 'Are you sure you want to clear all images?'))) {
+                gridImages = new Array(25).fill(null);
+                updateGrid();
+            }
+        }
+
+        function showLoadingModal() {
+            const modal = document.createElement('div');
+            modal.className = 'pdf-loading';
+            modal.id = 'pdfLoadingModal';
+            
+            modal.innerHTML = `
+                <div class="pdf-loading-content">
+                    <div class="pdf-loading-spinner"></div>
+                    <h3 style="color: #3b82f6; margin-bottom: 10px;">${t('pdf_loading_title', 'Generating High-Quality PDF')}</h3>
+                    <p style="color: rgba(255,255,255,0.8); margin: 0;">${t('pdf_loading_text', 'Please wait...')}</p>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+        }
+
+        function hideLoadingModal() {
+            const modal = document.getElementById('pdfLoadingModal');
+            if (modal) {
+                document.body.removeChild(modal);
+            }
+        }
+
+async function downloadLayout() {
+    try {
+        showLoadingModal();
+        const pdfContainer = document.createElement('div');
+        pdfContainer.style.position = 'absolute';
+        pdfContainer.style.left = '-9999px';
+        pdfContainer.style.top = '0';
+        pdfContainer.style.width = '210mm';
+        pdfContainer.style.height = '297mm';
+        pdfContainer.style.padding = '3mm'; 
+        pdfContainer.style.boxSizing = 'border-box';
+        pdfContainer.style.backgroundColor = 'white';
+        pdfContainer.style.fontFamily = 'Arial, sans-serif';
+
+        const title = document.createElement('h2');
+        title.textContent = document.getElementById('layoutTitle').value || t('title_input_default', 'Change Tittle Name Here');
+        title.style.textAlign = 'center';
+        title.style.marginBottom = '2mm'; 
+        title.style.marginTop = '0';
+        title.style.fontSize = '16px';
+        title.style.color = '#333';
+        title.style.fontWeight = 'bold';
+        pdfContainer.appendChild(title);
+
+        const pdfGrid = document.createElement('div');
+        pdfGrid.style.display = 'grid';
+        pdfGrid.style.gridTemplateColumns = 'repeat(5, 40mm)'; 
+        pdfGrid.style.gridTemplateRows = 'repeat(5, 55mm)';
+        pdfGrid.style.gap = '1.5mm'; 
+        pdfGrid.style.justifyContent = 'center';
+        pdfGrid.style.width = '100%';
+        pdfGrid.style.maxWidth = '204mm'; 
+        pdfGrid.style.margin = '0 auto';
+        
+        for (let i = 0; i < maxBoxes; i++) {
+            const box = document.createElement('div');
+            box.style.width = '40mm';  
+            box.style.height = '55mm'; 
+            box.style.border = '1px solid #000';
+            box.style.display = 'flex';
+            box.style.flexDirection = 'column';
+            box.style.background = 'white';
+            box.style.overflow = 'hidden';
+            box.style.boxSizing = 'border-box';
+            
+            const imageData = gridImages[i];
+            if (imageData) {
+                const fileName = imageData.name.replace(/\.[^/.]+$/, "");
+                
+                const nameDiv = document.createElement('div');
+                nameDiv.style.background = '#f8f9fa';
+                nameDiv.style.padding = '1mm';
+                nameDiv.style.fontSize = '8px';
+                nameDiv.style.fontWeight = 'bold';
+                nameDiv.style.textAlign = 'center';
+                nameDiv.style.borderBottom = '1px solid #ddd';
+                nameDiv.style.height = '8mm';
+                nameDiv.style.display = 'flex';
+                nameDiv.style.alignItems = 'center';
+                nameDiv.style.justifyContent = 'center';
+                nameDiv.style.color = '#333';
+                nameDiv.style.wordBreak = 'break-all';
+                nameDiv.style.lineHeight = '1.1';
+                nameDiv.style.boxSizing = 'border-box';
+                nameDiv.textContent = fileName;
+                
+                const imageDiv = document.createElement('div');
+                imageDiv.style.height = '47mm'; 
+                imageDiv.style.display = 'flex';
+                imageDiv.style.alignItems = 'center';
+                imageDiv.style.justifyContent = 'center';
+                imageDiv.style.background = 'white';
+                imageDiv.style.overflow = 'hidden';
+                imageDiv.style.boxSizing = 'border-box';
+                
+                const img = document.createElement('img');
+                img.src = imageData.url;
+                img.alt = fileName;
+                img.style.width = '100%';
+                img.style.height = '100%';
+                img.style.objectFit = 'cover';
+                img.style.display = 'block';
+                
+                imageDiv.appendChild(img);
+                box.appendChild(nameDiv);
+                box.appendChild(imageDiv);
+            } else {
+                const nameDiv = document.createElement('div');
+                nameDiv.style.background = '#f8f9fa';
+                nameDiv.style.padding = '1mm';
+                nameDiv.style.fontSize = '8px';
+                nameDiv.style.height = '8mm';
+                nameDiv.style.borderBottom = '1px solid #ddd';
+                nameDiv.style.boxSizing = 'border-box';
+                
+                const imageDiv = document.createElement('div');
+                imageDiv.style.height = '47mm';
+                imageDiv.style.display = 'flex';
+                imageDiv.style.alignItems = 'center';
+                imageDiv.style.justifyContent = 'center';
+                imageDiv.style.background = 'white';
+                imageDiv.style.fontSize = '8px';
+                imageDiv.style.color = '#666';
+                imageDiv.style.boxSizing = 'border-box';
+                imageDiv.textContent = t('pdf_export_empty_label', 'Empty');
+                
+                box.appendChild(nameDiv);
+                box.appendChild(imageDiv);
+            }
+            
+            pdfGrid.appendChild(box);
+        }
+        
+        pdfContainer.appendChild(pdfGrid);
+        document.body.appendChild(pdfContainer);
+        
+        const images = pdfContainer.querySelectorAll('img');
+        await Promise.all(Array.from(images).map(img => {
+            return new Promise((resolve) => {
+                if (img.complete) {
+                    resolve();
+                } else {
+                    img.onload = resolve;
+                    img.onerror = resolve;
+                }
+            });
+        }));
+
+        const canvas = await html2canvas(pdfContainer, {
+            backgroundColor: '#ffffff',
+            scale: 2.95, 
+            useCORS: true,
+            allowTaint: true,
+            logging: false,
+            imageTimeout: 15000,
+            removeContainer: false,
+            scrollX: 0,
+            scrollY: 0
         });
-    }catch(err){
-      console.warn('i18n: fetch is not available in this browser.', err);
+
+        document.body.removeChild(pdfContainer);
+
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF('p', 'mm', 'a4');
+
+        const imgData = canvas.toDataURL('image/png', 0.95);
+
+        pdf.addImage(imgData, 'PNG', 0, 0, 210, 297, '', 'FAST');
+        
+        const currentDate = new Date().toISOString().split('T')[0];
+        const titleText = document.getElementById('layoutTitle').value.replace(/[^a-zA-Z0-9]/g, '-') || 'invoice-layout';
+        
+        hideLoadingModal();
+        
+        pdf.save(`${titleText}-${currentDate}-250dpi.pdf`);
+        
+    } catch (error) {
+        console.error('Error generating PDF:', error);
+        hideLoadingModal();
+        alert(t('alert_pdf_error', 'Error generating PDF. Please try again.'));
     }
-  }
+}
 
-  if(langSwitcher){
-    langSwitcher.addEventListener('change', function(){
-      setLanguage(langSwitcher.checked ? 'id' : 'en');
-    });
-  }
+        initializeGrid();
 
-  initI18n();
-})();
+        refreshDynamicI18nText = function() {
+            updateGrid();
+
+            var valueNodes = document.querySelectorAll('[data-i18n-value]');
+            for (var vi = 0; vi < valueNodes.length; vi++) {
+                var vnode = valueNodes[vi];
+                var vkey = vnode.getAttribute('data-i18n-value');
+                var enVal = (__i18nDict && __i18nDict.en && __i18nDict.en[vkey]) || vnode.value;
+                var idVal = (__i18nDict && __i18nDict.id && __i18nDict.id[vkey]) || vnode.value;
+                if (vnode.value === enVal || vnode.value === idVal) {
+                    vnode.value = t(vkey, vnode.value);
+                }
+            }
+
+            var modal = document.querySelector('.bulk-upload-modal');
+            if (modal) {
+                var modalTitle = modal.querySelector('h3');
+                if (modalTitle) modalTitle.textContent = t('bulk_modal_title', 'Preview Invoice Upload');
+
+                if (selectedBulkImageIndex === null) {
+                    var instruction = modal.querySelector('.bulk-upload-content > p');
+                    if (instruction) instruction.textContent = t('bulk_modal_instruction', 'Make sure the invoice image uploaded is the correct data.');
+                }
+
+                var clickSelectNodes = modal.querySelectorAll('.bulk-upload-info > div');
+                for (var ci = 0; ci < clickSelectNodes.length; ci++) {
+                    clickSelectNodes[ci].textContent = t('bulk_modal_click_select', 'Click to select');
+                }
+
+                var confirmBtn = modal.querySelector('.btn-primary');
+                if (confirmBtn) confirmBtn.textContent = t('bulk_modal_confirm_btn', 'Confirm Place');
+
+                var cancelBtn = modal.querySelector('.btn-secondary');
+                if (cancelBtn) cancelBtn.textContent = t('bulk_modal_cancel_btn', 'Cancel');
+            }
+        };
+    </script>
+
+    <script>
+        (function() {
+            "use strict";
+
+            var LANG_STORAGE_KEY = 'anamaruchi_auto_layout_recap_invoice_lang';
+            var DEFAULT_LANG = 'en';
+
+            var langSwitcher = document.getElementById('langSwitcher');
+
+            function getSavedLang() {
+                try {
+                    var saved = localStorage.getItem(LANG_STORAGE_KEY);
+                    if (saved === 'en' || saved === 'id') return saved;
+                } catch (e) {}
+                return DEFAULT_LANG;
+            }
+
+            function saveLang(lang) {
+                try { localStorage.setItem(LANG_STORAGE_KEY, lang); } catch (e) {}
+            }
+
+            function applyTranslations(lang) {
+                if (!__i18nDict || !__i18nDict[lang]) return;
+                var dict = __i18nDict[lang];
+
+                var nodes = document.querySelectorAll('[data-i18n]');
+                for (var i = 0; i < nodes.length; i++) {
+                    var node = nodes[i];
+                    var key = node.getAttribute('data-i18n');
+                    if (Object.prototype.hasOwnProperty.call(dict, key)) {
+                        node.textContent = dict[key];
+                    }
+                }
+
+                var placeholderNodes = document.querySelectorAll('[data-i18n-placeholder]');
+                for (var j = 0; j < placeholderNodes.length; j++) {
+                    var pnode = placeholderNodes[j];
+                    var pkey = pnode.getAttribute('data-i18n-placeholder');
+                    if (Object.prototype.hasOwnProperty.call(dict, pkey)) {
+                        pnode.setAttribute('placeholder', dict[pkey]);
+                    }
+                }
+
+                if (typeof refreshDynamicI18nText === 'function') refreshDynamicI18nText();
+            }
+
+            function setLanguage(lang) {
+                __i18nLang = (lang === 'id') ? 'id' : 'en';
+                if (langSwitcher) langSwitcher.checked = (__i18nLang === 'id');
+                applyTranslations(__i18nLang);
+                saveLang(__i18nLang);
+            }
+
+            function initI18n() {
+                __i18nLang = getSavedLang();
+                if (langSwitcher) langSwitcher.checked = (__i18nLang === 'id');
+
+                try {
+                    fetch('auto-layout-recap-invoice-lang.json')
+                        .then(function(res) {
+                            if (!res.ok) throw new Error('Failed to load lang.json (status ' + res.status + ')');
+                            return res.json();
+                        })
+                        .then(function(data) {
+                            __i18nDict = data;
+                            applyTranslations(__i18nLang);
+                        })
+                        .catch(function(err) {
+                            console.warn('i18n: lang.json could not be loaded.', err);
+                        });
+                } catch (err) {
+                    console.warn('i18n: fetch is not available in this browser.', err);
+                }
+            }
+
+            if (langSwitcher) {
+                langSwitcher.addEventListener('change', function() {
+                    setLanguage(langSwitcher.checked ? 'id' : 'en');
+                });
+            }
+
+            initI18n();
+        })();
     </script>
 </body>
 </html>
