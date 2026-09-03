@@ -86,10 +86,10 @@
     "word_decreased": "decreased"
   },
   "id": {
-    "doc_title": "Anamaruchi - Perata File PDF",
-    "header_title": "Perata File PDF",
+    "doc_title": "Anamaruchi - Flatten File PDF",
+    "header_title": "Flatten File PDF",
     "warning_title": "Catatan Penting",
-    "warning_text_1": "Perataan File PDF mengubah teks dan vektor menjadi gambar, yang seringkali ",
+    "warning_text_1": "Flatten File PDF mengubah teks dan vektor menjadi gambar, yang seringkali ",
     "warning_text_bold": "menambah ukuran file",
     "warning_text_2": ". PDF dengan banyak teks bisa menjadi 2-5x lebih besar. PDF dengan banyak gambar bisa menjadi lebih kecil dengan kompresi.",
     "setting_title_dpi": "Resolusi Kualitas (DPI)",
@@ -166,7 +166,7 @@
     "progress_flattening_details": "Mengonversi ke {{format}} dengan kualitas {{quality}}%",
     "progress_finalizing_text": "Menyelesaikan PDF yang diratakan...",
     "progress_finalizing_details": "Menerapkan kompresi dan optimasi akhir",
-    "progress_complete_text": "Perataan selesai!",
+    "progress_complete_text": "Flatten selesai!",
     "progress_complete_details": "Ukuran file {{change}} sebesar {{percent}}%",
     "word_increased": "bertambah",
     "word_decreased": "berkurang"
