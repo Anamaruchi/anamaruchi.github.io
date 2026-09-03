@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Anamaruchi - Booklet 3D Previewer</title>
+<title data-i18n="doc_title">Anamaruchi - Booklet 3D Previewer</title>
 <link rel="icon" type="image/x-icon" href="https://anamaruchi.web.id/Image/Anamaruchi.ico">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/page-flip/dist/js/page-flip.browser.js"></script>
@@ -304,6 +304,7 @@ html.drag-scroll-lock, body.drag-scroll-lock { overflow: hidden !important; over
   .extension-group { top: 8px !important; right: 8px !important; }
   .extension-button { width: 62px !important; height: 26px !important; padding: 4px !important; }
   .extension-icon { width: 44px !important; height: 20px !important; }
+  .lang-switcher-wrap { top: 40px !important; right: 8px !important; }
   .cluster-width { width: 140px; }
   #info-cluster, #zoom-cluster { bottom: 6px; }
   #info-cluster { right: 6px; gap: 6px; }
@@ -655,6 +656,81 @@ html.drag-scroll-lock, body.drag-scroll-lock { overflow: hidden !important; over
   transition: background .2s ease;
 }
 .rotate-suggest-close:hover { background: rgba(255,255,255,.32); }
+.lang-switcher-wrap{
+  position: fixed;
+  top: clamp(56px, 15vw, 66px);
+  right: clamp(10px, 2vw, 13px);
+  z-index: 1002;
+}
+.lang-switcher{
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+.lang-switcher-input{
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+.lang-switcher-track{
+  position: relative;
+  width: clamp(72px, 16vw, 80px);
+  height: clamp(30px, 7vw, 34px);
+  background: linear-gradient(135deg, #0060df, #003eaa);
+  border-radius: 999px;
+  box-shadow: 0 5px 15px rgba(0, 96, 223, 0.3);
+  transition: box-shadow 0.3s ease;
+}
+.lang-switcher:hover .lang-switcher-track{ box-shadow: 0 8px 25px rgba(0, 96, 223, 0.4); }
+.lang-switcher:active .lang-switcher-track{ box-shadow: 0 4px 15px rgba(0, 96, 223, 0.5); }
+.lang-switcher-input:focus-visible ~ .lang-switcher-track{ outline: 2px solid rgba(255,255,255,0.5); outline-offset: 2px; }
+.lang-switcher-option{
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: rgba(255,255,255,0.65);
+  transition: color 0.3s ease;
+  pointer-events: none;
+}
+.lang-switcher-option-en{ left: 0; color: #0060df; }
+.lang-switcher-option-id{ right: 0; }
+.lang-switcher-thumb{
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: calc(50% - 6px);
+  height: calc(100% - 6px);
+  background: #fff;
+  border-radius: 999px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+  transition: transform 0.3s ease;
+  z-index: 1;
+}
+.lang-switcher-input:checked ~ .lang-switcher-track .lang-switcher-thumb{
+  transform: translateX(calc(100% + 6px));
+}
+.lang-switcher-input:checked ~ .lang-switcher-track .lang-switcher-option-en{ color: rgba(255,255,255,0.65); }
+.lang-switcher-input:checked ~ .lang-switcher-track .lang-switcher-option-id{ color: #0060df; }
+@media screen and (max-width: 600px){
+  .lang-switcher-wrap{ top: clamp(52px, 13vw, 58px); right: clamp(8px, 2vw, 10px); }
+}
 </style>
 </head>
 <body class="text-slate-100 min-h-screen">
@@ -669,10 +745,21 @@ html.drag-scroll-lock, body.drag-scroll-lock { overflow: hidden !important; over
   </a>
 </div>
 
+<div class="lang-switcher-wrap">
+  <label class="lang-switcher" for="langSwitcher">
+    <input type="checkbox" id="langSwitcher" class="lang-switcher-input" aria-label="Language / Bahasa">
+    <span class="lang-switcher-track">
+      <span class="lang-switcher-option lang-switcher-option-en">EN</span>
+      <span class="lang-switcher-option lang-switcher-option-id">ID</span>
+      <span class="lang-switcher-thumb"></span>
+    </span>
+  </label>
+</div>
+
 
 <div id="form-view" class="min-h-screen flex items-center justify-center px-4 py-8">
   <section id="spec-bar" class="w-full max-w-xs bg-panel/80 border border-white/5 rounded-2xl p-4 shadow-xl shadow-black/30">
-    <h3 class="page-title">Booklet 3D Previewer</h3>
+    <h3 class="page-title" data-i18n="page_title">Booklet 3D Previewer</h3>
 
     <div class="flex flex-col gap-3">
 
@@ -683,25 +770,25 @@ html.drag-scroll-lock, body.drag-scroll-lock { overflow: hidden !important; over
             <input type="radio" name="upload-mode" value="single" id="mode-single" checked>
             <span class="card-visual">
               <svg width="14" height="17" viewBox="0 0 20 26" fill="none" stroke-width="1.8"><rect x="1" y="1" width="18" height="24" rx="2"/></svg>
-              <span>Single File</span>
+              <span data-i18n="mode_single_file">Single File</span>
             </span>
           </label>
           <label class="radio-card flex-1">
             <input type="radio" name="upload-mode" value="separate" id="mode-separate">
             <span class="card-visual">
               <svg width="17" height="17" viewBox="0 0 26 26" fill="none" stroke-width="1.8"><rect x="1" y="3" width="16" height="22" rx="2"/><rect x="9" y="1" width="16" height="22" rx="2"/></svg>
-              <span>Separate File</span>
+              <span data-i18n="mode_separate_file">Separate File</span>
             </span>
           </label>
         </div>
       </div>
 
       <div id="single-upload-section" class="flex flex-col gap-0.5">
-        <span class="field-label">Upload PDF Booklet</span>
+        <span class="field-label" data-i18n="label_upload_pdf_booklet">Upload PDF Booklet</span>
         <label id="dropzone-single" for="pdf-input-single" class="flex flex-col items-center justify-center gap-1 border-2 border-dashed border-slate-600 hover:border-accent/70 rounded-xl px-3 py-3 cursor-pointer transition-colors bg-slate-900/40">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4"/><path d="M7 9l5-5 5 5"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg>
-          <span class="text-[11px] font-medium text-slate-200">Select or drag PDF files</span>
-          <span class="text-[8.5px] text-slate-500">Pages automatically adjust to multiples of 4</span>
+          <span class="text-[11px] font-medium text-slate-200" data-i18n="dropzone_select_drag">Select or drag PDF files</span>
+          <span class="text-[8.5px] text-slate-500" data-i18n="dropzone_auto_adjust_note">Pages automatically adjust to multiples of 4</span>
         </label>
         <input type="file" id="pdf-input-single" accept="application/pdf" class="hidden">
         <div id="file-info-single" class="hidden flex items-center justify-between gap-1.5 rounded-lg border border-white/5 bg-slate-900/60 px-2.5 py-1.5">
@@ -709,19 +796,19 @@ html.drag-scroll-lock, body.drag-scroll-lock { overflow: hidden !important; over
             <p id="file-name-single" class="text-[11px] font-medium text-white truncate max-w-[160px]"></p>
             <p id="file-meta-single" class="text-[9px] text-slate-400"></p>
           </div>
-          <button id="change-file-btn-single" type="button" class="shrink-0 text-[9px] text-accent2 hover:text-white transition-colors px-1.5 py-0.5 rounded-md border border-white/10 hover:border-accent/50 hover:bg-accent/10">Change</button>
+          <button id="change-file-btn-single" type="button" class="shrink-0 text-[9px] text-accent2 hover:text-white transition-colors px-1.5 py-0.5 rounded-md border border-white/10 hover:border-accent/50 hover:bg-accent/10" data-i18n="btn_change">Change</button>
         </div>
       </div>
 
       <div id="separate-upload-section" class="hidden flex-col gap-3">
 
         <div class="flex flex-col gap-0.5">
-          <span class="field-label">Upload File Cover</span>
+          <span class="field-label" data-i18n="label_upload_file_cover">Upload File Cover</span>
           <label id="dropzone-cover" for="pdf-input-cover" class="flex items-center gap-2 border-2 border-dashed border-slate-600 hover:border-accent/70 rounded-xl px-3 py-2.5 cursor-pointer transition-colors bg-slate-900/40">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4"/><path d="M7 9l5-5 5 5"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg>
             <div class="flex flex-col">
-              <span class="text-[11px] font-medium text-slate-200">Select the Cover file</span>
-              <span class="text-[8.5px] text-slate-500">2 Page File = 1 Side | 4 Page File = 2 Side</span>
+              <span class="text-[11px] font-medium text-slate-200" data-i18n="dropzone_select_cover">Select the Cover file</span>
+              <span class="text-[8.5px] text-slate-500" data-i18n="dropzone_cover_note">2 Page File = 1 Side | 4 Page File = 2 Side</span>
             </div>
           </label>
           <input type="file" id="pdf-input-cover" accept="application/pdf" class="hidden">
@@ -730,17 +817,17 @@ html.drag-scroll-lock, body.drag-scroll-lock { overflow: hidden !important; over
               <p id="file-name-cover" class="text-[11px] font-medium text-white truncate max-w-[160px]"></p>
               <p id="file-meta-cover" class="text-[9px] text-slate-400"></p>
             </div>
-            <button id="change-file-btn-cover" type="button" class="shrink-0 text-[9px] text-accent2 hover:text-white transition-colors px-1.5 py-0.5 rounded-md border border-white/10 hover:border-accent/50 hover:bg-accent/10">Change</button>
+            <button id="change-file-btn-cover" type="button" class="shrink-0 text-[9px] text-accent2 hover:text-white transition-colors px-1.5 py-0.5 rounded-md border border-white/10 hover:border-accent/50 hover:bg-accent/10" data-i18n="btn_change">Change</button>
           </div>
         </div>
 
         <div class="flex flex-col gap-0.5">
-          <span class="field-label">Upload File Pages</span>
+          <span class="field-label" data-i18n="label_upload_file_pages">Upload File Pages</span>
           <label id="dropzone-pages" for="pdf-input-pages" class="flex items-center gap-2 border-2 border-dashed border-slate-600 hover:border-accent/70 rounded-xl px-3 py-2.5 cursor-pointer transition-colors bg-slate-900/40">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4"/><path d="M7 9l5-5 5 5"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg>
             <div class="flex flex-col">
-              <span class="text-[11px] font-medium text-slate-200">Select the Pages file</span>
-              <span class="text-[8.5px] text-slate-500">Automatically adjusted to multiples of 4</span>
+              <span class="text-[11px] font-medium text-slate-200" data-i18n="dropzone_select_pages">Select the Pages file</span>
+              <span class="text-[8.5px] text-slate-500" data-i18n="dropzone_pages_note">Automatically adjusted to multiples of 4</span>
             </div>
           </label>
           <input type="file" id="pdf-input-pages" accept="application/pdf" class="hidden">
@@ -749,60 +836,60 @@ html.drag-scroll-lock, body.drag-scroll-lock { overflow: hidden !important; over
               <p id="file-name-pages" class="text-[11px] font-medium text-white truncate max-w-[160px]"></p>
               <p id="file-meta-pages" class="text-[9px] text-slate-400"></p>
             </div>
-            <button id="change-file-btn-pages" type="button" class="shrink-0 text-[9px] text-accent2 hover:text-white transition-colors px-1.5 py-0.5 rounded-md border border-white/10 hover:border-accent/50 hover:bg-accent/10">Change</button>
+            <button id="change-file-btn-pages" type="button" class="shrink-0 text-[9px] text-accent2 hover:text-white transition-colors px-1.5 py-0.5 rounded-md border border-white/10 hover:border-accent/50 hover:bg-accent/10" data-i18n="btn_change">Change</button>
           </div>
         </div>
 
       </div>
 
       <div id="step-size" class="hidden flex-col gap-0.5">
-        <span class="field-label">Booklet Size</span>
+        <span class="field-label" data-i18n="label_booklet_size">Booklet Size</span>
         <div class="print-mode-select">
           <button type="button" class="print-mode-trigger" id="size-select-trigger" aria-haspopup="listbox" aria-expanded="false">
-            <span id="size-select-trigger-label">Select Size&hellip;</span>
+            <span id="size-select-trigger-label" data-i18n="placeholder_select_size">Select Size&hellip;</span>
             <span class="print-mode-triangle"></span>
           </button>
         </div>
         <select id="size-select" class="visually-hidden-select" tabindex="-1" aria-hidden="true">
-          <option value="">Select Size&hellip;</option>
+          <option value="" data-i18n="placeholder_select_size">Select Size&hellip;</option>
           <option value="a4">A4 &middot; 21 &times; 29.7 cm</option>
           <option value="a5">A5 &middot; 14.8 &times; 21 cm</option>
-          <option value="custom">Custom Size</option>
+          <option value="custom" data-i18n="option_custom_size">Custom Size</option>
         </select>
       </div>
 
       <div id="step-orientation" class="hidden flex-col gap-0.5">
-        <span class="field-label">Page Orientation</span>
+        <span class="field-label" data-i18n="label_page_orientation">Page Orientation</span>
         <div class="flex gap-2">
           <label class="radio-card flex-1">
             <input type="radio" name="orientation" value="portrait" id="orientation-portrait">
             <span class="card-visual">
               <svg width="14" height="18" viewBox="0 0 20 26" fill="none" stroke-width="1.8"><rect x="1" y="1" width="18" height="24" rx="2"/></svg>
-              <span>Portrait</span>
+              <span data-i18n="orientation_portrait">Portrait</span>
             </span>
           </label>
           <label class="radio-card flex-1">
             <input type="radio" name="orientation" value="landscape" id="orientation-landscape">
             <span class="card-visual">
               <svg width="18" height="14" viewBox="0 0 26 20" fill="none" stroke-width="1.8"><rect x="1" y="1" width="24" height="18" rx="2"/></svg>
-              <span>Landscape</span>
+              <span data-i18n="orientation_landscape">Landscape</span>
             </span>
           </label>
         </div>
       </div>
 
       <div id="step-custom" class="hidden flex-col gap-0.5">
-        <span class="field-label">Custom Dimensions</span>
+        <span class="field-label" data-i18n="label_custom_dimensions">Custom Dimensions</span>
         <div class="grid grid-cols-2 gap-2">
           <div>
-            <span class="field-label">Width</span>
+            <span class="field-label" data-i18n="field_width">Width</span>
             <div class="field-input-wrap">
               <input type="number" min="1" step="0.1" id="custom-width" placeholder="0" class="input-base">
               <span class="field-unit">cm</span>
             </div>
           </div>
           <div>
-            <span class="field-label">Height</span>
+            <span class="field-label" data-i18n="field_height">Height</span>
             <div class="field-input-wrap">
               <input type="number" min="1" step="0.1" id="custom-height" placeholder="0" class="input-base">
               <span class="field-unit">cm</span>
@@ -812,10 +899,10 @@ html.drag-scroll-lock, body.drag-scroll-lock { overflow: hidden !important; over
       </div>
 
       <div class="flex flex-col gap-1.5">
-        <button id="preview-btn" disabled type="button" class="w-full bg-accent text-white text-[13px] font-semibold py-2 rounded-xl transition-colors hover:bg-accent2 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-accent">Preview Booklet</button>
-        <p id="preview-hint" class="hint">Upload the PDF first</p>
+        <button id="preview-btn" disabled type="button" class="w-full bg-accent text-white text-[13px] font-semibold py-2 rounded-xl transition-colors hover:bg-accent2 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-accent" data-i18n="btn_preview_booklet">Preview Booklet</button>
+        <p id="preview-hint" class="hint" data-i18n="hint_upload_pdf_first">Upload the PDF first</p>
       </div>
-		<p class="panel-credit">Created By Anamaruchi (<a href="https://www.facebook.com/anang.zikri.f" target="_blank">Anang Zikri Febriyansyah</a>)
+		<p class="panel-credit"><span data-i18n="credit_prefix">Created By Anamaruchi</span> (<a href="https://www.facebook.com/anang.zikri.f" target="_blank">Anang Zikri Febriyansyah</a>)
     </div>
   </section>
 </div>
@@ -837,7 +924,7 @@ html.drag-scroll-lock, body.drag-scroll-lock { overflow: hidden !important; over
       <button id="page-count-warning-hide-btn" type="button" class="page-count-warning-hide-btn" aria-label="Hide">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6L6 18"/><path d="M6 6l12 12"/></svg>
       </button>
-      <p class="page-count-warning-title">Page Count Not a Multiple of 4</p>
+      <p class="page-count-warning-title" data-i18n="warning_page_count_title">Page Count Not a Multiple of 4</p>
       <p id="page-count-warning-detail" class="page-count-warning-detail"></p>
     </div>
   </div>
@@ -853,7 +940,7 @@ html.drag-scroll-lock, body.drag-scroll-lock { overflow: hidden !important; over
   <div class="rotate-suggest-icon">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg>
   </div>
-  <span class="rotate-suggest-text">Rotate your device to Landscape for a better preview experience.</span>
+  <span class="rotate-suggest-text" data-i18n="rotate_suggest_text">Rotate your device to Landscape for a better preview experience.</span>
   <button id="rotate-suggest-close" type="button" aria-label="Dismiss" class="rotate-suggest-close">
     <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M18 6L6 18"/><path d="M6 6l12 12"/></svg>
   </button>
@@ -873,24 +960,24 @@ html.drag-scroll-lock, body.drag-scroll-lock { overflow: hidden !important; over
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
     </button>
     <span class="zoom-divider"></span>
-    <button id="zoom-fit-btn" type="button" class="zoom-fit-btn" aria-label="Fit to Screen">Fit</button>
+    <button id="zoom-fit-btn" type="button" class="zoom-fit-btn" aria-label="Fit to Screen" data-i18n="btn_fit">Fit</button>
   </div>
 </div>
 
 <div id="info-cluster" class="hidden flex-col items-stretch gap-2 fixed bottom-3 right-3 z-20">
   <div class="flex items-stretch gap-2 cluster-width">
     <button id="thumb-toggle-btn" type="button" class="action-btn action-btn-compact flex-1" aria-label="Open Pages">
-      Open Pages
+      <span data-i18n="btn_open_pages">Open Pages</span>
     </button>
     <button id="save-pdf-btn" type="button" class="action-btn action-btn-compact flex-1">
-      <span id="save-pdf-label">Save PDF</span>
+      <span id="save-pdf-label" data-i18n="btn_save_pdf">Save PDF</span>
     </button>
   </div>
   <div id="info-panel" class="flex flex-col items-stretch gap-0.5 cluster-width rounded-lg border border-white/10 bg-panel/95 backdrop-blur px-2.5 py-2 shadow-xl shadow-black/40">
     <p id="page-indicator" class="text-[12px] font-semibold text-white leading-snug text-right"></p>
     <p id="preview-meta-size" class="text-[11px] text-slate-400 leading-tight truncate text-right"></p>
     <button id="remove-preview-btn" type="button" class="action-btn danger mt-1">
-      Remove Preview
+      <span data-i18n="btn_remove_preview">Remove Preview</span>
     </button>
   </div>
 </div>
@@ -898,61 +985,69 @@ html.drag-scroll-lock, body.drag-scroll-lock { overflow: hidden !important; over
 <div id="thumb-overlay" class="thumb-overlay"></div>
 <aside id="thumb-sidebar" class="thumb-sidebar">
   <div class="thumb-sidebar-header">
-    <span class="thumb-sidebar-title">All Pages</span>
+    <span class="thumb-sidebar-title" data-i18n="thumb_sidebar_title">All Pages</span>
     <button id="thumb-close-btn" type="button" class="thumb-close-btn" aria-label="Tutup">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18"/><path d="M6 6l12 12"/></svg>
     </button>
   </div>
   <div class="thumb-legend">
-    <span class="legend-item"><span class="legend-swatch legend-blue"></span>Original Page</span>
-    <span class="legend-item"><span class="legend-swatch legend-gold"></span>Blank Page</span>
-    <span class="legend-item"><span class="legend-swatch legend-green"></span>Copy Page</span>
+    <span class="legend-item"><span class="legend-swatch legend-blue"></span><span data-i18n="legend_original_page">Original Page</span></span>
+    <span class="legend-item"><span class="legend-swatch legend-gold"></span><span data-i18n="legend_blank_page">Blank Page</span></span>
+    <span class="legend-item"><span class="legend-swatch legend-green"></span><span data-i18n="legend_copy_page">Copy Page</span></span>
   </div>
   <div id="thumb-grid" class="thumb-grid"></div>
-  <p class="panel-credit thumb-sidebar-credit">Created By Anamaruchi (<a href="https://www.facebook.com/anang.zikri.f" target="_blank">Anang Zikri Febriyansyah</a>)</p>
+  <p class="panel-credit thumb-sidebar-credit"><span data-i18n="credit_prefix">Created By Anamaruchi</span> (<a href="https://www.facebook.com/anang.zikri.f" target="_blank">Anang Zikri Febriyansyah</a>)</p>
 </aside>
 
 <div id="page-context-menu" class="page-context-menu hidden">
   <button type="button" class="page-context-item" data-action="copy">
     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="1.5"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg>
-    Copy Page
+    <span data-i18n="context_copy_page">Copy Page</span>
   </button>
   <button type="button" class="page-context-item" id="context-add-page-toggle" data-action="toggle-add">
     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M12 12v6"/><path d="M9 15h6"/></svg>
-    Add Blank Page
+    <span data-i18n="context_add_blank_page">Add Blank Page</span>
     <svg class="page-context-chevron" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
   </button>
   <div id="context-add-submenu" class="page-context-submenu">
     <button type="button" class="page-context-item sub" data-action="before">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="9" width="14" height="12" rx="1.5"/><path d="M12 6V2"/><path d="M9 5l3-3 3 3"/></svg>
-      Before This Page
+      <span data-i18n="context_before_this_page">Before This Page</span>
     </button>
     <button type="button" class="page-context-item sub" data-action="after">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="12" rx="1.5"/><path d="M12 18v4"/><path d="M9 19l3 3 3-3"/></svg>
-      After This Page
+      <span data-i18n="context_after_this_page">After This Page</span>
     </button>
   </div>
   <div class="page-context-divider"></div>
   <button type="button" class="page-context-item danger" data-action="delete">
     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
-    Delete Page
+    <span data-i18n="context_delete_page">Delete Page</span>
   </button>
 </div>
 
 <div id="page-context-menu-multi" class="page-context-menu hidden">
   <button type="button" class="page-context-item danger" data-action="delete-multi">
     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
-    Delete Pages
+    <span data-i18n="context_delete_pages">Delete Pages</span>
   </button>
 </div>
 
 <div class="print-mode-options" id="size-select-options" role="listbox" aria-label="Ukuran Booklet">
   <div class="print-mode-option" data-value="a4" role="option">A4 &middot; 21 &times; 29.7 cm</div>
   <div class="print-mode-option" data-value="a5" role="option">A5 &middot; 14.8 &times; 21 cm</div>
-  <div class="print-mode-option" data-value="custom" role="option">Custom Size</div>
+  <div class="print-mode-option" data-value="custom" role="option" data-i18n="option_custom_size">Custom Size</div>
 </div>
 
 <script>
+var __i18nDict = null;
+var __i18nLang = 'en';
+var refreshDynamicI18nText = null;
+function t(key, fallback){
+  var dict = (__i18nDict && __i18nDict[__i18nLang]) ? __i18nDict[__i18nLang] : null;
+  if(dict && Object.prototype.hasOwnProperty.call(dict, key)) return dict[key];
+  return fallback !== undefined ? fallback : key;
+}
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
 
 const RENDER_DPI = 300;
@@ -1371,13 +1466,13 @@ function updateBookIndicator() {
 
     let text;
     if (idx === 0) {
-      text = `Front Cover 1 of ${total}`;
+      text = t('indicator_front_cover', 'Front Cover 1 of {{total}}').split('{{total}}').join(total);
     } else if (idx >= total - 1) {
-      text = `Back Cover ${total} of ${total}`;
+      text = t('indicator_back_cover', 'Back Cover {{total}} of {{total}}').split('{{total}}').join(total);
     } else {
       const left = idx + 1;
       const right = Math.min(idx + 2, total);
-      text = `Page ${left}-${right} of ${total}`;
+      text = t('indicator_page_range', 'Page {{left}}-{{right}} of {{total}}').split('{{left}}').join(left).split('{{right}}').join(right).split('{{total}}').join(total);
     }
     pageIndicator.textContent = text;
 
@@ -1438,8 +1533,11 @@ function checkPageCountWarning() {
   }
   const short = 4 - remainder;
   const over = remainder;
-  pageCountWarningDetail.innerHTML = `Current total: <strong>${total} pages</strong><br>Add by <strong>${short} page${short > 1 ? 's' : ''}</strong> or Delete by <strong>${over} pages<br></strong>To match a multiple of 4`;
-  pageCountWarningSimpleText.innerHTML = `Add by <strong>${short} page${short > 1 ? 's' : ''}</strong> or Delete by <strong>${over} pages</strong>`;
+  const pluralS = short > 1 ? 's' : '';
+  pageCountWarningDetail.innerHTML = t('warning_page_count_detail', 'Current total: <strong>{{total}} pages</strong><br>Add by <strong>{{short}} page{{s}}</strong> or Delete by <strong>{{over}} pages<br></strong>To match a multiple of 4')
+    .split('{{total}}').join(total).split('{{short}}').join(short).split('{{over}}').join(over).split('{{s}}').join(pluralS);
+  pageCountWarningSimpleText.innerHTML = t('warning_page_count_simple', 'Add by <strong>{{short}} page{{s}}</strong> or Delete by <strong>{{over}} pages</strong>')
+    .split('{{short}}').join(short).split('{{over}}').join(over).split('{{s}}').join(pluralS);
   updatePageCountWarningVisibility();
 }
 
@@ -1480,10 +1578,10 @@ function relabelContentPages() {
   pageDataList.forEach(p => {
     if (p.isCover) return;
     if (p.isBlank) {
-      p.label = 'Blank Page';
+      p.label = t('label_blank_page', 'Blank Page');
     } else {
       n++;
-      p.label = `Page ${n}`;
+      p.label = t('label_page_n', 'Page {{n}}').split('{{n}}').join(n);
     }
   });
 }
@@ -1524,7 +1622,7 @@ function insertBlankPage(index, position) {
   if (!pageDataList.length) return;
   if (index < 0 || index >= pageDataList.length) return;
   const insertAt = position === 'after' ? index + 1 : index;
-  pageDataList.splice(insertAt, 0, { label: 'Blank Page', isCover: false, canvasEl: null, isBlank: true });
+  pageDataList.splice(insertAt, 0, { label: t('label_blank_page', 'Blank Page'), isCover: false, canvasEl: null, isBlank: true });
   commitPageListChange(insertAt);
 }
 
@@ -1532,7 +1630,7 @@ function copyPageAt(index) {
   if (index < 0 || index >= pageDataList.length) return;
   const source = pageDataList[index];
   const copy = {
-    label: `${source.label} (Copy)`,
+    label: `${source.label} ${t('suffix_copy', '(Copy)')}`,
     isCover: source.isCover,
     isBlank: source.isBlank,
     isCopy: true,
@@ -1746,7 +1844,7 @@ function buildThumbnails() {
     if (data.isBlank || !data.canvasEl) {
       const blankVisual = document.createElement('div');
       blankVisual.className = 'thumb-blank-visual';
-      blankVisual.textContent = 'Blank';
+      blankVisual.textContent = t('label_thumb_blank', 'Blank');
       visual.appendChild(blankVisual);
     } else {
       visual.appendChild(drawThumbCanvas(data.canvasEl, thumbRatio));
@@ -1910,14 +2008,14 @@ function createPageElement(data) {
   if (data.isBlank) {
     const blankDiv = document.createElement('div');
     blankDiv.className = 'page-blank';
-    blankDiv.innerText = 'Additional Blank Pages\n(Adjusting Print Folds)';
+    blankDiv.innerText = t('label_additional_blank_pages', 'Additional Blank Pages\n(Adjusting Print Folds)');
     inner.appendChild(blankDiv);
   } else if (data.canvasEl) {
     inner.appendChild(data.canvasEl);
   } else {
     const blankDiv = document.createElement('div');
     blankDiv.className = 'page-blank';
-    blankDiv.innerText = 'Page Not Found';
+    blankDiv.innerText = t('label_page_not_found', 'Page Not Found');
     inner.appendChild(blankDiv);
   }
 
@@ -2039,17 +2137,17 @@ function resetDownstream() {
   rotateBannerDismissed = false;
   previewMetaSize.textContent = '';
   previewBtn.disabled = true;
-  previewBtn.textContent = 'Preview Booklet';
-  setHint('Upload the PDF first.', 'default');
+  previewBtn.textContent = t('btn_preview_booklet', 'Preview Booklet');
+  setHint(t('hint_upload_pdf_first', 'Upload the PDF first.'), 'default');
 }
 
 function resetUploadUI(kind) {
-  const t = uploadTargets[kind];
-  t.info.classList.add('hidden');
-  t.dropzone.classList.remove('hidden');
-  t.nameEl.textContent = '';
-  t.metaEl.textContent = '';
-  t.input.value = '';
+  const target = uploadTargets[kind];
+  target.info.classList.add('hidden');
+  target.dropzone.classList.remove('hidden');
+  target.nameEl.textContent = '';
+  target.metaEl.textContent = '';
+  target.input.value = '';
 }
 
 document.querySelectorAll('input[name="upload-mode"]').forEach(r => {
@@ -2085,10 +2183,10 @@ document.querySelectorAll('input[name="upload-mode"]').forEach(r => {
 });
 
 async function handlePdfFile(file, kind) {
-  const t = uploadTargets[kind];
+  const target = uploadTargets[kind];
 
   if (!file || file.type !== 'application/pdf') {
-    setHint('Please select a valid PDF file', 'error');
+    setHint(t('error_invalid_pdf', 'Please select a valid PDF file'), 'error');
     return;
   }
 
@@ -2098,12 +2196,12 @@ async function handlePdfFile(file, kind) {
 
   resetDownstream();
 
-  t.info.classList.remove('hidden');
-  t.info.classList.add('step-enter');
-  t.dropzone.classList.add('hidden');
-  t.nameEl.textContent = file.name;
-  t.metaEl.textContent = `${formatBytes(file.size)} \u00b7 Reading Pages`;
-  setHint('Reading PDF File', 'default');
+  target.info.classList.remove('hidden');
+  target.info.classList.add('step-enter');
+  target.dropzone.classList.add('hidden');
+  target.nameEl.textContent = file.name;
+  target.metaEl.textContent = `${formatBytes(file.size)} \u00b7 ${t('status_reading_pages', 'Reading Pages')}`;
+  setHint(t('status_reading_pdf', 'Reading PDF File'), 'default');
 
   try {
     const buffer = await file.arrayBuffer();
@@ -2114,18 +2212,18 @@ async function handlePdfFile(file, kind) {
     else if (kind === 'cover') { coverPdfDoc = doc; coverFileBytes = new Uint8Array(bufferForLib); coverFileName = file.name; }
     else { pagesPdfDoc = doc; pagesFileBytes = new Uint8Array(bufferForLib); pagesFileName = file.name; }
 
-    t.metaEl.textContent = `${formatBytes(file.size)} \u00b7 ${doc.numPages} Pages`;
-    setHint('The file is ready to be processed', 'success');
+    target.metaEl.textContent = `${formatBytes(file.size)} \u00b7 ${doc.numPages} ${t('unit_pages', 'Pages')}`;
+    setHint(t('status_file_ready', 'The file is ready to be processed'), 'success');
     if (filesReady()) showStep(stepSize);
   } catch (err) {
     console.error(err);
     if (kind === 'single') { pdfDoc = null; singleFileBytes = null; singleFileName = ''; }
     else if (kind === 'cover') { coverPdfDoc = null; coverFileBytes = null; coverFileName = ''; }
     else { pagesPdfDoc = null; pagesFileBytes = null; pagesFileName = ''; }
-    setHint('Failed to read the PDF: ' + err.message, 'error');
+    setHint(`${t('error_failed_read_pdf', 'Failed to read the PDF:')} ${err.message}`, 'error');
   } finally {
     validate();
-    t.input.value = '';
+    target.input.value = '';
   }
 }
 
@@ -2152,11 +2250,11 @@ function setupDropzone(dropzoneEl, inputEl, kind) {
 }
 
 Object.keys(uploadTargets).forEach(kind => {
-  const t = uploadTargets[kind];
-  setupDropzone(t.dropzone, t.input, kind);
-  t.changeBtn.addEventListener('click', () => {
-    t.input.value = '';
-    t.input.click();
+  const target = uploadTargets[kind];
+  setupDropzone(target.dropzone, target.input, kind);
+  target.changeBtn.addEventListener('click', () => {
+    target.input.value = '';
+    target.input.click();
   });
 });
 
@@ -2196,18 +2294,18 @@ function validate() {
 
   let hint = '';
   if (uploadMode === 'single') {
-    if (!pdfDoc) hint = 'Upload the PDF first';
+    if (!pdfDoc) hint = t('hint_upload_pdf_first', 'Upload the PDF first.');
   } else {
-    if (!coverPdfDoc && !pagesPdfDoc) hint = 'Upload the cover file and pages file first';
-    else if (!coverPdfDoc) hint = 'Upload the cover file first';
-    else if (!pagesPdfDoc) hint = 'Upload the pages file first';
+    if (!coverPdfDoc && !pagesPdfDoc) hint = t('hint_upload_cover_and_pages', 'Upload the cover file and pages file first');
+    else if (!coverPdfDoc) hint = t('hint_upload_cover_first', 'Upload the cover file first');
+    else if (!pagesPdfDoc) hint = t('hint_upload_pages_first', 'Upload the pages file first');
   }
 
   if (!hint) {
-    if (!sizeOk) hint = 'Select the booklet size';
-    else if (isStandardSize() && !orientationOk) hint = 'Select page orientation';
-    else if (sizeSelect.value === 'custom' && !customOk) hint = 'Complete the custom size (Width & Height)';
-    else hint = 'All settings are ready, Click Preview Booklet';
+    if (!sizeOk) hint = t('hint_select_booklet_size', 'Select the booklet size');
+    else if (isStandardSize() && !orientationOk) hint = t('hint_select_orientation', 'Select page orientation');
+    else if (sizeSelect.value === 'custom' && !customOk) hint = t('hint_complete_custom_size', 'Complete the custom size (Width & Height)');
+    else hint = t('hint_all_ready', 'All settings are ready, Click Preview Booklet');
   }
   setHint(hint, 'default');
 
@@ -2229,10 +2327,10 @@ function getTargetSpec() {
 }
 
 function getSizeLabel(spec) {
-  const sizeName = sizeSelect.value === 'a4' ? 'A4' : sizeSelect.value === 'a5' ? 'A5' : 'Custom';
+  const sizeName = sizeSelect.value === 'a4' ? 'A4' : sizeSelect.value === 'a5' ? 'A5' : t('option_custom_size', 'Custom Size');
   const parts = [sizeName];
   if (spec.orientation) {
-    parts.push(spec.orientation === 'portrait' ? 'Portrait' : 'Landscape');
+    parts.push(spec.orientation === 'portrait' ? t('orientation_portrait', 'Portrait') : t('orientation_landscape', 'Landscape'));
   }
   parts.push(`${spec.wcm}\u00d7${spec.hcm} cm`);
   return parts.join(' \u00b7 ');
@@ -2260,25 +2358,25 @@ async function renderPdfPageToCanvas(doc, pageNum) {
 function buildCoverSlots(n) {
   if (n === 2) {
     return {
-      front: [{ label: 'Front Cover', real: 1 }, { label: 'Front Inner Cover', real: null }],
-      back: [{ label: 'Back Inner Cover', real: null }, { label: 'Back Cover', real: 2 }]
+      front: [{ label: t('label_front_cover', 'Front Cover'), real: 1 }, { label: t('label_front_inner_cover', 'Front Inner Cover'), real: null }],
+      back: [{ label: t('label_back_inner_cover', 'Back Inner Cover'), real: null }, { label: t('label_back_cover', 'Back Cover'), real: 2 }]
     };
   }
   if (n === 4) {
     return {
-      front: [{ label: 'Front Cover', real: 1 }, { label: 'Front Inner Cover', real: 2 }],
-      back: [{ label: 'Back Inner Cover', real: 3 }, { label: 'Back Cover', real: 4 }]
+      front: [{ label: t('label_front_cover', 'Front Cover'), real: 1 }, { label: t('label_front_inner_cover', 'Front Inner Cover'), real: 2 }],
+      back: [{ label: t('label_back_inner_cover', 'Back Inner Cover'), real: 3 }, { label: t('label_back_cover', 'Back Cover'), real: 4 }]
     };
   }
   if (n === 1) {
     return {
-      front: [{ label: 'Front Cover', real: 1 }],
-      back: [{ label: 'Back Cover', real: 1 }]
+      front: [{ label: t('label_front_cover', 'Front Cover'), real: 1 }],
+      back: [{ label: t('label_back_cover', 'Back Cover'), real: 1 }]
     };
   }
   return {
-    front: [{ label: 'Front Cover', real: 1 }],
-    back: [{ label: 'Back Cover', real: n }]
+    front: [{ label: t('label_front_cover', 'Front Cover'), real: 1 }],
+    back: [{ label: t('label_back_cover', 'Back Cover'), real: n }]
   };
 }
 
@@ -2291,11 +2389,11 @@ async function renderCoverPages(coverDoc) {
 
   async function resolveSlot(slot) {
     if (slot.real === null) {
-      return { label: `${slot.label} (Kosong)`, isCover: true, canvasEl: null, isBlank: true };
+      return { label: `${slot.label} ${t('suffix_empty', '(Empty)')}`, isCover: true, canvasEl: null, isBlank: true };
     }
     if (!cache[slot.real]) {
       rendered++;
-      setHint(`Rendering the page cover ${rendered} from ${totalToRender} (${RENDER_DPI} DPI)`, 'default');
+      setHint(t('status_rendering_cover_page', 'Rendering the page cover {{n}} from {{total}} ({{dpi}} DPI)').split('{{n}}').join(rendered).split('{{total}}').join(totalToRender).split('{{dpi}}').join(RENDER_DPI), 'default');
       cache[slot.real] = await renderPdfPageToCanvas(coverDoc, slot.real);
       return { label: slot.label, isCover: true, canvasEl: cache[slot.real], isBlank: false, sourceKind: 'cover', sourcePage: slot.real };
     }
@@ -2315,8 +2413,8 @@ async function generatePreview() {
   if (!filesReady()) return;
 
   previewBtn.disabled = true;
-  previewBtn.textContent = 'Processing';
-  setHint('Preparing the page', 'default');
+  previewBtn.textContent = t('btn_processing', 'Processing');
+  setHint(t('status_preparing_page', 'Preparing the page'), 'default');
 
   destroyBook();
   pageDataList = [];
@@ -2348,31 +2446,31 @@ async function generatePreview() {
     let globalIndex = frontPages.length;
     for (let i = 1; i <= contentPadded; i++) {
       globalIndex++;
-      setHint(`Rendering the page ${globalIndex} from ${bookletPages} (${RENDER_DPI} DPI)`, 'default');
+      setHint(t('status_rendering_page', 'Rendering the page {{n}} from {{total}} ({{dpi}} DPI)').split('{{n}}').join(globalIndex).split('{{total}}').join(bookletPages).split('{{dpi}}').join(RENDER_DPI), 'default');
 
       const isPadding = i > totalContentPages;
       let label;
       let isCover = false;
       if (uploadMode === 'separate') {
-        label = `Page ${i}`;
+        label = t('label_page_n', 'Page {{n}}').split('{{n}}').join(i);
       } else if (globalIndex === 1) {
-        label = 'Front Cover';
+        label = t('label_front_cover', 'Front Cover');
         isCover = true;
       } else if (globalIndex === 2) {
-        label = 'Front Inner Cover';
+        label = t('label_front_inner_cover', 'Front Inner Cover');
         isCover = true;
       } else if (globalIndex === bookletPages - 1) {
-        label = 'Back Inner Cover';
+        label = t('label_back_inner_cover', 'Back Inner Cover');
         isCover = true;
       } else if (globalIndex === bookletPages) {
-        label = 'Back Cover';
+        label = t('label_back_cover', 'Back Cover');
         isCover = true;
       } else {
-        label = `Page ${globalIndex - 2}`;
+        label = t('label_page_n', 'Page {{n}}').split('{{n}}').join(globalIndex - 2);
       }
 
       if (isPadding) {
-        label = isCover ? `${label} (Blank)` : 'Blank Page';
+        label = isCover ? `${label} ${t('suffix_blank', '(Blank)')}` : t('label_blank_page', 'Blank Page');
       }
 
       if (i <= totalContentPages) {
@@ -2402,10 +2500,10 @@ async function generatePreview() {
 
   } catch (err) {
     console.error(err);
-    setHint('An error occurred while creating the preview: ' + err.message, 'error');
+    setHint(`${t('error_preview_generation', 'An error occurred while creating the preview:')} ${err.message}`, 'error');
   } finally {
     previewBtn.disabled = false;
-    previewBtn.textContent = 'Preview Booklet';
+    previewBtn.textContent = t('btn_preview_booklet', 'Preview Booklet');
   }
 }
 
@@ -2461,7 +2559,7 @@ async function exportPdf() {
   if (!pageDataList.length || savePdfBtn.disabled) return;
 
   savePdfBtn.disabled = true;
-  savePdfLabel.textContent = 'Saving';
+  savePdfLabel.textContent = t('status_saving', 'Saving');
 
   try {
     await ensurePdfLib();
@@ -2508,13 +2606,13 @@ async function exportPdf() {
     a.remove();
     setTimeout(() => URL.revokeObjectURL(url), 4000);
 
-    savePdfLabel.textContent = 'Downloaded!';
+    savePdfLabel.textContent = t('status_downloaded', 'Downloaded!');
   } catch (err) {
     console.error(err);
-    savePdfLabel.textContent = 'Failed Download';
+    savePdfLabel.textContent = t('status_failed_download', 'Failed Download');
   } finally {
     setTimeout(() => {
-      savePdfLabel.textContent = 'Save PDF';
+      savePdfLabel.textContent = t('btn_save_pdf', 'Save PDF');
       savePdfBtn.disabled = false;
     }, 1600);
   }
@@ -2548,7 +2646,7 @@ function openSizeDropdown() {
 
 function syncSizeDropdownUI() {
   const opt = sizeSelectOptions.querySelector(`[data-value="${sizeSelect.value}"]`);
-  sizeSelectTriggerLabel.textContent = opt ? opt.textContent : 'Select Size';
+  sizeSelectTriggerLabel.textContent = opt ? opt.textContent : t('placeholder_select_size', 'Select Size\u2026');
   sizeSelectOptions.querySelectorAll('.print-mode-option').forEach(o => {
     o.classList.toggle('selected', o.dataset.value === sizeSelect.value);
   });
@@ -2585,6 +2683,105 @@ window.addEventListener('resize', lockAllScales);
 lockAllScales();
 syncSizeDropdownUI();
 validate();
+
+function applyAriaLabels() {
+  prevBtn.setAttribute('aria-label', t('aria_previous', 'Sebelumnya'));
+  nextBtn.setAttribute('aria-label', t('aria_next', 'Berikutnya'));
+  pageCountWarningHideBtn.setAttribute('aria-label', t('aria_hide', 'Hide'));
+  pageCountWarningShowBtn.setAttribute('aria-label', t('aria_show', 'Show'));
+  rotateSuggestCloseBtn.setAttribute('aria-label', t('aria_dismiss', 'Dismiss'));
+  zoomOutBtn.setAttribute('aria-label', t('aria_zoom_out', 'Zoom Out'));
+  zoomInBtn.setAttribute('aria-label', t('aria_zoom_in', 'Zoom In'));
+  zoomFitBtn.setAttribute('aria-label', t('aria_fit_to_screen', 'Fit to Screen'));
+  zoomPercentInput.setAttribute('aria-label', t('aria_zoom_percentage', 'Persentase Zoom'));
+  thumbToggleBtn.setAttribute('aria-label', t('btn_open_pages', 'Open Pages'));
+  thumbCloseBtn.setAttribute('aria-label', t('aria_close', 'Tutup'));
+  sizeSelectOptions.setAttribute('aria-label', t('label_booklet_size', 'Booklet Size'));
+}
+
+refreshDynamicI18nText = function () {
+  applyAriaLabels();
+  validate();
+  syncSizeDropdownUI();
+  if (pageFlipInstance) updateBookIndicator();
+  if (pageDataList.length) checkPageCountWarning();
+};
+
+applyAriaLabels();
+</script>
+
+<script>
+(function () {
+  "use strict";
+
+  var LANG_STORAGE_KEY = 'anamaruchi_booklet_previewer_lang';
+  var DEFAULT_LANG = 'en';
+
+  var langSwitcher = document.getElementById('langSwitcher');
+
+  function getSavedLang() {
+    try {
+      var saved = localStorage.getItem(LANG_STORAGE_KEY);
+      if (saved === 'en' || saved === 'id') return saved;
+    } catch (e) {}
+    return DEFAULT_LANG;
+  }
+
+  function saveLang(lang) {
+    try { localStorage.setItem(LANG_STORAGE_KEY, lang); } catch (e) {}
+  }
+
+  function applyTranslations(lang) {
+    if (!__i18nDict || !__i18nDict[lang]) return;
+    var dict = __i18nDict[lang];
+    var nodes = document.querySelectorAll('[data-i18n]');
+    for (var i = 0; i < nodes.length; i++) {
+      var node = nodes[i];
+      var key = node.getAttribute('data-i18n');
+      if (Object.prototype.hasOwnProperty.call(dict, key)) {
+        node.textContent = dict[key];
+      }
+    }
+    if (typeof refreshDynamicI18nText === 'function') refreshDynamicI18nText();
+  }
+
+  function setLanguage(lang) {
+    __i18nLang = (lang === 'id') ? 'id' : 'en';
+    if (langSwitcher) langSwitcher.checked = (__i18nLang === 'id');
+    applyTranslations(__i18nLang);
+    saveLang(__i18nLang);
+  }
+
+  function initI18n() {
+    __i18nLang = getSavedLang();
+    if (langSwitcher) langSwitcher.checked = (__i18nLang === 'id');
+
+    try {
+      fetch('booklet-3d-previewer-lang.json')
+        .then(function (res) {
+          if (!res.ok) throw new Error('Failed to load lang.json (status ' + res.status + ')');
+          return res.json();
+        })
+        .then(function (data) {
+          __i18nDict = data;
+          applyTranslations(__i18nLang);
+        })
+        .catch(function (err) {
+          console.warn('i18n: lang.json could not be loaded.', err);
+        });
+    } catch (err) {
+      console.warn('i18n: fetch is not available in this browser.', err);
+    }
+  }
+
+  if (langSwitcher) {
+    langSwitcher.addEventListener('change', function () {
+      setLanguage(langSwitcher.checked ? 'id' : 'en');
+    });
+  }
+
+  initI18n();
+})();
 </script>
 </body>
 </html>
