@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Anamaruchi - Auto Layout Recap Invoice</title>
+    <title data-i18n="doc_title">Anamaruchi - Auto Layout Recap Invoice</title>
 	<link rel="icon" type="image/x-icon" href="https://anamaruchi.web.id/Image/Anamaruchi.ico">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script> <!-- Awusome Lib UWU -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script> <!-- Awusome Lib UWU -->
@@ -673,6 +673,7 @@
             .controls,
             .instructions,
             .home-button,
+            .lang-switcher-wrap,
             .credit-line {
                 display: none;
             }
@@ -803,6 +804,88 @@
             align-items: center;
             justify-content: center;
         }
+
+        /* ===== Language Switcher (i18n) - ADDITIVE ONLY, tidak mengubah style di atas ===== */
+        .lang-switcher-wrap {
+            position: fixed;
+            top: clamp(10px, 2vw, 20px);
+            right: clamp(10px, 2vw, 20px);
+            height: clamp(30px, 7vw, 34px);
+            z-index: 1002;
+        }
+        .lang-switcher {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+        .lang-switcher-input {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0,0,0,0);
+            white-space: nowrap;
+            border: 0;
+        }
+        .lang-switcher-track {
+            position: relative;
+            width: clamp(72px, 16vw, 80px);
+            height: clamp(30px, 7vw, 34px);
+            background: linear-gradient(135deg, #0060df, #003eaa);
+            border-radius: 999px;
+            box-shadow: 0 5px 15px rgba(0, 96, 223, 0.3);
+            transition: box-shadow 0.3s ease;
+        }
+        .lang-switcher:hover .lang-switcher-track { box-shadow: 0 8px 25px rgba(0, 96, 223, 0.4); }
+        .lang-switcher:active .lang-switcher-track { box-shadow: 0 4px 15px rgba(0, 96, 223, 0.5); }
+        .lang-switcher-input:focus-visible ~ .lang-switcher-track { outline: 2px solid rgba(255,255,255,0.5); outline-offset: 2px; }
+        .lang-switcher-option {
+            position: absolute;
+            top: 0;
+            width: 50%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.03em;
+            color: rgba(255,255,255,0.65);
+            transition: color 0.3s ease;
+            pointer-events: none;
+        }
+        .lang-switcher-option-en { left: 0; color: #0060df; }
+        .lang-switcher-option-id { right: 0; }
+        .lang-switcher-thumb {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: calc(50% - 6px);
+            height: calc(100% - 6px);
+            background: #fff;
+            border-radius: 999px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+            transition: transform 0.3s ease;
+            z-index: 1;
+        }
+        .lang-switcher-input:checked ~ .lang-switcher-track .lang-switcher-thumb {
+            transform: translateX(calc(100% + 6px));
+        }
+        .lang-switcher-input:checked ~ .lang-switcher-track .lang-switcher-option-en { color: rgba(255,255,255,0.65); }
+        .lang-switcher-input:checked ~ .lang-switcher-track .lang-switcher-option-id { color: #0060df; }
+
+        @media screen and (max-width: 480px) {
+            .lang-switcher-wrap {
+                top: clamp(8px, 2vw, 14px);
+                right: clamp(8px, 2vw, 14px);
+            }
+        }
     </style>
 </head>
 <body>
@@ -810,41 +893,52 @@
         <img src="https://anamaruchi.web.id/Image/Home Icon.png" alt="Home" class="home-icon" />
     </a>
 
+    <div class="lang-switcher-wrap">
+        <label class="lang-switcher" for="langSwitcher">
+            <input type="checkbox" id="langSwitcher" class="lang-switcher-input" aria-label="Language / Bahasa">
+            <span class="lang-switcher-track">
+                <span class="lang-switcher-option lang-switcher-option-en">EN</span>
+                <span class="lang-switcher-option lang-switcher-option-id">ID</span>
+                <span class="lang-switcher-thumb"></span>
+            </span>
+        </label>
+    </div>
+
     <div class="main-wrapper">
         <div class="container">
             <div class="header">
-                <h1>Auto Layout Recap Invoice</h1>
-                <p>Upload Image to Create Auto Layout Invoice [Max 25 Images]</p>
+                <h1 data-i18n="page_title">Auto Layout Recap Invoice</h1>
+                <p data-i18n="page_subtitle">Upload Image to Create Auto Layout Invoice [Max 25 Images]</p>
             </div>
 
             <div class="title-editor">
-                <input type="text" class="title-input" id="layoutTitle" value="Change Tittle Name Here" placeholder="Enter layout title...">
+                <input type="text" class="title-input" id="layoutTitle" data-i18n-value="title_input_default" data-i18n-placeholder="title_input_placeholder" value="Change Tittle Name Here" placeholder="Enter layout title...">
             </div>
 
             <div class="instructions">
-                <h4>How to use:</h4>
+                <h4 data-i18n="instructions_title">How to use:</h4>
                 <ul>
-                    <li><strong>Edit Title:</strong> Click on the title above to change it</li>
-                    <li><strong>Upload Multiple Images:</strong> Use "Upload All Images" to select multiple files and place them manually</li>
-                    <li><strong>Upload to Specific Box:</strong> Click on any empty box to upload an image to that position</li>
-                    <li><strong>Remove Images:</strong> Hover over image and click × button</li>
-                    <li><strong>Clear All:</strong> Remove all images at once</li>
+                    <li><strong data-i18n="howto_edit_title_label">Edit Title:</strong> <span data-i18n="howto_edit_title_desc">Click on the title above to change it</span></li>
+                    <li><strong data-i18n="howto_upload_multiple_label">Upload Multiple Images:</strong> <span data-i18n="howto_upload_multiple_desc">Use "Upload All Images" to select multiple files and place them manually</span></li>
+                    <li><strong data-i18n="howto_upload_specific_label">Upload to Specific Box:</strong> <span data-i18n="howto_upload_specific_desc">Click on any empty box to upload an image to that position</span></li>
+                    <li><strong data-i18n="howto_remove_images_label">Remove Images:</strong> <span data-i18n="howto_remove_images_desc">Hover over image and click × button</span></li>
+                    <li><strong data-i18n="howto_clear_all_label">Clear All:</strong> <span data-i18n="howto_clear_all_desc">Remove all images at once</span></li>
                 </ul>
             </div>
 
             <div class="upload-section">
                 <input type="file" id="bulkFileInput" multiple accept="image/*" style="display: none;">
-                <button class="upload-btn" onclick="document.getElementById('bulkFileInput').click()">
+                <button class="upload-btn" onclick="document.getElementById('bulkFileInput').click()" data-i18n="upload_all_btn">
                     Upload All Images
                 </button>
-                <button class="clear-btn" onclick="clearAll()">
+                <button class="clear-btn" onclick="clearAll()" data-i18n="clear_all_btn">
                     Clear All Images
                 </button>
-                <p>Use "Upload All Images" for multiple files, or click individual boxes below for specific positions.</p>
+                <p data-i18n="upload_section_hint">Use "Upload All Images" for multiple files, or click individual boxes below for specific positions.</p>
             </div>
 
             <div class="controls">
-                <button class="print-btn" onclick="downloadLayout()">
+                <button class="print-btn" onclick="downloadLayout()" data-i18n="save_pdf_btn">
                     Save as PDF (A4)
                 </button>
             </div>
@@ -855,12 +949,21 @@
             <div id="fileInputs"></div>
 
             <div class="credit-line">
-                Created By Anamaruchi (<a href="https://www.facebook.com/anang.zikri.f" target="_blank">Anang Zikri Febriyansyah</a>)
+                <span data-i18n="credit_prefix">Created By Anamaruchi</span> (<a href="https://www.facebook.com/anang.zikri.f" target="_blank">Anang Zikri Febriyansyah</a>)
             </div>
         </div>
     </div>
 
     <script>
+        var __i18nDict = null;
+        var __i18nLang = 'en';
+        var refreshDynamicI18nText = null;
+        function t(key, fallback) {
+            var dict = (__i18nDict && __i18nDict[__i18nLang]) ? __i18nDict[__i18nLang] : null;
+            if (dict && Object.prototype.hasOwnProperty.call(dict, key)) return dict[key];
+            return fallback !== undefined ? fallback : key;
+        }
+
         let gridImages = new Array(25).fill(null);
         let bulkUploadImages = [];
         const maxBoxes = 25;
@@ -947,7 +1050,7 @@
                 box.innerHTML = `
                     <div class="invoice-name"></div>
                     <div class="invoice-image">
-                        <div class="placeholder-text">Click to Upload or Drag Drop Image</div>
+                        <div class="placeholder-text">${t('placeholder_text', 'Click to Upload or Drag Drop Image')}</div>
                     </div>
                 `;
         
@@ -1034,22 +1137,22 @@
             content.className = 'bulk-upload-content';
             
             content.innerHTML = `
-                <h3>Preview Invoice Upload</h3>
-                <p style="color: rgba(255,255,255,0.8); text-align: left; padding-left: 10px; margin-bottom: 20px;">Make sure the invoice image uploaded is the correct data.</p>
+                <h3>${t('bulk_modal_title', 'Preview Invoice Upload')}</h3>
+                <p style="color: rgba(255,255,255,0.8); text-align: left; padding-left: 10px; margin-bottom: 20px;">${t('bulk_modal_instruction', 'Make sure the invoice image uploaded is the correct data.')}</p>
                 <div class="bulk-upload-list" id="bulkUploadList">
                     ${bulkUploadImages.map((img, index) => `
                         <div class="bulk-upload-item" data-index="${index}" onclick="selectBulkImage(${index})">
                             <img src="${img.url}" alt="${img.name}">
                             <div class="bulk-upload-info">
                                 <strong>${img.name.replace(/\.[^/.]+$/, "")}</strong>
-                                <div style="font-size: 12px; color: rgba(255,255,255,0.6);">Click to select</div>
+                                <div style="font-size: 12px; color: rgba(255,255,255,0.6);">${t('bulk_modal_click_select', 'Click to select')}</div>
                             </div>
                         </div>
                     `).join('')}
                 </div>
                 <div class="bulk-upload-actions">
-                    <button class="btn-primary" onclick="autoPlaceBulkImages()">Confirm Place</button>
-                    <button class="btn-secondary" onclick="closeBulkUploadModal()">Cancel</button>
+                    <button class="btn-primary" onclick="autoPlaceBulkImages()">${t('bulk_modal_confirm_btn', 'Confirm Place')}</button>
+                    <button class="btn-secondary" onclick="closeBulkUploadModal()">${t('bulk_modal_cancel_btn', 'Cancel')}</button>
                 </div>
             `;
             
@@ -1073,7 +1176,8 @@
             
             const modal = document.querySelector('.bulk-upload-modal');
             const instruction = modal.querySelector('p');
-            instruction.textContent = `Selected: ${bulkUploadImages[index].name.replace(/\.[^/.]+$/, "")}. Now click on an empty grid box to place it.`;
+            instruction.textContent = t('bulk_modal_selected_template', 'Selected: {{name}}. Now click on an empty grid box to place it.')
+                .split('{{name}}').join(bulkUploadImages[index].name.replace(/\.[^/.]+$/, ""));
             instruction.style.color = '#60a5fa';
             instruction.style.fontWeight = 'bold';
         }
@@ -1095,7 +1199,9 @@
                         closeBulkUploadModal();
                         
                         if (placedCount < bulkUploadImages.length) {
-                            alert(`Placed ${placedCount} images. ${bulkUploadImages.length - placedCount} images couldn't be placed due to lack of empty spaces.`);
+                            alert(t('alert_placed_partial', "Placed {{placed}} images. {{remaining}} images couldn't be placed due to lack of empty spaces.")
+                                .split('{{placed}}').join(placedCount)
+                                .split('{{remaining}}').join(bulkUploadImages.length - placedCount));
                         }
                     }
                 });
@@ -1173,7 +1279,7 @@
         }
 
         function clearAll() {
-            if (confirm('Are you sure you want to clear all images?')) {
+            if (confirm(t('confirm_clear_all', 'Are you sure you want to clear all images?'))) {
                 gridImages = new Array(25).fill(null);
                 updateGrid();
             }
@@ -1187,8 +1293,8 @@
             modal.innerHTML = `
                 <div class="pdf-loading-content">
                     <div class="pdf-loading-spinner"></div>
-                    <h3 style="color: #3b82f6; margin-bottom: 10px;">Generating High-Quality PDF</h3>
-                    <p style="color: rgba(255,255,255,0.8); margin: 0;">Please wait...</p>
+                    <h3 style="color: #3b82f6; margin-bottom: 10px;">${t('pdf_loading_title', 'Generating High-Quality PDF')}</h3>
+                    <p style="color: rgba(255,255,255,0.8); margin: 0;">${t('pdf_loading_text', 'Please wait...')}</p>
                 </div>
             `;
             
@@ -1217,7 +1323,7 @@ async function downloadLayout() {
         pdfContainer.style.fontFamily = 'Arial, sans-serif';
 
         const title = document.createElement('h2');
-        title.textContent = document.getElementById('layoutTitle').value || 'Change Tittle Name Here';
+        title.textContent = document.getElementById('layoutTitle').value || t('title_input_default', 'Change Tittle Name Here');
         title.style.textAlign = 'center';
         title.style.marginBottom = '2mm'; 
         title.style.marginTop = '0';
@@ -1306,7 +1412,7 @@ async function downloadLayout() {
                 imageDiv.style.fontSize = '8px';
                 imageDiv.style.color = '#666';
                 imageDiv.style.boxSizing = 'border-box';
-                imageDiv.textContent = 'Empty';
+                imageDiv.textContent = t('pdf_export_empty_label', 'Empty');
                 
                 box.appendChild(nameDiv);
                 box.appendChild(imageDiv);
@@ -1361,11 +1467,133 @@ async function downloadLayout() {
     } catch (error) {
         console.error('Error generating PDF:', error);
         hideLoadingModal();
-        alert('Error generating PDF. Please try again.');
+        alert(t('alert_pdf_error', 'Error generating PDF. Please try again.'));
     }
 }
 
         initializeGrid();
+
+        refreshDynamicI18nText = function() {
+            updateGrid();
+
+            var valueNodes = document.querySelectorAll('[data-i18n-value]');
+            for (var vi = 0; vi < valueNodes.length; vi++) {
+                var vnode = valueNodes[vi];
+                var vkey = vnode.getAttribute('data-i18n-value');
+                var enVal = (__i18nDict && __i18nDict.en && __i18nDict.en[vkey]) || vnode.value;
+                var idVal = (__i18nDict && __i18nDict.id && __i18nDict.id[vkey]) || vnode.value;
+                if (vnode.value === enVal || vnode.value === idVal) {
+                    vnode.value = t(vkey, vnode.value);
+                }
+            }
+
+            var modal = document.querySelector('.bulk-upload-modal');
+            if (modal) {
+                var modalTitle = modal.querySelector('h3');
+                if (modalTitle) modalTitle.textContent = t('bulk_modal_title', 'Preview Invoice Upload');
+
+                if (selectedBulkImageIndex === null) {
+                    var instruction = modal.querySelector('.bulk-upload-content > p');
+                    if (instruction) instruction.textContent = t('bulk_modal_instruction', 'Make sure the invoice image uploaded is the correct data.');
+                }
+
+                var clickSelectNodes = modal.querySelectorAll('.bulk-upload-info > div');
+                for (var ci = 0; ci < clickSelectNodes.length; ci++) {
+                    clickSelectNodes[ci].textContent = t('bulk_modal_click_select', 'Click to select');
+                }
+
+                var confirmBtn = modal.querySelector('.btn-primary');
+                if (confirmBtn) confirmBtn.textContent = t('bulk_modal_confirm_btn', 'Confirm Place');
+
+                var cancelBtn = modal.querySelector('.btn-secondary');
+                if (cancelBtn) cancelBtn.textContent = t('bulk_modal_cancel_btn', 'Cancel');
+            }
+        };
+    </script>
+
+    <script>
+        (function() {
+            "use strict";
+
+            var LANG_STORAGE_KEY = 'anamaruchi_auto_layout_recap_invoice_lang';
+            var DEFAULT_LANG = 'en';
+
+            var langSwitcher = document.getElementById('langSwitcher');
+
+            function getSavedLang() {
+                try {
+                    var saved = localStorage.getItem(LANG_STORAGE_KEY);
+                    if (saved === 'en' || saved === 'id') return saved;
+                } catch (e) {}
+                return DEFAULT_LANG;
+            }
+
+            function saveLang(lang) {
+                try { localStorage.setItem(LANG_STORAGE_KEY, lang); } catch (e) {}
+            }
+
+            function applyTranslations(lang) {
+                if (!__i18nDict || !__i18nDict[lang]) return;
+                var dict = __i18nDict[lang];
+
+                var nodes = document.querySelectorAll('[data-i18n]');
+                for (var i = 0; i < nodes.length; i++) {
+                    var node = nodes[i];
+                    var key = node.getAttribute('data-i18n');
+                    if (Object.prototype.hasOwnProperty.call(dict, key)) {
+                        node.textContent = dict[key];
+                    }
+                }
+
+                var placeholderNodes = document.querySelectorAll('[data-i18n-placeholder]');
+                for (var j = 0; j < placeholderNodes.length; j++) {
+                    var pnode = placeholderNodes[j];
+                    var pkey = pnode.getAttribute('data-i18n-placeholder');
+                    if (Object.prototype.hasOwnProperty.call(dict, pkey)) {
+                        pnode.setAttribute('placeholder', dict[pkey]);
+                    }
+                }
+
+                if (typeof refreshDynamicI18nText === 'function') refreshDynamicI18nText();
+            }
+
+            function setLanguage(lang) {
+                __i18nLang = (lang === 'id') ? 'id' : 'en';
+                if (langSwitcher) langSwitcher.checked = (__i18nLang === 'id');
+                applyTranslations(__i18nLang);
+                saveLang(__i18nLang);
+            }
+
+            function initI18n() {
+                __i18nLang = getSavedLang();
+                if (langSwitcher) langSwitcher.checked = (__i18nLang === 'id');
+
+                try {
+                    fetch('auto-layout-recap-invoice-lang.json')
+                        .then(function(res) {
+                            if (!res.ok) throw new Error('Failed to load lang.json (status ' + res.status + ')');
+                            return res.json();
+                        })
+                        .then(function(data) {
+                            __i18nDict = data;
+                            applyTranslations(__i18nLang);
+                        })
+                        .catch(function(err) {
+                            console.warn('i18n: lang.json could not be loaded.', err);
+                        });
+                } catch (err) {
+                    console.warn('i18n: fetch is not available in this browser.', err);
+                }
+            }
+
+            if (langSwitcher) {
+                langSwitcher.addEventListener('change', function() {
+                    setLanguage(langSwitcher.checked ? 'id' : 'en');
+                });
+            }
+
+            initI18n();
+        })();
     </script>
 </body>
 </html>
