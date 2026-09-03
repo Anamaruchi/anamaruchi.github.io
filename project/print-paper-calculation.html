@@ -199,6 +199,12 @@ body {
     box-shadow: 0 10px 25px rgba(0, 96, 223, 0.5);
 }
 
+.go-up-icon {
+    width: clamp(20px, 5vw, 28px);
+    height: clamp(20px, 5vw, 28px);
+    transition: none;
+}
+
 .main-wrapper {
     width: 100%;
     display: flex;
@@ -471,8 +477,7 @@ input:focus {
 
 .result-container .result-label {
     font-weight: bold;
-    width: 150px;
-    min-width: 120px;
+    white-space: nowrap;
     padding-right: 10px;
     color: #60a5fa;
 }
@@ -911,6 +916,10 @@ h1, p, span, div, li, input, button {
   </label>
 </div>
 
+<button class="scroll-to-top" id="scrollToTop">
+    <img src="/Image/Go Up Icon.PNG" alt="Go to top" class="go-up-icon">
+</button>
+
 <div class="main-wrapper">
 <div class="calculator-container">
     <h1 data-i18n="page_title">Print Paper Calculation</h1>
@@ -1019,6 +1028,7 @@ let selectedPrintSide = '';
 let selectedPaperSize = '';
 
 let isDropdownOpen = false;
+let dropdownCloseTimers = {};
 
 function setupScrollToTop() {
     let isScrolling = false;
@@ -1082,6 +1092,13 @@ function closeAllDropdowns() {
         const openDropdown = dropdowns[i];
         if (openDropdown.classList.contains('show')) {
             openDropdown.classList.remove('show');
+            
+            if (dropdownCloseTimers[openDropdown.id]) {
+                clearTimeout(dropdownCloseTimers[openDropdown.id]);
+            }
+            dropdownCloseTimers[openDropdown.id] = setTimeout(function() {
+                openDropdown.style.display = 'none';
+            }, 200);
         }
     }
     
@@ -1111,8 +1128,23 @@ function toggleDropdown(dropdownId) {
             dropdown.classList.remove('show');
             btn.classList.remove('active');
             isDropdownOpen = false;
+            
+            if (dropdownCloseTimers[dropdownId]) {
+                clearTimeout(dropdownCloseTimers[dropdownId]);
+            }
+            dropdownCloseTimers[dropdownId] = setTimeout(function() {
+                dropdown.style.display = 'none';
+            }, 200);
         } else {
             closeAllDropdowns();
+            
+            if (dropdownCloseTimers[dropdownId]) {
+                clearTimeout(dropdownCloseTimers[dropdownId]);
+                dropdownCloseTimers[dropdownId] = null;
+            }
+            
+            dropdown.style.display = 'block';
+            void dropdown.offsetWidth;
             
             dropdown.classList.add('show');
             btn.classList.add('active');
@@ -2065,8 +2097,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('calculateBtn').addEventListener('click', calculate);
         
         document.addEventListener('click', function(event) {
-            if (!event.target.matches('.dropdown-btn') && 
-                !event.target.matches('.dropdown-arrow') && 
+            if (!event.target.closest('.dropdown-btn') && 
                 !event.target.closest('.dropdown-content')) {
                 closeAllDropdowns();
             }
