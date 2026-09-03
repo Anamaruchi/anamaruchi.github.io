@@ -2,8 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <script>
+        if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual';
+        }
+        window.scrollTo(0, 0);
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale: 1.0, user-scalable=no">
-    <title>Anamaruchi - PDF File Flattener</title>
+    <title data-i18n="doc_title">Anamaruchi - PDF File Flattener</title>
     <link rel="icon" type="image/x-icon" href="https://anamaruchi.web.id/Image/Anamaruchi.ico">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>	
     <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
@@ -17,6 +23,7 @@
             margin: 0;
             padding: 0;
             overflow-x: hidden;
+            overflow-anchor: none;
         }
 
         body {
@@ -24,8 +31,6 @@
             margin: 0;
             padding: 0;
             overflow-x: hidden;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
         }
 
         body {
@@ -151,8 +156,6 @@
             display: flex;
             justify-content: center;
             align-items: flex-start;
-            min-height: 100vh;
-            min-height: 100dvh;
             padding-top: clamp(15px, 3vh, 40px);
             padding-bottom: env(safe-area-inset-bottom);
         }
@@ -1446,12 +1449,109 @@
             width: 100%;
             overflow-x: hidden;
         }
+
+        .lang-switcher-wrap{
+            position: fixed;
+            top: clamp(10px, 2vw, 20px) !important;
+            right: clamp(10px, 2vw, 20px) !important;
+            height: clamp(40px, 8vw, 50px);
+            display: flex;
+            align-items: center;
+            z-index: 1002;
+        }
+        .lang-switcher{
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+        .lang-switcher-input{
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0,0,0,0);
+            white-space: nowrap;
+            border: 0;
+        }
+        .lang-switcher-track{
+            position: relative;
+            width: clamp(72px, 16vw, 80px);
+            height: clamp(30px, 7vw, 34px);
+            background: linear-gradient(135deg, #0060df, #003eaa);
+            border-radius: 999px;
+            box-shadow: 0 5px 15px rgba(0, 96, 223, 0.3);
+            transition: box-shadow 0.3s ease;
+        }
+        .lang-switcher:hover .lang-switcher-track{ box-shadow: 0 8px 25px rgba(0, 96, 223, 0.4); }
+        .lang-switcher:active .lang-switcher-track{ box-shadow: 0 4px 15px rgba(0, 96, 223, 0.5); }
+        .lang-switcher-input:focus-visible ~ .lang-switcher-track{ outline: 2px solid rgba(255,255,255,0.5); outline-offset: 2px; }
+        .lang-switcher-option{
+            position: absolute;
+            top: 0;
+            width: 50%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.03em;
+            color: rgba(255,255,255,0.65);
+            transition: color 0.3s ease;
+            pointer-events: none;
+        }
+        .lang-switcher-option-en{ left: 0; color: #0060df; }
+        .lang-switcher-option-id{ right: 0; }
+        .lang-switcher-thumb{
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: calc(50% - 6px);
+            height: calc(100% - 6px);
+            background: #fff;
+            border-radius: 999px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+            transition: transform 0.3s ease;
+            z-index: 1;
+        }
+        .lang-switcher-input:checked ~ .lang-switcher-track .lang-switcher-thumb{
+            transform: translateX(calc(100% + 6px));
+        }
+        .lang-switcher-input:checked ~ .lang-switcher-track .lang-switcher-option-en{ color: rgba(255,255,255,0.65); }
+        .lang-switcher-input:checked ~ .lang-switcher-track .lang-switcher-option-id{ color: #0060df; }
+
+        @media screen and (max-height: 500px) and (orientation: landscape) {
+            .lang-switcher-wrap{
+                height: 32px !important;
+            }
+            .lang-switcher-track{
+                width: 64px;
+                height: 28px;
+            }
+        }
     </style>
 </head>
 <body>
     <a href="https://anamaruchi.web.id/" class="home-button" id="homeButton">
         <img src="/Image/Home Icon.png" alt="Home" class="home-icon" />
     </a>
+
+    <div class="lang-switcher-wrap">
+        <label class="lang-switcher" for="langSwitcher">
+            <input type="checkbox" id="langSwitcher" class="lang-switcher-input" aria-label="Language / Bahasa">
+            <span class="lang-switcher-track">
+                <span class="lang-switcher-option lang-switcher-option-en">EN</span>
+                <span class="lang-switcher-option lang-switcher-option-id">ID</span>
+                <span class="lang-switcher-thumb"></span>
+            </span>
+        </label>
+    </div>
 
     <button class="scroll-to-top" id="scrollToTop">
         <img src="/Image/Go Up Icon.PNG" alt="Go to top" class="go-up-icon">
@@ -1460,86 +1560,85 @@
     <div class="main-wrapper">
         <div class="container">
             <div class="header">
-                <h1>PDF File Flattener</h1>
+                <h1 data-i18n="header_title">PDF File Flattener</h1>
             </div>
             <div class="warning-section">
-                <div class="warning-title">Important Note</div>
+                <div class="warning-title" data-i18n="warning_title">Important Note</div>
                 <div class="warning-text">
-                    PDF File Flattening converts text and vectors to images, which often <strong>increases file size</strong>. 
-                    Text-heavy PDFs may become 2-5x larger. Image-heavy PDFs may become smaller with compression.
+                    <span data-i18n="warning_text_1">PDF File Flattening converts text and vectors to images, which often </span><strong data-i18n="warning_text_bold">increases file size</strong><span data-i18n="warning_text_2">. Text-heavy PDFs may become 2-5x larger. Image-heavy PDFs may become smaller with compression.</span>
                 </div>
             </div>
 
             <div class="settings-section">
                 <div class="settings-grid">
                     <div class="setting-group">
-                        <h3 class="setting-title">Quality Resolution (DPI)</h3>
+                        <h3 class="setting-title" data-i18n="setting_title_dpi">Quality Resolution (DPI)</h3>
                         <p></p>
                         <div class="dpi-options">
                             <label class="dpi-option">
                                 <input type="radio" name="dpi" value="custom">
-                                <div class="dpi-value">Custom</div>
-                                <div class="dpi-label">Set your own DPI</div>
+                                <div class="dpi-value" data-i18n="dpi_custom_value">Custom</div>
+                                <div class="dpi-label" data-i18n="dpi_custom_label">Set your own DPI</div>
                             </label>
                             <label class="dpi-option selected">
                                 <input type="radio" name="dpi" value="150" checked>
                                 <div class="dpi-value">150</div>
-                                <div class="dpi-label">Standard</div>
+                                <div class="dpi-label" data-i18n="dpi_standard_label">Standard</div>
                             </label>
                             <label class="dpi-option">
                                 <input type="radio" name="dpi" value="200">
                                 <div class="dpi-value">200</div>
-                                <div class="dpi-label">Good</div>
+                                <div class="dpi-label" data-i18n="dpi_good_label">Good</div>
                             </label>
                             <label class="dpi-option">
                                 <input type="radio" name="dpi" value="300">
                                 <div class="dpi-value">300</div>
-                                <div class="dpi-label">Print</div>
+                                <div class="dpi-label" data-i18n="dpi_print_label">Print</div>
                             </label>
                         </div>
                         
                         <div class="custom-dpi-section" id="customDpiSection">
                             <div class="custom-dpi-controls">
-                                <span style="color: rgba(255, 255, 255, 0.8); font-size: 0.85rem;">DPI:</span>
+                                <span style="color: rgba(255, 255, 255, 0.8); font-size: 0.85rem;" data-i18n="custom_dpi_prefix">DPI:</span>
                                 <input type="number" id="customDpiInput" class="custom-dpi-input" min="72" max="600" value="120" placeholder="Enter DPI">
                             </div>
                         </div>
 
                         <div class="size-estimate" id="sizeEstimate">
-                            <h4>File Size Estimate</h4>
-                            <p>Upload a file to see size prediction</p>
+                            <h4 data-i18n="size_estimate_title">File Size Estimate</h4>
+                            <p data-i18n="size_estimate_default_note">Upload a file to see size prediction</p>
                         </div>	
                     </div>
 
                     <div class="setting-group">
-                        <h3 class="setting-title">Compression File</h3>
+                        <h3 class="setting-title" data-i18n="setting_title_compression">Compression File</h3>
                         <p></p>
                         <div class="compression-options">
                             <label class="compression-option selected">
                                 <input type="radio" name="compression" value="aggressive" checked>
-                                <div class="compression-label">Aggressive Compression</div>
-                                <div class="compression-desc">Maximum size reduction (40% quality)</div>
+                                <div class="compression-label" data-i18n="compression_aggressive_label">Aggressive Compression</div>
+                                <div class="compression-desc" data-i18n="compression_aggressive_desc">Maximum size reduction (40% quality)</div>
                             </label>
                             <label class="compression-option">
                                 <input type="radio" name="compression" value="balanced">
-                                <div class="compression-label">Balanced</div>
-                                <div class="compression-desc">Good balance (60% quality)</div>
+                                <div class="compression-label" data-i18n="compression_balanced_label">Balanced</div>
+                                <div class="compression-desc" data-i18n="compression_balanced_desc">Good balance (60% quality)</div>
                             </label>
                             <label class="compression-option">
                                 <input type="radio" name="compression" value="quality">
-                                <div class="compression-label">Quality First</div>
-                                <div class="compression-desc">Best quality (80% quality)</div>
+                                <div class="compression-label" data-i18n="compression_quality_label">Quality First</div>
+                                <div class="compression-desc" data-i18n="compression_quality_desc">Best quality (80% quality)</div>
                             </label>
                             <label class="compression-option">
                                 <input type="radio" name="compression" value="custom">
-                                <div class="compression-label">Custom Quality</div>
-                                <div class="compression-desc">Set your own compression level</div>
+                                <div class="compression-label" data-i18n="compression_custom_label">Custom Quality</div>
+                                <div class="compression-desc" data-i18n="compression_custom_desc">Set your own compression level</div>
                             </label>
                         </div>
                         
                         <div class="quality-slider-section" id="qualitySliderSection">
                             <div class="quality-controls">
-                                <span style="color: rgba(255, 255, 255, 0.8); font-size: 0.85rem;">Quality:</span>
+                                <span style="color: rgba(255, 255, 255, 0.8); font-size: 0.85rem;" data-i18n="quality_prefix">Quality:</span>
                                 <input type="range" id="qualitySlider" class="quality-slider" min="20" max="90" value="40" step="5">
                                 <span class="quality-value" id="qualityValue">40%</span>
                             </div>
@@ -1557,36 +1656,36 @@
                         <line x1="16" y1="17" x2="8" y2="17" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         <polyline points="10,9 9,9 8,9" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
-                    <div class="upload-text">Drop your PDF file here</div>
-                    <div class="upload-subtext">or click to browse files (Max 200MB)</div>
+                    <div class="upload-text" data-i18n="upload_text">Drop your PDF file here</div>
+                    <div class="upload-subtext" data-i18n="upload_subtext">or click to browse files (Max 200MB)</div>
                     <input type="file" id="fileInput" accept=".pdf" />
                 </div>
                 <div class="file-info" id="fileInfo">
-                    <h4>File Information</h4>
+                    <h4 data-i18n="file_info_title">File Information</h4>
                     <div class="file-details">
                         <div class="file-detail">
                             <div class="detail-value" id="fileName">-</div>
-                            <div class="detail-label">File Name</div>
+                            <div class="detail-label" data-i18n="file_detail_name">File Name</div>
                         </div>
                         <div class="file-detail">
                             <div class="detail-value" id="fileSize">-</div>
-                            <div class="detail-label">File Size</div>
+                            <div class="detail-label" data-i18n="file_detail_size">File Size</div>
                         </div>
                         <div class="file-detail">
                             <div class="detail-value" id="pageCount">-</div>
-                            <div class="detail-label">Pages</div>
+                            <div class="detail-label" data-i18n="file_detail_pages">Pages</div>
                         </div>
                         <div class="file-detail">
                             <div class="detail-value" id="estimatedSize">-</div>
-                            <div class="detail-label">Estimated Output</div>
+                            <div class="detail-label" data-i18n="file_detail_estimated">Estimated Output</div>
                         </div>
                     </div>
                     
                     <div class="action-buttons">
-                        <button class="btn btn-primary" id="processBtn" onclick="startProcessing()">
+                        <button class="btn btn-primary" id="processBtn" onclick="startProcessing()" data-i18n="btn_start_processing">
                             Start Processing
                         </button>
-                        <button class="btn btn-secondary" onclick="clearFile()">
+                        <button class="btn btn-secondary" onclick="clearFile()" data-i18n="btn_remove_file">
                             Remove File
                         </button>
                     </div>
@@ -1598,68 +1697,68 @@
                     <div class="progress-bar">
                         <div class="progress-fill" id="progressFill"></div>
                     </div>
-                    <div class="progress-text" id="progressText">Initializing...</div>
-                    <div class="progress-details" id="progressDetails">Please wait while we optimize your PDF</div>
+                    <div class="progress-text" id="progressText" data-i18n="progress_init_text">Initializing...</div>
+                    <div class="progress-details" id="progressDetails" data-i18n="progress_details_initial">Please wait while we optimize your PDF</div>
                 </div>
-                <button class="btn btn-danger" onclick="cancelProcessing()" id="cancelBtn">
+                <button class="btn btn-danger" onclick="cancelProcessing()" id="cancelBtn" data-i18n="btn_cancel_processing">
                     Cancel Processing
                 </button>
             </div>
 
             <div class="result-section" id="resultSection">
                 <div class="result-header">
-                    <h2 class="result-title">PDF Successfully Flattened!</h2>
-                    <p class="result-subtitle">Your PDF has been converted to images</p>
+                    <h2 class="result-title" data-i18n="result_title">PDF Successfully Flattened!</h2>
+                    <p class="result-subtitle" data-i18n="result_subtitle">Your PDF has been converted to images</p>
                 </div>
 
                 <div class="size-comparison" id="sizeComparison">
-                    <h4>File Size Comparison</h4>
+                    <h4 data-i18n="size_comparison_title">File Size Comparison</h4>
                     <div class="size-bars">
                         <div class="size-bar">
                             <div class="bar" style="height: 80px;">
                                 <div class="bar-fill" id="originalBar" style="height: 100%;"></div>
                             </div>
-                            <div class="bar-label">Original</div>
+                            <div class="bar-label" data-i18n="bar_label_original">Original</div>
                             <div class="bar-value" id="originalSizeDisplay">0 KB</div>
                         </div>
                         <div class="size-bar">
                             <div class="bar" style="height: 80px;">
                                 <div class="bar-fill" id="optimizedBar" style="height: 60%;"></div>
                             </div>
-                            <div class="bar-label">Flattened</div>
+                            <div class="bar-label" data-i18n="bar_label_flattened">Flattened</div>
                             <div class="bar-value" id="optimizedSizeDisplay">0 KB</div>
                         </div>
                     </div>
-                    <p id="sizeSavings">File size changed by 0%</p>
+                    <p id="sizeSavings" data-i18n="size_savings_default">File size changed by 0%</p>
                 </div>
 
                 <div class="result-stats" id="resultStats">
                     <div class="stat-card">
                         <div class="stat-number" id="resultPageCount">0</div>
-                        <div class="stat-label">Pages</div>
+                        <div class="stat-label" data-i18n="result_stat_pages">Pages</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-number" id="outputDpi">150</div>
-                        <div class="stat-label">DPI</div>
+                        <div class="stat-label" data-i18n="result_stat_dpi">DPI</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-number" id="compressionLevel">40%</div>
-                        <div class="stat-label">Quality</div>
+                        <div class="stat-label" data-i18n="result_stat_quality">Quality</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-number" id="processingTime">0s</div>
-                        <div class="stat-label">Time</div>
+                        <div class="stat-label" data-i18n="result_stat_time">Time</div>
                     </div>
                 </div>
 
                 <div class="download-section">
-                    <h3>Download Your Flattened PDF</h3>
-                    <p>All content converted to compressed images</p>
+                    <h3 data-i18n="download_section_title">Download Your Flattened PDF</h3>
+                    <p data-i18n="download_section_desc">All content converted to compressed images</p>
                     <div class="download-buttons">
-                        <button class="btn btn-primary" id="downloadBtn" onclick="downloadOptimizedPDF()">
+                        <button class="btn btn-primary" id="downloadBtn" onclick="downloadOptimizedPDF()" data-i18n="btn_download">
                             Download Flattened PDF
                         </button>
-                        <button class="btn btn-secondary" onclick="resetConverter()">
+                        <button class="btn btn-secondary" onclick="resetConverter()" data-i18n="btn_process_another">
                             Process Another PDF
                         </button>
                     </div>
@@ -1667,13 +1766,31 @@
             </div>
             <div class="footer-credit">
                 <p class="footer-text">
-                    Created By Anamaruchi (<a href="https://www.facebook.com/anang.zikri.f" target="_blank" class="footer-link">Anang Zikri Febriyansyah</a>)
+                    <span data-i18n="credit_prefix">Created By Anamaruchi</span> (<a href="https://www.facebook.com/anang.zikri.f" target="_blank" class="footer-link">Anang Zikri Febriyansyah</a>)
                 </p>
             </div>
         </div>
     </div>
 
     <script>
+        var __i18nDict = null;
+        var __i18nLang = 'en';
+        var refreshDynamicI18nText = null;
+        function t(key, fallback){
+            var dict = (__i18nDict && __i18nDict[__i18nLang]) ? __i18nDict[__i18nLang] : null;
+            if(dict && Object.prototype.hasOwnProperty.call(dict, key)) return dict[key];
+            return fallback !== undefined ? fallback : key;
+        }
+        function tpl(key, fallback, params){
+            var str = t(key, fallback);
+            if(params){
+                Object.keys(params).forEach(function(p){
+                    str = str.split('{{' + p + '}}').join(params[p]);
+                });
+            }
+            return str;
+        }
+
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
         let optimizedPdfBytes = null;
@@ -1683,6 +1800,7 @@
         let startTime = 0;
         let processingCancelled = false;
         let pdfPageCount = 0;
+        let sizeEstimateEmptyKey = 'size_estimate_default_note';
         let processingStats = {
             pages: 0,
             dpi: 150,
@@ -1816,7 +1934,7 @@
             if (files.length > 0 && files[0].type === 'application/pdf') {
                 loadFile(files[0]);
             } else {
-                showError('Please drop a valid PDF file.');
+                showError(t('error_invalid_drop', 'Please drop a valid PDF file.'));
             }
         }
 
@@ -1825,18 +1943,18 @@
             if (file && file.type === 'application/pdf') {
                 loadFile(file);
             } else {
-                showError('Please select a valid PDF file.');
+                showError(t('error_invalid_select', 'Please select a valid PDF file.'));
             }
         }
 
         async function loadFile(file) {
             if (file.size > 200 * 1024 * 1024) {
-                showError('File size too large. Please select a PDF smaller than 200MB.');
+                showError(t('error_file_too_large', 'File size too large. Please select a PDF smaller than 200MB.'));
                 return;
             }
             
             if (file.size === 0) {
-                showError('The selected file appears to be empty.');
+                showError(t('error_file_empty', 'The selected file appears to be empty.'));
                 return;
             }
             
@@ -1854,7 +1972,7 @@
                 
             } catch (error) {
                 console.error('Error loading PDF:', error);
-                showError('Error loading PDF. Please try a different file.');
+                showError(t('error_loading_pdf', 'Error loading PDF. Please try a different file.'));
             }
         }
 
@@ -1867,8 +1985,8 @@
             if (uploadIcon) {
                 uploadIcon.style.filter = 'drop-shadow(0 0 20px rgba(59, 130, 246, 0.5))';
             }
-            uploadArea.querySelector('.upload-text').textContent = 'File loaded successfully!';
-            uploadArea.querySelector('.upload-subtext').textContent = 'Configure settings and click "Start Processing"';
+            uploadArea.querySelector('.upload-text').textContent = t('upload_text_loaded', 'File loaded successfully!');
+            uploadArea.querySelector('.upload-subtext').textContent = t('upload_subtext_loaded', 'Configure settings and click "Start Processing"');
             
             document.getElementById('fileName').textContent = fileName;
             document.getElementById('fileSize').textContent = formatFileSize(fileSize);
@@ -1893,13 +2011,13 @@
             const isIncrease = change > 0;
             
             sizeEstimate.innerHTML = `
-                <h4>File Size Estimate</h4>
-                <p>Original: ${formatFileSize(originalFileSize)} → Estimated: ${formatFileSize(estimatedSize)}</p>
+                <h4>${t('size_estimate_title', 'File Size Estimate')}</h4>
+                <p>${tpl('size_estimate_original_to_estimated', 'Original: {{original}} \u2192 Estimated: {{estimated}}', { original: formatFileSize(originalFileSize), estimated: formatFileSize(estimatedSize) })}</p>
                 <p style="color: ${isIncrease ? '#3b82f6' : '#3b82f6'}; font-weight: 600; margin-top: 6px;">
-                    ${isIncrease ? 'Likely to increase' : 'May decrease'} by ~${Math.abs(change)}%
+                    ${isIncrease ? t('size_estimate_likely_increase', 'Likely to increase') : t('size_estimate_may_decrease', 'May decrease')} ${tpl('size_estimate_by_percent', 'by ~{{percent}}%', { percent: Math.abs(change) })}
                 </p>
                 <p style="font-size: 0.7rem; margin-top: 6px; opacity: 0.8;">
-                    ${isIncrease ? 'Text-heavy PDFs typically increase in size when flattened' : 'Image-heavy PDFs may compress well'}
+                    ${isIncrease ? t('size_estimate_note_increase', 'Text-heavy PDFs typically increase in size when flattened') : t('size_estimate_note_decrease', 'Image-heavy PDFs may compress well')}
                 </p>
             `;
         }
@@ -1967,7 +2085,7 @@
 
         function startProcessing() {
             if (!currentFile) {
-                showError('No file loaded. Please select a PDF file first.');
+                showError(t('error_no_file', 'No file loaded. Please select a PDF file first.'));
                 return;
             }
             
@@ -1990,7 +2108,7 @@
             showProcessing();
             
             try {
-                updateProgress(10, 'Reading PDF file...', `Flattening at ${settings.dpi} DPI with ${settings.quality}% quality`);
+                updateProgress(10, t('progress_reading_text', 'Reading PDF file...'), tpl('progress_reading_details', 'Flattening at {{dpi}} DPI with {{quality}}% quality', { dpi: settings.dpi, quality: settings.quality }));
                 
                 if (processingCancelled) return;
                 
@@ -1998,7 +2116,7 @@
                 const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
                 const numPages = pdf.numPages;
                 
-                updateProgress(20, 'Analyzing PDF structure...', `Found ${numPages} pages to flatten`);
+                updateProgress(20, t('progress_analyzing_text', 'Analyzing PDF structure...'), tpl('progress_analyzing_details', 'Found {{pages}} pages to flatten', { pages: numPages }));
                 
                 if (processingCancelled) return;
                 
@@ -2009,8 +2127,8 @@
                     
                     updateProgress(
                         20 + (pageNum / numPages) * 60, 
-                        `Flattening page ${pageNum} of ${numPages}...`,
-                        `Converting to ${settings.format.toUpperCase()} at ${settings.quality}% quality`
+                        tpl('progress_flattening_text', 'Flattening page {{current}} of {{total}}...', { current: pageNum, total: numPages }),
+                        tpl('progress_flattening_details', 'Converting to {{format}} at {{quality}}% quality', { format: settings.format.toUpperCase(), quality: settings.quality })
                     );
                     
                     const page = await pdf.getPage(pageNum);
@@ -2019,7 +2137,7 @@
                 
                 if (processingCancelled) return;
                 
-                updateProgress(85, 'Finalizing flattened PDF...', 'Applying final compression and optimization');
+                updateProgress(85, t('progress_finalizing_text', 'Finalizing flattened PDF...'), t('progress_finalizing_details', 'Applying final compression and optimization'));
                 
                 optimizedPdfBytes = await pdfDoc.save({
                     useObjectStreams: true,
@@ -2039,7 +2157,7 @@
                     processingTime: Math.round((endTime - startTime) / 1000)
                 };
                 
-                updateProgress(100, 'Flattening complete!', `File size ${compressionRatio > 0 ? 'increased' : 'decreased'} by ${Math.abs(compressionRatio)}%`);
+                updateProgress(100, t('progress_complete_text', 'Flattening complete!'), tpl('progress_complete_details', 'File size {{change}} by {{percent}}%', { change: compressionRatio > 0 ? t('word_increased', 'increased') : t('word_decreased', 'decreased'), percent: Math.abs(compressionRatio) }));
                 
                 setTimeout(() => {
                     if (!processingCancelled) {
@@ -2049,7 +2167,7 @@
                 
             } catch (error) {
                 console.error('Error processing PDF:', error);
-                showError(`Error processing PDF: ${error.message}. Please try a different PDF file.`);
+                showError(tpl('error_processing_pdf', 'Error processing PDF: {{message}}. Please try a different PDF file.', { message: error.message }));
             }
         }
 
@@ -2100,14 +2218,15 @@
             if (uploadIcon) {
                 uploadIcon.style.filter = 'drop-shadow(0 0 15px rgba(59, 130, 246, 0.3))';
             }
-            uploadArea.querySelector('.upload-text').textContent = 'Drop your PDF file here';
-            uploadArea.querySelector('.upload-subtext').textContent = 'or click to browse files (Max 200MB)';
+            uploadArea.querySelector('.upload-text').textContent = t('upload_text', 'Drop your PDF file here');
+            uploadArea.querySelector('.upload-subtext').textContent = t('upload_subtext', 'or click to browse files (Max 200MB)');
             
             document.getElementById('fileInfo').classList.remove('show');
             
+            sizeEstimateEmptyKey = 'size_estimate_initial_note';
             document.getElementById('sizeEstimate').innerHTML = `
-                <h4>File Size Estimate</h4>
-                <p>Upload a file to see accurate size prediction</p>
+                <h4>${t('size_estimate_title', 'File Size Estimate')}</h4>
+                <p>${t(sizeEstimateEmptyKey, 'Upload a file to see accurate size prediction')}</p>
             `;
             document.getElementById('sizeEstimate').classList.remove('warning');
         }
@@ -2159,11 +2278,11 @@
             
             if (change > 0) {
                 sizeComparison.classList.add('increased');
-                savingsElement.textContent = `File size increased by ${change}%`;
+                savingsElement.textContent = tpl('size_savings_increased', 'File size increased by {{percent}}%', { percent: change });
                 savingsElement.style.color = '#3b82f6';
             } else {
                 sizeComparison.classList.remove('increased');
-                savingsElement.textContent = `File size reduced by ${Math.abs(change)}%`;
+                savingsElement.textContent = tpl('size_savings_reduced', 'File size reduced by {{percent}}%', { percent: Math.abs(change) });
                 savingsElement.style.color = '#3b82f6';
             }
         }
@@ -2178,7 +2297,7 @@
 
         function downloadOptimizedPDF() {
             if (!optimizedPdfBytes) {
-                showError('No PDF available for download. Please process a file first.');
+                showError(t('error_no_pdf_download', 'No PDF available for download. Please process a file first.'));
                 return;
             }
             
@@ -2201,7 +2320,7 @@
             clearFile();
             showUploadSection();
             
-            updateProgress(0, 'Initializing...', 'Please wait while we process your PDF');
+            updateProgress(0, t('progress_init_text', 'Initializing...'), t('progress_details_reset', 'Please wait while we process your PDF'));
             
             const errors = document.querySelectorAll('.error');
             errors.forEach(error => error.remove());
@@ -2228,6 +2347,114 @@
                 }
             }, 8000);
         }
+
+        refreshDynamicI18nText = function(){
+            const uploadArea = document.getElementById('uploadArea');
+            if (uploadArea) {
+                const uploadTextEl = uploadArea.querySelector('.upload-text');
+                const uploadSubtextEl = uploadArea.querySelector('.upload-subtext');
+                if (uploadTextEl && uploadSubtextEl) {
+                    if (currentFile) {
+                        uploadTextEl.textContent = t('upload_text_loaded', 'File loaded successfully!');
+                        uploadSubtextEl.textContent = t('upload_subtext_loaded', 'Configure settings and click "Start Processing"');
+                    } else {
+                        uploadTextEl.textContent = t('upload_text', 'Drop your PDF file here');
+                        uploadSubtextEl.textContent = t('upload_subtext', 'or click to browse files (Max 200MB)');
+                    }
+                }
+            }
+
+            if (originalFileSize > 0 && pdfPageCount > 0) {
+                updateSizeEstimate();
+            } else {
+                const sizeEstimateEl = document.getElementById('sizeEstimate');
+                if (sizeEstimateEl) {
+                    sizeEstimateEl.innerHTML = `
+                        <h4>${t('size_estimate_title', 'File Size Estimate')}</h4>
+                        <p>${t(sizeEstimateEmptyKey, 'Upload a file to see size prediction')}</p>
+                    `;
+                }
+            }
+
+            const resultSection = document.getElementById('resultSection');
+            if (resultSection && resultSection.style.display === 'block' && optimizedPdfBytes) {
+                showResult();
+            }
+        };
+    </script>
+
+    <script>
+        (function(){
+            "use strict";
+
+            var LANG_STORAGE_KEY = 'anamaruchi_pdf_flattener_lang';
+            var DEFAULT_LANG = 'en';
+
+            var langSwitcher = document.getElementById('langSwitcher');
+
+            function getSavedLang(){
+                try{
+                    var saved = localStorage.getItem(LANG_STORAGE_KEY);
+                    if(saved === 'en' || saved === 'id') return saved;
+                }catch(e){}
+                return DEFAULT_LANG;
+            }
+
+            function saveLang(lang){
+                try{ localStorage.setItem(LANG_STORAGE_KEY, lang); }catch(e){}
+            }
+
+            function applyTranslations(lang){
+                if(!__i18nDict || !__i18nDict[lang]) return;
+                var dict = __i18nDict[lang];
+                var nodes = document.querySelectorAll('[data-i18n]');
+                for(var i = 0; i < nodes.length; i++){
+                    var node = nodes[i];
+                    var key = node.getAttribute('data-i18n');
+                    if(Object.prototype.hasOwnProperty.call(dict, key)){
+                        node.textContent = dict[key];
+                    }
+                }
+                if(typeof refreshDynamicI18nText === 'function') refreshDynamicI18nText();
+            }
+
+            function setLanguage(lang){
+                __i18nLang = (lang === 'id') ? 'id' : 'en';
+                if(langSwitcher) langSwitcher.checked = (__i18nLang === 'id');
+                applyTranslations(__i18nLang);
+                saveLang(__i18nLang);
+            }
+
+            function initI18n(){
+                __i18nLang = getSavedLang();
+                if(langSwitcher) langSwitcher.checked = (__i18nLang === 'id');
+
+                try{
+                    fetch('pdf-file-flattener-lang.json')
+                        .then(function(res){
+                            if(!res.ok) throw new Error('Failed to load lang.json (status ' + res.status + ')');
+                            return res.json();
+                        })
+                        .then(function(data){
+                            __i18nDict = data;
+                            applyTranslations(__i18nLang);
+                        })
+                        .catch(function(err){
+                            console.warn('i18n: lang.json could not be loaded.', err);
+                        });
+                }catch(err){
+                    console.warn('i18n: fetch is not available in this browser.', err);
+                }
+            }
+
+            if(langSwitcher){
+                langSwitcher.addEventListener('change', function(){
+                    setLanguage(langSwitcher.checked ? 'id' : 'en');
+                });
+            }
+
+            initI18n();
+        })();
     </script>
 </body>
 </html>
