@@ -167,60 +167,43 @@ body {
 .lang-switcher-input:checked ~ .lang-switcher-track .lang-switcher-option-id{ color: #0060df; }
 
 .scroll-to-top {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: linear-gradient(135deg, #0060df, #003eaa);
-            border: none;
-            padding: 15px;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0, 96, 223, 0.3);
-            z-index: 100;
-            width: 60px;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(100px);
-        }
+    position: fixed !important;
+    bottom: clamp(15px, 3vw, 30px) !important;
+    right: clamp(15px, 3vw, 30px) !important;
+    background: linear-gradient(135deg, #0060df, #003eaa);
+    border: none;
+    padding: clamp(10px, 2.5vw, 15px);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease, visibility 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 96, 223, 0.3);
+    z-index: 100;
+    width: clamp(45px, 10vw, 60px);
+    height: clamp(45px, 10vw, 60px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(100px) !important;
+}
 
-        .scroll-to-top.show {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
+.scroll-to-top.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) !important;
+}
 
-        .scroll-to-top:hover {
-            background: linear-gradient(135deg, #003eaa, #0060df);
-            transform: translateY(-5px) scale(1.1);
-            box-shadow: 0 10px 25px rgba(0, 96, 223, 0.5);
-        }
+.scroll-to-top:hover {
+    background: linear-gradient(135deg, #003eaa, #0060df);
+    box-shadow: 0 10px 25px rgba(0, 96, 223, 0.5);
+}
 
-        .scroll-to-top.show:hover {
-            transform: translateY(-5px) scale(1.1);
-        }
-
-        .scroll-to-top:active {
-            transform: translateY(-2px) scale(1.05);
-        }
-
-        .scroll-to-top.show:active {
-            transform: translateY(-2px) scale(1.05);
-        }
-
-        .go-up-icon {
-            width: 28px;
-            height: 28px;
-            transition: all 0.3s ease;
-        }
-
-        .scroll-to-top:hover .go-up-icon {
-            transform: scale(1.2) translateY(-2px);
-        }
+.go-up-icon {
+    width: clamp(20px, 5vw, 28px);
+    height: clamp(20px, 5vw, 28px);
+    transition: none;
+}
 
 .main-wrapper {
     width: 100%;
@@ -1378,7 +1361,7 @@ function calculate() {
             if (selectedPrintSide === '1 Side') {
                 if (selectedPaperSize.includes('A4')) {
                     result = qtyTotal * totalPages;
-                    calculationDetails = `${t('calc_for', 'Calculation for')} ${qtyTotal} ${t('calc_copies', 'copies')}: ${qtyTotal} * ${totalPages} = ${result} sheets`;
+                    calculationDetails = `${t('calc_for', 'Calculation for')} ${qtyTotal} ${t('calc_copies', 'copies')}: ${qtyTotal} × ${totalPages} = ${result} sheets`;
                 } else if (selectedPaperSize.includes('A3')) {
                     const repeats = Math.floor(qtyTotal / 2);
                     const remainder = qtyTotal % 2;
@@ -1399,19 +1382,19 @@ function calculate() {
                         if (repeats > 0) {
                             calculationDetails = `${t('calc_for', 'Calculation for')} ${qtyTotal} ${t('calc_copies', 'copies')}:<br>
 1. ${t('calc_sheet_produces', '1 sheet produces')} 2 ${t('calc_pieces_repeat', 'pieces (1 repeat)')}<br>
-2. ${qtyTotal} / 2 = ${repeats} ${t('calc_repeats_remainder', 'repeats with remainder')} ${remainder}<br>
-3. ${t('calc_half_collecut', 'Half pages (for collecut):')} ${totalPages} / 2 ${halfPagesText} ${t('calc_sheets', 'sheets')}<br>
-4. ${t('calc_paper_repeats', 'Paper for repeats:')} ${repeats} * ${totalPages} = ${repeatPaper} ${t('calc_sheets', 'sheets')}<br>
-5. ${t('calc_paper_collecut', 'Paper for collecut:')} ${remainder} * ${halfPages} = ${collecutPaper} ${t('calc_sheets', 'sheets')}<br>
+2. ${qtyTotal} ÷ 2 = ${repeats} ${t('calc_repeats_remainder', 'repeats with remainder')} ${remainder}<br>
+3. ${t('calc_half_collecut', 'Half pages (for collecut):')} ${totalPages} ÷ 2 ${halfPagesText} ${t('calc_sheets', 'sheets')}<br>
+4. ${t('calc_paper_repeats', 'Paper for repeats:')} ${repeats} × ${totalPages} = ${repeatPaper} ${t('calc_sheets', 'sheets')}<br>
+5. ${t('calc_paper_collecut', 'Paper for collecut:')} ${remainder} × ${halfPages} = ${collecutPaper} ${t('calc_sheets', 'sheets')}<br>
 6. ${t('calc_total_required', 'Total required paper:')} ${repeatPaper} + ${collecutPaper} = ${result} ${t('calc_sheets', 'sheets')}`;
                             
                             specialNote = `${repeats} ${t('calc_repeat_word', 'Repeat')} + ${remainder} ${t('calc_collecut_word', 'Collecut')}`;
                         } else {
                             calculationDetails = `${t('calc_for', 'Calculation for')} ${qtyTotal} ${t('calc_copies', 'copies')}:<br>
 1. ${t('calc_sheet_produces', '1 sheet produces')} 2 ${t('calc_pieces_repeat', 'pieces (1 repeat)')}<br>
-2. ${qtyTotal} / 2 = ${repeats} ${t('calc_repeats_remainder', 'repeats with remainder')} ${remainder}<br>
-3. ${t('calc_half_collecut', 'Half pages (for collecut):')} ${totalPages} / 2 ${halfPagesText} ${t('calc_sheets', 'sheets')}<br>
-4. ${t('calc_paper_collecut', 'Paper for collecut:')} ${remainder} * ${halfPages} = ${collecutPaper} ${t('calc_sheets', 'sheets')}<br>
+2. ${qtyTotal} ÷ 2 = ${repeats} ${t('calc_repeats_remainder', 'repeats with remainder')} ${remainder}<br>
+3. ${t('calc_half_collecut', 'Half pages (for collecut):')} ${totalPages} ÷ 2 ${halfPagesText} ${t('calc_sheets', 'sheets')}<br>
+4. ${t('calc_paper_collecut', 'Paper for collecut:')} ${remainder} × ${halfPages} = ${collecutPaper} ${t('calc_sheets', 'sheets')}<br>
 5. ${t('calc_total_required', 'Total required paper:')} ${collecutPaper} = ${result} ${t('calc_sheets', 'sheets')}`;
                             
                             specialNote = `${remainder} ${t('calc_collecut_word', 'Collecut')}`;
@@ -1422,14 +1405,14 @@ function calculate() {
                         if (repeats > 0) {
                             calculationDetails = `${t('calc_for', 'Calculation for')} ${qtyTotal} ${t('calc_copies', 'copies')}:<br>
 1. ${t('calc_sheet_produces', '1 sheet produces')} 2 ${t('calc_pieces_repeat', 'pieces (1 repeat)')}<br>
-2. ${qtyTotal} / 2 = ${repeats} ${t('calc_repeats', 'repeats')}<br>
-3. ${t('calc_paper_repeats', 'Paper for repeats:')} ${repeats} * ${totalPages} = ${repeatPaper} ${t('calc_sheets', 'sheets')}`;
+2. ${qtyTotal} ÷ 2 = ${repeats} ${t('calc_repeats', 'repeats')}<br>
+3. ${t('calc_paper_repeats', 'Paper for repeats:')} ${repeats} × ${totalPages} = ${repeatPaper} ${t('calc_sheets', 'sheets')}`;
                             
                             specialNote = `${repeats} ${t('calc_repeat_word', 'Repeat')}`;
                         } else {
                             calculationDetails = `${t('calc_for', 'Calculation for')} ${qtyTotal} ${t('calc_copies', 'copies')}:<br>
 1. ${t('calc_sheet_produces', '1 sheet produces')} 2 ${t('calc_pieces_repeat', 'pieces (1 repeat)')}<br>
-2. ${qtyTotal} / 2 = ${repeats} ${t('calc_repeats', 'repeats')}<br>
+2. ${qtyTotal} ÷ 2 = ${repeats} ${t('calc_repeats', 'repeats')}<br>
 3. ${t('calc_no_paper', 'No paper needed as quantity is 0')}`;
                         }
                     }
@@ -1443,8 +1426,8 @@ function calculate() {
                     const halfPagesText = formatRoundingText(rawHalfPages, halfPages);
                     
                     calculationDetails = `${t('calc_for', 'Calculation for')} ${qtyTotal} ${t('calc_copies', 'copies')} ${t('calc_2sided', '(2-sided)')}:<br>
-1. Half pages: ${totalPages} / 2 ${halfPagesText} sheets<br>
-2. Paper needed: ${qtyTotal} * ${halfPages} = ${result} sheets`;
+1. Half pages: ${totalPages} ÷ 2 ${halfPagesText} sheets<br>
+2. Paper needed: ${qtyTotal} × ${halfPages} = ${result} sheets`;
                 } else if (selectedPaperSize.includes('A3')) {
                     const repeats = Math.floor(qtyTotal / 2);
                     const remainder = qtyTotal % 2;
@@ -1469,20 +1452,20 @@ function calculate() {
                         if (repeats > 0) {
                             calculationDetails = `${t('calc_for', 'Calculation for')} ${qtyTotal} ${t('calc_copies', 'copies')} ${t('calc_2sided', '(2-sided)')}:<br>
 1. ${t('calc_sheet_produces', '1 sheet produces')} 2 ${t('calc_pieces_repeat', 'pieces (1 repeat)')}<br>
-2. ${qtyTotal} / 2 = ${repeats} ${t('calc_repeats_remainder', 'repeats with remainder')} ${remainder}<br>
-3. ${t('calc_half_repeat', 'Half pages (for repeat):')} ${totalPages} / 2 ${halfPagesText} ${t('calc_sheets', 'sheets')}<br>
-4. ${t('calc_quarter_collecut', 'Quarter pages (for collecut):')} ${totalPages} / 4 ${quarterPagesText} ${t('calc_sheets', 'sheets')}<br>
-5. ${t('calc_paper_repeats', 'Paper for repeats:')} ${repeats} * ${halfPages} = ${repeatPaper} ${t('calc_sheets', 'sheets')}<br>
-6. ${t('calc_paper_collecut', 'Paper for collecut:')} ${remainder} * ${quarterPages} = ${collecutPaper} ${t('calc_sheets', 'sheets')}<br>
+2. ${qtyTotal} ÷ 2 = ${repeats} ${t('calc_repeats_remainder', 'repeats with remainder')} ${remainder}<br>
+3. ${t('calc_half_repeat', 'Half pages (for repeat):')} ${totalPages} ÷ 2 ${halfPagesText} ${t('calc_sheets', 'sheets')}<br>
+4. ${t('calc_quarter_collecut', 'Quarter pages (for collecut):')} ${totalPages} ÷ 4 ${quarterPagesText} ${t('calc_sheets', 'sheets')}<br>
+5. ${t('calc_paper_repeats', 'Paper for repeats:')} ${repeats} × ${halfPages} = ${repeatPaper} ${t('calc_sheets', 'sheets')}<br>
+6. ${t('calc_paper_collecut', 'Paper for collecut:')} ${remainder} × ${quarterPages} = ${collecutPaper} ${t('calc_sheets', 'sheets')}<br>
 7. ${t('calc_total_required', 'Total required paper:')} ${repeatPaper} + ${collecutPaper} = ${result} ${t('calc_sheets', 'sheets')}`;
                             
                             specialNote = `${repeats} ${t('calc_repeat_word', 'Repeat')} + ${remainder} ${t('calc_collecut_word', 'Collecut')}`;
                         } else {
                             calculationDetails = `${t('calc_for', 'Calculation for')} ${qtyTotal} ${t('calc_copies', 'copies')} ${t('calc_2sided', '(2-sided)')}:<br>
 1. ${t('calc_sheet_produces', '1 sheet produces')} 2 ${t('calc_pieces_repeat', 'pieces (1 repeat)')}<br>
-2. ${qtyTotal} / 2 = ${repeats} ${t('calc_repeats_remainder', 'repeats with remainder')} ${remainder}<br>
-3. ${t('calc_quarter_collecut', 'Quarter pages (for collecut):')} ${totalPages} / 4 ${quarterPagesText} ${t('calc_sheets', 'sheets')}<br>
-4. ${t('calc_paper_collecut', 'Paper for collecut:')} ${remainder} * ${quarterPages} = ${collecutPaper} ${t('calc_sheets', 'sheets')}<br>
+2. ${qtyTotal} ÷ 2 = ${repeats} ${t('calc_repeats_remainder', 'repeats with remainder')} ${remainder}<br>
+3. ${t('calc_quarter_collecut', 'Quarter pages (for collecut):')} ${totalPages} ÷ 4 ${quarterPagesText} ${t('calc_sheets', 'sheets')}<br>
+4. ${t('calc_paper_collecut', 'Paper for collecut:')} ${remainder} × ${quarterPages} = ${collecutPaper} ${t('calc_sheets', 'sheets')}<br>
 5. ${t('calc_total_required', 'Total required paper:')} ${collecutPaper} = ${result} ${t('calc_sheets', 'sheets')}`;
                             
                             specialNote = `${remainder} ${t('calc_collecut_word', 'Collecut')}`;
@@ -1493,15 +1476,15 @@ function calculate() {
                         if (repeats > 0) {
                             calculationDetails = `${t('calc_for', 'Calculation for')} ${qtyTotal} ${t('calc_copies', 'copies')} ${t('calc_2sided', '(2-sided)')}:<br>
 1. ${t('calc_sheet_produces', '1 sheet produces')} 2 ${t('calc_pieces_repeat', 'pieces (1 repeat)')}<br>
-2. ${qtyTotal} / 2 = ${repeats} ${t('calc_repeats', 'repeats')}<br>
-3. ${t('calc_half_repeat', 'Half pages (for repeat):')} ${totalPages} / 2 ${halfPagesText} ${t('calc_sheets', 'sheets')}<br>
-4. ${t('calc_paper_repeats', 'Paper for repeats:')} ${repeats} * ${halfPages} = ${repeatPaper} ${t('calc_sheets', 'sheets')}`;
+2. ${qtyTotal} ÷ 2 = ${repeats} ${t('calc_repeats', 'repeats')}<br>
+3. ${t('calc_half_repeat', 'Half pages (for repeat):')} ${totalPages} ÷ 2 ${halfPagesText} ${t('calc_sheets', 'sheets')}<br>
+4. ${t('calc_paper_repeats', 'Paper for repeats:')} ${repeats} × ${halfPages} = ${repeatPaper} ${t('calc_sheets', 'sheets')}`;
                             
                             specialNote = `${repeats} ${t('calc_repeat_word', 'Repeat')}`;
                         } else {
                             calculationDetails = `${t('calc_for', 'Calculation for')} ${qtyTotal} ${t('calc_copies', 'copies')} ${t('calc_2sided', '(2-sided)')}:<br>
 1. ${t('calc_sheet_produces', '1 sheet produces')} 2 ${t('calc_pieces_repeat', 'pieces (1 repeat)')}<br>
-2. ${qtyTotal} / 2 = ${repeats} ${t('calc_repeats', 'repeats')}<br>
+2. ${qtyTotal} ÷ 2 = ${repeats} ${t('calc_repeats', 'repeats')}<br>
 3. ${t('calc_no_paper', 'No paper needed as quantity is 0')}`;
                         }
                     }
@@ -1530,19 +1513,19 @@ function calculate() {
                         if (repeats > 0) {
                             calculationDetails = `${t('calc_for', 'Calculation for')} ${qtyTotal} ${t('calc_copies', 'copies')}:<br>
 1. ${t('calc_sheet_produces', '1 sheet produces')} 2 ${t('calc_pieces_repeat', 'pieces (1 repeat)')}<br>
-2. ${qtyTotal} / 2 = ${repeats} ${t('calc_repeats_remainder', 'repeats with remainder')} ${remainder}<br>
-3. ${t('calc_half_collecut', 'Half pages (for collecut):')} ${totalPages} / 2 ${halfPagesText} ${t('calc_sheets', 'sheets')}<br>
-4. ${t('calc_paper_repeats', 'Paper for repeats:')} ${repeats} * ${totalPages} = ${repeatPaper} ${t('calc_sheets', 'sheets')}<br>
-5. ${t('calc_paper_collecut', 'Paper for collecut:')} ${remainder} * ${halfPages} = ${collecutPaper} ${t('calc_sheets', 'sheets')}<br>
+2. ${qtyTotal} ÷ 2 = ${repeats} ${t('calc_repeats_remainder', 'repeats with remainder')} ${remainder}<br>
+3. ${t('calc_half_collecut', 'Half pages (for collecut):')} ${totalPages} ÷ 2 ${halfPagesText} ${t('calc_sheets', 'sheets')}<br>
+4. ${t('calc_paper_repeats', 'Paper for repeats:')} ${repeats} × ${totalPages} = ${repeatPaper} ${t('calc_sheets', 'sheets')}<br>
+5. ${t('calc_paper_collecut', 'Paper for collecut:')} ${remainder} × ${halfPages} = ${collecutPaper} ${t('calc_sheets', 'sheets')}<br>
 6. ${t('calc_total_required', 'Total required paper:')} ${repeatPaper} + ${collecutPaper} = ${result} ${t('calc_sheets', 'sheets')}`;
                             
                             specialNote = `${repeats} ${t('calc_repeat_word', 'Repeat')} + ${remainder} ${t('calc_collecut_word', 'Collecut')}`;
                         } else {
                             calculationDetails = `${t('calc_for', 'Calculation for')} ${qtyTotal} ${t('calc_copies', 'copies')}:<br>
 1. ${t('calc_sheet_produces', '1 sheet produces')} 2 ${t('calc_pieces_repeat', 'pieces (1 repeat)')}<br>
-2. ${qtyTotal} / 2 = ${repeats} ${t('calc_repeats_remainder', 'repeats with remainder')} ${remainder}<br>
-3. ${t('calc_half_collecut', 'Half pages (for collecut):')} ${totalPages} / 2 ${halfPagesText} ${t('calc_sheets', 'sheets')}<br>
-4. ${t('calc_paper_collecut', 'Paper for collecut:')} ${remainder} * ${halfPages} = ${collecutPaper} ${t('calc_sheets', 'sheets')}<br>
+2. ${qtyTotal} ÷ 2 = ${repeats} ${t('calc_repeats_remainder', 'repeats with remainder')} ${remainder}<br>
+3. ${t('calc_half_collecut', 'Half pages (for collecut):')} ${totalPages} ÷ 2 ${halfPagesText} ${t('calc_sheets', 'sheets')}<br>
+4. ${t('calc_paper_collecut', 'Paper for collecut:')} ${remainder} × ${halfPages} = ${collecutPaper} ${t('calc_sheets', 'sheets')}<br>
 5. ${t('calc_total_required', 'Total required paper:')} ${collecutPaper} = ${result} ${t('calc_sheets', 'sheets')}`;
                             
                             specialNote = `${remainder} ${t('calc_collecut_word', 'Collecut')}`;
@@ -1553,14 +1536,14 @@ function calculate() {
                         if (repeats > 0) {
                             calculationDetails = `${t('calc_for', 'Calculation for')} ${qtyTotal} ${t('calc_copies', 'copies')}:<br>
 1. ${t('calc_sheet_produces', '1 sheet produces')} 2 ${t('calc_pieces_repeat', 'pieces (1 repeat)')}<br>
-2. ${qtyTotal} / 2 = ${repeats} ${t('calc_repeats', 'repeats')}<br>
-3. ${t('calc_paper_repeats', 'Paper for repeats:')} ${repeats} * ${totalPages} = ${repeatPaper} ${t('calc_sheets', 'sheets')}`;
+2. ${qtyTotal} ÷ 2 = ${repeats} ${t('calc_repeats', 'repeats')}<br>
+3. ${t('calc_paper_repeats', 'Paper for repeats:')} ${repeats} × ${totalPages} = ${repeatPaper} ${t('calc_sheets', 'sheets')}`;
                             
                             specialNote = `${repeats} ${t('calc_repeat_word', 'Repeat')}`;
                         } else {
                             calculationDetails = `${t('calc_for', 'Calculation for')} ${qtyTotal} ${t('calc_copies', 'copies')}:<br>
 1. ${t('calc_sheet_produces', '1 sheet produces')} 2 ${t('calc_pieces_repeat', 'pieces (1 repeat)')}<br>
-2. ${qtyTotal} / 2 = ${repeats} ${t('calc_repeats', 'repeats')}<br>
+2. ${qtyTotal} ÷ 2 = ${repeats} ${t('calc_repeats', 'repeats')}<br>
 3. ${t('calc_no_paper', 'No paper needed as quantity is 0')}`;
                         }
                     }
@@ -1584,19 +1567,19 @@ function calculate() {
                         if (repeats > 0) {
                             calculationDetails = `${t('calc_for', 'Calculation for')} ${qtyTotal} ${t('calc_copies', 'copies')}:<br>
 1. ${t('calc_sheet_produces', '1 sheet produces')} 4 ${t('calc_pieces_repeat', 'pieces (1 repeat)')}<br>
-2. ${qtyTotal} / 4 = ${repeats} ${t('calc_repeats_remainder', 'repeats with remainder')} ${remainder}<br>
-3. ${t('calc_quarter_collecut', 'Quarter pages (for collecut):')} ${totalPages} / 4 ${quarterPagesText} ${t('calc_sheets', 'sheets')}<br>
-4. ${t('calc_paper_repeats', 'Paper for repeats:')} ${repeats} * ${totalPages} = ${repeatPaper} ${t('calc_sheets', 'sheets')}<br>
-5. ${t('calc_paper_collecut', 'Paper for collecut:')} ${remainder} * ${quarterPages} = ${collecutPaper} ${t('calc_sheets', 'sheets')}<br>
+2. ${qtyTotal} ÷ 4 = ${repeats} ${t('calc_repeats_remainder', 'repeats with remainder')} ${remainder}<br>
+3. ${t('calc_quarter_collecut', 'Quarter pages (for collecut):')} ${totalPages} ÷ 4 ${quarterPagesText} ${t('calc_sheets', 'sheets')}<br>
+4. ${t('calc_paper_repeats', 'Paper for repeats:')} ${repeats} × ${totalPages} = ${repeatPaper} ${t('calc_sheets', 'sheets')}<br>
+5. ${t('calc_paper_collecut', 'Paper for collecut:')} ${remainder} × ${quarterPages} = ${collecutPaper} ${t('calc_sheets', 'sheets')}<br>
 6. ${t('calc_total_required', 'Total required paper:')} ${repeatPaper} + ${collecutPaper} = ${result} ${t('calc_sheets', 'sheets')}`;
                             
                             specialNote = `${repeats} ${t('calc_repeat_word', 'Repeat')} + ${remainder} ${t('calc_collecut_word', 'Collecut')}`;
                         } else {
                             calculationDetails = `${t('calc_for', 'Calculation for')} ${qtyTotal} ${t('calc_copies', 'copies')}:<br>
 1. ${t('calc_sheet_produces', '1 sheet produces')} 4 ${t('calc_pieces_repeat', 'pieces (1 repeat)')}<br>
-2. ${qtyTotal} / 4 = ${repeats} ${t('calc_repeats_remainder', 'repeats with remainder')} ${remainder}<br>
-3. ${t('calc_quarter_collecut', 'Quarter pages (for collecut):')} ${totalPages} / 4 ${quarterPagesText} ${t('calc_sheets', 'sheets')}<br>
-4. ${t('calc_paper_collecut', 'Paper for collecut:')} ${remainder} * ${quarterPages} = ${collecutPaper} ${t('calc_sheets', 'sheets')}<br>
+2. ${qtyTotal} ÷ 4 = ${repeats} ${t('calc_repeats_remainder', 'repeats with remainder')} ${remainder}<br>
+3. ${t('calc_quarter_collecut', 'Quarter pages (for collecut):')} ${totalPages} ÷ 4 ${quarterPagesText} ${t('calc_sheets', 'sheets')}<br>
+4. ${t('calc_paper_collecut', 'Paper for collecut:')} ${remainder} × ${quarterPages} = ${collecutPaper} ${t('calc_sheets', 'sheets')}<br>
 5. ${t('calc_total_required', 'Total required paper:')} ${collecutPaper} = ${result} ${t('calc_sheets', 'sheets')}`;
                             
                             specialNote = `${remainder} ${t('calc_collecut_word', 'Collecut')}`;
@@ -1607,14 +1590,14 @@ function calculate() {
                         if (repeats > 0) {
                             calculationDetails = `${t('calc_for', 'Calculation for')} ${qtyTotal} ${t('calc_copies', 'copies')}:<br>
 1. ${t('calc_sheet_produces', '1 sheet produces')} 4 ${t('calc_pieces_repeat', 'pieces (1 repeat)')}<br>
-2. ${qtyTotal} / 4 = ${repeats} ${t('calc_repeats', 'repeats')}<br>
-3. ${t('calc_paper_repeats', 'Paper for repeats:')} ${repeats} * ${totalPages} = ${repeatPaper} ${t('calc_sheets', 'sheets')}`;
+2. ${qtyTotal} ÷ 4 = ${repeats} ${t('calc_repeats', 'repeats')}<br>
+3. ${t('calc_paper_repeats', 'Paper for repeats:')} ${repeats} × ${totalPages} = ${repeatPaper} ${t('calc_sheets', 'sheets')}`;
                             
                             specialNote = `${repeats} ${t('calc_repeat_word', 'Repeat')}`;
                         } else {
                             calculationDetails = `${t('calc_for', 'Calculation for')} ${qtyTotal} ${t('calc_copies', 'copies')}:<br>
 1. ${t('calc_sheet_produces', '1 sheet produces')} 4 ${t('calc_pieces_repeat', 'pieces (1 repeat)')}<br>
-2. ${qtyTotal} / 4 = ${repeats} ${t('calc_repeats', 'repeats')}<br>
+2. ${qtyTotal} ÷ 4 = ${repeats} ${t('calc_repeats', 'repeats')}<br>
 3. ${t('calc_no_paper', 'No paper needed as quantity is 0')}`;
                         }
                     }
@@ -1644,20 +1627,20 @@ function calculate() {
                         if (repeats > 0) {
                             calculationDetails = `${t('calc_for', 'Calculation for')} ${qtyTotal} ${t('calc_copies', 'copies')} ${t('calc_2sided', '(2-sided)')}:<br>
 1. ${t('calc_sheet_produces', '1 sheet produces')} 2 ${t('calc_pieces_repeat', 'pieces (1 repeat)')}<br>
-2. ${qtyTotal} / 2 = ${repeats} ${t('calc_repeats_remainder', 'repeats with remainder')} ${remainder}<br>
-3. ${t('calc_half_repeat', 'Half pages (for repeat):')} ${totalPages} / 2 ${halfPagesText} ${t('calc_sheets', 'sheets')}<br>
-4. ${t('calc_quarter_collecut', 'Quarter pages (for collecut):')} ${totalPages} / 4 ${quarterPagesText} ${t('calc_sheets', 'sheets')}<br>
-5. ${t('calc_paper_repeats', 'Paper for repeats:')} ${repeats} * ${halfPages} = ${repeatPaper} ${t('calc_sheets', 'sheets')}<br>
-6. ${t('calc_paper_collecut', 'Paper for collecut:')} ${remainder} * ${quarterPages} = ${collecutPaper} ${t('calc_sheets', 'sheets')}<br>
+2. ${qtyTotal} ÷ 2 = ${repeats} ${t('calc_repeats_remainder', 'repeats with remainder')} ${remainder}<br>
+3. ${t('calc_half_repeat', 'Half pages (for repeat):')} ${totalPages} ÷ 2 ${halfPagesText} ${t('calc_sheets', 'sheets')}<br>
+4. ${t('calc_quarter_collecut', 'Quarter pages (for collecut):')} ${totalPages} ÷ 4 ${quarterPagesText} ${t('calc_sheets', 'sheets')}<br>
+5. ${t('calc_paper_repeats', 'Paper for repeats:')} ${repeats} × ${halfPages} = ${repeatPaper} ${t('calc_sheets', 'sheets')}<br>
+6. ${t('calc_paper_collecut', 'Paper for collecut:')} ${remainder} × ${quarterPages} = ${collecutPaper} ${t('calc_sheets', 'sheets')}<br>
 7. ${t('calc_total_required', 'Total required paper:')} ${repeatPaper} + ${collecutPaper} = ${result} ${t('calc_sheets', 'sheets')}`;
                             
                             specialNote = `${repeats} ${t('calc_repeat_word', 'Repeat')} + ${remainder} ${t('calc_collecut_word', 'Collecut')}`;
                         } else {
                             calculationDetails = `${t('calc_for', 'Calculation for')} ${qtyTotal} ${t('calc_copies', 'copies')} ${t('calc_2sided', '(2-sided)')}:<br>
 1. ${t('calc_sheet_produces', '1 sheet produces')} 2 ${t('calc_pieces_repeat', 'pieces (1 repeat)')}<br>
-2. ${qtyTotal} / 2 = ${repeats} ${t('calc_repeats_remainder', 'repeats with remainder')} ${remainder}<br>
-3. ${t('calc_quarter_collecut', 'Quarter pages (for collecut):')} ${totalPages} / 4 ${quarterPagesText} ${t('calc_sheets', 'sheets')}<br>
-4. ${t('calc_paper_collecut', 'Paper for collecut:')} ${remainder} * ${quarterPages} = ${collecutPaper} ${t('calc_sheets', 'sheets')}<br>
+2. ${qtyTotal} ÷ 2 = ${repeats} ${t('calc_repeats_remainder', 'repeats with remainder')} ${remainder}<br>
+3. ${t('calc_quarter_collecut', 'Quarter pages (for collecut):')} ${totalPages} ÷ 4 ${quarterPagesText} ${t('calc_sheets', 'sheets')}<br>
+4. ${t('calc_paper_collecut', 'Paper for collecut:')} ${remainder} × ${quarterPages} = ${collecutPaper} ${t('calc_sheets', 'sheets')}<br>
 5. ${t('calc_total_required', 'Total required paper:')} ${collecutPaper} = ${result} ${t('calc_sheets', 'sheets')}`;
                             
                             specialNote = `${remainder} ${t('calc_collecut_word', 'Collecut')}`;
@@ -1668,15 +1651,15 @@ function calculate() {
                         if (repeats > 0) {
                             calculationDetails = `${t('calc_for', 'Calculation for')} ${qtyTotal} ${t('calc_copies', 'copies')} ${t('calc_2sided', '(2-sided)')}:<br>
 1. ${t('calc_sheet_produces', '1 sheet produces')} 2 ${t('calc_pieces_repeat', 'pieces (1 repeat)')}<br>
-2. ${qtyTotal} / 2 = ${repeats} ${t('calc_repeats', 'repeats')}<br>
-3. ${t('calc_half_repeat', 'Half pages (for repeat):')} ${totalPages} / 2 ${halfPagesText} ${t('calc_sheets', 'sheets')}<br>
-4. ${t('calc_paper_repeats', 'Paper for repeats:')} ${repeats} * ${halfPages} = ${repeatPaper} ${t('calc_sheets', 'sheets')}`;
+2. ${qtyTotal} ÷ 2 = ${repeats} ${t('calc_repeats', 'repeats')}<br>
+3. ${t('calc_half_repeat', 'Half pages (for repeat):')} ${totalPages} ÷ 2 ${halfPagesText} ${t('calc_sheets', 'sheets')}<br>
+4. ${t('calc_paper_repeats', 'Paper for repeats:')} ${repeats} × ${halfPages} = ${repeatPaper} ${t('calc_sheets', 'sheets')}`;
                             
                             specialNote = `${repeats} ${t('calc_repeat_word', 'Repeat')}`;
                         } else {
                             calculationDetails = `${t('calc_for', 'Calculation for')} ${qtyTotal} ${t('calc_copies', 'copies')} ${t('calc_2sided', '(2-sided)')}:<br>
 1. ${t('calc_sheet_produces', '1 sheet produces')} 2 ${t('calc_pieces_repeat', 'pieces (1 repeat)')}<br>
-2. ${qtyTotal} / 2 = ${repeats} ${t('calc_repeats', 'repeats')}<br>
+2. ${qtyTotal} ÷ 2 = ${repeats} ${t('calc_repeats', 'repeats')}<br>
 3. ${t('calc_no_paper', 'No paper needed as quantity is 0')}`;
                         }
                     }
@@ -1704,20 +1687,20 @@ function calculate() {
                         if (repeats > 0) {
                             calculationDetails = `${t('calc_for', 'Calculation for')} ${qtyTotal} ${t('calc_copies', 'copies')} ${t('calc_2sided', '(2-sided)')}:<br>
 1. ${t('calc_sheet_produces', '1 sheet produces')} 4 ${t('calc_pieces_repeat', 'pieces (1 repeat)')}<br>
-2. ${qtyTotal} / 4 = ${repeats} ${t('calc_repeats_remainder', 'repeats with remainder')} ${remainder}<br>
-3. ${t('calc_half_repeat', 'Half pages (for repeat):')} ${totalPages} / 2 ${halfPagesText} ${t('calc_sheets', 'sheets')}<br>
-4. ${t('calc_eighth_collecut', 'Eighth pages (for collecut):')} ${totalPages} / 8 ${eighthPagesText} ${t('calc_sheets', 'sheets')}<br>
-5. ${t('calc_paper_repeats', 'Paper for repeats:')} ${repeats} * ${halfPages} = ${repeatPaper} ${t('calc_sheets', 'sheets')}<br>
-6. ${t('calc_paper_collecut', 'Paper for collecut:')} ${remainder} * ${eighthPages} = ${collecutPaper} ${t('calc_sheets', 'sheets')}<br>
+2. ${qtyTotal} ÷ 4 = ${repeats} ${t('calc_repeats_remainder', 'repeats with remainder')} ${remainder}<br>
+3. ${t('calc_half_repeat', 'Half pages (for repeat):')} ${totalPages} ÷ 2 ${halfPagesText} ${t('calc_sheets', 'sheets')}<br>
+4. ${t('calc_eighth_collecut', 'Eighth pages (for collecut):')} ${totalPages} ÷ 8 ${eighthPagesText} ${t('calc_sheets', 'sheets')}<br>
+5. ${t('calc_paper_repeats', 'Paper for repeats:')} ${repeats} × ${halfPages} = ${repeatPaper} ${t('calc_sheets', 'sheets')}<br>
+6. ${t('calc_paper_collecut', 'Paper for collecut:')} ${remainder} × ${eighthPages} = ${collecutPaper} ${t('calc_sheets', 'sheets')}<br>
 7. ${t('calc_total_required', 'Total required paper:')} ${repeatPaper} + ${collecutPaper} = ${result} ${t('calc_sheets', 'sheets')}`;
                             
                             specialNote = `${repeats} ${t('calc_repeat_word', 'Repeat')} + ${remainder} ${t('calc_collecut_word', 'Collecut')}`;
                         } else {
                             calculationDetails = `${t('calc_for', 'Calculation for')} ${qtyTotal} ${t('calc_copies', 'copies')} ${t('calc_2sided', '(2-sided)')}:<br>
 1. ${t('calc_sheet_produces', '1 sheet produces')} 4 ${t('calc_pieces_repeat', 'pieces (1 repeat)')}<br>
-2. ${qtyTotal} / 4 = ${repeats} ${t('calc_repeats_remainder', 'repeats with remainder')} ${remainder}<br>
-3. ${t('calc_eighth_collecut', 'Eighth pages (for collecut):')} ${totalPages} / 8 ${eighthPagesText} ${t('calc_sheets', 'sheets')}<br>
-4. ${t('calc_paper_collecut', 'Paper for collecut:')} ${remainder} * ${eighthPages} = ${collecutPaper} ${t('calc_sheets', 'sheets')}<br>
+2. ${qtyTotal} ÷ 4 = ${repeats} ${t('calc_repeats_remainder', 'repeats with remainder')} ${remainder}<br>
+3. ${t('calc_eighth_collecut', 'Eighth pages (for collecut):')} ${totalPages} ÷ 8 ${eighthPagesText} ${t('calc_sheets', 'sheets')}<br>
+4. ${t('calc_paper_collecut', 'Paper for collecut:')} ${remainder} × ${eighthPages} = ${collecutPaper} ${t('calc_sheets', 'sheets')}<br>
 5. ${t('calc_total_required', 'Total required paper:')} ${collecutPaper} = ${result} ${t('calc_sheets', 'sheets')}`;
                             
                             specialNote = `${remainder} ${t('calc_collecut_word', 'Collecut')}`;
@@ -1728,15 +1711,15 @@ function calculate() {
                         if (repeats > 0) {
                             calculationDetails = `${t('calc_for', 'Calculation for')} ${qtyTotal} ${t('calc_copies', 'copies')} ${t('calc_2sided', '(2-sided)')}:<br>
 1. ${t('calc_sheet_produces', '1 sheet produces')} 4 ${t('calc_pieces_repeat', 'pieces (1 repeat)')}<br>
-2. ${qtyTotal} / 4 = ${repeats} ${t('calc_repeats', 'repeats')}<br>
-3. ${t('calc_half_repeat', 'Half pages (for repeat):')} ${totalPages} / 2 ${halfPagesText} ${t('calc_sheets', 'sheets')}<br>
-4. ${t('calc_paper_repeats', 'Paper for repeats:')} ${repeats} * ${halfPages} = ${repeatPaper} ${t('calc_sheets', 'sheets')}`;
+2. ${qtyTotal} ÷ 4 = ${repeats} ${t('calc_repeats', 'repeats')}<br>
+3. ${t('calc_half_repeat', 'Half pages (for repeat):')} ${totalPages} ÷ 2 ${halfPagesText} ${t('calc_sheets', 'sheets')}<br>
+4. ${t('calc_paper_repeats', 'Paper for repeats:')} ${repeats} × ${halfPages} = ${repeatPaper} ${t('calc_sheets', 'sheets')}`;
                             
                             specialNote = `${repeats} ${t('calc_repeat_word', 'Repeat')}`;
                         } else {
                             calculationDetails = `${t('calc_for', 'Calculation for')} ${qtyTotal} ${t('calc_copies', 'copies')} ${t('calc_2sided', '(2-sided)')}:<br>
 1. ${t('calc_sheet_produces', '1 sheet produces')} 4 ${t('calc_pieces_repeat', 'pieces (1 repeat)')}<br>
-2. ${qtyTotal} / 4 = ${repeats} ${t('calc_repeats', 'repeats')}<br>
+2. ${qtyTotal} ÷ 4 = ${repeats} ${t('calc_repeats', 'repeats')}<br>
 3. ${t('calc_no_paper', 'No paper needed as quantity is 0')}`;
                         }
                     }
@@ -1765,19 +1748,19 @@ function calculate() {
                         if (repeats > 0) {
                             calculationDetails = `${t('calc_for', 'Calculation for')} ${qtyTotal} ${t('calc_copies', 'copies')}:<br>
 1. ${t('calc_sheet_produces', '1 sheet produces')} 4 ${t('calc_pieces_repeat', 'pieces (1 repeat)')}<br>
-2. ${qtyTotal} / 4 = ${repeats} ${t('calc_repeats_remainder', 'repeats with remainder')} ${remainder}<br>
-3. ${t('calc_quarter_collecut', 'Quarter pages (for collecut):')} ${totalPages} / 4 ${quarterPagesText} ${t('calc_sheets', 'sheets')}<br>
-4. ${t('calc_paper_repeats', 'Paper for repeats:')} ${repeats} * ${totalPages} = ${repeatPaper} ${t('calc_sheets', 'sheets')}<br>
-5. ${t('calc_paper_collecut', 'Paper for collecut:')} ${remainder} * ${quarterPages} = ${collecutPaper} ${t('calc_sheets', 'sheets')}<br>
+2. ${qtyTotal} ÷ 4 = ${repeats} ${t('calc_repeats_remainder', 'repeats with remainder')} ${remainder}<br>
+3. ${t('calc_quarter_collecut', 'Quarter pages (for collecut):')} ${totalPages} ÷ 4 ${quarterPagesText} ${t('calc_sheets', 'sheets')}<br>
+4. ${t('calc_paper_repeats', 'Paper for repeats:')} ${repeats} × ${totalPages} = ${repeatPaper} ${t('calc_sheets', 'sheets')}<br>
+5. ${t('calc_paper_collecut', 'Paper for collecut:')} ${remainder} × ${quarterPages} = ${collecutPaper} ${t('calc_sheets', 'sheets')}<br>
 6. ${t('calc_total_required', 'Total required paper:')} ${repeatPaper} + ${collecutPaper} = ${result} ${t('calc_sheets', 'sheets')}`;
                             
                             specialNote = `${repeats} ${t('calc_repeat_word', 'Repeat')} + ${remainder} ${t('calc_collecut_word', 'Collecut')}`;
                         } else {
                             calculationDetails = `${t('calc_for', 'Calculation for')} ${qtyTotal} ${t('calc_copies', 'copies')}:<br>
 1. ${t('calc_sheet_produces', '1 sheet produces')} 4 ${t('calc_pieces_repeat', 'pieces (1 repeat)')}<br>
-2. ${qtyTotal} / 4 = ${repeats} ${t('calc_repeats_remainder', 'repeats with remainder')} ${remainder}<br>
-3. ${t('calc_quarter_collecut', 'Quarter pages (for collecut):')} ${totalPages} / 4 ${quarterPagesText} ${t('calc_sheets', 'sheets')}<br>
-4. ${t('calc_paper_collecut', 'Paper for collecut:')} ${remainder} * ${quarterPages} = ${collecutPaper} ${t('calc_sheets', 'sheets')}<br>
+2. ${qtyTotal} ÷ 4 = ${repeats} ${t('calc_repeats_remainder', 'repeats with remainder')} ${remainder}<br>
+3. ${t('calc_quarter_collecut', 'Quarter pages (for collecut):')} ${totalPages} ÷ 4 ${quarterPagesText} ${t('calc_sheets', 'sheets')}<br>
+4. ${t('calc_paper_collecut', 'Paper for collecut:')} ${remainder} × ${quarterPages} = ${collecutPaper} ${t('calc_sheets', 'sheets')}<br>
 5. ${t('calc_total_required', 'Total required paper:')} ${collecutPaper} = ${result} ${t('calc_sheets', 'sheets')}`;
                             
                             specialNote = `${remainder} ${t('calc_collecut_word', 'Collecut')}`;
@@ -1788,14 +1771,14 @@ function calculate() {
                         if (repeats > 0) {
                             calculationDetails = `${t('calc_for', 'Calculation for')} ${qtyTotal} ${t('calc_copies', 'copies')}:<br>
 1. ${t('calc_sheet_produces', '1 sheet produces')} 4 ${t('calc_pieces_repeat', 'pieces (1 repeat)')}<br>
-2. ${qtyTotal} / 4 = ${repeats} ${t('calc_repeats', 'repeats')}<br>
-3. ${t('calc_paper_repeats', 'Paper for repeats:')} ${repeats} * ${totalPages} = ${repeatPaper} ${t('calc_sheets', 'sheets')}`;
+2. ${qtyTotal} ÷ 4 = ${repeats} ${t('calc_repeats', 'repeats')}<br>
+3. ${t('calc_paper_repeats', 'Paper for repeats:')} ${repeats} × ${totalPages} = ${repeatPaper} ${t('calc_sheets', 'sheets')}`;
                             
                             specialNote = `${repeats} ${t('calc_repeat_word', 'Repeat')}`;
                         } else {
                             calculationDetails = `${t('calc_for', 'Calculation for')} ${qtyTotal} ${t('calc_copies', 'copies')}:<br>
 1. ${t('calc_sheet_produces', '1 sheet produces')} 4 ${t('calc_pieces_repeat', 'pieces (1 repeat)')}<br>
-2. ${qtyTotal} / 4 = ${repeats} ${t('calc_repeats', 'repeats')}<br>
+2. ${qtyTotal} ÷ 4 = ${repeats} ${t('calc_repeats', 'repeats')}<br>
 3. ${t('calc_no_paper', 'No paper needed as quantity is 0')}`;
                         }
                     }
@@ -1819,19 +1802,19 @@ function calculate() {
                         if (repeats > 0) {
                             calculationDetails = `${t('calc_for', 'Calculation for')} ${qtyTotal} ${t('calc_copies', 'copies')}:<br>
 1. ${t('calc_sheet_produces', '1 sheet produces')} 8 ${t('calc_pieces_repeat', 'pieces (1 repeat)')}<br>
-2. ${qtyTotal} / 8 = ${repeats} ${t('calc_repeats_remainder', 'repeats with remainder')} ${remainder}<br>
-3. ${t('calc_eighth_collecut', 'Eighth pages (for collecut):')} ${totalPages} / 8 ${eighthPagesText} ${t('calc_sheets', 'sheets')}<br>
-4. ${t('calc_paper_repeats', 'Paper for repeats:')} ${repeats} * ${totalPages} = ${repeatPaper} ${t('calc_sheets', 'sheets')}<br>
-5. ${t('calc_paper_collecut', 'Paper for collecut:')} ${remainder} * ${eighthPages} = ${collecutPaper} ${t('calc_sheets', 'sheets')}<br>
+2. ${qtyTotal} ÷ 8 = ${repeats} ${t('calc_repeats_remainder', 'repeats with remainder')} ${remainder}<br>
+3. ${t('calc_eighth_collecut', 'Eighth pages (for collecut):')} ${totalPages} ÷ 8 ${eighthPagesText} ${t('calc_sheets', 'sheets')}<br>
+4. ${t('calc_paper_repeats', 'Paper for repeats:')} ${repeats} × ${totalPages} = ${repeatPaper} ${t('calc_sheets', 'sheets')}<br>
+5. ${t('calc_paper_collecut', 'Paper for collecut:')} ${remainder} × ${eighthPages} = ${collecutPaper} ${t('calc_sheets', 'sheets')}<br>
 6. ${t('calc_total_required', 'Total required paper:')} ${repeatPaper} + ${collecutPaper} = ${result} ${t('calc_sheets', 'sheets')}`;
                             
                             specialNote = `${repeats} ${t('calc_repeat_word', 'Repeat')} + ${remainder} ${t('calc_collecut_word', 'Collecut')}`;
                         } else {
                             calculationDetails = `${t('calc_for', 'Calculation for')} ${qtyTotal} ${t('calc_copies', 'copies')}:<br>
 1. ${t('calc_sheet_produces', '1 sheet produces')} 8 ${t('calc_pieces_repeat', 'pieces (1 repeat)')}<br>
-2. ${qtyTotal} / 8 = ${repeats} ${t('calc_repeats_remainder', 'repeats with remainder')} ${remainder}<br>
-3. ${t('calc_eighth_collecut', 'Eighth pages (for collecut):')} ${totalPages} / 8 ${eighthPagesText} ${t('calc_sheets', 'sheets')}<br>
-4. ${t('calc_paper_collecut', 'Paper for collecut:')} ${remainder} * ${eighthPages} = ${collecutPaper} ${t('calc_sheets', 'sheets')}<br>
+2. ${qtyTotal} ÷ 8 = ${repeats} ${t('calc_repeats_remainder', 'repeats with remainder')} ${remainder}<br>
+3. ${t('calc_eighth_collecut', 'Eighth pages (for collecut):')} ${totalPages} ÷ 8 ${eighthPagesText} ${t('calc_sheets', 'sheets')}<br>
+4. ${t('calc_paper_collecut', 'Paper for collecut:')} ${remainder} × ${eighthPages} = ${collecutPaper} ${t('calc_sheets', 'sheets')}<br>
 5. ${t('calc_total_required', 'Total required paper:')} ${collecutPaper} = ${result} ${t('calc_sheets', 'sheets')}`;
                             
                             specialNote = `${remainder} ${t('calc_collecut_word', 'Collecut')}`;
@@ -1842,14 +1825,14 @@ function calculate() {
                         if (repeats > 0) {
                             calculationDetails = `${t('calc_for', 'Calculation for')} ${qtyTotal} ${t('calc_copies', 'copies')}:<br>
 1. ${t('calc_sheet_produces', '1 sheet produces')} 8 ${t('calc_pieces_repeat', 'pieces (1 repeat)')}<br>
-2. ${qtyTotal} / 8 = ${repeats} ${t('calc_repeats', 'repeats')}<br>
-3. ${t('calc_paper_repeats', 'Paper for repeats:')} ${repeats} * ${totalPages} = ${repeatPaper} ${t('calc_sheets', 'sheets')}`;
+2. ${qtyTotal} ÷ 8 = ${repeats} ${t('calc_repeats', 'repeats')}<br>
+3. ${t('calc_paper_repeats', 'Paper for repeats:')} ${repeats} × ${totalPages} = ${repeatPaper} ${t('calc_sheets', 'sheets')}`;
                             
                             specialNote = `${repeats} ${t('calc_repeat_word', 'Repeat')}`;
                         } else {
                             calculationDetails = `${t('calc_for', 'Calculation for')} ${qtyTotal} ${t('calc_copies', 'copies')}:<br>
 1. ${t('calc_sheet_produces', '1 sheet produces')} 8 ${t('calc_pieces_repeat', 'pieces (1 repeat)')}<br>
-2. ${qtyTotal} / 8 = ${repeats} ${t('calc_repeats', 'repeats')}<br>
+2. ${qtyTotal} ÷ 8 = ${repeats} ${t('calc_repeats', 'repeats')}<br>
 3. ${t('calc_no_paper', 'No paper needed as quantity is 0')}`;
                         }
                     }
@@ -1879,20 +1862,20 @@ function calculate() {
                         if (repeats > 0) {
                             calculationDetails = `${t('calc_for', 'Calculation for')} ${qtyTotal} ${t('calc_copies', 'copies')} ${t('calc_2sided', '(2-sided)')}:<br>
 1. ${t('calc_sheet_produces', '1 sheet produces')} 4 ${t('calc_pieces_repeat', 'pieces (1 repeat)')}<br>
-2. ${qtyTotal} / 4 = ${repeats} ${t('calc_repeats_remainder', 'repeats with remainder')} ${remainder}<br>
-3. ${t('calc_half_repeat', 'Half pages (for repeat):')} ${totalPages} / 2 ${halfPagesText} ${t('calc_sheets', 'sheets')}<br>
-4. ${t('calc_eighth_collecut', 'Eighth pages (for collecut):')} ${totalPages} / 8 ${eighthPagesText} ${t('calc_sheets', 'sheets')}<br>
-5. ${t('calc_paper_repeats', 'Paper for repeats:')} ${repeats} * ${halfPages} = ${repeatPaper} ${t('calc_sheets', 'sheets')}<br>
-6. ${t('calc_paper_collecut', 'Paper for collecut:')} ${remainder} * ${eighthPages} = ${collecutPaper} ${t('calc_sheets', 'sheets')}<br>
+2. ${qtyTotal} ÷ 4 = ${repeats} ${t('calc_repeats_remainder', 'repeats with remainder')} ${remainder}<br>
+3. ${t('calc_half_repeat', 'Half pages (for repeat):')} ${totalPages} ÷ 2 ${halfPagesText} ${t('calc_sheets', 'sheets')}<br>
+4. ${t('calc_eighth_collecut', 'Eighth pages (for collecut):')} ${totalPages} ÷ 8 ${eighthPagesText} ${t('calc_sheets', 'sheets')}<br>
+5. ${t('calc_paper_repeats', 'Paper for repeats:')} ${repeats} × ${halfPages} = ${repeatPaper} ${t('calc_sheets', 'sheets')}<br>
+6. ${t('calc_paper_collecut', 'Paper for collecut:')} ${remainder} × ${eighthPages} = ${collecutPaper} ${t('calc_sheets', 'sheets')}<br>
 7. ${t('calc_total_required', 'Total required paper:')} ${repeatPaper} + ${collecutPaper} = ${result} ${t('calc_sheets', 'sheets')}`;
                             
                             specialNote = `${repeats} ${t('calc_repeat_word', 'Repeat')} + ${remainder} ${t('calc_collecut_word', 'Collecut')}`;
                         } else {
                             calculationDetails = `${t('calc_for', 'Calculation for')} ${qtyTotal} ${t('calc_copies', 'copies')} ${t('calc_2sided', '(2-sided)')}:<br>
 1. ${t('calc_sheet_produces', '1 sheet produces')} 4 ${t('calc_pieces_repeat', 'pieces (1 repeat)')}<br>
-2. ${qtyTotal} / 4 = ${repeats} ${t('calc_repeats_remainder', 'repeats with remainder')} ${remainder}<br>
-3. ${t('calc_eighth_collecut', 'Eighth pages (for collecut):')} ${totalPages} / 8 ${eighthPagesText} ${t('calc_sheets', 'sheets')}<br>
-4. ${t('calc_paper_collecut', 'Paper for collecut:')} ${remainder} * ${eighthPages} = ${collecutPaper} ${t('calc_sheets', 'sheets')}<br>
+2. ${qtyTotal} ÷ 4 = ${repeats} ${t('calc_repeats_remainder', 'repeats with remainder')} ${remainder}<br>
+3. ${t('calc_eighth_collecut', 'Eighth pages (for collecut):')} ${totalPages} ÷ 8 ${eighthPagesText} ${t('calc_sheets', 'sheets')}<br>
+4. ${t('calc_paper_collecut', 'Paper for collecut:')} ${remainder} × ${eighthPages} = ${collecutPaper} ${t('calc_sheets', 'sheets')}<br>
 5. ${t('calc_total_required', 'Total required paper:')} ${collecutPaper} = ${result} ${t('calc_sheets', 'sheets')}`;
                             
                             specialNote = `${remainder} ${t('calc_collecut_word', 'Collecut')}`;
@@ -1903,15 +1886,15 @@ function calculate() {
                         if (repeats > 0) {
                             calculationDetails = `${t('calc_for', 'Calculation for')} ${qtyTotal} ${t('calc_copies', 'copies')} ${t('calc_2sided', '(2-sided)')}:<br>
 1. ${t('calc_sheet_produces', '1 sheet produces')} 4 ${t('calc_pieces_repeat', 'pieces (1 repeat)')}<br>
-2. ${qtyTotal} / 4 = ${repeats} ${t('calc_repeats', 'repeats')}<br>
-3. ${t('calc_half_repeat', 'Half pages (for repeat):')} ${totalPages} / 2 ${halfPagesText} ${t('calc_sheets', 'sheets')}<br>
-4. ${t('calc_paper_repeats', 'Paper for repeats:')} ${repeats} * ${halfPages} = ${repeatPaper} ${t('calc_sheets', 'sheets')}`;
+2. ${qtyTotal} ÷ 4 = ${repeats} ${t('calc_repeats', 'repeats')}<br>
+3. ${t('calc_half_repeat', 'Half pages (for repeat):')} ${totalPages} ÷ 2 ${halfPagesText} ${t('calc_sheets', 'sheets')}<br>
+4. ${t('calc_paper_repeats', 'Paper for repeats:')} ${repeats} × ${halfPages} = ${repeatPaper} ${t('calc_sheets', 'sheets')}`;
                             
                             specialNote = `${repeats} ${t('calc_repeat_word', 'Repeat')}`;
                         } else {
                             calculationDetails = `${t('calc_for', 'Calculation for')} ${qtyTotal} ${t('calc_copies', 'copies')} ${t('calc_2sided', '(2-sided)')}:<br>
 1. ${t('calc_sheet_produces', '1 sheet produces')} 4 ${t('calc_pieces_repeat', 'pieces (1 repeat)')}<br>
-2. ${qtyTotal} / 4 = ${repeats} ${t('calc_repeats', 'repeats')}<br>
+2. ${qtyTotal} ÷ 4 = ${repeats} ${t('calc_repeats', 'repeats')}<br>
 3. ${t('calc_no_paper', 'No paper needed as quantity is 0')}`;
                         }
                     }
@@ -1939,20 +1922,20 @@ function calculate() {
                         if (repeats > 0) {
                             calculationDetails = `${t('calc_for', 'Calculation for')} ${qtyTotal} ${t('calc_copies', 'copies')} ${t('calc_2sided', '(2-sided)')}:<br>
 1. ${t('calc_sheet_produces', '1 sheet produces')} 8 ${t('calc_pieces_repeat', 'pieces (1 repeat)')}<br>
-2. ${qtyTotal} / 8 = ${repeats} ${t('calc_repeats_remainder', 'repeats with remainder')} ${remainder}<br>
-3. ${t('calc_half_repeat', 'Half pages (for repeat):')} ${totalPages} / 2 ${halfPagesText} ${t('calc_sheets', 'sheets')}<br>
-4. ${t('calc_sixteenth_collecut', 'Sixteenth pages (for collecut):')} ${totalPages} / 16 ${sixteenthPagesText} ${t('calc_sheets', 'sheets')}<br>
-5. ${t('calc_paper_repeats', 'Paper for repeats:')} ${repeats} * ${halfPages} = ${repeatPaper} ${t('calc_sheets', 'sheets')}<br>
-6. ${t('calc_paper_collecut', 'Paper for collecut:')} ${remainder} * ${sixteenthPages} = ${collecutPaper} ${t('calc_sheets', 'sheets')}<br>
+2. ${qtyTotal} ÷ 8 = ${repeats} ${t('calc_repeats_remainder', 'repeats with remainder')} ${remainder}<br>
+3. ${t('calc_half_repeat', 'Half pages (for repeat):')} ${totalPages} ÷ 2 ${halfPagesText} ${t('calc_sheets', 'sheets')}<br>
+4. ${t('calc_sixteenth_collecut', 'Sixteenth pages (for collecut):')} ${totalPages} ÷ 16 ${sixteenthPagesText} ${t('calc_sheets', 'sheets')}<br>
+5. ${t('calc_paper_repeats', 'Paper for repeats:')} ${repeats} × ${halfPages} = ${repeatPaper} ${t('calc_sheets', 'sheets')}<br>
+6. ${t('calc_paper_collecut', 'Paper for collecut:')} ${remainder} × ${sixteenthPages} = ${collecutPaper} ${t('calc_sheets', 'sheets')}<br>
 7. ${t('calc_total_required', 'Total required paper:')} ${repeatPaper} + ${collecutPaper} = ${result} ${t('calc_sheets', 'sheets')}`;
                             
                             specialNote = `${repeats} ${t('calc_repeat_word', 'Repeat')} + ${remainder} ${t('calc_collecut_word', 'Collecut')}`;
                         } else {
                             calculationDetails = `${t('calc_for', 'Calculation for')} ${qtyTotal} ${t('calc_copies', 'copies')} ${t('calc_2sided', '(2-sided)')}:<br>
 1. ${t('calc_sheet_produces', '1 sheet produces')} 8 ${t('calc_pieces_repeat', 'pieces (1 repeat)')}<br>
-2. ${qtyTotal} / 8 = ${repeats} ${t('calc_repeats_remainder', 'repeats with remainder')} ${remainder}<br>
-3. ${t('calc_sixteenth_collecut', 'Sixteenth pages (for collecut):')} ${totalPages} / 16 ${sixteenthPagesText} ${t('calc_sheets', 'sheets')}<br>
-4. ${t('calc_paper_collecut', 'Paper for collecut:')} ${remainder} * ${sixteenthPages} = ${collecutPaper} ${t('calc_sheets', 'sheets')}<br>
+2. ${qtyTotal} ÷ 8 = ${repeats} ${t('calc_repeats_remainder', 'repeats with remainder')} ${remainder}<br>
+3. ${t('calc_sixteenth_collecut', 'Sixteenth pages (for collecut):')} ${totalPages} ÷ 16 ${sixteenthPagesText} ${t('calc_sheets', 'sheets')}<br>
+4. ${t('calc_paper_collecut', 'Paper for collecut:')} ${remainder} × ${sixteenthPages} = ${collecutPaper} ${t('calc_sheets', 'sheets')}<br>
 5. ${t('calc_total_required', 'Total required paper:')} ${collecutPaper} = ${result} ${t('calc_sheets', 'sheets')}`;
                             
                             specialNote = `${remainder} ${t('calc_collecut_word', 'Collecut')}`;
@@ -1963,15 +1946,15 @@ function calculate() {
                         if (repeats > 0) {
                             calculationDetails = `${t('calc_for', 'Calculation for')} ${qtyTotal} ${t('calc_copies', 'copies')} ${t('calc_2sided', '(2-sided)')}:<br>
 1. ${t('calc_sheet_produces', '1 sheet produces')} 8 ${t('calc_pieces_repeat', 'pieces (1 repeat)')}<br>
-2. ${qtyTotal} / 8 = ${repeats} ${t('calc_repeats', 'repeats')}<br>
-3. ${t('calc_half_repeat', 'Half pages (for repeat):')} ${totalPages} / 2 ${halfPagesText} ${t('calc_sheets', 'sheets')}<br>
-4. ${t('calc_paper_repeats', 'Paper for repeats:')} ${repeats} * ${halfPages} = ${repeatPaper} ${t('calc_sheets', 'sheets')}`;
+2. ${qtyTotal} ÷ 8 = ${repeats} ${t('calc_repeats', 'repeats')}<br>
+3. ${t('calc_half_repeat', 'Half pages (for repeat):')} ${totalPages} ÷ 2 ${halfPagesText} ${t('calc_sheets', 'sheets')}<br>
+4. ${t('calc_paper_repeats', 'Paper for repeats:')} ${repeats} × ${halfPages} = ${repeatPaper} ${t('calc_sheets', 'sheets')}`;
                             
                             specialNote = `${repeats} ${t('calc_repeat_word', 'Repeat')}`;
                         } else {
                             calculationDetails = `${t('calc_for', 'Calculation for')} ${qtyTotal} ${t('calc_copies', 'copies')} ${t('calc_2sided', '(2-sided)')}:<br>
 1. ${t('calc_sheet_produces', '1 sheet produces')} 8 ${t('calc_pieces_repeat', 'pieces (1 repeat)')}<br>
-2. ${qtyTotal} / 8 = ${repeats} ${t('calc_repeats', 'repeats')}<br>
+2. ${qtyTotal} ÷ 8 = ${repeats} ${t('calc_repeats', 'repeats')}<br>
 3. ${t('calc_no_paper', 'No paper needed as quantity is 0')}`;
                         }
                     }
