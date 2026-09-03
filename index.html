@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Anamaruchi</title>
+    <title data-i18n="doc_title">Anamaruchi</title>
     <link rel="icon" type="image/x-icon" href="/Image/Anamaruchi.ico">
     <style>
         * {
@@ -261,6 +261,90 @@
         .social-icon.youtube { width: 80px; }
         .social-icon.youtube:hover { box-shadow: 0 0 25px rgba(255, 0, 0, 0.8); }
 
+        .lang-switcher-wrap {
+            position: fixed !important;
+            top: clamp(10px, 2vw, 20px) !important;
+            left: calc(clamp(10px, 2vw, 20px) + 45px + 10px) !important;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            z-index: 1002;
+        }
+
+        .lang-switcher {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+
+        .lang-switcher-input {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0,0,0,0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        .lang-switcher-track {
+            position: relative;
+            width: clamp(72px, 16vw, 80px);
+            height: clamp(30px, 7vw, 34px);
+            background: linear-gradient(135deg, #0060df, #003eaa);
+            border-radius: 999px;
+            box-shadow: 0 5px 15px rgba(0, 96, 223, 0.3);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .lang-switcher:hover .lang-switcher-track { box-shadow: 0 8px 25px rgba(0, 96, 223, 0.4); }
+        .lang-switcher:active .lang-switcher-track { box-shadow: 0 4px 15px rgba(0, 96, 223, 0.5); }
+        .lang-switcher-input:focus-visible ~ .lang-switcher-track { outline: 2px solid rgba(255,255,255,0.5); outline-offset: 2px; }
+
+        .lang-switcher-option {
+            position: absolute;
+            top: 0;
+            width: 50%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.03em;
+            color: rgba(255,255,255,0.65);
+            transition: color 0.3s ease;
+            pointer-events: none;
+        }
+
+        .lang-switcher-option-en { left: 0; color: #0060df; }
+        .lang-switcher-option-id { right: 0; }
+
+        .lang-switcher-thumb {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: calc(50% - 6px);
+            height: calc(100% - 6px);
+            background: #fff;
+            border-radius: 999px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+            transition: transform 0.3s ease;
+            z-index: 1;
+        }
+
+        .lang-switcher-input:checked ~ .lang-switcher-track .lang-switcher-thumb {
+            transform: translateX(calc(100% + 6px));
+        }
+        .lang-switcher-input:checked ~ .lang-switcher-track .lang-switcher-option-en { color: rgba(255,255,255,0.65); }
+        .lang-switcher-input:checked ~ .lang-switcher-track .lang-switcher-option-id { color: #0060df; }
+
         @keyframes fadeInUp {
             0% { opacity: 0; transform: translateY(30px); }
             100% { opacity: 1; transform: translateY(0); }
@@ -315,15 +399,26 @@
 
     <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
 
+    <div class="lang-switcher-wrap">
+        <label class="lang-switcher" for="langSwitcher">
+            <input type="checkbox" id="langSwitcher" class="lang-switcher-input" aria-label="Language / Bahasa">
+            <span class="lang-switcher-track">
+                <span class="lang-switcher-option lang-switcher-option-en">EN</span>
+                <span class="lang-switcher-option lang-switcher-option-id">ID</span>
+                <span class="lang-switcher-thumb"></span>
+            </span>
+        </label>
+    </div>
+
     <nav class="sidebar" id="sidebar">
-        <h3 style="color: #3b82f6; margin-bottom: 15px; text-align: center;">My Project</h3>
-        <a href="./project/paper-thickness-calculation" class="btn">Paper Thickness Calculation</a>
-        <a href="./project/quantity-size-calculation" class="btn">Quantity Size Calculation</a>
-        <a href="./project/print-paper-calculation" class="btn">Print Paper Calculation</a>
-        <a href="./project/booklet-3d-previewer" class="btn">Booklet 3D Previewer</a>
-        <a href="./project/pdf-file-flattener" class="btn">PDF File Flattener</a>
-        <a href="./project/auto-layout-recap-invoice" class="btn">Auto Layout Recap Invoice</a>
-        <a href="./project/receipt-address" class="btn">Receipt & Address Generator</a>
+        <h3 style="color: #3b82f6; margin-bottom: 15px; text-align: center;" data-i18n="sidebar_title">My Project</h3>
+        <a href="./project/paper-thickness-calculation" class="btn" data-i18n="nav_paper_thickness">Paper Thickness Calculation</a>
+        <a href="./project/quantity-size-calculation" class="btn" data-i18n="nav_quantity_size">Quantity Size Calculation</a>
+        <a href="./project/print-paper-calculation" class="btn" data-i18n="nav_print_paper">Print Paper Calculation</a>
+        <a href="./project/booklet-3d-previewer" class="btn" data-i18n="nav_booklet_3d">Booklet 3D Previewer</a>
+        <a href="./project/pdf-file-flattener" class="btn" data-i18n="nav_pdf_flattener">PDF File Flattener</a>
+        <a href="./project/auto-layout-recap-invoice" class="btn" data-i18n="nav_auto_layout_invoice">Auto Layout Recap Invoice</a>
+        <a href="./project/receipt-address" class="btn" data-i18n="nav_receipt_address">Receipt & Address Generator</a>
     </nav>
 
     <div class="portfolio-group">
@@ -342,15 +437,15 @@
         <div class="container">
             <div class="profile-section">
                 <img src="Image/Profile.jpeg" alt="Profile" class="profile-image">
-                <h1 class="hello-text">HELLO WORLD,</h1>
+                <h1 class="hello-text" data-i18n="hello_text">HELLO WORLD,</h1>
             </div>
             <div class="description">
-                <p>I’m Anang Zikri Febriyansyah, you can call me Anamaruchi.</p>
-                <p>I’m into Electronic Dance Music (EDM).</p>
-                <p>I work as a Graphic Designer, Video Editor, VFX Animator,</p>
-                <p>Programmer, Reverse Engineer, and Software Engineer.</p>
-                <p>I started my computer journey with Windows XP (and briefly used Windows 98).</p>
-                <p>These days, I mainly use Windows 11 and Linux on my personal setup.</p>
+                <p data-i18n="desc_line1">I’m Anang Zikri Febriyansyah, you can call me Anamaruchi.</p>
+                <p data-i18n="desc_line2">I’m into Electronic Dance Music (EDM).</p>
+                <p data-i18n="desc_line3">I work as a Graphic Designer, Video Editor, VFX Animator,</p>
+                <p data-i18n="desc_line4">Programmer, Reverse Engineer, and Software Engineer.</p>
+                <p data-i18n="desc_line5">I started my computer journey with Windows XP (and briefly used Windows 98).</p>
+                <p data-i18n="desc_line6">These days, I mainly use Windows 11 and Linux on my personal setup.</p>
             </div>
         </div>
     </div>
@@ -362,7 +457,7 @@
             <img src="Image/Youtube Logo.png" alt="YouTube" class="social-icon youtube" id="youtubeIcon">
         </div>
         <div class="footer-copyright">
-            <p>&copy; 2026 Anamaruchi. All rights reserved.</p>
+            <p data-i18n="footer_copyright">&copy; 2026 Anamaruchi. All rights reserved.</p>
         </div>
     </footer>
 
@@ -407,5 +502,88 @@
         document.getElementById('youtubeIcon').addEventListener('click', () => window.open('https://www.youtube.com/LtcoAnangZikri', '_blank'));
     </script>
     <style>@keyframes rippleAnim { to { transform: scale(4); opacity: 0; } }</style>
+
+    <script>
+        var __i18nDict = null;
+        var __i18nLang = 'en';
+        var refreshDynamicI18nText = null;
+        function t(key, fallback){
+            var dict = (__i18nDict && __i18nDict[__i18nLang]) ? __i18nDict[__i18nLang] : null;
+            if(dict && Object.prototype.hasOwnProperty.call(dict, key)) return dict[key];
+            return fallback !== undefined ? fallback : key;
+        }
+
+        (function(){
+            "use strict";
+
+            var LANG_STORAGE_KEY = 'anamaruchi_lang';
+            var DEFAULT_LANG = 'en';
+
+            var langSwitcher = document.getElementById('langSwitcher');
+
+            function getSavedLang(){
+                try{
+                    var saved = localStorage.getItem(LANG_STORAGE_KEY);
+                    if(saved === 'en' || saved === 'id') return saved;
+                }catch(e){}
+                return DEFAULT_LANG;
+            }
+
+            function saveLang(lang){
+                try{ localStorage.setItem(LANG_STORAGE_KEY, lang); }catch(e){}
+            }
+
+            function applyTranslations(lang){
+                if(!__i18nDict || !__i18nDict[lang]) return;
+                var dict = __i18nDict[lang];
+                var nodes = document.querySelectorAll('[data-i18n]');
+                for(var i = 0; i < nodes.length; i++){
+                    var node = nodes[i];
+                    var key = node.getAttribute('data-i18n');
+                    if(Object.prototype.hasOwnProperty.call(dict, key)){
+                        node.textContent = dict[key];
+                    }
+                }
+                if(typeof refreshDynamicI18nText === 'function') refreshDynamicI18nText();
+            }
+
+            function setLanguage(lang){
+                __i18nLang = (lang === 'id') ? 'id' : 'en';
+                if(langSwitcher) langSwitcher.checked = (__i18nLang === 'id');
+                applyTranslations(__i18nLang);
+                saveLang(__i18nLang);
+            }
+
+            function initI18n(){
+                __i18nLang = getSavedLang();
+                if(langSwitcher) langSwitcher.checked = (__i18nLang === 'id');
+
+                try{
+                    fetch('index-lang.json')
+                        .then(function(res){
+                            if(!res.ok) throw new Error('Failed to load lang.json (status ' + res.status + ')');
+                            return res.json();
+                        })
+                        .then(function(data){
+                            __i18nDict = data;
+                            applyTranslations(__i18nLang);
+                        })
+                        .catch(function(err){
+                            console.warn('i18n: lang.json could not be loaded.', err);
+                        });
+                }catch(err){
+                    console.warn('i18n: fetch is not available in this browser.', err);
+                }
+            }
+
+            if(langSwitcher){
+                langSwitcher.addEventListener('change', function(){
+                    setLanguage(langSwitcher.checked ? 'id' : 'en');
+                });
+            }
+
+            initI18n();
+        })();
+    </script>
 </body>
 </html>

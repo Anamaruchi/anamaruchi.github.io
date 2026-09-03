@@ -1,0 +1,40 @@
+{
+  "en": {
+    "doc_title": "Anamaruchi",
+    "sidebar_title": "My Project",
+    "nav_paper_thickness": "Paper Thickness Calculation",
+    "nav_quantity_size": "Quantity Size Calculation",
+    "nav_print_paper": "Print Paper Calculation",
+    "nav_booklet_3d": "Booklet 3D Previewer",
+    "nav_pdf_flattener": "PDF File Flattener",
+    "nav_auto_layout_invoice": "Auto Layout Recap Invoice",
+    "nav_receipt_address": "Receipt & Address Generator",
+    "hello_text": "HELLO WORLD,",
+    "desc_line1": "I'm Anang Zikri Febriyansyah, you can call me Anamaruchi.",
+    "desc_line2": "I'm into Electronic Dance Music (EDM).",
+    "desc_line3": "I work as a Graphic Designer, Video Editor, VFX Animator,",
+    "desc_line4": "Programmer, Reverse Engineer, and Software Engineer.",
+    "desc_line5": "I started my computer journey with Windows XP (and briefly used Windows 98).",
+    "desc_line6": "These days, I mainly use Windows 11 and Linux on my personal setup.",
+    "footer_copyright": "© 2026 Anamaruchi. All rights reserved."
+  },
+  "id": {
+    "doc_title": "Anamaruchi",
+    "sidebar_title": "Proyek Saya",
+    "nav_paper_thickness": "Kalkulasi Ketebalan Kertas",
+    "nav_quantity_size": "Kalkulasi Ukuran Kuantitas",
+    "nav_print_paper": "Kalkulasi Kertas Cetak",
+    "nav_booklet_3d": "Pratinjau 3D Booklet",
+    "nav_pdf_flattener": "Perata File PDF",
+    "nav_auto_layout_invoice": "Tata Letak Otomatis Rekap Invoice",
+    "nav_receipt_address": "Generator Tanda Terima & Alamat",
+    "hello_text": "HELLO WORLD,",
+    "desc_line1": "Saya Anang Zikri Febriyansyah, Anda bisa memanggil saya Anamaruchi.",
+    "desc_line2": "Saya menyukai Electronic Dance Music (EDM).",
+    "desc_line3": "Saya bekerja sebagai Graphic Designer, Video Editor, VFX Animator,",
+    "desc_line4": "Programmer, Reverse Engineer, dan Software Engineer.",
+    "desc_line5": "Saya memulai perjalanan komputer saya dengan Windows XP (dan sempat menggunakan Windows 98).",
+    "desc_line6": "Saat ini, saya lebih banyak menggunakan Windows 11 dan Linux pada perangkat pribadi saya.",
+    "footer_copyright": "© 2026 Anamaruchi. Seluruh hak cipta dilindungi."
+  }
+}
