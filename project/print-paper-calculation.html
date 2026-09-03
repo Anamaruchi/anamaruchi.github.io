@@ -1167,8 +1167,12 @@ function selectOption(type, value) {
             selectedPrintSide = value;
             const btn = document.getElementById('printSideBtn');
             if (btn) {
-                btn.innerHTML = value + ' <span class="dropdown-arrow"></span>';
+        const displayText = (value === '1 Side')
+            ? t('print_side_1', '1 Side')
+            : t('print_side_2', '2 Side');
+        btn.innerHTML = displayText + ' <span class="dropdown-arrow"></span>';
             }
+        }
         } else if (type === 'paperSize') {
             selectedPaperSize = value;
             const btn = document.getElementById('paperSizeBtn');
@@ -1987,7 +1991,7 @@ function calculate() {
                 </div>
                 <div class="result-row">
                     <div class="result-label">${t('print_side_word', 'Print Side')}:</div>
-                    <div class="result-value">${selectedPrintSide}</div>
+                    <div class="result-value">${selectedPrintSide === '1 Side' ? t('print_side_1', '1 Side') : t('print_side_2', '2 Side')}</div>
                 </div>
                 <div class="result-row">
                     <div class="result-label">${t('result_total_paper', 'Total Paper')}:</div>
@@ -2010,7 +2014,7 @@ function calculate() {
                 </div>
                 <div class="result-row">
                     <div class="result-label">${t('print_side_word', 'Print Side')} :</div>
-                    <div class="result-value"> ${selectedPrintSide}</div>
+                    <div class="result-value">${selectedPrintSide === '1 Side' ? t('print_side_1', '1 Side') : t('print_side_2', '2 Side')}</div>
                 </div>
                 <div class="result-row">
                     <div class="result-label">${t('result_total_paper', 'Total Paper')} :</div>
