@@ -1094,6 +1094,13 @@
         const homeButton = document.getElementById('homeButton');
         const scrollToTopBtn = document.getElementById('scrollToTop');
 
+        const CATEGORY_I18N_KEY = {
+            'graphic-design': 'filter_graphic_design',
+            'vfx-animation': 'filter_vfx_animation',
+            'software-engineering': 'filter_software_engineering',
+            'all': 'filter_all'
+        };
+
         function getCategoryDisplayName(category) {
             const categoryMap = {
                 'graphic-design': 'Graphic Design',
@@ -1101,6 +1108,8 @@
                 'software-engineering': 'Software Engineering',
                 'all': 'All'
             };
+            const i18nKey = CATEGORY_I18N_KEY[category];
+            if (i18nKey) return t(i18nKey, categoryMap[category]);
             return categoryMap[category] || category;
         }
 
@@ -1112,6 +1121,10 @@
                 const typeEl = node.querySelector('.portfolio-type');
                 if (typeEl) {
                     typeEl.textContent = t(data.type === 'video' ? 'type_video' : 'type_image', data.type);
+                }
+                const categoryEl = node.querySelector('.portfolio-category');
+                if (categoryEl) {
+                    categoryEl.textContent = getCategoryDisplayName(data.category);
                 }
             });
         }
