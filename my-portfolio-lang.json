@@ -1,0 +1,24 @@
+{
+  "en": {
+    "gallery_title": "GALLERY",
+    "portfolio_overlay": "MY PORTFOLIO",
+    "description_text": "All of the work shown here comes from my personal projects. I’ve also completed many other projects for commercial clients, but those can’t be shared due to confidentiality. Thank you.",
+    "filter_all": "All",
+    "filter_graphic_design": "Graphic Design",
+    "filter_vfx_animation": "VFX Animation Style",
+    "filter_software_engineering": "Software Engineering",
+    "type_video": "Video",
+    "type_image": "Image"
+  },
+  "id": {
+    "gallery_title": "GALERI",
+    "portfolio_overlay": "PORTOFOLIO SAYA",
+    "description_text": "Semua karya yang ditampilkan di sini berasal dari proyek pribadi saya. Saya juga telah menyelesaikan banyak proyek lain untuk klien komersial, namun proyek tersebut tidak dapat dibagikan karena alasan kerahasiaan. Terima kasih.",
+    "filter_all": "Semua",
+    "filter_graphic_design": "Desain Grafis",
+    "filter_vfx_animation": "Gaya Animasi VFX",
+    "filter_software_engineering": "Rekayasa Perangkat Lunak",
+    "type_video": "Video",
+    "type_image": "Gambar"
+  }
+}

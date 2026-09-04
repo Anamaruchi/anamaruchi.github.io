@@ -681,6 +681,94 @@
         .hidden {
             display: none !important;
         }
+
+        .lang-switcher-wrap{
+            position: fixed;
+            top: clamp(12px, 3vw, 20px);
+            right: clamp(12px, 3vw, 20px);
+            height: clamp(30px, 7vw, 34px);
+            z-index: 1002;
+        }
+        .lang-switcher{
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+        .lang-switcher-input{
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0,0,0,0);
+            white-space: nowrap;
+            border: 0;
+        }
+        .lang-switcher-track{
+            position: relative;
+            width: clamp(72px, 16vw, 80px);
+            height: clamp(30px, 7vw, 34px);
+            background: linear-gradient(135deg, #0060df, #003eaa);
+            border-radius: 999px;
+            box-shadow: 0 5px 15px rgba(0, 96, 223, 0.3);
+            transition: box-shadow 0.3s ease;
+        }
+        .lang-switcher:hover .lang-switcher-track{ box-shadow: 0 8px 25px rgba(0, 96, 223, 0.4); }
+        .lang-switcher:active .lang-switcher-track{ box-shadow: 0 4px 15px rgba(0, 96, 223, 0.5); }
+        .lang-switcher-input:focus-visible ~ .lang-switcher-track{ outline: 2px solid rgba(255,255,255,0.5); outline-offset: 2px; }
+        .lang-switcher-option{
+            position: absolute;
+            top: 0;
+            width: 50%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.03em;
+            color: rgba(255,255,255,0.65);
+            transition: color 0.3s ease;
+            pointer-events: none;
+        }
+        .lang-switcher-option-en{ left: 0; color: #0060df; }
+        .lang-switcher-option-id{ right: 0; }
+        .lang-switcher-thumb{
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: calc(50% - 6px);
+            height: calc(100% - 6px);
+            background: #fff;
+            border-radius: 999px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+            transition: transform 0.3s ease;
+            z-index: 1;
+        }
+        .lang-switcher-input:checked ~ .lang-switcher-track .lang-switcher-thumb{
+            transform: translateX(calc(100% + 6px));
+        }
+        .lang-switcher-input:checked ~ .lang-switcher-track .lang-switcher-option-en{ color: rgba(255,255,255,0.65); }
+        .lang-switcher-input:checked ~ .lang-switcher-track .lang-switcher-option-id{ color: #0060df; }
+
+        @media (max-width: 768px) {
+            .lang-switcher-wrap{
+                top: 15px;
+                right: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .lang-switcher-wrap{
+                top: 10px;
+                right: 10px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -692,22 +780,33 @@
         <img src="Image/Go Up Icon.PNG" alt="Go to top" class="go-up-icon">
     </button>
 
+    <div class="lang-switcher-wrap">
+        <label class="lang-switcher" for="langSwitcher">
+            <input type="checkbox" id="langSwitcher" class="lang-switcher-input" aria-label="Language / Bahasa">
+            <span class="lang-switcher-track">
+                <span class="lang-switcher-option lang-switcher-option-en">EN</span>
+                <span class="lang-switcher-option lang-switcher-option-id">ID</span>
+                <span class="lang-switcher-thumb"></span>
+            </span>
+        </label>
+    </div>
+
     <div class="container">
         <div class="header">
-            <h1 class="gallery-text">GALLERY</h1>
-            <div class="portfolio-overlay">MY PORTFOLIO</div>
+            <h1 class="gallery-text" data-i18n="gallery_title">GALLERY</h1>
+            <div class="portfolio-overlay" data-i18n="portfolio_overlay">MY PORTFOLIO</div>
         </div>
 
-        <div class="description-text">
+        <div class="description-text" data-i18n="description_text">
             All of the work shown here comes from my personal projects. I’ve also completed many other projects for commercial clients,
             but those can’t be shared due to confidentiality. Thank you.
         </div>
 
         <div class="filter-container">
-            <button class="filter-btn active" data-filter="all">All</button>
-            <button class="filter-btn" data-filter="graphic-design">Graphic Design</button>
-            <button class="filter-btn" data-filter="vfx-animation">VFX Animation Style</button>
-            <button class="filter-btn" data-filter="software-engineering">Software Engineering</button>
+            <button class="filter-btn active" data-filter="all" data-i18n="filter_all">All</button>
+            <button class="filter-btn" data-filter="graphic-design" data-i18n="filter_graphic_design">Graphic Design</button>
+            <button class="filter-btn" data-filter="vfx-animation" data-i18n="filter_vfx_animation">VFX Animation Style</button>
+            <button class="filter-btn" data-filter="software-engineering" data-i18n="filter_software_engineering">Software Engineering</button>
         </div>
 
         <div class="portfolio-grid" id="portfolioGrid">
@@ -736,6 +835,15 @@
     </div>
 
     <script>
+        var __i18nDict = null;
+        var __i18nLang = 'en';
+        var refreshDynamicI18nText = null;
+        function t(key, fallback){
+            var dict = (__i18nDict && __i18nDict[__i18nLang]) ? __i18nDict[__i18nLang] : null;
+            if(dict && Object.prototype.hasOwnProperty.call(dict, key)) return dict[key];
+            return fallback !== undefined ? fallback : key;
+        }
+
         const portfolioData = [
             {
                 id: 1,
@@ -996,6 +1104,18 @@
             return categoryMap[category] || category;
         }
 
+        function updatePortfolioTypeLabels() {
+            const items = document.querySelectorAll('.portfolio-item');
+            items.forEach((node, index) => {
+                const data = portfolioData[index];
+                if (!data) return;
+                const typeEl = node.querySelector('.portfolio-type');
+                if (typeEl) {
+                    typeEl.textContent = t(data.type === 'video' ? 'type_video' : 'type_image', data.type);
+                }
+            });
+        }
+
         function initPortfolio() {
             renderPortfolioItems(portfolioData);
             setupEventListeners();
@@ -1003,6 +1123,7 @@
             setupSocialMedia();
             setupHomeButton();
             setupScrollToTop();
+            refreshDynamicI18nText = updatePortfolioTypeLabels;
         }
 
         function setupScrollToTop() {
@@ -1181,11 +1302,13 @@
                     mediaElement = `<img class="portfolio-media" src="${item.src}" alt="${item.title}">`;
                 }
 
+                const typeLabel = t(item.type === 'video' ? 'type_video' : 'type_image', item.type);
+
                 portfolioItem.innerHTML = `
                     <div class="portfolio-content">
                         ${mediaElement}
                         <div class="portfolio-category">${getCategoryDisplayName(item.category)}</div>
-                        <div class="portfolio-type">${item.type}</div>
+                        <div class="portfolio-type">${typeLabel}</div>
                         <div class="portfolio-title">${item.title}</div>
                     </div>
                 `;
@@ -1330,6 +1453,78 @@
 
         window.addEventListener('resize', () => {
         });
+
+        (function(){
+            "use strict";
+
+            var LANG_STORAGE_KEY = 'anamaruchi_portfolio_lang';
+            var DEFAULT_LANG = 'en';
+
+            var langSwitcher = document.getElementById('langSwitcher');
+
+            function getSavedLang(){
+                try{
+                    var saved = localStorage.getItem(LANG_STORAGE_KEY);
+                    if(saved === 'en' || saved === 'id') return saved;
+                }catch(e){}
+                return DEFAULT_LANG;
+            }
+
+            function saveLang(lang){
+                try{ localStorage.setItem(LANG_STORAGE_KEY, lang); }catch(e){}
+            }
+
+            function applyTranslations(lang){
+                if(!__i18nDict || !__i18nDict[lang]) return;
+                var dict = __i18nDict[lang];
+                var nodes = document.querySelectorAll('[data-i18n]');
+                for(var i = 0; i < nodes.length; i++){
+                    var node = nodes[i];
+                    var key = node.getAttribute('data-i18n');
+                    if(Object.prototype.hasOwnProperty.call(dict, key)){
+                        node.textContent = dict[key];
+                    }
+                }
+                if(typeof refreshDynamicI18nText === 'function') refreshDynamicI18nText();
+            }
+
+            function setLanguage(lang){
+                __i18nLang = (lang === 'id') ? 'id' : 'en';
+                if(langSwitcher) langSwitcher.checked = (__i18nLang === 'id');
+                applyTranslations(__i18nLang);
+                saveLang(__i18nLang);
+            }
+
+            function initI18n(){
+                __i18nLang = getSavedLang();
+                if(langSwitcher) langSwitcher.checked = (__i18nLang === 'id');
+
+                try{
+                    fetch('my-portfolio-lang.json')
+                        .then(function(res){
+                            if(!res.ok) throw new Error('Failed to load lang.json (status ' + res.status + ')');
+                            return res.json();
+                        })
+                        .then(function(data){
+                            __i18nDict = data;
+                            applyTranslations(__i18nLang);
+                        })
+                        .catch(function(err){
+                            console.warn('i18n: lang.json could not be loaded.', err);
+                        });
+                }catch(err){
+                    console.warn('i18n: fetch is not available in this browser.', err);
+                }
+            }
+
+            if(langSwitcher){
+                langSwitcher.addEventListener('change', function(){
+                    setLanguage(langSwitcher.checked ? 'id' : 'en');
+                });
+            }
+
+            initI18n();
+        })();
     </script>
 </body>
 </html>
