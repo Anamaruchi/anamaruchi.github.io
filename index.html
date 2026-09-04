@@ -119,10 +119,12 @@
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.7);
-            display: none;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
             z-index: 999;
         }
-        .overlay.active { display: block; }
+        .overlay.active { opacity: 1; pointer-events: auto; }
 
         .portfolio-group {
             position: fixed !important;
