@@ -541,7 +541,7 @@
                     var node = nodes[i];
                     var key = node.getAttribute('data-i18n');
                     if(Object.prototype.hasOwnProperty.call(dict, key)){
-                        node.textContent = dict[key];
+                        node.innerHTML = dict[key];
                     }
                 }
                 if(typeof refreshDynamicI18nText === 'function') refreshDynamicI18nText();
