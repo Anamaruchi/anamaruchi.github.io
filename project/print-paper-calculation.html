@@ -1517,6 +1517,12 @@ function applyFinishMediaLabel() {
     }
 }
 
+function getFinishMediaPlaceholder() {
+    return (selectedPrintMode === 'booklet')
+        ? t('select_booklet_size', 'Select Booklet Size')
+        : t('select_finish_media', 'Select Finish Media');
+}
+
 function applyPrintModeUI() {
     try {
         const isBooklet = selectedPrintMode === 'booklet';
@@ -1682,7 +1688,7 @@ function restoreModeInputs(mode) {
         if (finishMediaBtn) {
             finishMediaBtn.innerHTML = selectedFinishMedia
                 ? (selectedFinishMedia + ' <span class="dropdown-arrow"></span>')
-                : (t('select_finish_media', 'Select Finish Media') + ' <span class="dropdown-arrow"></span>');
+                : (getFinishMediaPlaceholder() + ' <span class="dropdown-arrow"></span>');
         }
 
         selectedPaperSize = saved.paperSize || '';
@@ -2399,7 +2405,7 @@ function clearAllInputs() {
 
         selectedFinishMedia = '';
         const finishMediaBtn = document.getElementById('finishMediaBtn');
-        if (finishMediaBtn) finishMediaBtn.innerHTML = t('select_finish_media', 'Select Finish Media') + ' <span class="dropdown-arrow"></span>';
+        if (finishMediaBtn) finishMediaBtn.innerHTML = getFinishMediaPlaceholder() + ' <span class="dropdown-arrow"></span>';
 
         selectedPrintSide = '';
         const printSideBtn = document.getElementById('printSideBtn');
@@ -3546,6 +3552,18 @@ refreshDynamicI18nText = function(){
     var coverSideBtn = document.getElementById('coverSideBtn');
     if(coverSideBtn){
       coverSideBtn.innerHTML = getPrintSideLabel(selectedCoverSide) + ' <span class="dropdown-arrow"></span>';
+    }
+    if(!selectedFinishMedia){
+      var finishMediaBtn = document.getElementById('finishMediaBtn');
+      if(finishMediaBtn){
+        finishMediaBtn.innerHTML = getFinishMediaPlaceholder() + ' <span class="dropdown-arrow"></span>';
+      }
+    }
+    if(!selectedPaperSize){
+      var paperSizeBtn = document.getElementById('paperSizeBtn');
+      if(paperSizeBtn){
+        paperSizeBtn.innerHTML = t('select_paper_size', 'Select Paper Size') + ' <span class="dropdown-arrow"></span>';
+      }
     }
     applyFinishMediaLabel();
     updateCoverBreakdown();
