@@ -3544,6 +3544,11 @@ refreshDynamicI18nText = function(){
       if(printSideBtn){
         printSideBtn.innerHTML = getPrintSideLabel(selectedPrintSide) + ' <span class="dropdown-arrow"></span>';
       }
+    } else {
+      var printSideBtn = document.getElementById('printSideBtn');
+      if(printSideBtn){
+        printSideBtn.innerHTML = t('select_print_side', 'Select Print Side') + ' <span class="dropdown-arrow"></span>';
+      }
     }
     var coverConfigBtn = document.getElementById('coverConfigBtn');
     if(coverConfigBtn){
