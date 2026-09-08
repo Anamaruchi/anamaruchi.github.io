@@ -44,11 +44,11 @@
     "calc_no_paper": "No paper needed as quantity is 0",
     "calc_repeat_word": "Repeat",
     "calc_collecut_word": "Collecut",
-    "calc_rounded_to": "rounded to"
+    "calc_rounded_to": "rounded to",
 	"print_mode_word": "Print Mode",
     "print_mode_standard": "Standard Book Print",
     "print_mode_booklet": "Booklet Print",
-    "label_cover_config": "Booklet Configuration",
+    "label_cover_config": "Booklet Configuration"
   },
   "id": {
     "doc_title": "Anamaruchi - Kalkulasi Kertas Cetak",
