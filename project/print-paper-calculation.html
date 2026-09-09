@@ -1107,7 +1107,7 @@ h1, p, span, div, li, input, button {
             <label class="input-label" data-i18n="print_mode_word">Print Mode</label>
             <div id="printModeGroup" class="option-group cols-2" role="radiogroup" aria-label="Print Mode">
                 <button type="button" class="option-btn active" id="printModeBtnStandard" role="radio" data-value="standard" aria-checked="true">
-                    <span class="name" data-i18n="print_mode_standard">Standard Book Print</span>
+                    <span class="name" data-i18n="print_mode_standard">Standard Print</span>
                 </button>
                 <button type="button" class="option-btn" id="printModeBtnBooklet" role="radio" data-value="booklet" aria-checked="false">
                     <span class="name" data-i18n="print_mode_booklet">Booklet Print</span>
@@ -1257,7 +1257,7 @@ function getPrintSideLabel(value){
 
 function getPrintModeLabel(value){
   if(value === 'booklet') return t('print_mode_booklet', 'Booklet Print');
-  return t('print_mode_standard', 'Standard Book Print');
+  return t('print_mode_standard', 'Standard Print');
 }
 
 function refreshPrintModeButtons(){
