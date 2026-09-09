@@ -133,7 +133,7 @@
     "print_mode_standard": "Cetak Standar",
     "print_mode_booklet": "Cetak Booklet",
     "label_cover_config": "Konfigurasi Booklet",
-    "cover_config_without": "Booklet Tanpa Cover",
+    "cover_config_without": "Hanya Isi Booklet",
     "cover_config_with": "Booklet Dengan Cover",
     "label_cover_side": "Sisi Cover",
     "print_side_1": "1 Sisi",
