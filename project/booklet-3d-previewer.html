@@ -199,7 +199,7 @@ html.drag-scroll-lock, body.drag-scroll-lock { overflow: hidden !important; over
 }
 
 .my-page { background-color: #fff; box-shadow: 0 20px 45px rgba(0,0,0,.35); }
-.my-page canvas { width: 100%; height: 100%; object-fit: contain; display: block; }
+.my-page canvas, .my-page .page-flip-img { width: 100%; height: 100%; object-fit: contain; display: block; }
 .page-blank {
   display: flex; align-items: center; justify-content: center;
   background: #ffffff;
@@ -2011,7 +2011,14 @@ function createPageElement(data) {
     blankDiv.innerText = t('label_additional_blank_pages', 'Additional Blank Pages\n(Adjusting Print Folds)');
     inner.appendChild(blankDiv);
   } else if (data.canvasEl) {
-    inner.appendChild(data.canvasEl);
+    if (!data.canvasEl._flipImgSrc) {
+      data.canvasEl._flipImgSrc = data.canvasEl.toDataURL('image/jpeg', 0.92);
+    }
+    const pageImg = document.createElement('img');
+    pageImg.className = 'page-flip-img';
+    pageImg.alt = '';
+    pageImg.src = data.canvasEl._flipImgSrc;
+    inner.appendChild(pageImg);
   } else {
     const blankDiv = document.createElement('div');
     blankDiv.className = 'page-blank';
