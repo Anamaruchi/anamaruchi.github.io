@@ -2670,6 +2670,20 @@ sizeSelectOptions.querySelectorAll('.print-mode-option').forEach(optEl => {
 document.addEventListener('click', (e) => {
   if (!sizeSelectTrigger.contains(e.target) && !sizeSelectOptions.contains(e.target)) closeSizeDropdown();
 });
+function followSpecBarDropdownPosition() {
+  if (!sizeSelectOptions.classList.contains('show')) return;
+  const start = performance.now();
+  const duration = 320;
+  function step(now) {
+    if (!sizeSelectOptions.classList.contains('show')) return;
+    positionSizeDropdown();
+    if (now - start < duration) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+specBar.addEventListener('mouseenter', followSpecBarDropdownPosition);
+specBar.addEventListener('mouseleave', followSpecBarDropdownPosition);
 
 window.addEventListener('scroll', () => {
   if (sizeSelectOptions.classList.contains('show')) closeSizeDropdown();
