@@ -1,4 +1,5 @@
 const ALLOWED_ORIGINS = ['https://anamaruchi.web.id', 'https://anamaruchi.pages.dev'];
+const TTL_MS = 24 * 60 * 60 * 1000; // 1 hari
 
 function cors(request) {
   const origin = request.headers.get('Origin');
@@ -8,6 +9,18 @@ function cors(request) {
     h['Vary'] = 'Origin';
   }
   return h;
+}
+
+async function cleanupExpired(env, limit = 50) {
+  const { results } = await env.DB.prepare(
+    "SELECT id, file_key FROM booklets WHERE expires_at IS NULL OR expires_at < ? LIMIT ?"
+  ).bind(Date.now(), limit).all();
+  if (!results || !results.length) return;
+
+  await env.BUCKET.delete(results.map(r => r.file_key));
+  await env.DB.batch(
+    results.map(r => env.DB.prepare("DELETE FROM booklets WHERE id = ?").bind(r.id))
+  );
 }
 
 export async function onRequestOptions({ request }) {
@@ -28,7 +41,7 @@ export async function onRequestPost(context) {
 
   const formData = await request.formData();
   const file = formData.get('file');
-  const size = formData.get('size') || 'a4';              // 'a4' | 'a5' | 'custom:21x29.7'
+  const size = formData.get('size') || 'a4';
   const orientation = formData.get('orientation') || 'portrait';
 
   if (!file || typeof file === 'string') {
@@ -37,14 +50,18 @@ export async function onRequestPost(context) {
 
   const id = Math.random().toString(36).substring(2, 10);
   const fileKey = `booklets/${id}.pdf`;
+  const expiresAt = Date.now() + TTL_MS;
 
   await env.BUCKET.put(fileKey, file.stream(), {
     httpMetadata: { contentType: 'application/pdf' }
   });
 
   await env.DB.prepare(
-    "INSERT INTO booklets (id, file_key, size, orientation) VALUES (?, ?, ?, ?)"
-  ).bind(id, fileKey, size, orientation).run();
+    "INSERT INTO booklets (id, file_key, size, orientation, expires_at) VALUES (?, ?, ?, ?, ?)"
+  ).bind(id, fileKey, size, orientation, expiresAt).run();
 
-  return Response.json({ success: true, id }, { headers });
+  // Bersihkan data kedaluwarsa di belakang layar
+  context.waitUntil(cleanupExpired(env).catch(e => console.error('cleanup failed', e)));
+
+  return Response.json({ success: true, id, expiresAt }, { headers });
 }
