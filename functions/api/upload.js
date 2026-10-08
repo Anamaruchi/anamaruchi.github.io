@@ -1,5 +1,5 @@
 const ALLOWED_ORIGINS = ['https://anamaruchi.web.id', 'https://anamaruchi.pages.dev'];
-const TTL_MS = 24 * 60 * 60 * 1000; // 1 hari
+const TTL_MS = 6 * 60 * 60 * 1000; 
 
 function cors(request) {
   const origin = request.headers.get('Origin');
@@ -60,7 +60,6 @@ export async function onRequestPost(context) {
     "INSERT INTO booklets (id, file_key, size, orientation, expires_at) VALUES (?, ?, ?, ?, ?)"
   ).bind(id, fileKey, size, orientation, expiresAt).run();
 
-  // Bersihkan data kedaluwarsa di belakang layar
   context.waitUntil(cleanupExpired(env).catch(e => console.error('cleanup failed', e)));
 
   return Response.json({ success: true, id, expiresAt }, { headers });

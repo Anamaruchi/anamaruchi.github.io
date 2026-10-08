@@ -37,13 +37,12 @@ export async function onRequestGet(context) {
     return Response.json({ error: 'Booklet tidak ditemukan' }, { status: 404, headers: base });
   }
 
-  // Kedaluwarsa (atau baris lama tanpa expires_at)
   if (!record.expires_at || record.expires_at < Date.now()) {
     context.waitUntil((async () => {
       await env.BUCKET.delete(record.file_key);
       await env.DB.prepare("DELETE FROM booklets WHERE id = ?").bind(id).run();
     })().catch(e => console.error('expire cleanup failed', e)));
-    return Response.json({ error: 'Link sudah kedaluwarsa (berlaku 24 jam)' }, { status: 410, headers: base });
+    return Response.json({ error: 'Link sudah kedaluwarsa (berlaku 6 jam)' }, { status: 410, headers: base });
   }
 
   const pdfObject = await env.BUCKET.get(record.file_key);

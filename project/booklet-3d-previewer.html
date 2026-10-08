@@ -1419,6 +1419,7 @@ function resetBookContainer() {
 function destroyBook() {
   clearTimeout(reorderRenderTimer);
   renderGeneration++;
+  resetShareButton();
   unlockPageScroll();
   if (pageFlipInstance) {
     try { pageFlipInstance.destroy(); } catch (e) { console.warn(e); }
@@ -1618,6 +1619,7 @@ function relabelContentPages() {
 }
 
 function commitPageListChange(preferredIndex) {
+  resetShareButton();
   clearThumbSelection();
   relabelContentPages();
   buildThumbnails();
@@ -2773,7 +2775,30 @@ let isSharedView = false;
 let pendingShareUrl = null;
 let shareCopyIcon = null;
 let sharedLoadState = 'idle';
-let sharedLoadError = '';
+let sharedLoadErrorRaw = '';
+let shareContentVersion = 0;
+let shareUploading = false;
+
+function resetShareButton() {
+  shareContentVersion++;
+  if (isSharedView) return;
+  pendingShareUrl = null;
+  if (shareUploading) return;
+  if (shareCopyIcon && shareCopyIcon.parentNode === shareLinkBtn) shareCopyIcon.remove();
+  shareLinkBtn.classList.remove('share-copy');
+  shareLinkLabel.setAttribute('data-i18n', 'btn_share_link');
+  shareLinkLabel.textContent = shareText('btn_share_link', 'Share Link Preview', 'Bagikan Link');
+  shareLinkBtn.disabled = false;
+}
+
+function translateSharedError(raw) {
+  var s = String(raw || '');
+  if (s === 'Booklet tidak ditemukan') return shareText('error_shared_booklet_not_found', 'Booklet not found', 'Booklet tidak ditemukan');
+  if (s === 'ID tidak ditemukan') return shareText('error_shared_id_not_found', 'ID not found', 'ID tidak ditemukan');
+  if (s === 'File PDF hilang') return shareText('error_shared_pdf_missing', 'PDF file is missing', 'File PDF hilang');
+  if (s.indexOf('Link sudah kedaluwarsa') === 0) return shareText('error_shared_expired', 'Link has expired (valid for 6 hours)', 'Link sudah kedaluwarsa (berlaku 6 jam)');
+  return s;
+}
 
 function renderShareCopyButton(labelText) {
   if (!shareCopyIcon) {
@@ -2806,7 +2831,9 @@ function updateSharedStatusUI() {
   }
   if (sharedLoadingMsg && (sharedLoadState === 'loading' || sharedLoadState === 'error')) {
     if (sharedLoadState === 'error') {
-      sharedLoadingMsg.textContent = sharedLoadError;
+      sharedLoadingMsg.textContent = shareText('error_load_shared_title', 'Failed to load the shared link:', 'Gagal memuat tautan yang dibagikan:');
+      sharedLoadingMsg.appendChild(document.createElement('br'));
+      sharedLoadingMsg.appendChild(document.createTextNode(translateSharedError(sharedLoadErrorRaw)));
       sharedLoadingMsg.classList.add('is-error');
     } else {
       sharedLoadingMsg.textContent = shareText('status_loading_preview', 'Loading Preview', 'Memuat Preview');
@@ -2817,7 +2844,7 @@ function updateSharedStatusUI() {
     shareLinkBtn.classList.add('share-info');
     shareLinkBtn.disabled = true;
     shareLinkLabel.removeAttribute('data-i18n');
-    shareLinkLabel.textContent = shareText('info_preview_expire', 'The preview will expire in 1 day', 'Preview akan kedaluwarsa dalam 1 hari');
+    shareLinkLabel.textContent = shareText('info_preview_expire_6h', 'The preview will expire in 6 hours', 'Preview akan kedaluwarsa dalam 6 jam');
   }
 }
 
@@ -2853,7 +2880,7 @@ async function copyPendingShareLink() {
     renderShareCopyButton(shareText('status_link_copied', 'Link copied!', 'Link disalin!'));
     setTimeout(() => {
       shareLinkBtn.disabled = false;
-      renderShareCopyButton();
+      if (pendingShareUrl) renderShareCopyButton();
     }, 1800);
   } else {
     window.prompt(shareText('prompt_copy_link', 'Copy this link:', 'Salin link ini:'), pendingShareUrl);
@@ -2875,6 +2902,8 @@ async function generateShareLink() {
 
   let resultLabel = null;
   let uploaded = false;
+  const versionAtStart = shareContentVersion;
+  shareUploading = true;
   try {
     const pdfBytes = await buildBookletPdfBytes();
     const blob = new Blob([pdfBytes], { type: 'application/pdf' });
@@ -2896,15 +2925,18 @@ async function generateShareLink() {
     if (!res.ok || !data.success) throw new Error(data.error || `HTTP ${res.status}`);
 
     const shareUrl = `${window.location.origin}${window.location.pathname}?id=${encodeURIComponent(data.id)}`;
-    pendingShareUrl = shareUrl;
-    uploaded = true;
-    shareLinkBtn.disabled = false;
-    renderShareCopyButton();
+    if (versionAtStart === shareContentVersion) {
+      pendingShareUrl = shareUrl;
+      uploaded = true;
+      shareLinkBtn.disabled = false;
+      renderShareCopyButton();
+    }
   } catch (err) {
     console.error(err);
     resultLabel = shareText('status_share_failed', 'Failed to share', 'Gagal membagikan');
     alert(`${shareText('error_share_failed', 'Failed to create share link:', 'Gagal membuat link share:')} ${err.message}`);
   } finally {
+    shareUploading = false;
     if (!uploaded) {
       shareLinkLabel.textContent = resultLabel || shareText('btn_share_link', 'Share Link', 'Bagikan Link');
       setTimeout(() => {
@@ -2982,10 +3014,10 @@ async function loadSharedBooklet() {
     updateSharedStatusUI();
   } catch (err) {
     console.error(err);
-    const msg = `${shareText('error_load_shared', 'Failed to load the shared link:', 'Gagal memuat link preview:')} ${err.message}`;
+    const msg = `${shareText('error_load_shared_title', 'Failed to load the shared link:', 'Gagal memuat tautan yang dibagikan:')} ${translateSharedError(err.message)}`;
     setHint(msg, 'error');
     sharedLoadState = 'error';
-    sharedLoadError = msg;
+    sharedLoadErrorRaw = err.message;
     updateSharedStatusUI();
   }
 }
