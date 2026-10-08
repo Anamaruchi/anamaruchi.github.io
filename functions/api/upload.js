@@ -2,6 +2,11 @@ const ALLOWED_ORIGINS = ['https://anamaruchi.web.id', 'https://anamaruchi.pages.
 const TTL_MS = 3 * 60 * 60 * 1000;
 const MAX_FILE_BYTES = 200 * 1024 * 1024;
 const MAX_ACTIVE_FILES = 100;
+const WIB_OFFSET_MS = 7 * 60 * 60 * 1000;
+
+function wibTime(ms = Date.now()) {
+  return new Date(ms + WIB_OFFSET_MS).toISOString().slice(0, 19).replace('T', ' ');
+}
 
 function cors(request) {
   const origin = request.headers.get('Origin');
@@ -17,7 +22,7 @@ async function cleanupExpired(env, limit = 50) {
   while (true) {
     const { results } = await env.DB.prepare(
       "SELECT id, file_key FROM booklets WHERE expires_at IS NULL OR expires_at < ? LIMIT ?"
-    ).bind(Date.now(), limit).all();
+    ).bind(wibTime(), limit).all();
     if (!results || !results.length) return;
 
     await env.BUCKET.delete(results.map(r => r.file_key));
@@ -77,15 +82,17 @@ export async function onRequestPost(context) {
 
   const id = Math.random().toString(36).substring(2, 10);
   const fileKey = `booklets/${id}.pdf`;
-  const expiresAt = Date.now() + TTL_MS;
+  const nowMs = Date.now();
+  const createdAt = wibTime(nowMs);
+  const expiresAt = wibTime(nowMs + TTL_MS);
 
   await env.BUCKET.put(fileKey, file.stream(), {
     httpMetadata: { contentType: 'application/pdf' }
   });
 
   await env.DB.prepare(
-    "INSERT INTO booklets (id, file_key, size, orientation, expires_at) VALUES (?, ?, ?, ?, ?)"
-  ).bind(id, fileKey, size, orientation, expiresAt).run();
+    "INSERT INTO booklets (id, file_key, size, orientation, created_at, expires_at) VALUES (?, ?, ?, ?, ?, ?)"
+  ).bind(id, fileKey, size, orientation, createdAt, expiresAt).run();
 
   try {
     await cleanupExpired(env);

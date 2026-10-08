@@ -1,5 +1,11 @@
 const ALLOWED_ORIGINS = ['https://anamaruchi.web.id', 'https://anamaruchi.pages.dev'];
 
+const WIB_OFFSET_MS = 7 * 60 * 60 * 1000;
+
+function wibTime(ms = Date.now()) {
+  return new Date(ms + WIB_OFFSET_MS).toISOString().slice(0, 19).replace('T', ' ');
+}
+
 function cors(request) {
   const origin = request.headers.get('Origin');
   const h = {};
@@ -37,7 +43,7 @@ export async function onRequestGet(context) {
     return Response.json({ error: 'Booklet tidak ditemukan' }, { status: 404, headers: base });
   }
 
-  if (!record.expires_at || record.expires_at < Date.now()) {
+  if (!record.expires_at || record.expires_at < wibTime()) {
     context.waitUntil((async () => {
       await env.BUCKET.delete(record.file_key);
       await env.DB.prepare("DELETE FROM booklets WHERE id = ?").bind(id).run();
