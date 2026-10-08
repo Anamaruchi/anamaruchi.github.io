@@ -27,6 +27,9 @@ tailwind.config = {
   }
 }
 </script>
+<script>
+if (new URLSearchParams(location.search).get('id')) document.documentElement.classList.add('shared-mode');
+</script>
 <style>
 *, *::before, *::after { box-sizing: border-box; }
 body {
@@ -731,6 +734,19 @@ html.drag-scroll-lock, body.drag-scroll-lock { overflow: hidden !important; over
 @media screen and (max-width: 600px){
   .lang-switcher-wrap{ top: clamp(64px, 16vw, 70px); right: clamp(8px, 2vw, 10px); }
 }
+#shared-loading-msg { display: none; }
+html.shared-mode #spec-bar > *:not(#shared-loading-msg) { display: none !important; }
+html.shared-mode #shared-loading-msg {
+  display: block; margin: 0; padding: 6px 4px; text-align: center;
+  font-size: 13px; font-weight: 600; color: #fff; line-height: 1.5;
+}
+html.shared-mode #shared-loading-msg.is-error { color: #ff8a8a; }
+.action-btn.share-info, .action-btn.share-info:disabled {
+  background: rgba(59,130,246,.08); border: 1px solid rgba(59,130,246,.25);
+  box-shadow: none; opacity: 1; cursor: default;
+  white-space: normal; text-align: center; line-height: 1.35;
+  font-size: 10.5px; font-weight: 600; color: rgba(255,255,255,.85);
+}
 </style>
 </head>
 <body class="text-slate-100 min-h-screen">
@@ -904,6 +920,7 @@ html.drag-scroll-lock, body.drag-scroll-lock { overflow: hidden !important; over
       </div>
 		<p class="panel-credit"><span data-i18n="credit_prefix">Created By Anamaruchi</span> (<a href="https://www.facebook.com/anang.zikri.f" target="_blank">Anang Zikri Febriyansyah</a>)
     </div>
+    <p id="shared-loading-msg">Loading Preview</p>
   </section>
 </div>
 
@@ -974,7 +991,7 @@ html.drag-scroll-lock, body.drag-scroll-lock { overflow: hidden !important; over
     </button>
   </div>
   <button id="share-link-btn" type="button" class="action-btn action-btn-compact cluster-width">
-    <span id="share-link-label" data-i18n="btn_share_link">Share Link</span>
+    <span id="share-link-label" data-i18n="btn_share_link">Share Link Preview</span>
   </button>
   <div id="info-panel" class="flex flex-col items-stretch gap-0.5 cluster-width rounded-lg border border-white/10 bg-panel/95 backdrop-blur px-2.5 py-2 shadow-xl shadow-black/40">
     <p id="page-indicator" class="text-[12px] font-semibold text-white leading-snug text-right"></p>
@@ -2520,7 +2537,6 @@ async function generatePreview() {
 previewBtn.addEventListener('click', generatePreview);
 
 removePreviewBtn.addEventListener('click', () => {
-  // Buang parameter ?id=... supaya halaman tidak otomatis memuat booklet lagi
   window.location.href = window.location.pathname;
 });
 
@@ -2730,6 +2746,7 @@ function applyAriaLabels() {
 
 refreshDynamicI18nText = function () {
   applyAriaLabels();
+  updateSharedStatusUI();
   validate();
   syncSizeDropdownUI();
   if (pageFlipInstance) updateBookIndicator();
@@ -2738,11 +2755,30 @@ refreshDynamicI18nText = function () {
 
 applyAriaLabels();
 
-// ============================================================
-// SHARE LINK (Cloudflare R2 + D1)
-// ============================================================
 const shareLinkBtn = document.getElementById('share-link-btn');
 const shareLinkLabel = document.getElementById('share-link-label');
+const sharedLoadingMsg = document.getElementById('shared-loading-msg');
+let isSharedView = false;
+let sharedLoadState = 'idle';
+let sharedLoadError = '';
+
+function updateSharedStatusUI() {
+  if (sharedLoadingMsg && (sharedLoadState === 'loading' || sharedLoadState === 'error')) {
+    if (sharedLoadState === 'error') {
+      sharedLoadingMsg.textContent = sharedLoadError;
+      sharedLoadingMsg.classList.add('is-error');
+    } else {
+      sharedLoadingMsg.textContent = shareText('status_loading_preview', 'Loading Preview', 'Memuat Preview');
+      sharedLoadingMsg.classList.remove('is-error');
+    }
+  }
+  if (isSharedView) {
+    shareLinkBtn.classList.add('share-info');
+    shareLinkBtn.disabled = true;
+    shareLinkLabel.removeAttribute('data-i18n');
+    shareLinkLabel.textContent = shareText('info_preview_expire', 'The preview will expire in 1 day', 'Preview akan kedaluwarsa dalam 1 hari');
+  }
+}
 
 function shareText(key, en, id) {
   return t(key, __i18nLang === 'id' ? id : en);
@@ -2770,22 +2806,19 @@ async function copyToClipboard(text) {
 }
 
 async function generateShareLink() {
-  if (!pageDataList.length || shareLinkBtn.disabled) return;
+  if (isSharedView || !pageDataList.length || shareLinkBtn.disabled) return;
 
   shareLinkBtn.disabled = true;
   shareLinkLabel.textContent = shareText('status_sharing', 'Uploading\u2026', 'Mengunggah\u2026');
 
   let resultLabel = null;
   try {
-    // Pakai hasil booklet yang sama persis dengan "Save PDF"
-    // (urutan halaman, halaman kosong, dan cover sudah final).
     const pdfBytes = await buildBookletPdfBytes();
     const blob = new Blob([pdfBytes], { type: 'application/pdf' });
 
     let sizeValue = sizeSelect.value || 'a4';
     let orientationValue = (currentSpec && currentSpec.orientation) ? currentSpec.orientation : '';
     if (sizeValue === 'custom' && currentSpec) {
-      // Ukuran custom dikodekan di kolom "size" supaya tidak perlu ubah skema D1
       sizeValue = `custom:${currentSpec.wcm}x${currentSpec.hcm}`;
     }
 
@@ -2822,9 +2855,6 @@ async function generateShareLink() {
 
 shareLinkBtn.addEventListener('click', generateShareLink);
 
-// ============================================================
-// BUKA PREVIEW OTOMATIS DARI LINK  (?id=xxxx)
-// ============================================================
 async function applySharedSpec(metaSize, metaOrientation) {
   let size = (metaSize || '').toLowerCase();
   let customW = null, customH = null;
@@ -2843,7 +2873,6 @@ async function applySharedSpec(metaSize, metaOrientation) {
   } else {
     let orientation = (metaOrientation === 'landscape' || metaOrientation === 'portrait') ? metaOrientation : null;
     if (!orientation) {
-      // Fallback: tebak dari rasio halaman pertama PDF
       const vp = (await pdfDoc.getPage(1)).getViewport({ scale: 1 });
       orientation = vp.width > vp.height ? 'landscape' : 'portrait';
     }
@@ -2857,6 +2886,8 @@ async function loadSharedBooklet() {
   const bookletId = new URLSearchParams(window.location.search).get('id');
   if (!bookletId) return;
 
+  sharedLoadState = 'loading';
+  updateSharedStatusUI();
   previewBtn.disabled = true;
   setHint(shareText('status_loading_shared', 'Loading booklet from link\u2026', 'Memuat booklet dari link\u2026'), 'default');
 
@@ -2879,9 +2910,21 @@ async function loadSharedBooklet() {
 
     await applySharedSpec(metaSize, metaOrientation);
     await generatePreview();
+
+    if (previewView.classList.contains('hidden')) {
+      throw new Error(previewHint.textContent || 'Preview failed');
+    }
+
+    sharedLoadState = 'done';
+    isSharedView = true;
+    updateSharedStatusUI();
   } catch (err) {
     console.error(err);
-    setHint(`${shareText('error_load_shared', 'Failed to load the shared link:', 'Gagal memuat link preview:')} ${err.message}`, 'error');
+    const msg = `${shareText('error_load_shared', 'Failed to load the shared link:', 'Gagal memuat link preview:')} ${err.message}`;
+    setHint(msg, 'error');
+    sharedLoadState = 'error';
+    sharedLoadError = msg;
+    updateSharedStatusUI();
   }
 }
 
