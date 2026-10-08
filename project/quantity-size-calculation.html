@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<title>Anamaruchi - Quantity Size Calculation</title>
+<title data-i18n="doc_title">Anamaruchi - Quantity Size Calculation</title>
 <link rel="icon" type="image/x-icon" href="https://anamaruchi.web.id/Image/Anamaruchi.ico">
 <style>
   *, *::before, *::after{ box-sizing: border-box; }
@@ -214,7 +214,7 @@
     color:#3b82f6;
     margin: 0 0 10px 0;
   }
-
+  
   .option-group{ display:flex; flex-direction:column; gap:8px; }
   .option-group.cols-2{ display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:8px; }
   .option-group.cols-3{ display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:8px; }
@@ -530,6 +530,7 @@
   .a3-orient-section .option-btn .name{ font-size:13px; }
   .a3-orient-section .option-btn .sub{ font-size:10px; }
   .a3-best-info{
+	white-space: pre-line;
     margin: 8px 0 0;
     font-size:11px;
     font-weight:600;
@@ -539,6 +540,85 @@
     border: 1px solid rgba(59,130,246,0.25);
     border-radius:8px;
     padding:6px 9px;
+  }
+
+  .a3-best-info.bleed-highlight{
+    color:#f5a524;
+    background: rgba(245,165,36,0.1);
+    border: 1px solid rgba(245,165,36,0.35);
+    display:flex;
+    align-items:center;
+    gap:6px;
+  }
+
+  .info-tooltip-btn{
+    position:relative;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:15px;
+    height:15px;
+    padding:0;
+    margin:0;
+    border:none;
+    background:transparent;
+    cursor:pointer;
+    flex-shrink:0;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .info-tooltip-btn.hidden{ display:none; }
+  .info-tooltip-icon{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:15px;
+    height:15px;
+    border-radius:50%;
+    border:1px solid rgba(245,165,36,0.6);
+    background:rgba(245,165,36,0.18);
+    color:#f5a524;
+    font-size:10px;
+    font-weight:700;
+    font-style:italic;
+    line-height:1;
+  }
+  .info-tooltip-bubble{
+    position:absolute;
+    bottom:calc(100% + 8px);
+    right:0;
+    left:auto;
+    width:max-content;
+    max-width:220px;
+    background:#1a1a1a;
+    border:1px solid rgba(245,165,36,0.4);
+    color:#f5a524;
+    font-size:11px;
+    font-weight:600;
+    line-height:1.4;
+    padding:8px 10px;
+    border-radius:8px;
+    text-align:left;
+    box-shadow:0 8px 20px rgba(0,0,0,0.4);
+    opacity:0;
+    transform:translateY(4px);
+    pointer-events:none;
+    transition:opacity 0.2s ease, transform 0.2s ease;
+    z-index:20;
+    white-space:normal;
+  }
+  .info-tooltip-bubble::after{
+    content:'';
+    position:absolute;
+    top:100%;
+    right:4px;
+    border:6px solid transparent;
+    border-top-color:#1a1a1a;
+  }
+  .info-tooltip-btn.open .info-tooltip-bubble,
+  .info-tooltip-btn:hover .info-tooltip-bubble{
+    opacity:1;
+    pointer-events:auto;
+    transform:translateY(0);
   }
 
   .compare-line{ margin-top:14px; font-size:11px; color:rgba(255,255,255,0.4); border-top:1px solid rgba(59,130,246,0.2); padding-top:10px; }
@@ -724,6 +804,81 @@
   @media (prefers-reduced-motion: reduce){
     *{ transition-duration:0.001ms !important; animation-duration:0.001ms !important; }
   }
+/* ===== Language Switcher (i18n) - ADDITIVE ONLY, tidak mengubah style di atas ===== */
+.lang-switcher-wrap{
+  position: fixed;
+  right: clamp(12px, 3vw, 20px);
+  top: calc(100vh - clamp(30px, 7vw, 34px) - clamp(12px, 3vw, 20px) - env(safe-area-inset-bottom, 0px));
+  top: calc(100dvh - clamp(30px, 7vw, 34px) - clamp(12px, 3vw, 20px) - env(safe-area-inset-bottom, 0px));
+  height: clamp(30px, 7vw, 34px);
+  z-index: 1002;
+}
+.lang-switcher{
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+.lang-switcher-input{
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+.lang-switcher-track{
+  position: relative;
+  width: clamp(72px, 16vw, 80px);
+  height: clamp(30px, 7vw, 34px);
+  background: linear-gradient(135deg, #0060df, #003eaa);
+  border-radius: 999px;
+  box-shadow: 0 5px 15px rgba(0, 96, 223, 0.3);
+  transition: box-shadow 0.3s ease;
+}
+.lang-switcher:hover .lang-switcher-track{ box-shadow: 0 8px 25px rgba(0, 96, 223, 0.4); }
+.lang-switcher:active .lang-switcher-track{ box-shadow: 0 4px 15px rgba(0, 96, 223, 0.5); }
+.lang-switcher-input:focus-visible ~ .lang-switcher-track{ outline: 2px solid rgba(255,255,255,0.5); outline-offset: 2px; }
+.lang-switcher-option{
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: rgba(255,255,255,0.65);
+  transition: color 0.3s ease;
+  pointer-events: none;
+}
+.lang-switcher-option-en{ left: 0; color: #0060df; }
+.lang-switcher-option-id{ right: 0; }
+.lang-switcher-thumb{
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: calc(50% - 6px);
+  height: calc(100% - 6px);
+  background: #fff;
+  border-radius: 999px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+  transition: transform 0.3s ease;
+  z-index: 1;
+}
+.lang-switcher-input:checked ~ .lang-switcher-track .lang-switcher-thumb{
+  transform: translateX(calc(100% + 6px));
+}
+.lang-switcher-input:checked ~ .lang-switcher-track .lang-switcher-option-en{ color: rgba(255,255,255,0.65); }
+.lang-switcher-input:checked ~ .lang-switcher-track .lang-switcher-option-id{ color: #0060df; }
 </style>
 </head>
 
@@ -740,23 +895,34 @@
         <img src="https://anamaruchi.web.id/Image/Home Icon.png" alt="Home" class="home-icon">
   </a>
 
+  <div class="lang-switcher-wrap">
+    <label class="lang-switcher" for="langSwitcher">
+      <input type="checkbox" id="langSwitcher" class="lang-switcher-input" aria-label="Language / Bahasa">
+      <span class="lang-switcher-track">
+        <span class="lang-switcher-option lang-switcher-option-en">EN</span>
+        <span class="lang-switcher-option lang-switcher-option-id">ID</span>
+        <span class="lang-switcher-thumb"></span>
+      </span>
+    </label>
+  </div>
+
   <div id="sidebarOverlay" class="sidebar-overlay"></div>
 
   <aside id="sidebar" class="sidebar" aria-hidden="true">
     <div class="sidebar-header">
-      <p class="sidebar-title">Print Setting</p>
+      <p class="sidebar-title" data-i18n="sidebar_title">Print Setting</p>
       <button id="sidebarClose" class="sidebar-close-btn" type="button" aria-label="Close Menu">✕</button>
     </div>
 
     <section class="panel control-panel">
 
       <div class="section">
-        <p class="eyebrow">01 · Print Mode</p>
+        <p class="eyebrow" data-i18n="eyebrow_print_mode">01 · Print Mode</p>
         <div id="printCategoryGroup" class="option-group cols-3" role="radiogroup" aria-label="Print Mode"></div>
       </div>
 
       <div class="section" id="standardTypeSection">
-        <p class="eyebrow">02 · Print Type</p>
+        <p class="eyebrow" data-i18n="eyebrow_print_type">02 · Print Type</p>
         <div class="print-mode-select">
           <button type="button" class="print-mode-trigger" id="modeTrigger" aria-haspopup="listbox" aria-expanded="false">
             <span id="modeTriggerLabel">A3+ Paper Size</span>
@@ -767,7 +933,7 @@
       </div>
 
       <div class="section hidden" id="uvInfoSection">
-        <p class="eyebrow">02 · UV Machine</p>
+        <p class="eyebrow" data-i18n="eyebrow_uv_machine">02 · UV Machine</p>
         <div class="print-mode-select">
           <button type="button" class="print-mode-trigger" id="uvMachineTrigger" aria-haspopup="listbox" aria-expanded="false">
             <span id="uvMachineTriggerLabel">Dlican 1250</span>
@@ -778,38 +944,38 @@
       </div>
 
       <div class="section hidden" id="customSizeSection">
-        <p class="eyebrow">02 · Canvas Size</p>
+        <p class="eyebrow" data-i18n="eyebrow_canvas_size">02 · Canvas Size</p>
         <div class="grid-2">
           <div>
-            <span class="field-label">Width</span>
+            <span class="field-label" data-i18n="field_width">Width</span>
             <div class="field-input-wrap">
               <input id="inputCanvasWidth" type="text" inputmode="decimal" autocomplete="off" value="100" class="field-input" />
               <span class="field-unit">cm</span>
             </div>
           </div>
           <div>
-            <span class="field-label">Height</span>
+            <span class="field-label" data-i18n="field_height">Height</span>
             <div class="field-input-wrap">
               <input id="inputCanvasHeight" type="text" inputmode="decimal" autocomplete="off" value="100" class="field-input" />
               <span class="field-unit">cm</span>
             </div>
           </div>
         </div>
-        <p class="hint">Canvas size = your input + 2cm margin. Print area follows your input exactly. Maximum size is 300 × 300 cm.</p>
+        <p class="hint" data-i18n="hint_canvas_size">Canvas size = your input + 2cm margin. Print area follows your input exactly. Maximum size is 300 × 300 cm.</p>
       </div>
 
       <div class="section">
-        <p class="eyebrow">03 · Object Size</p>
+        <p class="eyebrow" data-i18n="eyebrow_object_size">03 · Object Size</p>
         <div class="grid-2">
           <div>
-            <span class="field-label">Lenght</span>
+            <span class="field-label" data-i18n="field_width">Width</span>
             <div class="field-input-wrap">
               <input id="inputWidth" type="text" inputmode="decimal" autocomplete="off" value="5" class="field-input" />
               <span class="field-unit">cm</span>
             </div>
           </div>
           <div>
-            <span class="field-label">Width</span>
+            <span class="field-label" data-i18n="field_height">Height</span>
             <div class="field-input-wrap">
               <input id="inputHeight" type="text" inputmode="decimal" autocomplete="off" value="5" class="field-input" />
               <span class="field-unit">cm</span>
@@ -819,7 +985,7 @@
       </div>
 
       <div class="section">
-        <p class="eyebrow">04 · Object Shape</p>
+        <p class="eyebrow" data-i18n="eyebrow_object_shape">04 · Object Shape</p>
         <div id="shapeGroup" class="option-group cols-2" role="radiogroup" aria-label="Object Shape"></div>
       </div>
 
@@ -835,7 +1001,7 @@
 
     <div class="page-content">
 
-      <h2 class="page-title">Quantity Size Calculation</h2>
+      <h2 class="page-title" data-i18n="page_title">Quantity Size Calculation</h2>
 
       <div class="main-container">
 
@@ -844,15 +1010,15 @@
         <div class="results-grid">
 
           <section class="panel panel-qty">
-            <div id="resultEmpty" class="empty-state">
+            <div id="resultEmpty" class="empty-state" data-i18n="result_empty">
               Enter the object's lenght and width dimensions to start calculating the print capacity.
             </div>
 
             <div id="resultBody" class="result-body hidden">
-              <p class="qty-label">Qty per Sheet</p>
+              <p class="qty-label" data-i18n="qty_label">Qty per Sheet</p>
               <div class="qty-headline">
                 <span id="qtyTotal" class="qty-number">0</span>
-                <span class="qty-unit">pcs</span>
+                <span class="qty-unit" data-i18n="qty_unit">pcs</span>
               </div>
 
               <p id="autoRotateNote" class="auto-rotate-note hidden"></p>
@@ -865,18 +1031,18 @@
 
               <div class="stats-grid">
                 <div>
-                  <p class="stat-label">Layout</p>
+                  <p class="stat-label" data-i18n="stat_layout">Layout</p>
                   <p id="qtyRows" class="stat-value">—</p>
                   <p id="qtyCols" class="stat-value">—</p>
                 </div>
-                <div><p class="stat-label">Object Shape</p><p id="qtyShape" class="stat-value">—</p></div>
-                <div><p class="stat-label">Area Efficiency</p><p id="qtyEfficiency" class="stat-value">—</p></div>
-                <div><p class="stat-label">Remaining Space</p><p id="qtyLeftover" class="stat-value">—</p></div>
+                <div><p class="stat-label" data-i18n="stat_object_shape">Object Shape</p><p id="qtyShape" class="stat-value">—</p></div>
+                <div><p class="stat-label" data-i18n="stat_area_efficiency">Area Efficiency</p><p id="qtyEfficiency" class="stat-value">—</p></div>
+                <div><p class="stat-label" data-i18n="stat_remaining_space">Remaining Space</p><p id="qtyLeftover" class="stat-value">—</p></div>
                 <div id="sizeObjectBlock" class="hidden">
-                  <p class="stat-label">Object Size</p>
+                  <p class="stat-label" data-i18n="stat_object_size">Object Size</p>
                   <p id="qtySizeObject" class="stat-value">—</p>
                   <p id="qtySizeObjectNote" class="stat-note hidden"></p>
-                  <p id="qtySizeBleedInfo" class="a3-best-info hidden"></p>
+                  <p id="qtySizeBleedInfo" class="a3-best-info bleed-highlight hidden"><span id="qtySizeBleedInfoText"></span><button type="button" id="bleedInfoTooltipBtn" class="info-tooltip-btn hidden" aria-label="Bleed info"><span class="info-tooltip-icon">i</span><span id="bleedInfoTooltipText" class="info-tooltip-bubble"></span></button></p>
                 </div>
               </div>
 
@@ -898,17 +1064,17 @@
               </div>
             </div>
 
-            <p id="previewNote" class="preview-note hidden">
+            <div id="visualLegend" class="visual-legend hidden"></div>
+
+            <p id="previewNote" class="preview-note hidden" data-i18n="preview_note">
               Preview simplified for viewing, totals remain calculated accurately.
             </p>
 
-            <p id="bleedNote" class="bleed-note hidden">
+            <p id="bleedNote" class="bleed-note hidden" data-i18n="bleed_note">
               For sizes below 4 cm, even when using bleed, there is still a possibility of shifting during the cutting.
             </p>
 
-            <div id="visualLegend" class="visual-legend hidden"></div>
-
-            <p class="panel-credit">Created By Anamaruchi (<a href="https://www.facebook.com/anang.zikri.f" target="_blank">Anang Zikri Febriyansyah</a>)
+            <p class="panel-credit"><span data-i18n="credit_prefix">Created By Anamaruchi</span> (<a href="https://www.facebook.com/anang.zikri.f" target="_blank">Anang Zikri Febriyansyah</a>)
           </section>
 
         </div>
@@ -921,6 +1087,14 @@
   </div>
 
 <script>
+var __i18nDict = null;
+var __i18nLang = 'en';
+var refreshDynamicI18nText = null;
+function t(key, fallback){
+  var dict = (__i18nDict && __i18nDict[__i18nLang]) ? __i18nDict[__i18nLang] : null;
+  if(dict && Object.prototype.hasOwnProperty.call(dict, key)) return dict[key];
+  return fallback !== undefined ? fallback : key;
+}
 (function(){
   "use strict";
 
@@ -1090,10 +1264,12 @@
     }
     return opts[1] ? opts[1].mm : opts[0].mm;
   }
-  const SHAPE_OPTIONS = [
-    { key:'kotak', label:'Square', icon: shapeIconSquare() },
-    { key:'bulat', label:'Circle', icon: shapeIconCircle() }
-  ];
+  function getShapeOptions(){
+    return [
+      { key:'kotak', label:t('shape_square','Square'), icon: shapeIconSquare() },
+      { key:'bulat', label:t('shape_circle','Circle'), icon: shapeIconCircle() }
+    ];
+  }
 
   function isPaperMode(mode){
     return mode === 'a4' || mode === 'a3std' || mode === 'a3';
@@ -1162,6 +1338,9 @@
     qtySizeObject: document.getElementById('qtySizeObject'),
     qtySizeObjectNote: document.getElementById('qtySizeObjectNote'),
     qtySizeBleedInfo: document.getElementById('qtySizeBleedInfo'),
+    qtySizeBleedInfoText: document.getElementById('qtySizeBleedInfoText'),
+    bleedInfoTooltipBtn: document.getElementById('bleedInfoTooltipBtn'),
+    bleedInfoTooltipText: document.getElementById('bleedInfoTooltipText'),
 
     extraInfoNote: document.getElementById('extraInfoNote'),
 
@@ -1433,37 +1612,41 @@
     el.extraLabel.textContent = cfg.extraLabel;
   }
 
-  const EXTRA_NOTE_BY_MODE = {
-    a4: 'Bleed adds extra margin around the object for safer cropping tolerances. Select "No Bleed" if the object does not require additional cropping margin.',
-    a3std: 'Bleed adds extra margin around the object for safer cropping tolerances. Select "No Bleed" if the object does not require additional cropping margin.',
-    a3: 'Bleed adds extra margin around the object for safer cropping tolerances. Select "No Bleed" if the object does not require additional cropping margin.',
-    kiss: 'Distance controls the distance between objects on a single sheet to ensure a safer cutting pattern. Object sizes will automatically rotate if the result produces more quantity.',
-    die: 'Distance controls the distance between objects on a single sheet to ensure a safer cutting pattern. Object sizes will automatically rotate if the result produces more quantity.',
-    uv: 'Distance controls the distance between objects on the flatboard to ensure a safer print object. Object sizes will automatically rotate if the result produces more quantity.',
-    custom: 'Bleed adds extra margin around the object for safer cropping tolerances. Select "No Bleed" if the object does not require additional cropping margin. Object sizes will automatically rotate if the result produces more quantity.'
-  };
-
-  function refreshExtraNote(){
-    el.extraInfoNote.textContent = EXTRA_NOTE_BY_MODE[state.mode] || '';
+  function getExtraNoteByMode(){
+    return {
+      a4: t('hint_bleed_standard'),
+      a3std: t('hint_bleed_standard'),
+      a3: t('hint_bleed_standard'),
+      kiss: t('hint_distance_cutting'),
+      die: t('hint_distance_cutting'),
+      uv: t('hint_distance_uv'),
+      custom: t('hint_bleed_custom')
+    };
   }
 
-  const VISUAL_TITLE_BY_MODE = {
-    a4: 'Layout Visualization - A4 Paper Size',
-    a3std: 'Layout Visualization - A3 Paper Size',
-    a3: 'Layout Visualization - A3+ Paper Size',
-    kiss: 'Layout Visualization - Kiss Cutting',
-    die: 'Layout Visualization - Die Cutting',
-    uv: 'Layout Visualization - UV Print',
-    custom: 'Layout Visualization - Custom Size Print'
+  function refreshExtraNote(){
+    el.extraInfoNote.textContent = getExtraNoteByMode()[state.mode] || '';
+  }
+
+  const VISUAL_TITLE_MODE_NAME = {
+    a4: 'A4 Paper Size',
+    a3std: 'A3 Paper Size',
+    a3: 'A3+ Paper Size',
+    kiss: 'Kiss Cutting',
+    die: 'Die Cutting',
+    uv: 'UV Print',
+    custom: 'Custom Size Print'
   };
 
   function updateVisualTitle(){
-    el.visualTitle.textContent = VISUAL_TITLE_BY_MODE[state.mode] || 'Layout Visualization';
+    const prefix = t('visual_layout_prefix', 'Layout Visualization');
+    const modeName = VISUAL_TITLE_MODE_NAME[state.mode];
+    el.visualTitle.textContent = modeName ? `${prefix} - ${modeName}` : prefix;
   }
 
   function buildShapeButtons(){
     el.shapeGroup.innerHTML = '';
-    SHAPE_OPTIONS.forEach(opt => {
+    getShapeOptions().forEach(opt => {
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.setAttribute('role','radio');
@@ -1670,11 +1853,11 @@
     const spec = PAPER_MODE_SPECS[state.mode];
     if(!spec) return;
 
-    el.a3OrientationLabel.textContent = `Paper Orientation (${spec.short})`;
+    el.a3OrientationLabel.textContent = `${t('paper_orientation_label','Paper Orientation')} (${spec.short})`;
 
     const options = [
-      { key:'portrait',  label:'Portrait',  sub:`${fmtSmart(spec.portrait.paperMm.w/10)}×${fmtSmart(spec.portrait.paperMm.h/10)} cm` },
-      { key:'landscape', label:'Landscape', sub:`${fmtSmart(spec.landscape.paperMm.w/10)}×${fmtSmart(spec.landscape.paperMm.h/10)} cm` }
+      { key:'portrait',  label:t('orientation_portrait','Portrait'),  sub:`${fmtSmart(spec.portrait.paperMm.w/10)}×${fmtSmart(spec.portrait.paperMm.h/10)} cm` },
+      { key:'landscape', label:t('orientation_landscape','Landscape'), sub:`${fmtSmart(spec.landscape.paperMm.w/10)}×${fmtSmart(spec.landscape.paperMm.h/10)} cm` }
     ];
 
     el.a3OrientGroup.innerHTML = '';
@@ -1684,7 +1867,7 @@
       btn.setAttribute('role','radio');
       btn.dataset.orient = opt.key;
       btn.className = a3OrientBtnClass(opt.key === state.paperOrientation[state.mode]);
-      btn.innerHTML = `<span class="name">${opt.label}</span><span class="sub">${opt.sub} · Preview</span>`;
+      btn.innerHTML = `<span class="name">${opt.label}</span><span class="sub">${opt.sub} · ${t('preview_word','Preview')}</span>`;
       btn.addEventListener('click', () => {
         state.paperOrientation[state.mode] = opt.key;
         state.paperAutoMode[state.mode] = false;
@@ -1710,11 +1893,11 @@
     const totalL = rL.valid ? rL.total : 0;
     let text;
     if(totalP === totalL){
-      text = `Both orientations are equivalent: ${fmt(totalP)} pcs`;
+      text = `${t('compare_equivalent','Both orientations are equivalent:')}\n${fmt(totalP)} pcs`;
     } else if(totalL > totalP){
-      text = `Most Qty In Landscape: ${fmt(totalL)} pcs (Portrait: ${fmt(totalP)} pcs)`;
+      text = `${t('compare_landscape_more','Most Qty In Landscape:')} ${fmt(totalL)} pcs\n(${t('orientation_portrait','Portrait')}: ${fmt(totalP)} pcs)`;
     } else {
-      text = `Most Qty In Portrait: ${fmt(totalP)} pcs (Landscape: ${fmt(totalL)} pcs)`;
+      text = `${t('compare_portrait_more','Most Qty In Portrait:')} ${fmt(totalP)} pcs\n(${t('orientation_landscape','Landscape')}: ${fmt(totalL)} pcs)`;
     }
     el.a3BestInfo.textContent = text;
   }
@@ -1780,7 +1963,7 @@
     el.qtyTotal.textContent = fmt(result.total);
     el.qtyRows.textContent = `${result.rows} Rows`;
     el.qtyCols.textContent = `${result.cols} Columns`;
-    const shapeOpt = SHAPE_OPTIONS.find(o => o.key === state.shape);
+    const shapeOpt = getShapeOptions().find(o => o.key === state.shape);
     el.qtyShape.textContent = shapeOpt ? shapeOpt.label : '—';
     el.qtyEfficiency.textContent = `${fmt1(result.efficiency)}%`;
 
@@ -1798,13 +1981,13 @@
 
     let paperText;
     if(cfg.key === 'kiss' || cfg.key === 'die'){
-      paperText = `Paper Size ${cfg.paperMm.w/10}×${cfg.paperMm.h/10} cm · Cutting Area ${cfg.areaMm.w/10}×${cfg.areaMm.h/10} cm`;
+      paperText = `${t('paper_size_label','Paper Size')} ${cfg.paperMm.w/10}×${cfg.paperMm.h/10} cm · ${t('cutting_area_label','Cutting Area')} ${cfg.areaMm.w/10}×${cfg.areaMm.h/10} cm`;
     } else if(cfg.key === 'uv'){
-      paperText = `${cfg.machine} · Flatboard ${cfg.paperMm.w/10}×${cfg.paperMm.h/10} cm · Print Area ${cfg.areaMm.w/10}×${cfg.areaMm.h/10} cm`;
+      paperText = `${cfg.machine} · Flatboard ${cfg.paperMm.w/10}×${cfg.paperMm.h/10} cm · ${t('print_area_label','Print Area')} ${cfg.areaMm.w/10}×${cfg.areaMm.h/10} cm`;
     } else if(cfg.key === 'custom'){
-      paperText = `Canvas Size ${cfg.paperMm.w/10}×${cfg.paperMm.h/10} cm · Print Area ${cfg.areaMm.w/10}×${cfg.areaMm.h/10} cm`;
+      paperText = `${t('canvas_size_label','Canvas Size')} ${cfg.paperMm.w/10}×${cfg.paperMm.h/10} cm · ${t('print_area_label','Print Area')} ${cfg.areaMm.w/10}×${cfg.areaMm.h/10} cm`;
     } else {
-      paperText = `Paper Size ${fmtSmart(cfg.paperMm.w/10)}×${fmtSmart(cfg.paperMm.h/10)} cm · Print Area ${fmtSmart(cfg.areaMm.w/10)}×${fmtSmart(cfg.areaMm.h/10)} cm`;
+      paperText = `${t('paper_size_label','Paper Size')} ${fmtSmart(cfg.paperMm.w/10)}×${fmtSmart(cfg.paperMm.h/10)} cm · ${t('print_area_label','Print Area')} ${fmtSmart(cfg.areaMm.w/10)}×${fmtSmart(cfg.areaMm.h/10)} cm`;
     }
     el.paperMeta.textContent = paperText;
   }
@@ -2064,14 +2247,31 @@
     const extraMm = Number(calcState.extraMm) || 0;
     if(extraMm <= 0){
       el.qtySizeBleedInfo.classList.add('hidden');
+      el.bleedInfoTooltipBtn.classList.add('hidden');
     } else {
       const extraLabelWord = (isPaperMode(cfg.key) || cfg.key === 'custom') ? 'Bleed' : 'Distance';
       const totalW = wCm + (extraMm / 10);
       const totalH = hCm + (extraMm / 10);
-      el.qtySizeBleedInfo.textContent = `With ${extraLabelWord} ${fmt1(extraMm)}mm = ${fmtSmart(totalW)}x${fmtSmart(totalH)} cm`;
+      const isBleedWord = extraLabelWord === 'Bleed';
+      el.bleedInfoTooltipBtn.classList.remove('hidden');
+      const tooltipWord = isBleedWord ? 'bleed' : 'distance';
+      el.bleedInfoTooltipBtn.setAttribute('aria-label', isBleedWord ? 'Bleed info' : 'Distance info');
+      el.qtySizeBleedInfoText.textContent = `${t('size_with_prefix','With')} ${extraLabelWord} ${fmt1(extraMm)}mm = ${fmtSmart(totalW)}x${fmtSmart(totalH)} cm`;
       el.qtySizeBleedInfo.classList.remove('hidden');
+      el.bleedInfoTooltipText.textContent = t('tooltip_choose', 'You choose a {{n}} mm {{word}}, that actually means a {{half}} mm {{word}} around all sides.')
+        .split('{{n}}').join(fmt1(extraMm))
+        .split('{{half}}').join(fmt1(extraMm / 2))
+        .split('{{word}}').join(tooltipWord);
     }
   }
+
+  el.bleedInfoTooltipBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    el.bleedInfoTooltipBtn.classList.toggle('open');
+  });
+  document.addEventListener('click', () => {
+    el.bleedInfoTooltipBtn.classList.remove('open');
+  });
 
   function updateLegend(cfg, calcState){
     const isA3 = isPaperMode(cfg.key);
@@ -2084,7 +2284,7 @@
 
     const qtyItem = document.createElement('span');
     qtyItem.className = 'legend-item';
-    qtyItem.innerHTML = '<span class="legend-swatch legend-blue"></span>Total Quantity';
+    qtyItem.innerHTML = `<span class="legend-swatch legend-blue"></span>${t('legend_total_quantity','Total Quantity')}`;
     el.visualLegend.appendChild(qtyItem);
 
     if(isA3 || isCustom){
@@ -2162,6 +2362,85 @@
   refreshExtraNote();
   calculate();
 
+  refreshDynamicI18nText = function(){
+    buildShapeButtons();
+    refreshExtraNote();
+    if(isPaperMode(state.mode)) buildA3OrientButtons();
+    calculate();
+  };
+
+})();
+
+(function(){
+  "use strict";
+
+  var LANG_STORAGE_KEY = 'anamaruchi_lang';
+  var DEFAULT_LANG = 'en';
+
+  var langSwitcher = document.getElementById('langSwitcher');
+
+  function getSavedLang(){
+    try{
+      var saved = localStorage.getItem(LANG_STORAGE_KEY);
+      if(saved === 'en' || saved === 'id') return saved;
+    }catch(e){}
+    return DEFAULT_LANG;
+  }
+
+  function saveLang(lang){
+    try{ localStorage.setItem(LANG_STORAGE_KEY, lang); }catch(e){}
+  }
+
+  function applyTranslations(lang){
+    if(!__i18nDict || !__i18nDict[lang]) return;
+    var dict = __i18nDict[lang];
+    var nodes = document.querySelectorAll('[data-i18n]');
+    for(var i = 0; i < nodes.length; i++){
+      var node = nodes[i];
+      var key = node.getAttribute('data-i18n');
+      if(Object.prototype.hasOwnProperty.call(dict, key)){
+        node.textContent = dict[key];
+      }
+    }
+    if(typeof refreshDynamicI18nText === 'function') refreshDynamicI18nText();
+  }
+
+  function setLanguage(lang){
+    __i18nLang = (lang === 'id') ? 'id' : 'en';
+    if(langSwitcher) langSwitcher.checked = (__i18nLang === 'id');
+    applyTranslations(__i18nLang);
+    saveLang(__i18nLang);
+  }
+
+  function initI18n(){
+    __i18nLang = getSavedLang();
+    if(langSwitcher) langSwitcher.checked = (__i18nLang === 'id');
+
+    try{
+      fetch('quantity-size-calculation-lang.json')
+        .then(function(res){
+          if(!res.ok) throw new Error('Failed to load lang.json (status ' + res.status + ')');
+          return res.json();
+        })
+        .then(function(data){
+          __i18nDict = data;
+          applyTranslations(__i18nLang);
+        })
+        .catch(function(err){
+          console.warn('i18n: lang.json could not be loaded.', err);
+        });
+    }catch(err){
+      console.warn('i18n: fetch is not available in this browser.', err);
+    }
+  }
+
+  if(langSwitcher){
+    langSwitcher.addEventListener('change', function(){
+      setLanguage(langSwitcher.checked ? 'id' : 'en');
+    });
+  }
+
+  initI18n();
 })();
 </script>
 </body>
