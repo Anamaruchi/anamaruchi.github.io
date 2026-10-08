@@ -531,6 +531,81 @@ html.drag-scroll-lock, body.drag-scroll-lock { overflow: hidden !important; over
   filter: brightness(0) invert(1);
   transition: none;
 }
+.hud-toggle-button {
+  position: fixed;
+  left: clamp(10px, 2vw, 20px);
+  top: calc(clamp(10px, 2vw, 20px) + clamp(40px, 8vw, 50px) + 10px);
+  z-index: 100;
+  padding: 0;
+  border: none;
+  background: none;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+.hud-toggle-button.is-off { display: none !important; }
+.hud-toggle-button.is-hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+.hud-toggle-track {
+  position: relative;
+  width: clamp(72px, 16vw, 80px);
+  height: clamp(30px, 7vw, 34px);
+  background: linear-gradient(135deg, #0060df, #003eaa);
+  border-radius: 999px;
+  box-shadow: 0 5px 15px rgba(0, 96, 223, 0.3);
+  transition: box-shadow 0.3s ease;
+}
+.hud-toggle-button:hover .hud-toggle-track { box-shadow: 0 8px 25px rgba(0, 96, 223, 0.4); }
+.hud-toggle-button:active .hud-toggle-track { box-shadow: 0 4px 15px rgba(0, 96, 223, 0.5); }
+.hud-toggle-button:focus-visible .hud-toggle-track { outline: 2px solid rgba(255,255,255,0.5); outline-offset: 2px; }
+.hud-toggle-option {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  color: rgba(255,255,255,0.65);
+  transition: color 0.3s ease;
+  pointer-events: none;
+}
+.hud-toggle-option svg { width: 22px; height: 22px; }
+.hud-toggle-option-open { left: 0; color: #0060df; }
+.hud-toggle-option-closed { right: 0; }
+.hud-toggle-thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: calc(50% - 6px);
+  height: calc(100% - 6px);
+  background: #fff;
+  border-radius: 999px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+  transition: transform 0.3s ease;
+  z-index: 1;
+}
+body.hud-hidden .hud-toggle-thumb { transform: translateX(calc(100% + 6px)); }
+body.hud-hidden .hud-toggle-option-open { color: rgba(255,255,255,0.65); }
+body.hud-hidden .hud-toggle-option-closed { color: #0060df; }
+@media screen and (max-width: 600px) {
+  .hud-toggle-button { left: 15px !important; top: calc(15px + 45px + 10px) !important; }
+}
+@media screen and (max-height: 480px) and (orientation: landscape) {
+  .hud-toggle-button { left: 8px !important; top: calc(8px + 36px + 8px) !important; }
+}
+.extension-group, .lang-switcher-wrap, #zoom-cluster, #info-cluster {
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+body.hud-hidden .extension-group,
+body.hud-hidden .lang-switcher-wrap,
+body.hud-hidden #zoom-cluster,
+body.hud-hidden #info-cluster {
+  opacity: 0; visibility: hidden; pointer-events: none;
+}
 .extension-group {
   position: fixed !important;
   top: clamp(10px, 2vw, 20px) !important;
@@ -765,6 +840,14 @@ html.shared-mode #shared-loading-msg.is-error { color: #ff8a8a; }
 <a href="https://anamaruchi.web.id/" class="home-button" id="home-button">
   <img src="https://anamaruchi.web.id/Image/Home Icon.png" alt="Home" class="home-icon" />
 </a>
+
+<button type="button" class="hud-toggle-button is-off" id="hud-toggle-btn" aria-pressed="false">
+  <span class="hud-toggle-track">
+    <span class="hud-toggle-option hud-toggle-option-open"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12C5 6.5 19 6.5 22 12C19 17.5 5 17.5 2 12Z"/><circle cx="12" cy="12" r="3.4"/><path d="M10.4 12a1.6 1.6 0 1 1 1.6 1.6"/></svg></span>
+    <span class="hud-toggle-option hud-toggle-option-closed"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5C7 14.5 17 14.5 21 9.5"/><path d="M6 11.9l-1 2.4"/><path d="M8.9 12.9l-.5 2.6"/><path d="M12 13.25v2.8"/><path d="M15.1 12.9l.5 2.6"/><path d="M18 11.9l1 2.4"/></svg></span>
+    <span class="hud-toggle-thumb"></span>
+  </span>
+</button>
 
 <div class="extension-group">
   <a href="./Anamaruchi Screen Record.rar" class="extension-button" id="extensionButton">
@@ -1204,6 +1287,16 @@ const zoomPercentInput = document.getElementById('zoom-percent-input');
 const thumbToggleBtn = document.getElementById('thumb-toggle-btn');
 const thumbSidebar = document.getElementById('thumb-sidebar');
 const homeButton = document.getElementById('home-button');
+const hudToggleBtn = document.getElementById('hud-toggle-btn');
+
+function setHudHidden(hidden) {
+  document.body.classList.toggle('hud-hidden', hidden);
+  hudToggleBtn.setAttribute('aria-pressed', hidden ? 'true' : 'false');
+}
+
+hudToggleBtn.addEventListener('click', () => {
+  setHudHidden(!document.body.classList.contains('hud-hidden'));
+});
 const thumbOverlay = document.getElementById('thumb-overlay');
 const thumbCloseBtn = document.getElementById('thumb-close-btn');
 const thumbGrid = document.getElementById('thumb-grid');
@@ -1589,6 +1682,7 @@ function closeThumbSidebar() {
   closePageContextMenu();
   clearThumbSelection();
   homeButton.classList.remove('is-hidden');
+  hudToggleBtn.classList.remove('is-hidden');
 }
 
 function openThumbSidebar() {
@@ -1596,6 +1690,7 @@ function openThumbSidebar() {
   thumbOverlay.classList.add('open');
   syncThumbnailActive(true);
   homeButton.classList.add('is-hidden');
+  hudToggleBtn.classList.add('is-hidden');
 }
 
 thumbToggleBtn.addEventListener('click', () => {
@@ -2175,6 +2270,8 @@ function resetDownstream() {
   rotateSuggestBanner.classList.add('hidden');
   rotateSuggestBanner.classList.remove('flex');
   rotateBannerDismissed = false;
+  setHudHidden(false);
+  hudToggleBtn.classList.add('is-off');
   previewMetaSize.textContent = '';
   previewBtn.disabled = true;
   previewBtn.textContent = t('btn_preview_booklet', 'Preview Booklet');
@@ -2533,6 +2630,7 @@ async function generatePreview() {
     infoCluster.classList.remove('hidden');
     infoCluster.classList.add('flex');
     document.body.classList.add('preview-lock');
+    hudToggleBtn.classList.remove('is-off');
     lockAllScales();
     updateRotateBanner();
 
@@ -2755,6 +2853,8 @@ function applyAriaLabels() {
   thumbToggleBtn.setAttribute('aria-label', t('btn_open_pages', 'Open Pages'));
   thumbCloseBtn.setAttribute('aria-label', t('aria_close', 'Tutup'));
   sizeSelectOptions.setAttribute('aria-label', t('label_booklet_size', 'Booklet Size'));
+  hudToggleBtn.setAttribute('aria-label', t('aria_toggle_hud', 'Show/Hide HUD'));
+  hudToggleBtn.setAttribute('title', t('aria_toggle_hud', 'Show/Hide HUD'));
 }
 
 refreshDynamicI18nText = function () {
@@ -2844,7 +2944,7 @@ function updateSharedStatusUI() {
     shareLinkBtn.classList.add('share-info');
     shareLinkBtn.disabled = true;
     shareLinkLabel.removeAttribute('data-i18n');
-    shareLinkLabel.textContent = shareText('info_preview_expire_3h', 'The preview will expire in 3 hours', 'Preview akan kedaluwarsa dalam 3 jam');
+    shareLinkLabel.textContent = shareText('info_preview_expire_3h', 'The preview will expire in 3 hours', 'Preview kedaluwarsa dalam 3 jam');
   }
 }
 
