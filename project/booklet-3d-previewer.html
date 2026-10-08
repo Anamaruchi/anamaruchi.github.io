@@ -973,6 +973,9 @@ html.drag-scroll-lock, body.drag-scroll-lock { overflow: hidden !important; over
       <span id="save-pdf-label" data-i18n="btn_save_pdf">Save PDF</span>
     </button>
   </div>
+  <button id="share-link-btn" type="button" class="action-btn action-btn-compact cluster-width">
+    <span id="share-link-label" data-i18n="btn_share_link">Share Link</span>
+  </button>
   <div id="info-panel" class="flex flex-col items-stretch gap-0.5 cluster-width rounded-lg border border-white/10 bg-panel/95 backdrop-blur px-2.5 py-2 shadow-xl shadow-black/40">
     <p id="page-indicator" class="text-[12px] font-semibold text-white leading-snug text-right"></p>
     <p id="preview-meta-size" class="text-[11px] text-slate-400 leading-tight truncate text-right"></p>
@@ -2517,7 +2520,8 @@ async function generatePreview() {
 previewBtn.addEventListener('click', generatePreview);
 
 removePreviewBtn.addEventListener('click', () => {
-  window.location.reload();
+  // Buang parameter ?id=... supaya halaman tidak otomatis memuat booklet lagi
+  window.location.href = window.location.pathname;
 });
 
 function ensurePdfLib() {
@@ -2562,6 +2566,43 @@ function buildExportFileName() {
   return `${base}-booklet.pdf`;
 }
 
+async function buildBookletPdfBytes() {
+  await ensurePdfLib();
+  const outDoc = await PDFLib.PDFDocument.create();
+
+  const ptPerCm = 28.3465;
+  const blankSize = (currentSpec && currentSpec.wcm && currentSpec.hcm)
+    ? [currentSpec.wcm * ptPerCm, currentSpec.hcm * ptPerCm]
+    : [419.53, 595.28];
+
+  const groups = {};
+  pageDataList.forEach((data, index) => {
+    if (data.isBlank || !data.sourceKind) return;
+    if (!groups[data.sourceKind]) groups[data.sourceKind] = [];
+    groups[data.sourceKind].push(index);
+  });
+
+  const copiedByPosition = new Array(pageDataList.length).fill(null);
+
+  for (const kind of Object.keys(groups)) {
+    const libDoc = await getSourceLibDoc(kind);
+    const positions = groups[kind];
+    const srcIndices = positions.map(pos => pageDataList[pos].sourcePage - 1);
+    const copiedPages = await outDoc.copyPages(libDoc, srcIndices);
+    positions.forEach((pos, i) => { copiedByPosition[pos] = copiedPages[i]; });
+  }
+
+  pageDataList.forEach((data, index) => {
+    if (data.isBlank || !data.sourceKind) {
+      outDoc.addPage(blankSize);
+    } else {
+      outDoc.addPage(copiedByPosition[index]);
+    }
+  });
+
+  return await outDoc.save();
+}
+
 async function exportPdf() {
   if (!pageDataList.length || savePdfBtn.disabled) return;
 
@@ -2569,40 +2610,7 @@ async function exportPdf() {
   savePdfLabel.textContent = t('status_saving', 'Saving');
 
   try {
-    await ensurePdfLib();
-    const outDoc = await PDFLib.PDFDocument.create();
-
-    const ptPerCm = 28.3465;
-    const blankSize = (currentSpec && currentSpec.wcm && currentSpec.hcm)
-      ? [currentSpec.wcm * ptPerCm, currentSpec.hcm * ptPerCm]
-      : [419.53, 595.28];
-
-    const groups = {};
-    pageDataList.forEach((data, index) => {
-      if (data.isBlank || !data.sourceKind) return;
-      if (!groups[data.sourceKind]) groups[data.sourceKind] = [];
-      groups[data.sourceKind].push(index);
-    });
-
-    const copiedByPosition = new Array(pageDataList.length).fill(null);
-
-    for (const kind of Object.keys(groups)) {
-      const libDoc = await getSourceLibDoc(kind);
-      const positions = groups[kind];
-      const srcIndices = positions.map(pos => pageDataList[pos].sourcePage - 1);
-      const copiedPages = await outDoc.copyPages(libDoc, srcIndices);
-      positions.forEach((pos, i) => { copiedByPosition[pos] = copiedPages[i]; });
-    }
-
-    pageDataList.forEach((data, index) => {
-      if (data.isBlank || !data.sourceKind) {
-        outDoc.addPage(blankSize);
-      } else {
-        outDoc.addPage(copiedByPosition[index]);
-      }
-    });
-
-    const pdfBytes = await outDoc.save();
+    const pdfBytes = await buildBookletPdfBytes();
     const blob = new Blob([pdfBytes], { type: 'application/pdf' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -2729,6 +2737,155 @@ refreshDynamicI18nText = function () {
 };
 
 applyAriaLabels();
+
+// ============================================================
+// SHARE LINK (Cloudflare R2 + D1)
+// ============================================================
+const shareLinkBtn = document.getElementById('share-link-btn');
+const shareLinkLabel = document.getElementById('share-link-label');
+
+function shareText(key, en, id) {
+  return t(key, __i18nLang === 'id' ? id : en);
+}
+
+async function copyToClipboard(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+    return true;
+  } catch (e) {
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      const ok = document.execCommand('copy');
+      ta.remove();
+      return ok;
+    } catch (e2) {
+      return false;
+    }
+  }
+}
+
+async function generateShareLink() {
+  if (!pageDataList.length || shareLinkBtn.disabled) return;
+
+  shareLinkBtn.disabled = true;
+  shareLinkLabel.textContent = shareText('status_sharing', 'Uploading\u2026', 'Mengunggah\u2026');
+
+  let resultLabel = null;
+  try {
+    // Pakai hasil booklet yang sama persis dengan "Save PDF"
+    // (urutan halaman, halaman kosong, dan cover sudah final).
+    const pdfBytes = await buildBookletPdfBytes();
+    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+
+    let sizeValue = sizeSelect.value || 'a4';
+    let orientationValue = (currentSpec && currentSpec.orientation) ? currentSpec.orientation : '';
+    if (sizeValue === 'custom' && currentSpec) {
+      // Ukuran custom dikodekan di kolom "size" supaya tidak perlu ubah skema D1
+      sizeValue = `custom:${currentSpec.wcm}x${currentSpec.hcm}`;
+    }
+
+    const formData = new FormData();
+    formData.append('file', blob, 'booklet.pdf');
+    formData.append('size', sizeValue);
+    if (orientationValue) formData.append('orientation', orientationValue);
+
+    const res = await fetch('/api/upload', { method: 'POST', body: formData });
+    let data = {};
+    try { data = await res.json(); } catch (e) {}
+    if (!res.ok || !data.success) throw new Error(data.error || `HTTP ${res.status}`);
+
+    const shareUrl = `${window.location.origin}${window.location.pathname}?id=${encodeURIComponent(data.id)}`;
+    const copied = await copyToClipboard(shareUrl);
+    if (copied) {
+      resultLabel = shareText('status_link_copied', 'Link copied!', 'Link disalin!');
+    } else {
+      resultLabel = shareText('status_link_ready', 'Link ready', 'Link siap');
+      window.prompt(shareText('prompt_copy_link', 'Copy this link:', 'Salin link ini:'), shareUrl);
+    }
+  } catch (err) {
+    console.error(err);
+    resultLabel = shareText('status_share_failed', 'Failed to share', 'Gagal membagikan');
+    alert(`${shareText('error_share_failed', 'Failed to create share link:', 'Gagal membuat link share:')} ${err.message}`);
+  } finally {
+    shareLinkLabel.textContent = resultLabel || shareText('btn_share_link', 'Share Link', 'Bagikan Link');
+    setTimeout(() => {
+      shareLinkLabel.textContent = shareText('btn_share_link', 'Share Link', 'Bagikan Link');
+      shareLinkBtn.disabled = false;
+    }, 1800);
+  }
+}
+
+shareLinkBtn.addEventListener('click', generateShareLink);
+
+// ============================================================
+// BUKA PREVIEW OTOMATIS DARI LINK  (?id=xxxx)
+// ============================================================
+async function applySharedSpec(metaSize, metaOrientation) {
+  let size = (metaSize || '').toLowerCase();
+  let customW = null, customH = null;
+
+  const m = size.match(/^custom:([\d.]+)x([\d.]+)$/);
+  if (m) { size = 'custom'; customW = m[1]; customH = m[2]; }
+  if (size !== 'a4' && size !== 'a5' && size !== 'custom') size = 'a4';
+
+  sizeSelect.value = size;
+  syncSizeDropdownUI();
+  sizeSelect.dispatchEvent(new Event('change', { bubbles: true }));
+
+  if (size === 'custom') {
+    customWidthInput.value = customW;
+    customHeightInput.value = customH;
+  } else {
+    let orientation = (metaOrientation === 'landscape' || metaOrientation === 'portrait') ? metaOrientation : null;
+    if (!orientation) {
+      // Fallback: tebak dari rasio halaman pertama PDF
+      const vp = (await pdfDoc.getPage(1)).getViewport({ scale: 1 });
+      orientation = vp.width > vp.height ? 'landscape' : 'portrait';
+    }
+    const radio = document.querySelector(`input[name="orientation"][value="${orientation}"]`);
+    if (radio) radio.checked = true;
+  }
+  validate();
+}
+
+async function loadSharedBooklet() {
+  const bookletId = new URLSearchParams(window.location.search).get('id');
+  if (!bookletId) return;
+
+  previewBtn.disabled = true;
+  setHint(shareText('status_loading_shared', 'Loading booklet from link\u2026', 'Memuat booklet dari link\u2026'), 'default');
+
+  try {
+    const response = await fetch(`/api/booklet?id=${encodeURIComponent(bookletId)}`);
+    if (!response.ok) {
+      let msg = `HTTP ${response.status}`;
+      try { const j = await response.json(); if (j && j.error) msg = j.error; } catch (e) {}
+      throw new Error(msg);
+    }
+
+    const metaSize = response.headers.get('X-Booklet-Size');
+    const metaOrientation = response.headers.get('X-Booklet-Orientation');
+
+    const blob = await response.blob();
+    const file = new File([blob], 'shared-booklet.pdf', { type: 'application/pdf' });
+
+    await handlePdfFile(file, 'single');
+    if (!pdfDoc) throw new Error(shareText('error_failed_read_pdf', 'Failed to read the PDF', 'Gagal membaca PDF'));
+
+    await applySharedSpec(metaSize, metaOrientation);
+    await generatePreview();
+  } catch (err) {
+    console.error(err);
+    setHint(`${shareText('error_load_shared', 'Failed to load the shared link:', 'Gagal memuat link preview:')} ${err.message}`, 'error');
+  }
+}
+
+loadSharedBooklet();
 </script>
 
 <script>
