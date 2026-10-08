@@ -748,7 +748,7 @@ html.shared-mode #shared-loading-msg.is-error { color: #ff8a8a; }
   font-size: 10.5px; font-weight: 600; color: rgba(255,255,255,.85);
 }
 .action-btn.share-copy {
-  background: rgba(59,130,246,.14); border: 1px solid rgba(59,130,246,.45);
+  background: linear-gradient(135deg, rgba(26,26,26,.92), rgba(45,45,45,.92)); border: 1px solid rgba(59,130,246,.45);
   box-shadow: none; color: #93c5fd;
 }
 .action-btn.share-copy:hover:not(:disabled) {
@@ -767,7 +767,7 @@ html.shared-mode #shared-loading-msg.is-error { color: #ff8a8a; }
 </a>
 
 <div class="extension-group">
-  <a href="http://tiny.cc/anamaruchi-screen-record" class="extension-button" id="extensionButton" target="_blank" rel="noopener noreferrer">
+  <a href="./Anamaruchi Screen Record.rar" class="extension-button" id="extensionButton">
     <img src="https://anamaruchi.web.id/Image/Download Screen Recorder.png" alt="Module" class="extension-icon">
   </a>
 </div>
@@ -2844,7 +2844,7 @@ function updateSharedStatusUI() {
     shareLinkBtn.classList.add('share-info');
     shareLinkBtn.disabled = true;
     shareLinkLabel.removeAttribute('data-i18n');
-    shareLinkLabel.textContent = shareText('info_preview_expire_3h', 'The preview will expire in 3 hours', 'Preview kedaluwarsa dalam 3 jam');
+    shareLinkLabel.textContent = shareText('info_preview_expire_3h', 'The preview will expire in 3 hours', 'Preview akan kedaluwarsa dalam 3 jam');
   }
 }
 
