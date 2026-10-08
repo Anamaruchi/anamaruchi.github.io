@@ -747,6 +747,17 @@ html.shared-mode #shared-loading-msg.is-error { color: #ff8a8a; }
   white-space: normal; text-align: center; line-height: 1.35;
   font-size: 10.5px; font-weight: 600; color: rgba(255,255,255,.85);
 }
+.action-btn.share-copy {
+  background: rgba(59,130,246,.14); border: 1px solid rgba(59,130,246,.45);
+  box-shadow: none; color: #93c5fd;
+}
+.action-btn.share-copy:hover:not(:disabled) {
+  background: #3b82f6; border-color: #3b82f6; color: #fff;
+  box-shadow: 0 8px 25px rgba(59,130,246,.4);
+}
+.action-btn.share-copy:active:not(:disabled) { background: #1d4ed8; border-color: #1d4ed8; }
+.action-btn.share-copy:disabled { opacity: 1; cursor: default; }
+.action-btn.share-copy svg { flex-shrink: 0; }
 </style>
 </head>
 <body class="text-slate-100 min-h-screen">
@@ -2759,10 +2770,40 @@ const shareLinkBtn = document.getElementById('share-link-btn');
 const shareLinkLabel = document.getElementById('share-link-label');
 const sharedLoadingMsg = document.getElementById('shared-loading-msg');
 let isSharedView = false;
+let pendingShareUrl = null;
+let shareCopyIcon = null;
 let sharedLoadState = 'idle';
 let sharedLoadError = '';
 
+function renderShareCopyButton(labelText) {
+  if (!shareCopyIcon) {
+    const ns = 'http://www.w3.org/2000/svg';
+    shareCopyIcon = document.createElementNS(ns, 'svg');
+    shareCopyIcon.setAttribute('width', '13');
+    shareCopyIcon.setAttribute('height', '13');
+    shareCopyIcon.setAttribute('viewBox', '0 0 24 24');
+    shareCopyIcon.setAttribute('fill', 'none');
+    shareCopyIcon.setAttribute('stroke', 'currentColor');
+    shareCopyIcon.setAttribute('stroke-width', '2');
+    shareCopyIcon.setAttribute('stroke-linecap', 'round');
+    shareCopyIcon.setAttribute('stroke-linejoin', 'round');
+    const p1 = document.createElementNS(ns, 'path');
+    p1.setAttribute('d', 'M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71');
+    const p2 = document.createElementNS(ns, 'path');
+    p2.setAttribute('d', 'M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71');
+    shareCopyIcon.appendChild(p1);
+    shareCopyIcon.appendChild(p2);
+  }
+  if (shareCopyIcon.parentNode !== shareLinkBtn) shareLinkBtn.insertBefore(shareCopyIcon, shareLinkLabel);
+  shareLinkBtn.classList.add('share-copy');
+  shareLinkLabel.removeAttribute('data-i18n');
+  shareLinkLabel.textContent = labelText || shareText('btn_copy_link', 'Copy Link', 'Salin Link');
+}
+
 function updateSharedStatusUI() {
+  if (pendingShareUrl && !isSharedView && !shareLinkBtn.disabled) {
+    renderShareCopyButton();
+  }
   if (sharedLoadingMsg && (sharedLoadState === 'loading' || sharedLoadState === 'error')) {
     if (sharedLoadState === 'error') {
       sharedLoadingMsg.textContent = sharedLoadError;
@@ -2776,7 +2817,7 @@ function updateSharedStatusUI() {
     shareLinkBtn.classList.add('share-info');
     shareLinkBtn.disabled = true;
     shareLinkLabel.removeAttribute('data-i18n');
-    shareLinkLabel.textContent = shareText('info_preview_expire', 'The preview will expire in 1 day', 'Preview kadaluarsa dalam 1 hari');
+    shareLinkLabel.textContent = shareText('info_preview_expire', 'The preview will expire in 1 day', 'Preview akan kedaluwarsa dalam 1 hari');
   }
 }
 
@@ -2805,13 +2846,35 @@ async function copyToClipboard(text) {
   }
 }
 
+async function copyPendingShareLink() {
+  shareLinkBtn.disabled = true;
+  const copied = await copyToClipboard(pendingShareUrl);
+  if (copied) {
+    renderShareCopyButton(shareText('status_link_copied', 'Link copied!', 'Link disalin!'));
+    setTimeout(() => {
+      shareLinkBtn.disabled = false;
+      renderShareCopyButton();
+    }, 1800);
+  } else {
+    window.prompt(shareText('prompt_copy_link', 'Copy this link:', 'Salin link ini:'), pendingShareUrl);
+    shareLinkBtn.disabled = false;
+    renderShareCopyButton();
+  }
+}
+
 async function generateShareLink() {
   if (isSharedView || !pageDataList.length || shareLinkBtn.disabled) return;
+
+  if (pendingShareUrl) {
+    await copyPendingShareLink();
+    return;
+  }
 
   shareLinkBtn.disabled = true;
   shareLinkLabel.textContent = shareText('status_sharing', 'Uploading\u2026', 'Mengunggah\u2026');
 
   let resultLabel = null;
+  let uploaded = false;
   try {
     const pdfBytes = await buildBookletPdfBytes();
     const blob = new Blob([pdfBytes], { type: 'application/pdf' });
@@ -2833,23 +2896,22 @@ async function generateShareLink() {
     if (!res.ok || !data.success) throw new Error(data.error || `HTTP ${res.status}`);
 
     const shareUrl = `${window.location.origin}${window.location.pathname}?id=${encodeURIComponent(data.id)}`;
-    const copied = await copyToClipboard(shareUrl);
-    if (copied) {
-      resultLabel = shareText('status_link_copied', 'Link copied!', 'Link disalin!');
-    } else {
-      resultLabel = shareText('status_link_ready', 'Link ready', 'Link siap');
-      window.prompt(shareText('prompt_copy_link', 'Copy this link:', 'Salin link ini:'), shareUrl);
-    }
+    pendingShareUrl = shareUrl;
+    uploaded = true;
+    shareLinkBtn.disabled = false;
+    renderShareCopyButton();
   } catch (err) {
     console.error(err);
     resultLabel = shareText('status_share_failed', 'Failed to share', 'Gagal membagikan');
     alert(`${shareText('error_share_failed', 'Failed to create share link:', 'Gagal membuat link share:')} ${err.message}`);
   } finally {
-    shareLinkLabel.textContent = resultLabel || shareText('btn_share_link', 'Share Link', 'Bagikan Link');
-    setTimeout(() => {
-      shareLinkLabel.textContent = shareText('btn_share_link', 'Share Link', 'Bagikan Link');
-      shareLinkBtn.disabled = false;
-    }, 1800);
+    if (!uploaded) {
+      shareLinkLabel.textContent = resultLabel || shareText('btn_share_link', 'Share Link', 'Bagikan Link');
+      setTimeout(() => {
+        shareLinkLabel.textContent = shareText('btn_share_link', 'Share Link', 'Bagikan Link');
+        shareLinkBtn.disabled = false;
+      }, 1800);
+    }
   }
 }
 
