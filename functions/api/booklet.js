@@ -42,7 +42,7 @@ export async function onRequestGet(context) {
       await env.BUCKET.delete(record.file_key);
       await env.DB.prepare("DELETE FROM booklets WHERE id = ?").bind(id).run();
     })().catch(e => console.error('expire cleanup failed', e)));
-    return Response.json({ error: 'Link sudah kedaluwarsa (berlaku 6 jam)' }, { status: 410, headers: base });
+    return Response.json({ error: 'Link sudah kedaluwarsa (berlaku 3 jam)' }, { status: 410, headers: base });
   }
 
   const pdfObject = await env.BUCKET.get(record.file_key);

@@ -2796,7 +2796,7 @@ function translateSharedError(raw) {
   if (s === 'Booklet tidak ditemukan') return shareText('error_shared_booklet_not_found', 'Booklet not found', 'Booklet tidak ditemukan');
   if (s === 'ID tidak ditemukan') return shareText('error_shared_id_not_found', 'ID not found', 'ID tidak ditemukan');
   if (s === 'File PDF hilang') return shareText('error_shared_pdf_missing', 'PDF file is missing', 'File PDF hilang');
-  if (s.indexOf('Link sudah kedaluwarsa') === 0) return shareText('error_shared_expired', 'Link has expired (valid for 6 hours)', 'Link sudah kedaluwarsa (berlaku 6 jam)');
+  if (s.indexOf('Link sudah kedaluwarsa') === 0) return shareText('error_shared_expired', 'Link has expired (valid for 3 hours)', 'Link sudah kedaluwarsa (berlaku 3 jam)');
   return s;
 }
 
@@ -2844,7 +2844,7 @@ function updateSharedStatusUI() {
     shareLinkBtn.classList.add('share-info');
     shareLinkBtn.disabled = true;
     shareLinkLabel.removeAttribute('data-i18n');
-    shareLinkLabel.textContent = shareText('info_preview_expire_6h', 'The preview will expire in 6 hours', 'Preview kedaluwarsa dalam 6 jam');
+    shareLinkLabel.textContent = shareText('info_preview_expire_3h', 'The preview will expire in 3 hours', 'Preview kedaluwarsa dalam 3 jam');
   }
 }
 
@@ -2907,6 +2907,8 @@ async function generateShareLink() {
   try {
     const pdfBytes = await buildBookletPdfBytes();
     const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+    const tooLargeMsg = shareText('error_file_too_large', 'File is too large (max 200 MB)', 'File terlalu besar (maks 200 MB)');
+    if (blob.size > 200 * 1024 * 1024) throw new Error(tooLargeMsg);
 
     let sizeValue = sizeSelect.value || 'a4';
     let orientationValue = (currentSpec && currentSpec.orientation) ? currentSpec.orientation : '';
@@ -2920,6 +2922,7 @@ async function generateShareLink() {
     if (orientationValue) formData.append('orientation', orientationValue);
 
     const res = await fetch('/api/upload', { method: 'POST', body: formData });
+    if (res.status === 413) throw new Error(tooLargeMsg);
     let data = {};
     try { data = await res.json(); } catch (e) {}
     if (!res.ok || !data.success) throw new Error(data.error || `HTTP ${res.status}`);
