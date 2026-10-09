@@ -1,20 +1,37 @@
 const ALLOWED_ORIGINS = ['https://anamaruchi.web.id', 'https://anamaruchi.pages.dev'];
+const ID_RE = /^[A-Za-z0-9_-]{6,64}$/;          
+const SAFE_HEADER_RE = /^[A-Za-z0-9:._-]{1,40}$/;
 
-const WIB_OFFSET_MS = 7 * 60 * 60 * 1000;
+const BASE_HEADERS = {
+  'Cache-Control': 'no-store',
+  'X-Content-Type-Options': 'nosniff'
+};
 
-function wibTime(ms = Date.now()) {
-  return new Date(ms + WIB_OFFSET_MS).toISOString().slice(0, 19).replace('T', ' ');
+function wibToMs(str) {
+  const ms = Date.parse(String(str).replace(' ', 'T') + '+07:00');
+  return Number.isFinite(ms) ? ms : null;
 }
 
 function cors(request) {
   const origin = request.headers.get('Origin');
   const h = {};
-  if (origin && ALLOWED_ORIGINS.includes(origin)) {
+  let same = false;
+  try { same = origin === new URL(request.url).origin; } catch {}
+  if (origin && (ALLOWED_ORIGINS.includes(origin) || same)) {
     h['Access-Control-Allow-Origin'] = origin;
     h['Vary'] = 'Origin';
     h['Access-Control-Expose-Headers'] = 'X-Booklet-Size, X-Booklet-Orientation, X-Booklet-Expires';
   }
   return h;
+}
+
+function json(body, status, extra) {
+  return Response.json(body, { status, headers: { ...BASE_HEADERS, ...extra } });
+}
+
+
+function safeHeader(value, fallback) {
+  return typeof value === 'string' && SAFE_HEADER_RE.test(value) ? value : fallback;
 }
 
 export async function onRequestOptions({ request }) {
@@ -30,39 +47,49 @@ export async function onRequestOptions({ request }) {
 
 export async function onRequestGet(context) {
   const { request, env } = context;
-  const url = new URL(request.url);
-  const id = url.searchParams.get('id');
   const base = cors(request);
 
-  if (!id) {
-    return Response.json({ error: 'ID tidak ditemukan' }, { status: 400, headers: base });
+  try {
+    const id = new URL(request.url).searchParams.get('id');
+    if (!id) return json({ error: 'ID tidak ditemukan' }, 400, base);
+    if (!ID_RE.test(id)) return json({ error: 'ID tidak valid' }, 400, base);
+
+    const record = await env.DB.prepare("SELECT * FROM booklets WHERE id = ?").bind(id).first();
+    if (!record) return json({ error: 'Booklet tidak ditemukan' }, 404, base);
+
+    const expiresMs = record.expires_at ? wibToMs(record.expires_at) : null;
+
+    if (!expiresMs || expiresMs <= Date.now()) {
+      context.waitUntil((async () => {
+        await env.BUCKET.delete(record.file_key);
+        await env.DB.prepare("DELETE FROM booklets WHERE id = ?").bind(id).run();
+      })().catch(e => console.error('expire cleanup failed', e)));
+      return json({ error: 'Link sudah kedaluwarsa (berlaku 3 jam)' }, 410, base);
+    }
+
+    const pdfObject = await env.BUCKET.get(record.file_key);
+    if (!pdfObject) {
+      context.waitUntil(
+        env.DB.prepare("DELETE FROM booklets WHERE id = ?").bind(id).run().catch(() => {})
+      );
+      return json({ error: 'File PDF hilang' }, 404, base);
+    }
+
+    const headers = new Headers(base);
+    pdfObject.writeHttpMetadata(headers);
+    headers.set('Content-Type', 'application/pdf');
+    headers.set('Content-Disposition', 'attachment; filename="booklet.pdf"');
+    headers.set('Content-Security-Policy', "default-src 'none'; sandbox");
+    headers.set('Cache-Control', 'private, no-store');
+    headers.set('X-Content-Type-Options', 'nosniff');
+    headers.set('X-Robots-Tag', 'noindex');
+    headers.set('X-Booklet-Size', safeHeader(record.size, 'a4'));
+    headers.set('X-Booklet-Orientation', safeHeader(record.orientation, 'portrait'));
+    headers.set('X-Booklet-Expires', String(expiresMs));
+
+    return new Response(pdfObject.body, { headers });
+  } catch (e) {
+    console.error('booklet fetch failed', e);
+    return json({ error: 'Terjadi kesalahan server' }, 500, base);
   }
-
-  const record = await env.DB.prepare("SELECT * FROM booklets WHERE id = ?").bind(id).first();
-  if (!record) {
-    return Response.json({ error: 'Booklet tidak ditemukan' }, { status: 404, headers: base });
-  }
-
-  if (!record.expires_at || record.expires_at < wibTime()) {
-    context.waitUntil((async () => {
-      await env.BUCKET.delete(record.file_key);
-      await env.DB.prepare("DELETE FROM booklets WHERE id = ?").bind(id).run();
-    })().catch(e => console.error('expire cleanup failed', e)));
-    return Response.json({ error: 'Link sudah kedaluwarsa (berlaku 3 jam)' }, { status: 410, headers: base });
-  }
-
-  const pdfObject = await env.BUCKET.get(record.file_key);
-  if (!pdfObject) {
-    return Response.json({ error: 'File PDF hilang' }, { status: 404, headers: base });
-  }
-
-  const headers = new Headers(base);
-  pdfObject.writeHttpMetadata(headers);
-  headers.set('etag', pdfObject.httpEtag);
-  headers.set('Content-Type', 'application/pdf');
-  headers.set('X-Booklet-Size', record.size || 'a4');
-  headers.set('X-Booklet-Orientation', record.orientation || 'portrait');
-  headers.set('X-Booklet-Expires', String(Date.parse(record.expires_at.replace(' ', 'T') + '+07:00')));
-
-  return new Response(pdfObject.body, { headers });
 }
