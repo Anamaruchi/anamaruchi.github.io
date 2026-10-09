@@ -1898,7 +1898,6 @@ async function generateShareLink() {
       sizeValue = `custom:${currentSpec.wcm}x${currentSpec.hcm}`;
     }
 
-    // Raw body (di-stream server ke R2), metadata lewat query string
     const qs = new URLSearchParams({ size: sizeValue });
     if (orientationValue) qs.set('orientation', orientationValue);
 
