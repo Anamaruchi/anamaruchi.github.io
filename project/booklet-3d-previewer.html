@@ -810,12 +810,18 @@ body.hud-hidden #info-cluster {
   .lang-switcher-wrap{ top: clamp(64px, 16vw, 70px); right: clamp(8px, 2vw, 10px); }
 }
 #shared-loading-msg { display: none; }
-html.shared-mode #spec-bar > *:not(#shared-loading-msg) { display: none !important; }
+html.shared-mode #spec-bar > *:not(#shared-loading-msg):not(#shared-render-msg) { display: none !important; }
 html.shared-mode #shared-loading-msg {
   display: block; margin: 0; padding: 6px 4px; text-align: center;
   font-size: 13px; font-weight: 600; color: #fff; line-height: 1.5;
 }
 html.shared-mode #shared-loading-msg.is-error { color: #ff8a8a; }
+#shared-render-msg { display: none; }
+html.shared-mode #shared-render-msg {
+  display: block; margin: 0; padding: 0 4px 6px; text-align: center;
+  font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.65); line-height: 1.5;
+}
+html.shared-mode #shared-render-msg:empty { display: none; }
 .action-btn.share-info, .action-btn.share-info:disabled {
   background: linear-gradient(135deg, rgba(26,26,26,.92), rgba(45,45,45,.92)); border: 1px solid rgba(59,130,246,.45);
   box-shadow: none; opacity: 1; cursor: default;
@@ -1015,6 +1021,7 @@ html.shared-mode #shared-loading-msg.is-error { color: #ff8a8a; }
 		<p class="panel-credit"><span data-i18n="credit_prefix">Created By Anamaruchi</span> (<a href="https://www.facebook.com/anang.zikri.f" target="_blank">Anang Zikri Febriyansyah</a>)
     </div>
     <p id="shared-loading-msg">Loading Preview</p>
+    <p id="shared-render-msg"></p>
   </section>
 </div>
 
@@ -2598,7 +2605,9 @@ async function generatePreview() {
     let globalIndex = frontPages.length;
     for (let i = 1; i <= contentPadded; i++) {
       globalIndex++;
-      setHint(t('status_rendering_page', 'Rendering the page {{n}} from {{total}} ({{dpi}} DPI)').split('{{n}}').join(globalIndex).split('{{total}}').join(bookletPages).split('{{dpi}}').join(RENDER_DPI), 'default');
+      const renderingText = t('status_rendering_page', 'Rendering the page {{n}} from {{total}} ({{dpi}} DPI)').split('{{n}}').join(globalIndex).split('{{total}}').join(bookletPages).split('{{dpi}}').join(RENDER_DPI);
+      setHint(renderingText, 'default');
+      if (sharedLoadState === 'loading') document.getElementById('shared-render-msg').textContent = renderingText;
 
       const isPadding = i > totalContentPages;
       let label;
@@ -2945,6 +2954,10 @@ function updateSharedStatusUI() {
   if (pendingShareUrl && !isSharedView && !shareLinkBtn.disabled) {
     renderShareCopyButton();
   }
+  if (sharedLoadState === 'done' || sharedLoadState === 'error') {
+    const renderMsgEl = document.getElementById('shared-render-msg');
+    if (renderMsgEl) renderMsgEl.textContent = '';
+  }
   if (sharedLoadingMsg && (sharedLoadState === 'loading' || sharedLoadState === 'error')) {
     if (sharedLoadState === 'error') {
       sharedLoadingMsg.textContent = shareText('error_load_shared_title', 'Failed to load the shared link:', 'Gagal memuat tautan yang dibagikan:');
@@ -3014,7 +3027,7 @@ async function generateShareLink() {
   }
 
   shareLinkBtn.disabled = true;
-  shareLinkLabel.textContent = shareText('status_sharing', 'Uploading\u2026', 'Mengunggah\u2026');
+  shareLinkLabel.textContent = shareText('status_sharing', 'Creating a Link\u2026', 'Membuat Link\u2026');
 
   let resultLabel = null;
   let uploaded = false;
