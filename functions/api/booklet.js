@@ -12,7 +12,7 @@ function cors(request) {
   if (origin && ALLOWED_ORIGINS.includes(origin)) {
     h['Access-Control-Allow-Origin'] = origin;
     h['Vary'] = 'Origin';
-    h['Access-Control-Expose-Headers'] = 'X-Booklet-Size, X-Booklet-Orientation';
+    h['Access-Control-Expose-Headers'] = 'X-Booklet-Size, X-Booklet-Orientation, X-Booklet-Expires';
   }
   return h;
 }
@@ -62,6 +62,7 @@ export async function onRequestGet(context) {
   headers.set('Content-Type', 'application/pdf');
   headers.set('X-Booklet-Size', record.size || 'a4');
   headers.set('X-Booklet-Orientation', record.orientation || 'portrait');
+  headers.set('X-Booklet-Expires', String(Date.parse(record.expires_at.replace(' ', 'T') + '+07:00')));
 
   return new Response(pdfObject.body, { headers });
 }

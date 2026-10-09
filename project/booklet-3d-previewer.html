@@ -839,6 +839,22 @@ html.shared-mode #shared-render-msg:empty { display: none; }
 .action-btn.share-copy:active:not(:disabled) { background: #1d4ed8; border-color: #1d4ed8; }
 .action-btn.share-copy:disabled { opacity: 1; cursor: default; }
 .action-btn.share-copy svg { flex-shrink: 0; }
+.action-btn.share-info { position: relative; }
+.share-expire-bubble {
+  position: absolute; bottom: calc(100% + 8px); right: 0; left: auto; width: 100%; box-sizing: border-box;
+  background: #1a1a1a; border: 1px solid rgba(245,165,36,0.4); color: #f5a524;
+  font-size: 11px; font-weight: 600; line-height: 1.4; padding: 8px 10px; border-radius: 8px;
+  text-align: left; box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+  opacity: 0; transform: translateY(4px); pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease; z-index: 20; white-space: normal;
+}
+.share-expire-bubble::after {
+  content: ''; position: absolute; top: 100%; right: calc(50% - 6px);
+  border: 6px solid transparent; border-top-color: #1a1a1a;
+}
+.action-btn.share-info:hover .share-expire-bubble {
+  opacity: 1; pointer-events: auto; transform: translateY(0);
+}
 </style>
 </head>
 <body class="text-slate-100 min-h-screen">
@@ -2901,6 +2917,8 @@ let pendingShareUrl = null;
 let shareCopyIcon = null;
 let sharedLoadState = 'idle';
 let sharedLoadErrorRaw = '';
+let sharedExpiresAt = null;
+let shareExpireBubble = null;
 let shareContentVersion = 0;
 let shareUploading = false;
 
@@ -2974,7 +2992,21 @@ function updateSharedStatusUI() {
     shareLinkBtn.disabled = true;
     shareLinkLabel.removeAttribute('data-i18n');
     shareLinkLabel.textContent = shareText('info_preview_expire_3h', 'The Preview expire in 3 hours', 'Preview kedaluwarsa dalam 3 jam');
+    if (sharedExpiresAt) {
+      if (!shareExpireBubble) {
+        shareExpireBubble = document.createElement('span');
+        shareExpireBubble.className = 'share-expire-bubble';
+      }
+      shareExpireBubble.textContent = shareText('tooltip_preview_expire', 'Preview Booklet will expire in 3 hours ({{time}})', 'Preview Booklet akan kedaluwarsa dalam 3 jam ({{time}})').split('{{time}}').join(formatShareExpireTime(sharedExpiresAt));
+      if (shareExpireBubble.parentNode !== shareLinkBtn) shareLinkBtn.appendChild(shareExpireBubble);
+    }
   }
+}
+
+function formatShareExpireTime(ms) {
+  const d = new Date(ms);
+  const pad = n => String(n).padStart(2, '0');
+  return `${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
 
 function shareText(key, en, id) {
@@ -3127,6 +3159,8 @@ async function loadSharedBooklet() {
 
     const metaSize = response.headers.get('X-Booklet-Size');
     const metaOrientation = response.headers.get('X-Booklet-Orientation');
+    const metaExpires = Number(response.headers.get('X-Booklet-Expires'));
+    sharedExpiresAt = metaExpires > 0 ? metaExpires : null;
 
     const blob = await response.blob();
     const file = new File([blob], 'shared-booklet.pdf', { type: 'application/pdf' });
