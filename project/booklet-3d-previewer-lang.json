@@ -88,6 +88,7 @@
     "aria_zoom_out": "Zoom Out",
     "aria_zoom_in": "Zoom In",
     "aria_fit_to_screen": "Fit to Screen",
+    "btn_share_link": "Share Link Preview",
     "aria_zoom_percentage": "Zoom Percentage",
     "aria_close": "Close"
   },
@@ -180,6 +181,7 @@
     "aria_zoom_out": "Perkecil",
     "aria_zoom_in": "Perbesar",
     "aria_fit_to_screen": "Sesuaikan ke Layar",
+    "btn_share_link": "Bagikan Link Preview",
     "aria_zoom_percentage": "Persentase Zoom",
     "aria_close": "Tutup"
   }
