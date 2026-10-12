@@ -6,7 +6,7 @@ function t(key, fallback){
   if(dict && Object.prototype.hasOwnProperty.call(dict, key)) return dict[key];
   return fallback !== undefined ? fallback : key;
 }
-pdfjsLib.GlobalWorkerOptions.workerSrc = '/booklet-assets/vendor/pdf.worker.min.js';
+pdfjsLib.GlobalWorkerOptions.workerSrc = '/project/booklet-assets/vendor/pdf.worker.min.js';
 
 const RENDER_DPI = 300;
 const RENDER_SCALE = RENDER_DPI / 72;
@@ -1517,7 +1517,7 @@ function ensurePdfLib() {
   if (!pdfLibPromise) {
     pdfLibPromise = new Promise((resolve, reject) => {
       const s = document.createElement('script');
-      s.src = '/booklet-assets/vendor/pdf-lib.min.js';
+      s.src = '/project/booklet-assets/vendor/pdf-lib.min.js';
       s.onload = resolve;
       s.onerror = reject;
       document.head.appendChild(s);
